@@ -1,0 +1,352 @@
+<link rel="stylesheet" href="styles.css" />
+<script>
+  // Run this script immediately, before DOM is fully loaded
+  (function () {
+    // Apply theme immediately
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+
+    // Pre-set the checkbox state in the HTML
+    if (savedTheme === "dark") {
+      document.write(
+        "<style>#theme-toggle{opacity:0}#theme-toggle.ready{opacity:1}</style>"
+      );
+      // This will run after the DOM is loaded to check the checkbox
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("theme-toggle").checked = true;
+      });
+    }
+  })();
+</script>
+<style>
+  @media (max-width: 1200px) {
+    header {
+      display: none;
+    }
+  }
+  /* Add these styles to your existing CSS file */
+  /* Navigation */
+  header {
+    background-color: var(--header-bg);
+    padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  @media (max-width: 600px) {
+    .score {
+      display: none;
+    }
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--header-text);
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  .nav-links a.active,
+  .nav-links a:hover {
+    color: var(--primary-color);
+  }
+  .nav-icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  /* Header adjustments for logo layout */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    flex-wrap: nowrap;
+
+  }
+
+
+  /* Logo styling */
+  .logo {
+    flex: 0 0 auto;
+    max-width: 150px;
+    padding: 5px 0;
+  }
+
+  .site-logo {
+    max-height: 50px;
+    width: auto;
+  }
+
+  /* Middle spacer */
+  .spacer {
+    flex: 1;
+  }
+
+  /* Navigation links repositioned to right */
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+    margin-right: 20px;
+  }
+  .xzy1__navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999; /* High z-index to ensure it appears above all */
+    background-color: #1a202c; /* Dark gray */
+    color: white;
+    display: none; /* Hidden by default */
+  }
+
+  .xzy1__navbar.active {
+    display: block;
+  }
+
+  .xzy1__menu {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 10px;
+  }
+
+  .xzy1__menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    transition: color 0.3s;
+  }
+
+  .xzy1__menu a:hover {
+    color: #63b3ed; /* Light blue */
+  }
+
+  /* Toggle Button */
+  .xzy1__toggle-btn {
+    position: fixed;
+    top: 10px;
+    right: 15px;
+    z-index: 10000; /* Higher z-index for button */
+    background-color: #4a5568; /* Gray */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .xzy1__toggle-btn:hover {
+    background-color: #2d3748; /* Darker gray */
+  }
+
+  /* Hide Navbar on larger screens */
+  @media (min-width: 1200px) {
+    .xzy1__navbar,
+    .xzy1__toggle-btn {
+      display: none;
+    }
+    nav {
+      max-height: 30px;
+    }
+  }
+
+</style>
+
+<!-- Toggle Button -->
+<button class="xzy1__toggle-btn" onclick="toggleNavbar()">☰ Menu</button>
+
+<!-- Mobile Navbar -->
+<nav class="xzy1__navbar" id="mobileNavbar">
+  <div class="xzy1__menu">
+    <a href="index.html">Home</a>
+    <a href="aboutPI.html">About PI</a>
+    <a href="Education.html">Education</a>
+    <a href="Publication.html">Publication</a>
+    <a href="positions.html">Work Experience</a>
+    <a href="teaching.html">Teaching Experience</a>
+    <a href="extension.html">Extension Activities</a>
+    <a href="Awards.html">Awards</a>
+    <a href="Projects.html">Projects</a>
+    <a href="patents.html">Patents and Technology Transfers</a>
+    <a href="keyTechnology.html">Key Technologies</a>
+    <a href="ResearchMembers.html">Research Groups</a>
+    <a href="phdOpportunities.html">PhD/JRF Opportunities</a>
+    <a href="internships.html">Internship Opportunities</a>
+  </div>
+</nav>
+
+<script>
+  function toggleNavbar() {
+    const navbar = document.getElementById("mobileNavbar");
+    navbar.classList.toggle("active");
+  }
+</script>
+
+<header>
+  <div class="container">
+    <nav>
+      <!-- Logo on the left -->
+      <div class="logo">
+        <a href="index.html">
+          <img src="/images/iitlogo.jpg" alt="Logo" class="site-logo" />
+        </a>
+      </div>
+      <div class="logo score">
+        <a href="index.html">
+          <img
+            src="/images/score.png"
+            alt="Logo"
+            class="site-logo"
+            style="padding-left: 25px"
+          />
+        </a>
+      </div>
+      <!-- Empty space in the middle -->
+      <div class="spacer"></div>
+
+      <!-- Navigation links on the right -->
+      <div class="nav-links">
+        <a
+          href="index.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>"
+          >Home</a
+        >
+        <div class="dropdown">
+          <a
+            href="aboutPI.html"
+            class="dropdown-toggle <%= typeof currentPage !== 'undefined' && (currentPage === 'about' || currentPage === 'teaching' || currentPage === 'Awards' || currentPage === 'positions' || currentPage === 'Education' || currentPage === 'extension' ) ? 'active' : '' %>"
+            data-default="About PI ▼"
+            >About PI</a
+          >
+          <div class="dropdown-content">
+            <a
+              href="Education.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Education' ? 'active' : '' %>"
+              >Education</a
+            >
+            <a
+              href="positions.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'positons' ? 'active' : '' %>"
+              >Work Experience</a
+            >
+            <a
+              href="teaching.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'teaching' ? 'active' : '' %>"
+              >Teaching Experience</a
+            >
+            <a
+            href=""
+            class="<%= typeof currentPage !== 'undefined' && currentPage === '' ? 'active' : '' %>"
+            >Dissertations supervised</a
+          >
+            <a
+              href="extension.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'extension' ? 'active' : '' %>"
+              >Extension Activities</a
+            >
+
+            <a
+              href="Awards.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Awards' ? 'active' : '' %>"
+              >Awards</a
+            >
+          </div>
+        </div>
+
+        <a
+          href="publication.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'publication' ? 'active' : '' %>"
+          >Publication</a
+        >
+        <a
+          href="Projects.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'Projects' ? 'active' : '' %>"
+          >Projects</a
+        >
+        <a
+          href="patents.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'patents' ? 'active' : '' %>"
+          >Patents</a
+        >
+
+        <div class="dropdown">
+          <a
+            href="#"
+            class="dropdown-toggle <%= typeof currentPage !== 'undefined' && ( currentPage === 'ResearchMembers') ? 'active' : '' %>"
+            data-default="Research ▼"
+            >Research Group</a
+          >
+          <div class="dropdown-content">
+            <a
+              href="ResearchMembers.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'ResearchMembers' ? 'active' : '' %>"
+              >Members</a
+            >
+            <a
+              href="keyTechnology.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'keyTechnology' ? 'active' : '' %>"
+              >Key Technologies</a
+            >
+            <a
+              href=""
+              class="<%= typeof currentPage !== 'undefined' && currentPage === '' ? 'active' : '' %>"
+              >Collaborations</a
+            >
+            <a
+              href="internships.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'internships' ? 'active' : '' %>"
+              >Facilities</a
+            >
+          </div>
+        </div>
+        <a
+          href="/contact.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'contact' ? 'active' : '' %>"
+          >Contact Us</a
+        >
+      </div>
+
+      <div class="nav-icons">
+        <a href="#"><i class="fas fa-search"></i></a>
+        <label class="theme-switch">
+          <input type="checkbox" id="theme-toggle" />
+          <span class="slider">
+            <i class="fas fa-sun sun-icon icon"></i>
+            <i class="fas fa-moon moon-icon icon"></i>
+          </span>
+        </label>
+      </div>
+
+      <!-- Hamburger menu for mobile -->
+      <div class="menu-icon" id="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const themeToggle = document.getElementById("theme-toggle");
+
+    // Get saved theme
+    const savedTheme = localStorage.getItem("theme") || "dark";
+
+    // Set the toggle position
+    themeToggle.checked = savedTheme === "dark";
+
+    // Make toggle visible after its state is set
+    setTimeout(() => themeToggle.classList.add("ready"), 50);
+
+    // Listen for toggle changes
+    themeToggle.addEventListener("change", function (e) {
+      if (e.target.checked) {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.setAttribute("data-theme", "light");
+        localStorage.setItem("theme", "light");
+      }
+    });
+  });
+</script>

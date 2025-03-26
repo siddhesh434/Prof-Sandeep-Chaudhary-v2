@@ -1,0 +1,197 @@
+<%- include('partials/header') %>
+
+<style>
+.contact-page {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.section {
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background-color: var(--primary-color);
+}
+
+/* Contact Information Section */
+.contact-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 1px solid var(--border-color);
+}
+
+.contact-details h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.contact-location {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.contact-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.contact-methods a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-methods a:hover {
+    text-decoration: underline;
+}
+
+/* Opportunities Sections */
+.opportunities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.opportunity-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease;
+}
+
+.opportunity-card:hover {
+    transform: translateY(-10px);
+}
+
+.opportunity-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+.opportunity-card ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.opportunity-card ul li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.opportunity-card ul li:last-child {
+    border-bottom: none;
+}
+
+.application-cta {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .opportunities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .opportunities-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+}
+</style>
+<main class="contact-page">
+    <!-- Contact Information Section -->
+    <section class="contact-info section">
+        <div class="container">
+            <h1 class="section-title">Contact Information</h1>
+            <div class="contact-card">
+                <div class="contact-details">
+                    <h2>Prof. Sandeep Chaudhary</h2>
+                    <p class="contact-location">
+                        Room No 403, Chromium Building<br>
+                        Department of Civil Engineering<br>
+                        Indian Institute of Technology Indore<br>
+                        Khandwa Road, Simrol-453552<br>
+                        Madhya Pradesh – (INDIA)
+                    </p>
+                    <div class="contact-methods">
+                        <p class="email">
+                            <i class="icon-envelope"></i> 
+                            <a href="mailto:schaudhary@iiti.ac.in">schaudhary [at] iiti.ac.in</a>
+                        </p>
+                        <p class="phone">
+                            <i class="icon-phone"></i> 
+                            91-731-6603256 (Ext code 3256)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PhD/JRF Opportunities Section -->
+    <section class="phd-opportunities section">
+        <div class="container">
+            <%- include('phdOpportunities') %>
+        </div>
+    </section>
+
+    <!-- Internship Opportunities Section -->
+    <section class="internship-opportunities section">
+        <div class="container">
+        <%- include('internships') %>
+      </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

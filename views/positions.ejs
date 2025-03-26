@@ -1,0 +1,446 @@
+<%- include('partials/header') %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .main-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 60px 0;
+  }
+
+  .section-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 36px;
+    margin-bottom: 40px;
+    color: var(--primary-color);
+    position: relative;
+    padding-bottom: 15px;
+    text-align: center;
+  }
+
+  .section-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: var(--primary-color);
+  }
+
+  .academic-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  .section-card {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    padding: 35px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .section-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .section-card h2 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 26px;
+    margin-bottom: 25px;
+    color: var(--primary-color);
+    position: relative;
+    padding-bottom: 12px;
+  }
+
+  .section-card h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 45px;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+  }
+
+  .section-card:hover h2::after {
+    width: 100px;
+  }
+
+  .position-item {
+    margin-bottom: 25px;
+    position: relative;
+    padding-left: 28px;
+    transition: transform 0.3s ease;
+  }
+
+  .position-item:hover {
+    transform: translateX(5px);
+  }
+
+  .position-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .position-item:hover::before {
+    transform: scale(1.3);
+    background-color: var(--accent-color, var(--primary-color));
+  }
+
+  .position-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+  }
+
+  .position-details {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+
+  .admin-item {
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 28px;
+    transition: transform 0.3s ease;
+  }
+
+  .admin-item:hover {
+    transform: translateX(5px);
+  }
+
+  .admin-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .admin-item:hover::before {
+    transform: scale(1.3);
+    background-color: var(--accent-color, var(--primary-color));
+  }
+
+  .admin-institution {
+    font-weight: 700;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    position: relative;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(var(--primary-color-rgb, 0, 123, 255), 0.2);
+  }
+
+  .admin-institution:first-child {
+    margin-top: 0;
+  }
+
+  .theme-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .theme-toggle:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .theme-toggle i {
+    font-size: 24px;
+    transition: transform 0.5s ease;
+  }
+
+  .theme-toggle:hover i {
+    transform: rotate(360deg);
+  }
+
+  @media (max-width: 768px) {
+    .academic-sections {
+      grid-template-columns: 1fr;
+    }
+
+    .section-title {
+      font-size: 30px;
+    }
+
+    .section-card {
+      padding: 25px;
+    }
+  }
+
+  :root {
+    --primary-color-rgb: 41, 98, 255;
+    --accent-color: #ff6b6b;
+    --transition-timing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  [data-theme="light"] {
+    --primary-color: rgb(var(--primary-color-rgb));
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --bg-color: #f8f9fa;
+  }
+
+  [data-theme="dark"] {
+    --primary-color: rgb(var(--primary-color-rgb));
+    --card-bg: #2d2d2d;
+    --text-color: #e0e0e0;
+    --bg-color: #1a1a1a;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <div class="main-wrapper">
+      <h1 class="section-title">Work Experience</h1>
+
+      <div class="academic-sections">
+        <!-- Academic Positions Section -->
+        <div class="section-card">
+          <h2>Academic Positions</h2>
+          <div class="position-item">
+            <div class="position-title">Professor (Higher Administrative Grade)</div>
+            <div class="position-details">
+              Department of Civil Engineering, Indian Institute of Technology, Indore
+            </div>
+            <div class="position-details">Since October 2024</div>
+          </div>
+          <div class="position-item">
+            <div class="position-title">Professor</div>
+            <div class="position-details">
+              Department of Civil Engineering, Indian Institute of Technology
+              Indore, India
+            </div>
+            <div class="position-details">Since October 2018</div>
+          </div>
+          <div class="position-item">
+            <div class="position-title">Associate Professor</div>
+            <div class="position-details">
+              Department of Civil Engineering, Indian Institute of Technology
+              Indore, India
+            </div>
+            <div class="position-details">May 2017 - October 2018</div>
+          </div>
+          <div class="position-item">
+            <div class="position-title">Reader/Associate Professor</div>
+            <div class="position-details">
+              Department of Civil Engineering, Malaviya National Institute of
+              Technology Jaipur, India
+            </div>
+            <div class="position-details">July 2007 – May 2017</div>
+          </div>
+          <div class="position-item">
+            <div class="position-title">Lecturer</div>
+            <div class="position-details">
+              Department of Civil Engineering, Malaviya National Institute of
+              Technology Jaipur, India
+            </div>
+            <div class="position-details">October 1996 – June 2007</div>
+          </div>
+        </div>
+
+        <!-- Administrative Responsibilities Section -->
+        <div class="section-card">
+          <h2>Administrative Responsibilities</h2>
+          <div class="admin-institution">IIT INDORE:</div>
+          <div class="admin-item">
+            <div>Dean, Administration</div>
+            <div class="position-details">Feb 2023 - Present</div>
+          </div>
+          <div class="admin-item">
+            <div>
+              Head/ Professor Incharge, Centre for Rural Development and
+              Technology
+            </div>
+            <div class="position-details">April 2020 - April 2023</div>
+          </div>
+          <div class="admin-item">
+            <div>Head, Department of Civil Engineering</div>
+            <div class="position-details">October 2017 - March 2019</div>
+          </div>
+          <div class="admin-item">
+            <div>Associate Dean, Planning-III</div>
+            <div class="position-details">September 2017 - March 2019</div>
+          </div>
+          <div class="admin-item">
+            <div>
+              Coordinator, Technical Education Quality Improvement Programme
+              (TEQIP)
+            </div>
+            <div class="position-details">September 2017 - October 2018</div>
+          </div>
+
+          <div class="admin-institution">MNIT JAIPUR:</div>
+          <div class="admin-item">
+            <div>Associate Dean, Planning & Development</div>
+            <div class="position-details">June 2016 - May 2017</div>
+          </div>
+          <div class="admin-item">
+            <div>Associate Dean, Research & Consultancy</div>
+            <div class="position-details">November 2013 - May 2016</div>
+          </div>
+          <div class="admin-item">
+            <div>Associate Dean, Academic</div>
+            <div class="position-details">March 2012 - November 2013</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme toggle button -->
+  <div class="theme-toggle" id="themeToggle" style="display: none">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById("themeToggle");
+    const htmlElement = document.documentElement;
+    const themeIcon = themeToggle.querySelector("i");
+
+    // Check if user has a saved preference
+    const savedTheme = localStorage.getItem("theme") || "light";
+    htmlElement.setAttribute("data-theme", savedTheme);
+    updateThemeIcon(savedTheme);
+
+    themeToggle.addEventListener("click", () => {
+      const currentTheme = htmlElement.getAttribute("data-theme");
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+
+      htmlElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+
+      // Add animation to theme toggle
+      themeToggle.classList.add("theme-changing");
+      setTimeout(() => {
+        themeToggle.classList.remove("theme-changing");
+        updateThemeIcon(newTheme);
+      }, 300);
+    });
+
+    function updateThemeIcon(theme) {
+      if (theme === "light") {
+        themeIcon.className = "fas fa-moon";
+      } else {
+        themeIcon.className = "fas fa-sun";
+      }
+    }
+
+    // Animate cards on scroll
+    const sectionCards = document.querySelectorAll(".section-card");
+
+    function checkVisibility() {
+      sectionCards.forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const isVisible = rect.top <= window.innerHeight * 0.8;
+
+        if (isVisible) {
+          setTimeout(() => {
+            card.classList.add("visible");
+          }, index * 100);
+        }
+      });
+    }
+
+    // Check visibility on page load
+    window.addEventListener("load", checkVisibility);
+
+    // Check visibility on scroll
+    window.addEventListener("scroll", checkVisibility);
+
+    // Add hover effect to position items
+    const positionItems = document.querySelectorAll(
+      ".position-item, .admin-item"
+    );
+
+    positionItems.forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        item.style.transform = "translateX(8px)";
+      });
+
+      item.addEventListener("mouseleave", () => {
+        item.style.transform = "translateX(0)";
+      });
+    });
+
+    // Random accent color generator
+    function generateAccentColor() {
+      const colors = [
+        "#ff6b6b",
+        "#ff9e7d",
+        "#4ecdc4",
+        "#45b7d1",
+        "#a78bfa",
+        "#f687b3",
+        "#38b2ac",
+        "#4299e1",
+        "#667eea",
+        "#ed64a6",
+      ];
+
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    // Apply random accent color
+    document.documentElement.style.setProperty(
+      "--accent-color",
+      generateAccentColor()
+    );
+  </script>
+
+  <%- include('partials/footer') %>
+</body>

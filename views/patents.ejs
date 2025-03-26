@@ -1,0 +1,148 @@
+<%- include('partials/header') %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="patent.css" />
+<div class="main-wrapper">
+  <div class="container">
+    <div class="page-title">
+      <h1>Patents & Innovations</h1>
+      <p class="subtitle">Pioneering Technologies and Groundbreaking Inventions</p>
+    </div>
+  <div class="profile-links">
+  <a href="#" target="_blank" style="pointer-events: none">
+    <i class="fas fa-flask"></i> Research Profile
+  </a>
+  <a href="#" target="_blank" style="pointer-events: none">
+    <i class="fas fa-lightbulb"></i> Innovation Portfolio
+  </a>
+</div>
+
+<!-- Patent Summary -->
+<div class="patent-summary-container">
+  <div class="patent-summary">
+    <div class="summary-card">
+      <div class="summary-icon"><i class="fas fa-award"></i></div>
+      <div class="summary-content">
+        <div class="summary-number"><%= patents.filter(patent => patent.grantNumber).length %></div>
+        <div class="summary-title">Patents Granted</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon"><i class="fas fa-file-alt"></i></div>
+      <div class="summary-content">
+        <div class="summary-number"><%= patents.filter(patent => !patent.grantNumber).length %></div>
+        <div class="summary-title">Patents Applied</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon"><i class="fas fa-exchange-alt"></i></div>
+      <div class="summary-content">
+        <div class="summary-number">1</div>
+        <div class="summary-title">Technology Transfer</div>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon"><i class="fas fa-flask"></i></div>
+      <div class="summary-content">
+        <div class="summary-number">0</div>
+        <div class="summary-title">Translational Works</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Patents List Section -->
+<div class="patents-section">
+  <div class="section-title">
+    <h2>Patent Portfolio</h2>
+  </div>
+
+  <!-- Search Control -->
+  <div class="search-container">
+    <input
+      type="text"
+      id="patent-search"
+      placeholder="Search patents..."
+      class="search-input"
+    />
+    <button id="search-btn-patents" class="search-button">
+      <i class="fas fa-search"></i>
+    </button>
+  </div>
+
+  <!-- Patent Cards -->
+  <div class="patent-cards-container" id="patent-cards">
+    <% patents.forEach((patent, index) => { %>
+    <div class="patent-card" data-index="<%= index %>">
+      <div class="patent-card-header">
+        <h3><%= patent.title %></h3>
+        <span class="patent-year"><%= patent.year %></span>
+      </div>
+      <div class="patent-card-body">
+        <p><strong>Inventors:</strong> <%= patent.authors %></p>
+        <p><strong>Application No.:</strong> <%= patent.applicationNumber %></p>
+
+        <p class="grantNum"><strong>Grant Number: </strong> <%= patent.grantNumber %></p>
+
+        <p class="grantDate"><strong>Grant Date: </strong> <%= patent.grantDate %></p>
+
+        <p class="desc" style="display: none;"><strong>Description</strong> <%= patent.description%></p>
+      </div>
+      <div class="patent-card-footer">
+        <button class="view-details-btn" data-id="<%= index %>">
+          View Details
+        </button>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>
+<br>
+<br>
+<h2>Technology Transfer</h2>
+<!-- Technology Transfer Section -->
+<div class="technology-transfer-section">
+  <div class="section-title">
+   
+  </div>
+  <div class="technology-transfer-content">
+    <h3>Compressed Coloured Bi-layered Bricks</h3>
+    <p>
+      Developed a novel compressed coloured bi-layer brick by upcycling dimensional stone processing waste as natural pigments. The innovation offers three key advantages:
+    </p>
+    <ul>
+      <li>Environment-friendly waste disposal solution for Rajasthan</li>
+      <li>Economical alternative to conventional painted masonry walls</li>
+      <li>Aesthetically pleasing with natural coloring</li>
+    </ul>
+    <div class="transfer-details">
+      <p>
+        <strong>Transferred to:</strong> M/s Abhishek Bricks, Indore, M.P., India
+      </p>
+      <p>
+        <strong>Transfer Period:</strong> April 1, 2022 - March 31, 2025
+      </p>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+<!-- Patent Details Modal -->
+<div id="patent-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2 id="modal-title"></h2>
+    <div class="modal-info">
+      <p><strong>Inventors:</strong> <span id="modal-inventors"></span></p>
+      <p><strong>Year:</strong> <span id="modal-year"></span></p>
+      <p><strong>Application Number:</strong> <span id="modal-app-number"></span></p>
+      <p><strong>Patent Number:</strong> <span id="modal-patent-number"></span></p>
+      <p><strong>Grant Date:</strong> <span id="modal-grant-date"></span></p>
+    </div>
+    <div class="modal-description">
+      <h3>Description</h3>
+      <p id="modal-description"></p>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>
+<script src="patent.js"></script>

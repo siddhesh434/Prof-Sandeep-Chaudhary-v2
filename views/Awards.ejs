@@ -1,0 +1,228 @@
+<%- include('partials/header') %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<section class="awards-section section" style="margin-bottom: 0px">
+  <div class="container">
+    <h2 class="section-title">Awards and Scholarship</h2>
+
+    <div class="awards-container">
+      <div class="award-item">
+        <div class="award-icon">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <div class="award-details">
+          <h3 class="award-title">Eminent Engineer Award</h3>
+          <p class="award-description">
+            Awarded by The Institution of Engineers (India) during the 37th
+            National Convention in 2022.
+          </p>
+        </div>
+      </div>
+
+      <div class="award-item">
+        <div class="award-icon">
+          <i class="fas fa-globe-asia"></i>
+        </div>
+        <div class="award-details">
+          <h3 class="award-title">Research Fellowship</h3>
+          <p class="award-description">
+            Offered by the Hong Kong Polytechnic University for two months in
+            2017.
+          </p>
+        </div>
+      </div>
+
+      <div class="award-item">
+        <div class="award-icon">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <div class="award-details">
+          <h3 class="award-title">Post-Doctoral Research Fellowship</h3>
+          <p class="award-description">
+            Granted by National Research Foundation, S. Korea (2010-2011).
+          </p>
+        </div>
+      </div>
+
+      <div class="award-item">
+        <div class="award-icon">
+          <i class="fas fa-university"></i>
+        </div>
+        <div class="award-details">
+          <h3 class="award-title">QIP Fellowship</h3>
+          <p class="award-description">
+            For pursuing Ph.D. at IIT Delhi by Ministry of Human Resources
+            Development, Government of India (2002-2005).
+          </p>
+        </div>
+      </div>
+
+      <div class="award-item">
+        <div class="award-icon">
+          <i class="fas fa-medal"></i>
+        </div>
+        <div class="award-details">
+          <h3 class="award-title">Merit Scholarship</h3>
+          <p class="award-description">Awarded during B.E. (1993-1995).</p>
+        </div>
+      </div>
+
+      <div class="award-item">
+        <div class="award-icon">
+          <i class="fas fa-lightbulb"></i>
+        </div>
+        <div class="award-details">
+          <h3 class="award-title">Best Technology Award 2024</h3>
+          <p class="award-description">
+            By IIT Indore for developing technology product with high
+            commercialization potential.
+          </p>
+        </div>
+      </div>
+
+      <div class="award-item">
+        <div class="award-icon">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="award-details">
+          <h3 class="award-title">Best Research Paper Award 2023</h3>
+          <p class="award-description">By IIT Indore.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .awards-section {
+    padding: 60px 0;
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    color: var(--text-color);
+    margin-bottom: 40px;
+    position: relative;
+    padding-bottom: 15px;
+    text-align: center;
+  }
+
+  .section-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary-color);
+  }
+
+  .awards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+  }
+
+  .award-item {
+    background-color: var(--secondary-bg);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: flex-start;
+    border-left: 4px solid var(--primary-color);
+  }
+
+  .award-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .award-icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-right: 20px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .award-details {
+    flex: 1;
+  }
+
+  .award-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .award-description {
+    font-size: 0.95rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .awards-container {
+      grid-template-columns: 1fr;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Add animation to award items
+    const awardItems = document.querySelectorAll(".award-item");
+
+    // Function to check if an element is in viewport
+    function isInViewport(element) {
+      const rect = element.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <=
+          (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <=
+          (window.innerWidth || document.documentElement.clientWidth)
+      );
+    }
+
+    // Function to add animation class when element is in viewport
+    function animateOnScroll() {
+      awardItems.forEach((item) => {
+        if (isInViewport(item)) {
+          item.classList.add("animate");
+        }
+      });
+    }
+
+    // Add initial animation class
+    setTimeout(() => {
+      animateOnScroll();
+    }, 300);
+
+    // Add animation on scroll
+    window.addEventListener("scroll", animateOnScroll);
+
+    // Add click event for award items
+    awardItems.forEach((item) => {
+      item.addEventListener("click", function () {
+        this.classList.toggle("expanded");
+      });
+    });
+  });
+</script>
+<%- include('partials/footer') %>
