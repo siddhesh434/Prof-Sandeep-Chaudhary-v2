@@ -1,16 +1,13 @@
 <%- include('partials/header') %>
 
 <style>
-.contact-page {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    min-height: 100vh;
-    padding: 2rem 0;
-}
 
-.section {
-    margin-bottom: 3rem;
-    padding: 2rem 0;
+.contact-page {
+    background: linear-gradient(135deg, var(--background-color) 0%, 100%);
+    min-height: 100vh;
+    padding: 4rem 0;
+    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
 }
 
 .container {
@@ -19,139 +16,138 @@
     padding: 0 1rem;
 }
 
-.section-title {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    position: relative;
+.section {
+    margin-bottom: 4rem;
+    padding: 3rem 0;
+    background-color: var(--secondary-bg);
+    border-radius: 12px;
+    box-shadow: var(--soft-shadow);
+    transition: var(--transition);
 }
 
+.section:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: var(--primary-color);
+    font-size: 2.75rem;
+    font-weight: 700;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-title::before,
 .section-title::after {
     content: '';
     position: absolute;
-    bottom: -10px;
+    bottom: -15px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
-    height: 4px;
     background-color: var(--primary-color);
 }
 
-/* Contact Information Section */
+.section-title::before {
+    width: 120px;
+    height: 4px;
+    opacity: 0.3;
+}
+
+.section-title::after {
+    width: 60px;
+    height: 6px;
+}
+
 .contact-card {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    padding: 2rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    border: 1px solid var(--border-color);
+    background-color: var(--secondary-bg);
+    border-radius: 15px;
+    padding: 2.5rem;
+    box-shadow: var(--soft-shadow);
+    border-left: 5px solid var(--primary-color);
+    transition: var(--transition);
+}
+
+.contact-card:hover {
+    transform: scale(1.02);
 }
 
 .contact-details h2 {
     color: var(--primary-color);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
 }
 
 .contact-location {
-    line-height: 1.6;
-    margin-bottom: 1rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
 }
 
 .contact-methods {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.contact-methods p {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-color);
+}
+
+.contact-methods i {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
 }
 
 .contact-methods a {
     color: var(--primary-color);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: var(--transition);
 }
 
 .contact-methods a:hover {
+    color: var(--accent-color);
     text-decoration: underline;
 }
 
-/* Opportunities Sections */
-.opportunities-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-}
-
-.opportunity-card {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    padding: 1.5rem;
-    border: 1px solid var(--border-color);
-    transition: transform 0.3s ease;
-}
-
-.opportunity-card:hover {
-    transform: translateY(-10px);
-}
-
-.opportunity-card h3 {
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 0.5rem;
-}
-
-.opportunity-card ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.opportunity-card ul li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.opportunity-card ul li:last-child {
-    border-bottom: none;
-}
-
-.application-cta {
-    text-align: center;
-    margin-top: 2rem;
-}
-
-.btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    background-color: var(--primary-color);
-    color: var(--background-color);
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    opacity: 0.9;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 1024px) {
-    .opportunities-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
 @media screen and (max-width: 768px) {
-    .opportunities-grid {
-        grid-template-columns: 1fr;
+    .contact-page {
+        padding: 2rem 0;
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 2.25rem;
+    }
+
+    .contact-card {
+        padding: 1.5rem;
+    }
+
+    .contact-methods {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .contact-card {
+        padding: 1rem;
     }
 }
 </style>
 <main class="contact-page">
     <!-- Contact Information Section -->
-    <section class="contact-info section">
+    <section>
         <div class="container">
             <h1 class="section-title">Contact Information</h1>
             <div class="contact-card">
@@ -178,16 +174,16 @@
             </div>
         </div>
     </section>
-
+     <br>
     <!-- PhD/JRF Opportunities Section -->
-    <section class="phd-opportunities section">
+    <section>
         <div class="container">
             <%- include('phdOpportunities') %>
         </div>
     </section>
-
+     <br>
     <!-- Internship Opportunities Section -->
-    <section class="internship-opportunities section">
+    <section>
         <div class="container">
         <%- include('internships') %>
       </div>

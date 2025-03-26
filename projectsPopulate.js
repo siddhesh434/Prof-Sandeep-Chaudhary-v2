@@ -1,4 +1,6 @@
 // insert-projects.js - Script to insert research project data into MongoDB
+const XLSX = require("xlsx");
+const fs = require("fs");
 
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -57,7 +59,7 @@ const ProjectData = [
     title: "A comprehensive rheology based thixotropic fluid flow model for improved control on 3D printing of concrete",
     year: "2021-2024",
     funded: "SERB, DST, GOI",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Sponsored Research Project",
     role: "As Principal Investigator"
   },
@@ -105,7 +107,7 @@ const ProjectData = [
     title: "Experimental and analytical studies for the short term and long term behavior of epoxy bonded steel-concrete composite bridges",
     year: "2012-2015",
     funded: "DST, GOI",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Sponsored Research Project",
     role: "As Principal Investigator"
   },
@@ -113,7 +115,7 @@ const ProjectData = [
     title: "Development of a highly efficient procedure and GUI equipped software for the service load analysis of composite structures",
     year: "2008-2011",
     funded: "DST, GOI",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Sponsored Research Project",
     role: "As Principal Investigator"
   },
@@ -123,7 +125,7 @@ const ProjectData = [
     title: "Waste characterization and possible gainful utilization of induction melting furnace dust",
     year: "2021-2022",
     funded: "Jaideep Ispat & Alloys Pvt. Ltd., Moira Sariya, India",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Sponsored Research Project",
     role: "As Co-Principal Investigator"
   },
@@ -131,7 +133,7 @@ const ProjectData = [
     title: "Utilization of Bamboo Strip as reinforcement in concrete",
     year: "2019-2020",
     funded: "TEQIP, MHRD",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Sponsored Research Project",
     role: "As Co-Principal Investigator"
   },
@@ -165,7 +167,7 @@ const ProjectData = [
     title: "Durability of concrete containing zinc slag as partial replacement of sand",
     year: "2010-2013",
     funded: "DST, GOI",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Sponsored Research Project",
     role: "As Scientist Mentor"
   },
@@ -173,7 +175,7 @@ const ProjectData = [
     title: "Durability studies on geopolymer concrete containing waste rubber fibre as partial replacement of sand",
     year: "2015-2017",
     funded: "DST, GOI",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Sponsored Research Project",
     role: "As Scientist Mentor"
   },
@@ -231,11 +233,11 @@ const ProjectData = [
   // INSTITUTE LEVEL PROJECT
   {
     title: "Knowledge incubation for technical education under Technical Education Quality Improvement Program of MHRD",
-    year: "",
+    year: "-",
     funded: "MHRD",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Institute Level Project",
-    role: ""
+    role: "-"
   },
   
   // CONSULTANCY PROJECTS - Major ones only
@@ -243,7 +245,7 @@ const ProjectData = [
     title: "Investigation of cracks in concrete PSC Girder on Bridge no 10 in RAU to TIHI new Broad Gauge line section",
     year: "2019",
     funded: "Western Railway",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
@@ -251,7 +253,7 @@ const ProjectData = [
     title: "Investigations for structural safety of Mughal Museum being made by Precast Technique and subsequent technical suggestions",
     year: "2018-2019",
     funded: "U.P Rajkiya Nirman Nigam Ltd.",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
@@ -259,7 +261,7 @@ const ProjectData = [
     title: "Third Party Quality Assurance for Infrastructure of New Campus of IIM Udaipur",
     year: "2018",
     funded: "CPWD",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
@@ -267,7 +269,7 @@ const ProjectData = [
     title: "Vetting of Design and Drawing of 90 meter Arch, 252 meter suspension bridge & 90 meter truss bridge at Rajim, Raipur (C.G.)",
     year: "2017",
     funded: "AQUATIC Pump Industries, Indore (India)",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
@@ -275,7 +277,7 @@ const ProjectData = [
     title: "Proof checking of structural design and drawing of bridge at Gambhiri river and ROB at Hindaun Bypass",
     year: "2014-2016",
     funded: "RSRDC Ltd., Jaipur",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
@@ -283,7 +285,7 @@ const ProjectData = [
     title: "Proof Checking of Structural Design/Drawings for C/o 500 Bedded Boys Hostel and 210 Bedded Girls Hostel with provision for future vertical extension on III floor",
     year: "2014-2015",
     funded: "CPWD, Jaipur",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
@@ -291,7 +293,7 @@ const ProjectData = [
     title: "Proof Checking of Structural Design of Multistoried residential apartment located at Sun-City, Jaipur-Bikaner Highway, Jaipur",
     year: "2014",
     funded: "Apeksha Infrastructures Pvt. Ltd., Jaipur",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
@@ -299,7 +301,7 @@ const ProjectData = [
     title: "Proof checking of structural design and drawing of three ROB's at Makrana, Kishangarh and Ajmer in Rajasthan",
     year: "2012-2013",
     funded: "Multimedia Consultants Pvt. Ltd., Ahmadabad, India",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
@@ -307,7 +309,7 @@ const ProjectData = [
     title: "Technical evaluation/quality assessment of PQC mix for cement content",
     year: "2012-2013",
     funded: "Airport Authority of India, Jaipur",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
@@ -315,15 +317,15 @@ const ProjectData = [
     title: "Proof checking design of substructure of seventeen major railway bridges in the Swarupganj-Abu Road section of Ajmer division of north western railway",
     year: "2011-2012",
     funded: "Rail Vikas Nigam Limited",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   },
   {
     title: "Proof Checking of Various designs and drawings of Rajasthan Rural Water Supply and Mitigation Project",
-    year: "",
+    year: "-",
     funded: "Larsen & Toubro Limited. Ltd., Chennai",
-    collaborator: "",
+    collaborator: "-",
     projectType: "Consultancy Project",
     role: "As Principal Investigator"
   }
@@ -346,6 +348,18 @@ const insertProjects = async () => {
     console.error("Error inserting projects:", error);
   }
 };
+
+// Convert to worksheet
+const ws = XLSX.utils.json_to_sheet(ProjectData);
+
+// Create a new workbook
+const wb = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(wb, ws, "Projects");
+
+// Write to Excel file
+XLSX.writeFile(wb, "projects.xlsx");
+
+console.log("Excel file created: projects.xlsx");
 
 // Run the function
 insertProjects();

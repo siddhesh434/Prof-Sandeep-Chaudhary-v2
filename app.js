@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const path = require("path");
+const axios = require('axios');
 
 dotenv.config();
 const app = express();
@@ -148,6 +149,7 @@ app.get("/teaching.html", async (req, res) => {
   res.render("teaching");
 });
 
+
 app.get("/ResearchMembers.html", async (req, res) => {
   res.render("ResearchMembers");
 });
@@ -198,18 +200,74 @@ app.get("/extension.html", async (req, res) => {
 app.get("/contact.html", async (req, res) => {
   res.render("contact");
 });
+
+const SHEET_ID_Dissertations = "1dWreGKaR-s9TjCFM5-U2LYS-uznRM7wg2o5ntdrPcDY"; // Replace with actual Sheet ID
+const API_KEY = "AIzaSyAVI_jtr5QRz9ixcg5XOOkmUwED4F2gtMk";   // Replace with actual API Key
+const RANGE_Dissertations = "Sheet1!A2:E";      // Adjust range based on sheet
+
+app.get('/Dissertation.html', async (req, res) => {
+  try {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID_Dissertations}/values/${RANGE_Dissertations}?key=${API_KEY}`;
+      const response = await axios.get(url);
+
+      const rows = response.data.values || [];
+      const researchData = rows.map(row => ({
+          name: row[0] || "N/A",
+          title: row[1] || "N/A",
+          year: row[2] || "N/A",
+          coSupervisors: row[3] || "N/A",
+          degree: row[4] || "N/A"
+      }));
+      res.render('Dissertation', { researchData });
+  } catch (error) {
+      console.error("Error fetching data:", error);
+      res.render('Dissertation', { researchData: [] });
+  }
+});
+
+// app.get("/Projects.html", async (req, res) => {
+//   try {
+//     // Fetch all projects from the database
+//     const projects = await Project.find();
+
+//     // Render the Projects.ejs page and pass projects
+//     res.render("Projects", { projects });
+//   } catch (error) {
+//     console.error("Error fetching projects:", error);
+//     res.status(500).send("Error loading projects");
+//   }
+// });
+
+const SHEET_ID_Project = "1twUrNhruozD27bZxtuG799oEOSFGMDkMkYW1abBI2CM";
+const API_KEY_Project = "AIzaSyC2tMNGZLpLl7vioXIR1-U8KZ8F12t2Sbg"
+const RANGE_Project = "Sheet1!A1:F"; // Adjust based on your columns
+
 app.get("/Projects.html", async (req, res) => {
   try {
-    // Fetch all projects from the database
-    const projects = await Project.find();
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID_Project}/values/${RANGE_Project}?key=${API_KEY_Project}`;
+    const response = await axios.get(url);
+    
+    // Convert sheet data into an array of objects
+    const rows = response.data.values;
+    const headers = rows[0]; // First row as headers
+    const projects = rows.slice(1).map(row => ({
+      title: row[0],
+      year: row[1],
+      funded: row[2],
+      collaborator: row[3],
+      projectType: row[4],
+      role: row[5]
+    }));
 
-    // Render the Projects.ejs page and pass projects
+    // Render Projects.ejs with fetched data
     res.render("Projects", { projects });
+
   } catch (error) {
-    console.error("Error fetching projects:", error);
+    console.error("Error fetching projects from Google Sheets:", error);
     res.status(500).send("Error loading projects");
   }
 });
+
 
 app.get("/patents.html", async (req, res) => {
   try {
@@ -518,3 +576,4 @@ app.get("/researchGroups", async (req, res) => {
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
+

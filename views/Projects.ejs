@@ -23,30 +23,72 @@
           <div class="summary-number" id="total-projects">
             <%= projects.length %>
           </div>
-          <div class="summary-title">Total Projects</div>
+          <div class="summary-title" style="font-weight: bold;">Total Projects</div>
         </div>
-        <div class="summary-card">
-          <div class="summary-number" id="total-projects">
-            <%= projects.projectType="Sponsored Research Project" .length %>
+      
+        <div class="summary-card expanded-summary">
+          <div class="summary-number" id="sponsored-projects-total">
+            <%= projects.filter(project => project.projectType === "Sponsored Research Project").length %>
           </div>
-          <div class="summary-title">Sponsored Research Projects</div>
+          <div class="summary-details">
+            <div class="summary-title main-title" style="font-weight: bold;">Sponsored Research Projects</div>
+            <div class="summary-breakdown">
+              <div class="summary-breakdown-item">
+                <span class="breakdown-label">Principal Investigator:</span>
+                <span class="breakdown-count">
+                  <%= projects.filter(project => 
+                    project.projectType === "Sponsored Research Project" && 
+                    project.role === "As Principal Investigator"
+                  ).length %>
+                </span>
+              </div>
+              <div class="summary-breakdown-item">
+                <span class="breakdown-label">Co-Principal Investigator:</span>
+                <span class="breakdown-count">
+                  <%= projects.filter(project => 
+                    project.projectType === "Sponsored Research Project" && 
+                    project.role === "As Co-Principal Investigator"
+                  ).length %>
+                </span>
+              </div>
+              <div class="summary-breakdown-item">
+                <span class="breakdown-label">Scientist Mentor:</span>
+                <span class="breakdown-count">
+                  <%= projects.filter(project => 
+                    project.projectType === "Sponsored Research Project" && 
+                    project.role === "As Scientist Mentor"
+                  ).length %>
+                </span>
+              </div>
+              <div class="summary-breakdown-item">
+                <span class="breakdown-label">As a Guide:</span>
+                <span class="breakdown-count">
+                  <%= projects.filter(project => 
+                    project.projectType === "Sponsored Research Project" && 
+                    project.role === "As a Guide"
+                  ).length %>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
-
+      
         <div class="summary-card" style="display: none">
           <div class="summary-number" id="consultancy-count">0</div>
           <div class="summary-title">Consultancy Projects</div>
         </div>
       </div>
-
       <!-- Sponsored Research Projects Section -->
       <div class="project-section">
         <div class="section-title">
-          <h2>Sponsored Research Projects</h2>
+          <h2>Sponsored Research Projects </h2>
         </div>
 
         <!-- Principal Investigator Projects -->
         <div class="role-subsection">
-          <h3>As Principal Investigator</h3>
+          <h3>As Principal Investigator (Total:  <%= projects.filter(project => 
+            project.projectType === "Sponsored Research Project" && 
+            project.role === "As Principal Investigator").length %>) </h3>
           <div class="table-controls">
             <div class="entries-selector">
               <label for="entries-select-pi">Show</label>
@@ -115,7 +157,7 @@
 
         <!-- Co-Principal Investigator Projects -->
         <div class="role-subsection">
-          <h3>As Co-Principal Investigator</h3>
+          <h3>As Co-Principal Investigator (Total:  <%= projects.filter(project => project.role === "As Co-Principal Investigator").length %>) </h3>
           <div class="table-controls">
             <div class="entries-selector">
               <label for="entries-select-copi">Show</label>
@@ -183,7 +225,7 @@
 
         <!-- Scientist Mentor Projects -->
         <div class="role-subsection">
-          <h3>As Scientist Mentor</h3>
+          <h3>As Scientist Mentor (Total:  <%= projects.filter(project => project.role === "As Scientist Mentor").length %>) </h3>
           <div class="table-controls">
             <div class="entries-selector">
               <label for="entries-select-scientist-mentor">Show</label>
@@ -252,7 +294,7 @@
 
         <!-- Guide Projects -->
         <div class="role-subsection">
-          <h3>As a Guide</h3>
+          <h3>As a Guide (Total:  <%= projects.filter(project => project.role === "As a Guide").length %>) </h3>
           <div class="table-controls">
             <div class="entries-selector">
               <label for="entries-select-guide">Show</label>
