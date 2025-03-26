@@ -127,18 +127,18 @@
     top: 10px;
     right: 15px;
     z-index: 10000; /* Higher z-index for button */
-    background-color: #4a5568; /* Gray */
+    background-color: var(--primary-color); /* Gray */
     color: white;
     padding: 10px 15px;
-    border-radius: 5px;
+  
     cursor: pointer;
     transition: background 0.3s;
   }
 
   .xzy1__toggle-btn:hover {
-    background-color: #2d3748; /* Darker gray */
+    background-color: var(--primary-color); /* Darker gray */
   }
-
+    
   /* Hide Navbar on larger screens */
   @media (min-width: 1200px) {
     .xzy1__navbar,
@@ -148,6 +148,9 @@
     nav {
       max-height: 30px;
     }
+    .mobile{
+      display: none;
+    }
   }
 
 </style>
@@ -155,21 +158,42 @@
 <!-- Toggle Button -->
 <button class="xzy1__toggle-btn" onclick="toggleNavbar()">☰ Menu</button>
 
+<div class="mobile" style="background-color: white; height: 70px; width: 100%; margin-bottom: 1px; z-index: 200;position: fixed;">
+  <a href="index.html">
+    <img src="/images/iiti_logo.png" alt="Logo" class="site-logo" style=" margin: 10px;" />
+  </a>
+
+  <a href="index.html">
+    <img
+      src="/images/score.png"
+      alt="Logo"
+      class="site-logo"
+      style="margin: 10px;"
+    />
+  </a>
+</div>
 <!-- Mobile Navbar -->
 <nav class="xzy1__navbar" id="mobileNavbar">
   <div class="xzy1__menu">
     <a href="index.html">Home</a>
+    
     <a href="aboutPI.html">About PI</a>
     <a href="Education.html">Education</a>
-    <a href="Publication.html">Publication</a>
     <a href="positions.html">Work Experience</a>
     <a href="teaching.html">Teaching Experience</a>
+    <a href="Dissertation.html">Dissertations supervised</a>
     <a href="extension.html">Extension Activities</a>
     <a href="Awards.html">Awards</a>
+
+    <a href="Publication.html">Publication</a>
     <a href="Projects.html">Projects</a>
-    <a href="patents.html">Patents and Technology Transfers</a>
-    <a href="keyTechnology.html">Key Technologies</a>
+    <a href="patents.html">Patents</a>
+
     <a href="ResearchMembers.html">Research Groups</a>
+    <a href="keyTechnology.html">Key Technologies</a>
+    <a href="Collaboration.html">Collaboration</a>
+    <a href="facilities.html">Facilities</a>
+    
     <a href="contact.html">Contact Us</a>
   </div>
 </nav>
@@ -181,7 +205,7 @@
   }
 </script>
 
-<header>
+<header style="position: fixed;width: 100%; z-index: 2000;">
   <div class="container">
     <nav>
       <!-- Logo on the left -->
@@ -319,6 +343,7 @@
     </nav>
   </div>
 </header>
+<div style="height: 70px !important;"></div>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
