@@ -1,0 +1,253 @@
+<%- include('partials/header') %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+/>
+<style>
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  /* Header Styles */
+  .header {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .profile {
+    display: flex;
+    align-items: center;
+  }
+
+  .profile-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 3px solid var(--primary-color);
+  }
+
+  .profile-info h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .profile-info p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  /* Facilities Grid */
+  .facilities-section {
+    padding: 3rem 0;
+  }
+
+  .facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .facility-card {
+    background-color: var(--card-background);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-speed);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .facility-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .facility-card-icon {
+    font-size: 2.5rem;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+  }
+
+  .facility-card h3 {
+    color: var(--color-accent);
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+  }
+
+  .facility-card p {
+    flex-grow: 1;
+    opacity: 0.8;
+  }
+
+  /* Responsive Adjustments */
+  @media screen and (max-width: 768px) {
+    .header-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .profile {
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+
+    .profile-image {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+
+    .facilities-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Scroll Bar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--background-color);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 5px;
+  }
+  :root {
+    /* Default is dark mode */
+    --primary-color: #5ab9a8;
+    --background-color: #20232a;
+    --text-color: #ffffff;
+    --secondary-bg: #292d36;
+    --footer-bg: #191c22;
+    --header-bg: #ffffff;
+    --header-text: #333333;
+    --card-bg: #292d36;
+    --border-color: #444;
+  }
+
+  /* Light theme */
+  html[data-theme="light"] {
+    --primary-color: #33b38d;
+    --background-color: #f5f5f7;
+    --text-color: #333;
+    --secondary-bg: #ffffff;
+    --footer-bg: #e5e5e7;
+    --header-bg: #ffffff;
+    --header-text: #333333;
+    --card-bg: #ffffff;
+    --border-color: #ddd;
+  }
+  h3 {
+    color: var(--primary-color) !important;
+  }
+  i {
+    color: var(--primary-color) !important;
+  }
+</style>
+
+<header class="header" style="color: var(--text-color) !important">
+  <div class="header-content">
+    <div class="profile">
+      <img
+        src="https://sandeepiiti.in/static/images/displaypic.png"
+        alt="Prof. Sandeep Chaudhary"
+        class="profile-image"
+      />
+      <div class="profile-info">
+        <h1>Prof. Sandeep Chaudhary</h1>
+        <p>Department of Civil Engineering</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main
+  class="container facilities-section"
+  style="color: var(--text-color) !important"
+>
+  <div class="facilities-grid">
+    <div class="facility-card">
+      <i class="fas fa-building facility-card-icon"></i>
+      <h3 style="color: var(--primary-color)">Structural Engineering Lab</h3>
+      <p>
+        Advanced testing facilities for concrete, steel, and composite
+        materials. Equipped with state-of-the-art universal testing machines and
+        comprehensive material stress analysis equipment.
+      </p>
+    </div>
+
+    <div class="facility-card">
+      <i class="fas fa-mountain facility-card-icon"></i>
+      <h3>Geotechnical Research Center</h3>
+      <p>
+        Specialized laboratory for soil mechanics, foundation engineering, and
+        geotechnical investigations. Features advanced soil testing apparatus
+        and 3D geological mapping technologies.
+      </p>
+    </div>
+
+    <div class="facility-card">
+      <i class="fas fa-flask facility-card-icon"></i>
+      <h3>Environmental Engineering Unit</h3>
+      <p>
+        Cutting-edge facilities for water quality analysis, waste management
+        research, and environmental impact assessments. Includes advanced
+        spectrophotometers and comprehensive filtration systems.
+      </p>
+    </div>
+
+    <div class="facility-card">
+      <i class="fas fa-road facility-card-icon"></i>
+      <h3>Transportation Infrastructure Lab</h3>
+      <p>
+        Specialized research area for road, bridge, and transportation
+        infrastructure studies. Equipped with pavement testing equipment,
+        traffic simulation software, and material durability testing tools.
+      </p>
+    </div>
+
+    <div class="facility-card">
+      <i class="fas fa-water facility-card-icon"></i>
+      <h3>Hydraulics and Water Resources Lab</h3>
+      <p>
+        Comprehensive facilities for fluid mechanics, hydraulic systems, and
+        water resource management. Features precision flow measurement
+        instruments and scaled model testing tanks.
+      </p>
+    </div>
+
+    <div class="facility-card">
+      <i class="fas fa-satellite facility-card-icon"></i>
+      <h3>GIS and Remote Sensing Center</h3>
+      <p>
+        Advanced geographic information systems and remote sensing technology
+        for spatial analysis, urban planning, and environmental monitoring.
+        Includes high-resolution satellite imagery processing capabilities.
+      </p>
+    </div>
+  </div>
+</main>
+
+<script></script>
+
+<%- include('partials/footer') %>

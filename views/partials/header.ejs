@@ -213,7 +213,7 @@
         <div class="dropdown">
           <a
             href="aboutPI.html"
-            class="dropdown-toggle <%= typeof currentPage !== 'undefined' && (currentPage === 'about' || currentPage === 'teaching' || currentPage === 'Awards' || currentPage === 'positions' || currentPage === 'Education' || currentPage === 'extension' ) ? 'active' : '' %>"
+            class="dropdown-toggle <%= typeof currentPage !== 'undefined' && (currentPage === 'about' || currentPage === 'teaching' || currentPage === 'Awards' || currentPage === 'positions' || currentPage === 'Education' || currentPage === 'extension' || currentPage === 'Dissertation') ? 'active' : '' %>"
             data-default="About PI ▼"
             >About PI</a
           >
@@ -235,7 +235,7 @@
             >
             <a
             href="Dissertation.html"
-            class="<%= typeof currentPage !== 'undefined' && currentPage === '' ? 'active' : '' %>"
+            class="<%= typeof currentPage !== 'undefined' && currentPage === 'Dissertation' ? 'active' : '' %>"
             >Dissertations supervised</a
           >
             <a
@@ -271,7 +271,7 @@
         <div class="dropdown">
           <a
             href="#"
-            class="dropdown-toggle <%= typeof currentPage !== 'undefined' && ( currentPage === 'ResearchMembers') ? 'active' : '' %>"
+            class="dropdown-toggle <%= typeof currentPage !== 'undefined' && ( currentPage === 'ResearchMembers' || currentPage === 'keyTechnology' || currentPage === 'Collaboration' || currentPage === 'facilities') ? 'active' : '' %>"
             data-default="Research ▼"
             >Research Group</a
           >
@@ -287,13 +287,13 @@
               >Key Technologies</a
             >
             <a
-              href=""
-              class="<%= typeof currentPage !== 'undefined' && currentPage === '' ? 'active' : '' %>"
+              href="Collaboration.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Collaboration' ? 'active' : '' %>"
               >Collaborations</a
             >
             <a
-              href="#"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === '' ? 'active' : '' %>"
+              href="facilities.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'facilities' ? 'active' : '' %>"
               >Facilities</a
             >
           </div>
@@ -306,7 +306,7 @@
       </div>
 
       <div class="nav-icons">
-        <a href="#"><i class="fas fa-search"></i></a>
+       
         <label class="theme-switch">
           <input type="checkbox" id="theme-toggle" />
           <span class="slider">
@@ -316,10 +316,6 @@
         </label>
       </div>
 
-      <!-- Hamburger menu for mobile -->
-      <div class="menu-icon" id="mobile-menu-toggle">
-        <i class="fas fa-bars"></i>
-      </div>
     </nav>
   </div>
 </header>

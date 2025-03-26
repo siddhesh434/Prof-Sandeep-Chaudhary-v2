@@ -137,6 +137,9 @@ app.use((req, res, next) => {
 app.get("/", async (req, res) => {
   res.render("index");
 });
+app.get("/facilities.html", async (req, res) => {
+  res.render("facilities");
+});
 
 app.get("/index.html", async (req, res) => {
   res.render("index");
@@ -147,6 +150,10 @@ app.get("/aboutPI.html", async (req, res) => {
 
 app.get("/teaching.html", async (req, res) => {
   res.render("teaching");
+});
+
+app.get("/Collaboration.html", async (req, res) => {
+  res.render("Collaboration");
 });
 
 
