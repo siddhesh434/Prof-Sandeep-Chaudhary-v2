@@ -216,14 +216,15 @@
 
       /* Courses Section */
       .courses-container {
+        min-width: 88vw;
         display: flex;
         flex-wrap: wrap;
-        gap: 40px;
+        gap: 5%;
       }
 
       .course-section {
         flex: 1;
-        min-width: 300px;
+        min-width: 40%;
         background-color: var(--card-bg);
         padding: 30px;
         border-radius: 10px;

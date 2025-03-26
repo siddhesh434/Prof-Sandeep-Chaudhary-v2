@@ -14,6 +14,7 @@
   }
 
   .section-title {
+    
     font-family: "Montserrat", sans-serif;
     font-size: 36px;
     margin-bottom: 40px;
@@ -35,11 +36,12 @@
   }
 
   .academic-sections {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    display: flex;
+   
     gap: 40px;
     margin-bottom: 40px;
   }
+
 
   .section-card {
     background-color: var(--card-bg);
@@ -203,6 +205,8 @@
 
   @media (max-width: 768px) {
     .academic-sections {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
       grid-template-columns: 1fr;
     }
 
@@ -347,39 +351,6 @@
   </div>
 
   <script>
-    // Theme toggle functionality
-    const themeToggle = document.getElementById("themeToggle");
-    const htmlElement = document.documentElement;
-    const themeIcon = themeToggle.querySelector("i");
-
-    // Check if user has a saved preference
-    const savedTheme = localStorage.getItem("theme") || "light";
-    htmlElement.setAttribute("data-theme", savedTheme);
-    updateThemeIcon(savedTheme);
-
-    themeToggle.addEventListener("click", () => {
-      const currentTheme = htmlElement.getAttribute("data-theme");
-      const newTheme = currentTheme === "light" ? "dark" : "light";
-
-      htmlElement.setAttribute("data-theme", newTheme);
-      localStorage.setItem("theme", newTheme);
-
-      // Add animation to theme toggle
-      themeToggle.classList.add("theme-changing");
-      setTimeout(() => {
-        themeToggle.classList.remove("theme-changing");
-        updateThemeIcon(newTheme);
-      }, 300);
-    });
-
-    function updateThemeIcon(theme) {
-      if (theme === "light") {
-        themeIcon.className = "fas fa-moon";
-      } else {
-        themeIcon.className = "fas fa-sun";
-      }
-    }
-
     // Animate cards on scroll
     const sectionCards = document.querySelectorAll(".section-card");
 
