@@ -1,4 +1,3 @@
-// insert-books.js - Script to insert book data into MongoDB
 
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");

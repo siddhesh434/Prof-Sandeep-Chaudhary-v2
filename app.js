@@ -137,6 +137,10 @@ app.use((req, res, next) => {
 
 /////////////////////////////////////////Book///////////////////////////////////////////////////////
 
+app.get('/admin/book.html',(req,res)=>{
+  res.render("admin/book")
+})
+
 app.post("/books", async (req, res) => {
   try {
     const newBook = new Book(req.body);
@@ -204,12 +208,354 @@ app.delete("/books/:id", async (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-app.get('/admin/index.html',(req,res)=>{
-  res.render("admin/index")
+
+/////////////////////////////////////////Publication///////////////////////////////////////////////////////
+// Publication Routes
+
+// Render Publication Admin Page
+app.get('/admin/publication.html', (req, res) => {
+  res.render("admin/publication")
 })
 
-app.get('/admin/book.html',(req,res)=>{
-  res.render("admin/book")
+// Create Publication (POST)
+app.post("/publications", async (req, res) => {
+  try {
+    const newPublication = new Publication(req.body);
+    const savedPublication = await newPublication.save();
+    res.status(201).json(savedPublication);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Read All Publications (GET)
+app.get("/publications", async (req, res) => {
+  try {
+    const publications = await Publication.find().sort({ year: -1 }); // Sort by most recent year
+    res.json(publications);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Read One Publication (GET by ID)
+app.get("/publications/:id", async (req, res) => {
+  try {
+    const publication = await Publication.findById(req.params.id);
+    if (!publication) {
+      return res.status(404).json({ message: "Publication not found" });
+    }
+    res.json(publication);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update Publication (PUT)
+app.put("/publications/:id", async (req, res) => {
+  try {
+    const updatedPublication = await Publication.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedPublication) {
+      return res.status(404).json({ message: "Publication not found" });
+    }
+    res.json(updatedPublication);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete Publication (DELETE)
+app.delete("/publications/:id", async (req, res) => {
+  try {
+    const deletedPublication = await Publication.findByIdAndDelete(req.params.id);
+    if (!deletedPublication) {
+      return res.status(404).json({ message: "Publication not found" });
+    }
+    res.json({ message: "Publication deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Optional: Search Publications
+app.get("/publications/search", async (req, res) => {
+  try {
+    const { query, year, journal } = req.query;
+    
+    // Build a dynamic search query
+    let searchQuery = {};
+    
+    if (query) {
+      searchQuery.$or = [
+        { title: { $regex: query, $options: 'i' } },
+        { author: { $regex: query, $options: 'i' } }
+      ];
+    }
+    
+    if (year) {
+      searchQuery.year = parseInt(year);
+    }
+    
+    if (journal) {
+      searchQuery.journal = { $regex: journal, $options: 'i' };
+    }
+    
+    const publications = await Publication.find(searchQuery)
+      .sort({ year: -1 })
+      .limit(50); // Limit to prevent overly broad searches
+    
+    res.json(publications);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////Conference Routes/////////////////////////////////////////////////////////
+// Conference Routes
+
+// Render Conference Admin Page
+app.get('/admin/conference.html', (req, res) => {
+  res.render("admin/conference")
+})
+
+// Create Conference Proceeding (POST)
+app.post("/conferences", async (req, res) => {
+  try {
+    const newConference = new Conference(req.body);
+    const savedConference = await newConference.save();
+    res.status(201).json(savedConference);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Read All Conference Proceedings (GET)
+app.get("/conferences", async (req, res) => {
+  try {
+    const conferences = await Conference.find().sort({ year: -1 }); // Sort by most recent year
+    res.json(conferences);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Read One Conference Proceeding (GET by ID)
+app.get("/conferences/:id", async (req, res) => {
+  try {
+    const conference = await Conference.findById(req.params.id);
+    if (!conference) {
+      return res.status(404).json({ message: "Conference proceeding not found" });
+    }
+    res.json(conference);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update Conference Proceeding (PUT)
+app.put("/conferences/:id", async (req, res) => {
+  try {
+    const updatedConference = await Conference.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedConference) {
+      return res.status(404).json({ message: "Conference proceeding not found" });
+    }
+    res.json(updatedConference);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete Conference Proceeding (DELETE)
+app.delete("/conferences/:id", async (req, res) => {
+  try {
+    const deletedConference = await Conference.findByIdAndDelete(req.params.id);
+    if (!deletedConference) {
+      return res.status(404).json({ message: "Conference proceeding not found" });
+    }
+    res.json({ message: "Conference proceeding deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Optional: Search Conference Proceedings
+app.get("/conferences/search", async (req, res) => {
+  try {
+    const { query, year, conference } = req.query;
+    
+    // Build a dynamic search query
+    let searchQuery = {};
+    
+    if (query) {
+      searchQuery.$or = [
+        { title: { $regex: query, $options: 'i' } },
+        { author: { $regex: query, $options: 'i' } }
+      ];
+    }
+    
+    if (year) {
+      searchQuery.year = parseInt(year);
+    }
+    
+    if (conference) {
+      searchQuery.conference = { $regex: conference, $options: 'i' };
+    }
+    
+    const conferences = await Conference.find(searchQuery)
+      .sort({ year: -1 })
+      .limit(50); // Limit to prevent overly broad searches
+    
+    res.json(conferences);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Additional Optional Routes
+
+// Get Unique Years for Filtering
+app.get("/conferences/years", async (req, res) => {
+  try {
+    const years = await Conference.distinct('year');
+    res.json(years.sort((a, b) => b - a));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get Conferences by Year
+app.get("/conferences/year/:year", async (req, res) => {
+  try {
+    const conferences = await Conference.find({ year: parseInt(req.params.year) })
+      .sort({ date: 1 });
+    res.json(conferences);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////chapters///////////////////////////////////////////////////////
+// Book Chapter Routes
+// Book Chapter Routes
+
+// Render Book Chapter Admin Page
+app.get('/admin/chapters.html', (req, res) => {
+  res.render("admin/chapters")
+})
+
+// Create Book Chapter (POST)
+app.post("/chapters", async (req, res) => {
+  try {
+    const newChapter = new Chapter(req.body);
+    const savedChapter = await newChapter.save();
+    res.status(201).json(savedChapter);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Read All Book Chapters (GET)
+app.get("/chapters", async (req, res) => {
+  try {
+    const chapters = await Chapter.find().sort({ year: -1 }); // Sort by most recent year
+    res.json(chapters);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Read One Book Chapter (GET by ID)
+app.get("/chapters/:id", async (req, res) => {
+  try {
+    const chapter = await Chapter.findById(req.params.id);
+    if (!chapter) {
+      return res.status(404).json({ message: "Book chapter not found" });
+    }
+    res.json(chapter);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update Book Chapter (PUT)
+app.put("/chapters/:id", async (req, res) => {
+  try {
+    const updatedChapter = await Chapter.findByIdAndUpdate(
+      req.params.id, 
+      req.body,
+      { new: true, runValidators: true }
+    );
+    
+    if (!updatedChapter) {
+      return res.status(404).json({ message: "Book chapter not found" });
+    }
+    res.json(updatedChapter);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete Book Chapter (DELETE)
+app.delete("/chapters/:id", async (req, res) => {
+  try {
+    const deletedChapter = await Chapter.findByIdAndDelete(req.params.id);
+    if (!deletedChapter) {
+      return res.status(404).json({ message: "Book chapter not found" });
+    }
+    res.json({ message: "Book chapter deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Optional: Search Book Chapters
+app.get("/chapters/search", async (req, res) => {
+  try {
+    const { query, year, bookName } = req.query;
+    
+    // Build a dynamic search query
+    let searchQuery = {};
+    
+    if (query) {
+      searchQuery.$or = [
+        { chapterName: { $regex: query, $options: 'i' } },
+        { author: { $regex: query, $options: 'i' } }
+      ];
+    }
+    
+    if (year) {
+      searchQuery.year = parseInt(year);
+    }
+    
+    if (bookName) {
+      searchQuery.bookName = { $regex: bookName, $options: 'i' };
+    }
+    
+    const chapters = await Chapter.find(searchQuery)
+      .sort({ year: -1 })
+      .limit(50); // Limit to prevent overly broad searches
+    
+    res.json(chapters);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.get('/admin/index.html',(req,res)=>{
+  res.render("admin/index")
 })
 
 app.get("/", async (req, res) => {
