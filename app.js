@@ -105,7 +105,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set("views", path.join(__dirname, "views"));
-
+app.use(express.json());
 // Add this before your route handlers
 app.use((req, res, next) => {
   // Get the full URL path
@@ -133,6 +133,84 @@ app.use((req, res, next) => {
 
   next();
 });
+
+
+/////////////////////////////////////////Book///////////////////////////////////////////////////////
+
+app.post("/books", async (req, res) => {
+  try {
+    const newBook = new Book(req.body);
+    const savedBook = await newBook.save();
+    res.status(201).json(savedBook);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Read All (GET)
+app.get("/books", async (req, res) => {
+  try {
+    const books = await Book.find();
+    res.json(books);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Read One (GET by ID)
+app.get("/books/:id", async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    res.json(book);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update (PUT)
+app.put("/books/:id", async (req, res) => {
+  console.log("hi",req.body,"bi");
+  try {
+    const updatedBook = await Book.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
+      { new: true, runValidators: true }
+    );
+    console.log(updatedBook);
+    if (!updatedBook) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    res.json(updatedBook);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete (DELETE)
+app.delete("/books/:id", async (req, res) => {
+  try {
+    const deletedBook = await Book.findByIdAndDelete(req.params.id);
+    if (!deletedBook) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    res.json({ message: "Book deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.get('/admin/index.html',(req,res)=>{
+  res.render("admin/index")
+})
+
+app.get('/admin/book.html',(req,res)=>{
+  res.render("admin/book")
+})
 
 app.get("/", async (req, res) => {
   res.render("index");
