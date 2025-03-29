@@ -187,279 +187,272 @@ const Dissertation =
     })
   );
 
-/////////////////////////////////////////////////////////File Upload Functionality//////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////File Upload Functionality//////////////////////////////////////////////////////////////
 
-// Create uploads directory if it doesn't exist
-const uploadsDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
+// // Create uploads directory if it doesn't exist
+// const uploadsDir = path.join(__dirname, "uploads");
+// if (!fs.existsSync(uploadsDir)) {
+//   fs.mkdirSync(uploadsDir, { recursive: true });
+// }
 
-// Configure multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadsDir),
-  filename: (req, file, cb) =>
-    cb(null, `${uuidv4()}${path.extname(file.originalname)}`),
-});
+// // Configure multer storage
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => cb(null, uploadsDir),
+//   filename: (req, file, cb) =>
+//     cb(null, `${uuidv4()}${path.extname(file.originalname)}`),
+// });
 
-// File filter for multer
-const fileFilter = (req, file, cb) => {
-  const allowedTypes =
-    /jpeg|jpg|png|gif|pdf|doc|docx|xls|xlsx|txt|csv|zip|rar|tar|gz/;
-  const isValidExt = allowedTypes.test(
-    path.extname(file.originalname).toLowerCase()
-  );
-  const isValidMime = allowedTypes.test(file.mimetype);
+// // File filter for multer
+// const fileFilter = (req, file, cb) => {
+//   const allowedTypes =
+//     /jpeg|jpg|png|gif|pdf|doc|docx|xls|xlsx|txt|csv|zip|rar|tar|gz/;
+//   const isValidExt = allowedTypes.test(
+//     path.extname(file.originalname).toLowerCase()
+//   );
+//   const isValidMime = allowedTypes.test(file.mimetype);
 
-  if (isValidExt && isValidMime) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error(
-        "Invalid file type. Only common document and image formats are allowed."
-      )
-    );
-  }
-};
+//   if (isValidExt && isValidMime) {
+//     cb(null, true);
+//   } else {
+//     cb(
+//       new Error(
+//         "Invalid file type. Only common document and image formats are allowed."
+//       )
+//     );
+//   }
+// };
 
-// Configure multer upload
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-  fileFilter,
-});
+// // Configure multer upload
+// const upload = multer({
+//   storage,
+//   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+//   fileFilter,
+// });
 
-// Define File Schema
-const File =
-  mongoose.models.File ||
-  mongoose.model(
-    "File",
-    new mongoose.Schema({
-      fileName: { type: String, required: true, trim: true },
-      description: { type: String, trim: true },
-      originalFilename: { type: String, required: true },
-      storedFilename: { type: String, required: true },
-      fileType: { type: String, required: true },
-      size: { type: Number, required: true },
-      uploadDate: { type: Date, default: Date.now },
-    })
-  );
+// // Define File Schema
+// const File =
+//   mongoose.models.File ||
+//   mongoose.model(
+//     "File",
+//     new mongoose.Schema({
+//       fileName: { type: String, required: true, trim: true },
+//       description: { type: String, trim: true },
+//       originalFilename: { type: String, required: true },
+//       storedFilename: { type: String, required: true },
+//       fileType: { type: String, required: true },
+//       size: { type: Number, required: true },
+//       uploadDate: { type: Date, default: Date.now },
+//     })
+//   );
 
-// Add text indexes for search
-File.schema.index({ fileName: "text", description: "text" });
+// // Add text indexes for search
+// File.schema.index({ fileName: "text", description: "text" });
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-app.use(morgan("dev")); // Request logging
+// // Middleware
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.static(path.join(__dirname, "public")));
+// app.use(morgan("dev")); // Request logging
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    success: false,
-    message: err.message || "Something went wrong on the server",
-  });
-});
+// // Error handling middleware
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).json({
+//     success: false,
+//     message: err.message || "Something went wrong on the server",
+//   });
+// });
 
-// Routes
+// // Routes
 
-// Get all files
-app.get("/api/files", async (req, res) => {
-  try {
-    const files = await File.find().sort({ uploadDate: -1 });
-    res.json(files);
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error fetching files",
-      error: error.message,
-    });
-  }
-});
+// // Get all files
+// app.get("/api/files", async (req, res) => {
+//   try {
+//     const files = await File.find().sort({ uploadDate: -1 });
+//     res.json(files);
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: "Error fetching files",
+//       error: error.message,
+//     });
+//   }
+// });
 
-// Search files
-app.get("/api/files/search", async (req, res) => {
-  try {
-    const { query } = req.query;
+// // Search files
+// app.get("/api/files/search", async (req, res) => {
+//   try {
+//     const { query } = req.query;
 
-    if (!query || query.trim() === "") {
-      const files = await File.find().sort({ uploadDate: -1 });
-      return res.json(files);
-    }
+//     if (!query || query.trim() === "") {
+//       const files = await File.find().sort({ uploadDate: -1 });
+//       return res.json(files);
+//     }
 
-    const files = await File.find(
-      { $text: { $search: query } },
-      { score: { $meta: "textScore" } }
-    ).sort({ score: { $meta: "textScore" } });
+//     const files = await File.find(
+//       { $text: { $search: query } },
+//       { score: { $meta: "textScore" } }
+//     ).sort({ score: { $meta: "textScore" } });
 
-    if (files.length === 0) {
-      const regexFiles = await File.find({
-        $or: [
-          { fileName: { $regex: query, $options: "i" } },
-          { description: { $regex: query, $options: "i" } },
-        ],
-      }).sort({ uploadDate: -1 });
+//     if (files.length === 0) {
+//       const regexFiles = await File.find({
+//         $or: [
+//           { fileName: { $regex: query, $options: "i" } },
+//           { description: { $regex: query, $options: "i" } },
+//         ],
+//       }).sort({ uploadDate: -1 });
 
-      return res.json(regexFiles);
-    }
+//       return res.json(regexFiles);
+//     }
 
-    res.json(files);
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error searching files",
-      error: error.message,
-    });
-  }
-});
+//     res.json(files);
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: "Error searching files",
+//       error: error.message,
+//     });
+//   }
+// });
 
-// Upload file
-app.post("/api/files/upload", upload.single("file"), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: "No file uploaded",
-      });
-    }
+// // Upload file
+// app.post("/api/files/upload", upload.single("file"), async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "No file uploaded",
+//       });
+//     }
 
-    const { fileName, fileDescription } = req.body;
+//     const { fileName, fileDescription } = req.body;
 
-    // Basic validation
-    if (!fileName) {
-      // Remove uploaded file if fileName is missing
-      fs.unlinkSync(req.file.path);
-      return res.status(400).json({
-        success: false,
-        message: "File name is required",
-      });
-    }
+//     // Basic validation
+//     if (!fileName) {
+//       // Remove uploaded file if fileName is missing
+//       fs.unlinkSync(req.file.path);
+//       return res.status(400).json({
+//         success: false,
+//         message: "File name is required",
+//       });
+//     }
 
-    // Create new file record
-    const newFile = new File({
-      fileName: fileName,
-      description: fileDescription || "",
-      originalFilename: req.file.originalname,
-      storedFilename: req.file.filename,
-      fileType: req.file.mimetype,
-      size: req.file.size,
-    });
+//     // Create new file record
+//     const newFile = new File({
+//       fileName: fileName,
+//       description: fileDescription || "",
+//       originalFilename: req.file.originalname,
+//       storedFilename: req.file.filename,
+//       fileType: req.file.mimetype,
+//       size: req.file.size,
+//     });
 
-    // Save to database
-    const savedFile = await newFile.save();
+//     // Save to database
+//     const savedFile = await newFile.save();
 
-    res.status(201).json({
-      success: true,
-      message: "File uploaded successfully",
-      file: savedFile,
-    });
-  } catch (error) {
-    // Attempt to remove uploaded file if there was an error
-    if (req.file) {
-      try {
-        fs.unlinkSync(req.file.path);
-      } catch (unlinkError) {
-        console.error("Error removing file after failed upload:", unlinkError);
-      }
-    }
-    res.status(500).json({
-      success: false,
-      message: "Error uploading file",
-      error: error.message,
-    });
-  }
-});
+//     res.status(201).json({
+//       success: true,
+//       message: "File uploaded successfully",
+//       file: savedFile,
+//     });
+//   } catch (error) {
+//     // Attempt to remove uploaded file if there was an error
+//     if (req.file) {
+//       try {
+//         fs.unlinkSync(req.file.path);
+//       } catch (unlinkError) {
+//         console.error("Error removing file after failed upload:", unlinkError);
+//       }
+//     }
+//     res.status(500).json({
+//       success: false,
+//       message: "Error uploading file",
+//       error: error.message,
+//     });
+//   }
+// });
 
-// Download file
-app.get("/api/files/download/:id", async (req, res) => {
-  try {
-    const file = await File.findById(req.params.id);
+// // Download file
+// app.get("/api/files/download/:id", async (req, res) => {
+//   try {
+//     const file = await File.findById(req.params.id);
 
-    if (!file) {
-      return res.status(404).json({
-        success: false,
-        message: "File not found",
-      });
-    }
+//     if (!file) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "File not found",
+//       });
+//     }
 
-    const filePath = path.join(uploadsDir, file.storedFilename);
+//     const filePath = path.join(uploadsDir, file.storedFilename);
 
-    // Check if file exists in filesystem
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({
-        success: false,
-        message: "File not found on server",
-      });
-    }
+//     // Check if file exists in filesystem
+//     if (!fs.existsSync(filePath)) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "File not found on server",
+//       });
+//     }
 
-    // Set appropriate headers
-    res.setHeader("Content-Type", file.fileType);
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="${file.originalFilename}"`
-    );
+//     // Set appropriate headers
+//     res.setHeader("Content-Type", file.fileType);
+//     res.setHeader(
+//       "Content-Disposition",
+//       `attachment; filename="${file.originalFilename}"`
+//     );
 
-    // Stream the file to client
-    const fileStream = fs.createReadStream(filePath);
-    fileStream.pipe(res);
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error downloading file",
-      error: error.message,
-    });
-  }
-});
+//     // Stream the file to client
+//     const fileStream = fs.createReadStream(filePath);
+//     fileStream.pipe(res);
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: "Error downloading file",
+//       error: error.message,
+//     });
+//   }
+// });
 
-// Delete file
-app.delete("/api/files/:id", async (req, res) => {
-  try {
-    const file = await File.findById(req.params.id);
+// // Delete file
+// app.delete("/api/files/:id", async (req, res) => {
+//   try {
+//     const file = await File.findById(req.params.id);
 
-    if (!file) {
-      return res.status(404).json({
-        success: false,
-        message: "File not found",
-      });
-    }
+//     if (!file) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "File not found",
+//       });
+//     }
 
-    const filePath = path.join(uploadsDir, file.storedFilename);
+//     const filePath = path.join(uploadsDir, file.storedFilename);
 
-    // Delete file from filesystem if it exists
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
+//     // Delete file from filesystem if it exists
+//     if (fs.existsSync(filePath)) {
+//       fs.unlinkSync(filePath);
+//     }
 
-    // Delete record from database
-    await File.findByIdAndDelete(req.params.id);
+//     // Delete record from database
+//     await File.findByIdAndDelete(req.params.id);
 
-    res.json({
-      success: true,
-      message: "File deleted successfully",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error deleting file",
-      error: error.message,
-    });
-  }
-});
+//     res.json({
+//       success: true,
+//       message: "File deleted successfully",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: "Error deleting file",
+//       error: error.message,
+//     });
+//   }
+// });
 
-// Serve the frontend
-app.get("/admin/fileupload.html", (req, res) => {
-  if (!req.session.admin) return res.redirect("/admin/login");
-  res.render("admin/fileupload");
-});
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-app.get("/admin/adminControl.html", (req, res) => {
-  if (!req.session.admin) return res.redirect("/admin/login");
-  res.render("admin/adminControl");
-});
+// // Serve the frontend
+// app.get("/admin/fileupload.html", (req, res) => {
+//   if (!req.session.admin) return res.redirect("/admin/login");
+//   res.render("admin/fileupload");
+// });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 app.set("view engine", "ejs");
