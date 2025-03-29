@@ -18,376 +18,374 @@
       </div>
       <div>
       </div>
-      <% if (appSettings.showPublications===true) { %>
-        <!-- Publication Summary -->
-        <div class="publication-summary">
-          <div class="summary-card">
-            <div class="summary-number">
-              <%= Object.keys(publicationsByYear).reduce((sum, year)=> sum +
-                publicationsByYear[year].length, 0) %>
-            </div>
-            <div class="summary-title">Journal Publications</div>
+
+      <!-- Publication Summary -->
+      <div class="publication-summary">
+        <div class="summary-card">
+          <div class="summary-number">
+            <%= Object.keys(publicationsByYear).reduce((sum, year)=> sum +
+              publicationsByYear[year].length, 0) %>
           </div>
-          <div class="summary-card">
-            <div class="summary-number">
-              <%= Object.keys(conferencesByYear).reduce((sum, year)=> sum +
-                conferencesByYear[year].length, 0) %>
-            </div>
-            <div class="summary-title">Conference Proceedings</div>
+          <div class="summary-title">Journal Publications</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number">
+            <%= Object.keys(conferencesByYear).reduce((sum, year)=> sum +
+              conferencesByYear[year].length, 0) %>
           </div>
-          <div class="summary-card">
-            <div class="summary-number">
-              <%= Object.keys(booksByYear).reduce((sum, year)=> sum +
-                booksByYear[year].length, 0) %>
-            </div>
-            <div class="summary-title">Books</div>
+          <div class="summary-title">Conference Proceedings</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number">
+            <%= Object.keys(booksByYear).reduce((sum, year)=> sum +
+              booksByYear[year].length, 0) %>
           </div>
-          <div class="summary-card">
-            <div class="summary-number">
-              <%= Object.keys(chaptersByYear).reduce((sum, year)=> sum +
-                chaptersByYear[year].length, 0) %>
-            </div>
-            <div class="summary-title">Book Chapters</div>
+          <div class="summary-title">Books</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number">
+            <%= Object.keys(chaptersByYear).reduce((sum, year)=> sum +
+              chaptersByYear[year].length, 0) %>
+          </div>
+          <div class="summary-title">Book Chapters</div>
+        </div>
+      </div>
+
+      <!-- Journal Publications -->
+      <div class="publication-section">
+        <div class="section-title">
+          <h2>Journal Publications</h2>
+        </div>
+
+        <!-- Search and Display Controls -->
+        <div class="table-controls">
+          <div class="entries-selector">
+            <label for="entries-select-journals">Show</label>
+            <select id="entries-select-journals" class="entries-select">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span>entries</span>
+          </div>
+          <div class="search-container">
+            <input type="text" id="publication-search-journals" placeholder="Search publications..."
+              class="search-input" />
+            <button id="search-btn-journals" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
           </div>
         </div>
-        <% } %>
-          <!-- Journal Publications -->
-          <div class="publication-section">
-            <div class="section-title">
-              <h2>Journal Publications</h2>
-            </div>
 
-            <!-- Search and Display Controls -->
-            <div class="table-controls">
-              <div class="entries-selector">
-                <label for="entries-select-journals">Show</label>
-                <select id="entries-select-journals" class="entries-select">
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-                <span>entries</span>
-              </div>
-              <div class="search-container">
-                <input type="text" id="publication-search-journals" placeholder="Search publications..."
-                  class="search-input" />
-                <button id="search-btn-journals" class="search-button">
-                  <i class="fas fa-search"></i>
-                </button>
-              </div>
-            </div>
+        <div class="table-wrapper">
+          <table class="publication-table" id="publications-table">
+            <thead>
+              <tr>
+                <th>Author</th>
+                <th>Paper Title</th>
+                <th>Journal Title</th>
+                <th>Year</th>
+                <th>Volume/Pages</th>
+                <th>Publication Link</th>
+                <th>Impact Factor</th>
+              </tr>
+            </thead>
+            <tbody id="publications-body">
+              <% publications.forEach((pub, index)=> { %>
+                <tr class="publication-row" data-index="<%= index %>">
+                  <td>
+                    <%= pub.author %>
+                  </td>
+                  <td>
+                    <%= pub.title %>
+                  </td>
+                  <td>
+                    <%= pub.journal %>
+                  </td>
+                  <td>
+                    <%= pub.year %>
+                  </td>
+                  <td>
+                    <%= pub.volumePages %>
+                  </td>
+                  <td>
+                    <% if (pub.publicationLink && pub.publicationLink !=='#' ) { %>
+                      <a href="<%= pub.publicationLink %>" target="_blank">DOI</a>
+                      <% } else { %>
+                        <%= pub.publicationDate %>
+                          <% } %>
+                  </td>
+                  <td>
+                    <span class="impact-factor">
+                      <%= pub.impactFactor %>
+                    </span>
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+        </div>
 
-            <div class="table-wrapper">
-              <table class="publication-table" id="publications-table">
-                <thead>
-                  <tr>
-                    <th>Author</th>
-                    <th>Paper Title</th>
-                    <th>Journal Title</th>
-                    <th>Year</th>
-                    <th>Volume/Pages</th>
-                    <th>Publication Link</th>
-                    <th>Impact Factor</th>
-                  </tr>
-                </thead>
-                <tbody id="publications-body">
-                  <% publications.forEach((pub, index)=> { %>
-                    <tr class="publication-row" data-index="<%= index %>">
-                      <td>
-                        <%= pub.author %>
-                      </td>
-                      <td>
-                        <%= pub.title %>
-                      </td>
-                      <td>
-                        <%= pub.journal %>
-                      </td>
-                      <td>
-                        <%= pub.year %>
-                      </td>
-                      <td>
-                        <%= pub.volumePages %>
-                      </td>
-                      <td>
-                        <% if (pub.publicationLink && pub.publicationLink !=='#' ) { %>
-                          <a href="<%= pub.publicationLink %>" target="_blank">DOI</a>
-                          <% } else { %>
-                            <%= pub.publicationDate %>
-                              <% } %>
-                      </td>
-                      <td>
-                        <span class="impact-factor">
-                          <%= pub.impactFactor %>
-                        </span>
-                      </td>
-                    </tr>
-                    <% }) %>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination-container">
-              <div class="pagination-info">
-                Showing <span id="showing-start-journals">1</span> to
-                <span id="showing-end-journals">10</span> of
-                <span id="total-entries-journals">
-                  <%= publications.length %>
-                </span>
-                entries
-              </div>
-              <div class="pagination-controls" id="pagination-controls-journals">
-                <!-- Pagination buttons will be dynamically generated -->
-              </div>
-            </div>
+        <!-- Pagination -->
+        <div class="pagination-container">
+          <div class="pagination-info">
+            Showing <span id="showing-start-journals">1</span> to
+            <span id="showing-end-journals">10</span> of
+            <span id="total-entries-journals">
+              <%= publications.length %>
+            </span>
+            entries
           </div>
-
-          <!-- Conference Proceedings -->
-          <div class="publication-section">
-            <div class="section-title">
-              <h2>Conference Proceedings</h2>
-            </div>
-
-            <!-- Search and Display Controls -->
-            <div class="table-controls">
-              <div class="entries-selector">
-                <label for="entries-select-conferences">Show</label>
-                <select id="entries-select-conferences" class="entries-select">
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-                <span>entries</span>
-              </div>
-              <div class="search-container">
-                <input type="text" id="publication-search-conferences" placeholder="Search conferences..."
-                  class="search-input" />
-                <button id="search-btn-conferences" class="search-button">
-                  <i class="fas fa-search"></i>
-                </button>
-              </div>
-            </div>
-
-            <div class="table-wrapper">
-              <table class="publication-table conference-table" id="conferences-table">
-                <thead>
-                  <tr>
-                    <th>Author</th>
-                    <th>Proceeding/Presentation Title</th>
-                    <th>Conference/Journal Title</th>
-                    <th>Date</th>
-                    <th>Year</th>
-                    <th>Place</th>
-                  </tr>
-                </thead>
-                <tbody id="conferences-body">
-                  <% conferences.forEach((conf, index)=> { %>
-                    <tr class="conference-row" data-index="<%= index %>">
-                      <td>
-                        <%= conf.author %>
-                      </td>
-                      <td>
-                        <%= conf.title %>
-                      </td>
-                      <td>
-                        <%= conf.conference %>
-                      </td>
-                      <td>
-                        <%= conf.date %>
-                      </td>
-                      <td>
-                        <%= conf.year %>
-                      </td>
-                      <td>
-                        <%= conf.place %>
-                      </td>
-                    </tr>
-                    <% }) %>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination-container">
-              <div class="pagination-info">
-                Showing <span id="showing-start-conferences">1</span> to
-                <span id="showing-end-conferences">5</span> of
-                <span id="total-entries-conferences">
-                  <%= conferences.length %>
-                </span>
-                entries
-              </div>
-              <div class="pagination-controls" id="pagination-controls-conferences">
-                <!-- Pagination buttons will be dynamically generated -->
-              </div>
-            </div>
+          <div class="pagination-controls" id="pagination-controls-journals">
+            <!-- Pagination buttons will be dynamically generated -->
           </div>
+        </div>
+      </div>
 
-          <!-- Books -->
-          <div class="publication-section mt-5">
-            <div class="section-title">
-              <h2>Books</h2>
-            </div>
-            <!-- Search and Display Controls for Books -->
-            <div class="table-controls">
-              <div class="entries-selector">
-                <label for="entries-select-books">Show</label>
-                <select id="entries-select-books" class="entries-select">
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-                <span>entries</span>
-              </div>
-              <div class="search-container">
-                <input type="text" id="publication-search-books" placeholder="Search books..." class="search-input" />
-                <button id="search-btn-books" class="search-button">
-                  <i class="fas fa-search"></i>
-                </button>
-              </div>
-            </div>
+      <!-- Conference Proceedings -->
+      <div class="publication-section">
+        <div class="section-title">
+          <h2>Conference Proceedings</h2>
+        </div>
 
-            <div class="table-wrapper">
-              <table class="publication-table books-table" id="books-table">
-                <thead>
-                  <tr>
-                    <th>Author</th>
-                    <th>Name</th>
-                    <th>Year</th>
-                    <th>ISBN</th>
-                    <th>Photo</th>
-                  </tr>
-                </thead>
-                <tbody id="books-body">
-                  <% books.forEach((book, index)=> { %>
-                    <tr class="book-row" data-index="<%= index %>">
-                      <td>
-                        <%= book.author %>
-                      </td>
-                      <td>
-                        <%= book.title %>
-                      </td>
-                      <td>
-                        <%= book.year %>
-                      </td>
-                      <td>
-                        <%= book.isbn %>
-                      </td>
-                      <td>
-                        <% if (book.photo) { %>
-                          <img src="<%= book.photo %>" alt="Cover of <%= book.title %>"
-                            style="width: 50px; height: auto" />
-                          <% } else { %> No Image <% } %>
-                      </td>
-                    </tr>
-                    <% }) %>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Pagination for Books -->
-            <div class="pagination-container">
-              <div class="pagination-info">
-                Showing <span id="showing-start-books">1</span> to
-                <span id="showing-end-books">5</span> of
-                <span id="total-entries-books">
-                  <%= books.length %>
-                </span> entries
-              </div>
-              <div class="pagination-controls" id="pagination-controls-books">
-                <!-- Pagination buttons will be dynamically generated -->
-              </div>
-            </div>
+        <!-- Search and Display Controls -->
+        <div class="table-controls">
+          <div class="entries-selector">
+            <label for="entries-select-conferences">Show</label>
+            <select id="entries-select-conferences" class="entries-select">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span>entries</span>
           </div>
-
-          <!-- Chapters -->
-          <div class="publication-section">
-            <div class="section-title">
-              <h2>Chapters</h2>
-            </div>
-
-            <!-- Search and Display Controls for Chapters -->
-            <div class="table-controls">
-              <div class="entries-selector">
-                <label for="entries-select-chapters">Show</label>
-                <select id="entries-select-chapters" class="entries-select">
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-                <span>entries</span>
-              </div>
-              <div class="search-container">
-                <input type="text" id="publication-search-chapters" placeholder="Search chapters..."
-                  class="search-input" />
-                <button id="search-btn-chapters" class="search-button">
-                  <i class="fas fa-search"></i>
-                </button>
-              </div>
-            </div>
-
-            <div class="table-wrapper">
-              <table class="publication-table chapters-table" id="chapters-table">
-                <thead>
-                  <tr>
-                    <th>Author</th>
-                    <th>Chapter Name</th>
-                    <th>Book Name</th>
-                    <th>Year</th>
-                    <th>ISBN</th>
-                    <th>Page No.</th>
-                  </tr>
-                </thead>
-                <tbody id="chapters-body">
-                  <% chapters.forEach((chapter, index)=> { %>
-                    <tr class="chapter-row" data-index="<%= index %>">
-                      <td>
-                        <%= chapter.author %>
-                      </td>
-                      <td>
-                        <%= chapter.chapterName %>
-                      </td>
-                      <td>
-                        <%= chapter.bookName %>
-                      </td>
-                      <td>
-                        <%= chapter.year %>
-                      </td>
-                      <td>
-                        <%= chapter.ISBN %>
-                      </td>
-                      <td>
-                        <%= chapter.Page %>
-                      </td>
-                    </tr>
-                    <% }) %>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Pagination for Chapters -->
-            <div class="pagination-container">
-              <div class="pagination-info">
-                Showing <span id="showing-start-chapters">1</span> to
-                <span id="showing-end-chapters">5</span> of
-                <span id="total-entries-chapters">
-                  <%= chapters.length %>
-                </span>
-                entries
-              </div>
-              <div class="pagination-controls" id="pagination-controls-chapters">
-                <!-- Pagination buttons will be dynamically generated -->
-              </div>
-            </div>
+          <div class="search-container">
+            <input type="text" id="publication-search-conferences" placeholder="Search conferences..."
+              class="search-input" />
+            <button id="search-btn-conferences" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
           </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="publication-table conference-table" id="conferences-table">
+            <thead>
+              <tr>
+                <th>Author</th>
+                <th>Proceeding/Presentation Title</th>
+                <th>Conference/Journal Title</th>
+                <th>Date</th>
+                <th>Year</th>
+                <th>Place</th>
+              </tr>
+            </thead>
+            <tbody id="conferences-body">
+              <% conferences.forEach((conf, index)=> { %>
+                <tr class="conference-row" data-index="<%= index %>">
+                  <td>
+                    <%= conf.author %>
+                  </td>
+                  <td>
+                    <%= conf.title %>
+                  </td>
+                  <td>
+                    <%= conf.conference %>
+                  </td>
+                  <td>
+                    <%= conf.date %>
+                  </td>
+                  <td>
+                    <%= conf.year %>
+                  </td>
+                  <td>
+                    <%= conf.place %>
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+          <div class="pagination-info">
+            Showing <span id="showing-start-conferences">1</span> to
+            <span id="showing-end-conferences">5</span> of
+            <span id="total-entries-conferences">
+              <%= conferences.length %>
+            </span>
+            entries
+          </div>
+          <div class="pagination-controls" id="pagination-controls-conferences">
+            <!-- Pagination buttons will be dynamically generated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Books -->
+      <div class="publication-section mt-5">
+        <div class="section-title">
+          <h2>Books</h2>
+        </div>
+        <!-- Search and Display Controls for Books -->
+        <div class="table-controls">
+          <div class="entries-selector">
+            <label for="entries-select-books">Show</label>
+            <select id="entries-select-books" class="entries-select">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span>entries</span>
+          </div>
+          <div class="search-container">
+            <input type="text" id="publication-search-books" placeholder="Search books..." class="search-input" />
+            <button id="search-btn-books" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="publication-table books-table" id="books-table">
+            <thead>
+              <tr>
+                <th>Author</th>
+                <th>Name</th>
+                <th>Year</th>
+                <th>ISBN</th>
+                <th>Photo</th>
+              </tr>
+            </thead>
+            <tbody id="books-body">
+              <% books.forEach((book, index)=> { %>
+                <tr class="book-row" data-index="<%= index %>">
+                  <td>
+                    <%= book.author %>
+                  </td>
+                  <td>
+                    <%= book.title %>
+                  </td>
+                  <td>
+                    <%= book.year %>
+                  </td>
+                  <td>
+                    <%= book.isbn %>
+                  </td>
+                  <td>
+                    <% if (book.photo) { %>
+                      <img src="<%= book.photo %>" alt="Cover of <%= book.title %>" style="width: 50px; height: auto" />
+                      <% } else { %> No Image <% } %>
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination for Books -->
+        <div class="pagination-container">
+          <div class="pagination-info">
+            Showing <span id="showing-start-books">1</span> to
+            <span id="showing-end-books">5</span> of
+            <span id="total-entries-books">
+              <%= books.length %>
+            </span> entries
+          </div>
+          <div class="pagination-controls" id="pagination-controls-books">
+            <!-- Pagination buttons will be dynamically generated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Chapters -->
+      <div class="publication-section">
+        <div class="section-title">
+          <h2>Chapters</h2>
+        </div>
+
+        <!-- Search and Display Controls for Chapters -->
+        <div class="table-controls">
+          <div class="entries-selector">
+            <label for="entries-select-chapters">Show</label>
+            <select id="entries-select-chapters" class="entries-select">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span>entries</span>
+          </div>
+          <div class="search-container">
+            <input type="text" id="publication-search-chapters" placeholder="Search chapters..." class="search-input" />
+            <button id="search-btn-chapters" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="publication-table chapters-table" id="chapters-table">
+            <thead>
+              <tr>
+                <th>Author</th>
+                <th>Chapter Name</th>
+                <th>Book Name</th>
+                <th>Year</th>
+                <th>ISBN</th>
+                <th>Page No.</th>
+              </tr>
+            </thead>
+            <tbody id="chapters-body">
+              <% chapters.forEach((chapter, index)=> { %>
+                <tr class="chapter-row" data-index="<%= index %>">
+                  <td>
+                    <%= chapter.author %>
+                  </td>
+                  <td>
+                    <%= chapter.chapterName %>
+                  </td>
+                  <td>
+                    <%= chapter.bookName %>
+                  </td>
+                  <td>
+                    <%= chapter.year %>
+                  </td>
+                  <td>
+                    <%= chapter.ISBN %>
+                  </td>
+                  <td>
+                    <%= chapter.Page %>
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination for Chapters -->
+        <div class="pagination-container">
+          <div class="pagination-info">
+            Showing <span id="showing-start-chapters">1</span> to
+            <span id="showing-end-chapters">5</span> of
+            <span id="total-entries-chapters">
+              <%= chapters.length %>
+            </span>
+            entries
+          </div>
+          <div class="pagination-controls" id="pagination-controls-chapters">
+            <!-- Pagination buttons will be dynamically generated -->
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <%- include('partials/footer') %>
