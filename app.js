@@ -35,6 +35,7 @@ app.use(
 const adminRoutes = require("./routes/admin");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/admin", adminRoutes);
+app.use(express.json());
 
 // Root route
 app.get("/admin", (req, res) => {
@@ -69,10 +70,6 @@ mongoose
   .catch((error) => console.error("MongoDB connection error:", error));
 
 // ✅ Check if models already exist to prevent overwrite error
-const Item =
-  mongoose.models.Item ||
-  mongoose.model("Item", new mongoose.Schema({ name: String }));
-
 const Publication =
   mongoose.models.Publication ||
   mongoose.model(
@@ -186,6 +183,47 @@ const Dissertation =
       degree: String,
     })
   );
+/////////////////////////////////////////////////////////////////Control////////////////////////////////////////////////////////////////////
+
+const Visibility =
+  mongoose.models.Visibility ||
+  mongoose.model(
+    "Visibility",
+    new mongoose.Schema({
+      showPublications: { type: Boolean, default: false },
+      showPatents: { type: Boolean, default: false },
+      showProjects: { type: Boolean, default: false },
+      showDissertation: { type: Boolean, default: false },
+    })
+  );
+app.get("/admin/control.html", (req, res) => {
+  res.render("admin/control");
+});
+
+app.post("/admin/update-settings", async (req, res) => {
+  try {
+    const { settings } = req.body;
+    const updatedSettings = await Visibility.findOneAndUpdate({}, settings, {
+      upsert: true,
+      new: true,
+    });
+    res.json({ success: true, settings: updatedSettings });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error saving settings" });
+  }
+});
+
+app.get("/admin/get-settings", async (req, res) => {
+  try {
+    const settings = (await Visibility.findOne()) || {};
+    console.log(settings);
+    res.json({ success: true, settings });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching settings" });
+  }
+});
 
 // /////////////////////////////////////////////////////////File Upload Functionality//////////////////////////////////////////////////////////////
 
@@ -1425,9 +1463,9 @@ app.get("/Projects.html", async (req, res) => {
   try {
     // Fetch all projects from the database
     const projects = await Project.find();
-
+    const settings = (await Visibility.findOne()) || {};
     // Render the Projects.ejs page and pass projects
-    res.render("Projects", { projects });
+    res.render("Projects", { settings, projects });
   } catch (error) {
     console.error("Error fetching projects:", error);
     res.status(500).send("Error loading projects");
@@ -1438,9 +1476,9 @@ app.get("/patents.html", async (req, res) => {
   try {
     // Fetch all projects from the database
     const patents = await Patent.find();
-
+    const settings = (await Visibility.findOne()) || {};
     // Render the Projects.ejs page and pass projects
-    res.render("patents", { patents });
+    res.render("patents", { settings, patents });
   } catch (error) {
     console.error("Error fetching patents:", error);
     res.status(500).send("Error loading patents");
@@ -1495,9 +1533,11 @@ app.get("/publication.html", async (req, res) => {
       }
       chaptersByYear[chapter.year].push(chapter);
     });
+    const settings = (await Visibility.findOne()) || {};
 
     // Render the publication page with all data
     res.render("publication", {
+      settings,
       publications,
       publicationsByYear,
       conferences,

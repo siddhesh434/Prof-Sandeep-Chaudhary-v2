@@ -1,0 +1,229 @@
+<!-- Admin Control Panel - control.ejs or control.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Panel</title>
+    <!-- Include Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Additional custom styles */
+        .toggle-btn {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-btn input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #3b82f6;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #3b82f6;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Visibility Controls</h1>
+
+        <!-- Loading spinner -->
+        <div id="loading" class="flex justify-center py-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        </div>
+
+        <!-- Settings Panel -->
+        <div id="settings-panel" class="hidden space-y-4">
+            <!-- Publications Toggle -->
+            <div class="flex items-center justify-between">
+                <label for="showPublications" class="text-gray-700 font-medium">Publications</label>
+                <label class="toggle-btn">
+                    <input type="checkbox" id="showPublications">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Patents Toggle -->
+            <div class="flex items-center justify-between">
+                <label for="showPatents" class="text-gray-700 font-medium">Patents</label>
+                <label class="toggle-btn">
+                    <input type="checkbox" id="showPatents">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Projects Toggle -->
+            <div class="flex items-center justify-between">
+                <label for="showProjects" class="text-gray-700 font-medium">Projects</label>
+                <label class="toggle-btn">
+                    <input type="checkbox" id="showProjects">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Dissertation Toggle -->
+            <div class="flex items-center justify-between">
+                <label for="showDissertation" class="text-gray-700 font-medium">Dissertation</label>
+                <label class="toggle-btn">
+                    <input type="checkbox" id="showDissertation">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Save Button -->
+            <div class="mt-6">
+                <button id="save-button"
+                    class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Save Settings
+                </button>
+            </div>
+
+            <!-- Status Message -->
+            <div id="status-message" class="mt-2 text-center hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loadingElement = document.getElementById('loading');
+            const settingsPanel = document.getElementById('settings-panel');
+            const saveButton = document.getElementById('save-button');
+            const statusMessage = document.getElementById('status-message');
+
+            // Toggle inputs
+            const showPublications = document.getElementById('showPublications');
+            const showPatents = document.getElementById('showPatents');
+            const showProjects = document.getElementById('showProjects');
+            const showDissertation = document.getElementById('showDissertation');
+
+            // Fetch settings on page load
+            fetchSettings();
+
+            // Save settings on button click
+            saveButton.addEventListener('click', saveSettings);
+
+            // Function to fetch current settings
+            async function fetchSettings() {
+                try {
+                    loadingElement.classList.remove('hidden');
+                    settingsPanel.classList.add('hidden');
+
+                    const response = await fetch('/admin/get-settings');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const settings = data.settings;
+
+                        // Set toggle states based on fetched settings
+                        showPublications.checked = settings.showPublications || false;
+                        showPatents.checked = settings.showPatents || false;
+                        showProjects.checked = settings.showProjects || false;
+                        showDissertation.checked = settings.showDissertation || false;
+
+                        // Show settings panel
+                        loadingElement.classList.add('hidden');
+                        settingsPanel.classList.remove('hidden');
+                    } else {
+                        showError('Error loading settings');
+                    }
+                } catch (error) {
+                    showError('Failed to connect to server');
+                }
+            }
+
+            // Function to save settings
+            async function saveSettings() {
+                try {
+                    // Show saving status
+                    showStatus('Saving...', 'text-blue-500');
+
+                    // Collect current toggle states
+                    const settings = {
+                        showPublications: showPublications.checked,
+                        showPatents: showPatents.checked,
+                        showProjects: showProjects.checked,
+                        showDissertation: showDissertation.checked
+                    };
+
+                    // Send to server
+                    const response = await fetch('/admin/update-settings', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ settings })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        showStatus('Settings saved successfully!', 'text-green-500');
+                        setTimeout(() => {
+                            statusMessage.classList.add('hidden');
+                        }, 3000);
+                    } else {
+                        showError('Error saving settings');
+                    }
+                } catch (error) {
+                    showError('Failed to connect to server');
+                }
+            }
+
+            // Helper function to show error message
+            function showError(message) {
+                showStatus(message, 'text-red-500');
+            }
+
+            // Helper function to show status message
+            function showStatus(message, className) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'mt-2 text-center ' + className;
+                statusMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>

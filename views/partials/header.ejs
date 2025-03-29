@@ -24,6 +24,7 @@
       display: none;
     }
   }
+
   /* Add these styles to your existing CSS file */
   /* Navigation */
   header {
@@ -31,6 +32,7 @@
     padding: 20px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
+
   @media (max-width: 600px) {
     .score {
       display: none;
@@ -43,10 +45,12 @@
     font-weight: 500;
     transition: color 0.3s ease;
   }
+
   .nav-links a.active,
   .nav-links a:hover {
     color: var(--primary-color);
   }
+
   .nav-icons {
     display: flex;
     gap: 15px;
@@ -88,15 +92,19 @@
     justify-content: flex-end;
     margin-right: 20px;
   }
+
   .xzy1__navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 9999; /* High z-index to ensure it appears above all */
-    background-color: #1a202c; /* Dark gray */
+    z-index: 9999;
+    /* High z-index to ensure it appears above all */
+    background-color: #1a202c;
+    /* Dark gray */
     color: white;
-    display: none; /* Hidden by default */
+    display: none;
+    /* Hidden by default */
   }
 
   .xzy1__navbar.active {
@@ -118,7 +126,8 @@
   }
 
   .xzy1__menu a:hover {
-    color: #63b3ed; /* Light blue */
+    color: #63b3ed;
+    /* Light blue */
   }
 
   /* Toggle Button */
@@ -126,70 +135,72 @@
     position: fixed;
     top: 10px;
     right: 15px;
-    z-index: 10000; /* Higher z-index for button */
-    background-color: var(--primary-color); /* Gray */
+    z-index: 10000;
+    /* Higher z-index for button */
+    background-color: var(--primary-color);
+    /* Gray */
     color: white;
     padding: 10px 15px;
-  
+
     cursor: pointer;
     transition: background 0.3s;
   }
 
   .xzy1__toggle-btn:hover {
-    background-color: var(--primary-color); /* Darker gray */
+    background-color: var(--primary-color);
+    /* Darker gray */
   }
-    
+
   /* Hide Navbar on larger screens */
   @media (min-width: 1200px) {
+
     .xzy1__navbar,
     .xzy1__toggle-btn {
       display: none;
     }
+
     nav {
       max-height: 30px;
     }
-    .mobile{
+
+    .mobile {
       display: none;
     }
   }
+
   .admin-login {
-  text-decoration: none;
-  background-color: #4f46e5;
-  color: white;
-  padding: 8px 15px;
-  border-radius: 6px;
-  font-weight: 600;
-  transition: background 0.3s ease-in-out;
-}
+    text-decoration: none;
+    background-color: #4f46e5;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.3s ease-in-out;
+  }
 
-.admin-login:hover {
-  background-color: #4338ca;
-}
-
+  .admin-login:hover {
+    background-color: #4338ca;
+  }
 </style>
 
 <!-- Toggle Button -->
 <button class="xzy1__toggle-btn" onclick="toggleNavbar()">☰ Menu</button>
 
-<div class="mobile" style="background-color: white; height: 70px; width: 100%; margin-bottom: 1px; z-index: 200;position: fixed;">
+<div class="mobile"
+  style="background-color: white; height: 70px; width: 100%; margin-bottom: 1px; z-index: 200;position: fixed;">
   <a href="index.html">
     <img src="/images/iiti_logo.png" alt="Logo" class="site-logo" style=" margin: 10px;" />
   </a>
 
   <a href="index.html">
-    <img
-      src="/images/score.png"
-      alt="Logo"
-      class="site-logo"
-      style="margin: 10px;"
-    />
+    <img src="/images/score.png" alt="Logo" class="site-logo" style="margin: 10px;" />
   </a>
 </div>
 <!-- Mobile Navbar -->
 <nav class="xzy1__navbar" id="mobileNavbar">
   <div class="xzy1__menu">
     <a href="index.html">Home</a>
-    
+
     <a href="aboutPI.html">About PI</a>
     <a href="Education.html">Education</a>
     <a href="positions.html">Work Experience</a>
@@ -206,9 +217,9 @@
     <a href="keyTechnology.html">Key Technologies</a>
     <a href="Collaboration.html">Collaboration</a>
     <a href="facilities.html">Facilities</a>
-    
+
     <a href="contact.html">Contact Us</a>
-    <a href="/admin/login" style="font-weight: bold;">Admin Login</a>
+    <!-- <a href="/admin/login" style="font-weight: bold;">Admin Login</a> -->
   </div>
 </nav>
 
@@ -230,12 +241,7 @@
       </div>
       <div class="logo score">
         <a href="index.html">
-          <img
-            src="/images/score.png"
-            alt="Logo"
-            class="site-logo"
-            style="padding-left: 25px"
-          />
+          <img src="/images/score.png" alt="Logo" class="site-logo" style="padding-left: 25px" />
         </a>
       </div>
       <!-- Empty space in the middle -->
@@ -243,112 +249,66 @@
 
       <!-- Navigation links on the right -->
       <div class="nav-links">
-        <a
-          href="index.html"
-          class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>"
-          >Home</a
-        >
+        <a href="index.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">Home</a>
         <div class="dropdown">
-          <a
-            href="aboutPI.html"
+          <a href="aboutPI.html"
             class="dropdown-toggle <%= typeof currentPage !== 'undefined' && (currentPage === 'about' || currentPage === 'teaching' || currentPage === 'Awards' || currentPage === 'positions' || currentPage === 'Education' || currentPage === 'extension' || currentPage === 'Dissertation') ? 'active' : '' %>"
-            data-default="About PI ▼"
-            >About PI</a
-          >
+            data-default="About PI ▼">About PI</a>
           <div class="dropdown-content">
-            <a
-              href="Education.html"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Education' ? 'active' : '' %>"
-              >Education</a
-            >
-            <a
-              href="positions.html"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === 'positons' ? 'active' : '' %>"
-              >Work Experience</a
-            >
-            <a
-              href="teaching.html"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === 'teaching' ? 'active' : '' %>"
-              >Teaching Experience</a
-            >
-            <a
-            href="Dissertation.html"
-            class="<%= typeof currentPage !== 'undefined' && currentPage === 'Dissertation' ? 'active' : '' %>"
-            >Dissertations supervised</a
-          >
-            <a
-              href="extension.html"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === 'extension' ? 'active' : '' %>"
-              >Extension Activities</a
-            >
+            <a href="Education.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Education' ? 'active' : '' %>">Education</a>
+            <a href="positions.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'positons' ? 'active' : '' %>">Work
+              Experience</a>
+            <a href="teaching.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'teaching' ? 'active' : '' %>">Teaching
+              Experience</a>
+            <a href="Dissertation.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Dissertation' ? 'active' : '' %>">Dissertations
+              supervised</a>
+            <a href="extension.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'extension' ? 'active' : '' %>">Extension
+              Activities</a>
 
-            <a
-              href="Awards.html"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Awards' ? 'active' : '' %>"
-              >Awards</a
-            >
+            <a href="Awards.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Awards' ? 'active' : '' %>">Awards</a>
           </div>
         </div>
 
-        <a
-          href="publication.html"
-          class="<%= typeof currentPage !== 'undefined' && currentPage === 'publication' ? 'active' : '' %>"
-          >Publication</a
-        >
-        <a
-          href="Projects.html"
-          class="<%= typeof currentPage !== 'undefined' && currentPage === 'Projects' ? 'active' : '' %>"
-          >Projects</a
-        >
-        <a
-          href="patents.html"
-          class="<%= typeof currentPage !== 'undefined' && currentPage === 'patents' ? 'active' : '' %>"
-          >Patents</a
-        >
+        <a href="publication.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'publication' ? 'active' : '' %>">Publication</a>
+        <a href="Projects.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'Projects' ? 'active' : '' %>">Projects</a>
+        <a href="patents.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'patents' ? 'active' : '' %>">Patents</a>
 
         <div class="dropdown">
-          <a
-            href="#"
+          <a href="#"
             class="dropdown-toggle <%= typeof currentPage !== 'undefined' && ( currentPage === 'ResearchMembers' || currentPage === 'keyTechnology' || currentPage === 'Collaboration' || currentPage === 'facilities') ? 'active' : '' %>"
-            data-default="Research ▼"
-            >Research Group</a
-          >
+            data-default="Research ▼">Research Group</a>
           <div class="dropdown-content">
-            <a
-              href="ResearchMembers.html"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === 'ResearchMembers' ? 'active' : '' %>"
-              >Members</a
-            >
-            <a
-              href="keyTechnology.html"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === 'keyTechnology' ? 'active' : '' %>"
-              >Key Technologies</a
-            >
-            <a
-              href="Collaboration.html"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Collaboration' ? 'active' : '' %>"
-              >Collaborations</a
-            >
-            <a
-              href="facilities.html"
-              class="<%= typeof currentPage !== 'undefined' && currentPage === 'facilities' ? 'active' : '' %>"
-              >Facilities</a
-            >
+            <a href="ResearchMembers.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'ResearchMembers' ? 'active' : '' %>">Members</a>
+            <a href="keyTechnology.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'keyTechnology' ? 'active' : '' %>">Key
+              Technologies</a>
+            <a href="Collaboration.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'Collaboration' ? 'active' : '' %>">Collaborations</a>
+            <a href="facilities.html"
+              class="<%= typeof currentPage !== 'undefined' && currentPage === 'facilities' ? 'active' : '' %>">Facilities</a>
           </div>
         </div>
-        <a
-          href="/contact.html"
-          class="<%= typeof currentPage !== 'undefined' && currentPage === 'contact' ? 'active' : '' %>"
-          >Contact Us</a
-        >
+        <a href="/contact.html"
+          class="<%= typeof currentPage !== 'undefined' && currentPage === 'contact' ? 'active' : '' %>">Contact Us</a>
       </div>
-      
-      <div class="nav-icons">
+
+      <!-- <div class="nav-icons">
         <a href="/admin/login" class="admin-login">Admin Login</a>
-       </div>
+      </div> -->
 
       <div class="nav-icons">
-       
+
         <label class="theme-switch">
           <input type="checkbox" id="theme-toggle" />
           <span class="slider">
@@ -357,7 +317,7 @@
           </span>
         </label>
       </div>
-     
+
     </nav>
   </div>
 </header>
