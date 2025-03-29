@@ -43,12 +43,11 @@
                         </a>
                     </li>
                     <li class="mb-1 px-2">
-                        <a href="/admin/fileupload.html"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-users mr-3"></i>
-                            <span>File Upload</span>
+                        <a href="/admin/control.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                          <i class="fas fa-sliders-h mr-3"></i>
+                          <span>Visibility Controls</span>
                         </a>
-                    </li>
+                      </li>
                     <li class="mb-1 px-2">
                         <a href="/admin/logout"
                             class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
@@ -431,31 +430,11 @@
             const year = document.getElementById('year').value;
             const isbn = document.getElementById('isbn').value.trim();
 
-            if (author.length < 3) {
-                alert('Author names must be at least 3 characters long');
-                return false;
-            }
-
-            if (chapterName.length < 5) {
-                alert('Chapter name must be at least 5 characters long');
-                return false;
-            }
-
-            if (bookName.length < 3) {
-                alert('Book name must be at least 3 characters long');
-                return false;
-            }
-
             if (year < 1900 || year > new Date().getFullYear()) {
                 alert(`Year must be between 1900 and ${new Date().getFullYear()}`);
                 return false;
             }
-
-            if (isbn && !/^(?=.*\d)[\d-]+$/.test(isbn)) {
-                alert('Invalid ISBN format');
-                return false;
-            }
-
+            
             return true;
         }
 

@@ -1,229 +1,429 @@
-<!-- Admin Control Panel - control.ejs or control.html -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Control Panel</title>
-    <!-- Include Tailwind CSS from CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Additional custom styles */
-        .toggle-btn {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 24px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Admin Dashboard - Visibility Controls</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* Toggle switch styles */
+    .toggle-btn {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
 
-        .toggle-btn input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+    .toggle-btn input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
 
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
 
-        input:checked+.slider {
-            background-color: #3b82f6;
-        }
+    input:checked+.slider {
+      background-color: #3b82f6;
+    }
 
-        input:focus+.slider {
-            box-shadow: 0 0 1px #3b82f6;
-        }
+    input:focus+.slider {
+      box-shadow: 0 0 1px #3b82f6;
+    }
 
-        input:checked+.slider:before {
-            transform: translateX(20px);
-        }
+    input:checked+.slider:before {
+      transform: translateX(20px);
+    }
 
-        .hidden {
-            display: none;
-        }
-    </style>
+    /* Animations and transitions */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="max-w-md w-full mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Visibility Controls</h1>
+<body class="bg-gray-100">
+  <div class="flex h-screen overflow-hidden relative">
+    <!-- Sidebar - hidden on mobile by default -->
+    <aside id="sidebar"
+      class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
+      <div class="p-6 border-b border-blue-800">
+        <h2 class="text-xl font-bold tracking-wide">
+          Welcome, Admin!
+        </h2>
+        <!-- Close button for mobile -->
+        <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <nav class="mt-4">
+        <ul>
+          <li class="mb-1 px-2">
+            <a href="/admin" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fas fa-home mr-3"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/control.html" class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
+              <i class="fas fa-sliders-h mr-3"></i>
+              <span>Visibility Controls</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/logout"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fas fa-sign-out-alt mr-3"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
 
-        <!-- Loading spinner -->
-        <div id="loading" class="flex justify-center py-4">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+      <div class="p-4 md:p-6">
+        <!-- Header with mobile menu indicator -->
+        <div class="flex justify-between items-center mb-6 md:mb-8">
+          <div class="flex items-center">
+            <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+              Website Visibility Controls
+            </h1>
+          </div>
+          <div class="flex items-center space-x-2 md:space-x-4">
+            <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Welcome, Admin</span>
+            <div
+              class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
+              A
+            </div>
+          </div>
         </div>
 
-        <!-- Settings Panel -->
-        <div id="settings-panel" class="hidden space-y-4">
-            <!-- Publications Toggle -->
-            <div class="flex items-center justify-between">
-                <label for="showPublications" class="text-gray-700 font-medium">Publications</label>
-                <label class="toggle-btn">
-                    <input type="checkbox" id="showPublications">
-                    <span class="slider"></span>
-                </label>
+        <!-- Main content area -->
+        <div class="max-w-2xl mx-auto">
+          <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover mb-6">
+            <div class="bg-blue-800 text-white p-5">
+              <h2 class="text-xl font-semibold flex items-center">
+                <i class="fas fa-eye mr-3 text-2xl"></i>
+                Content Visibility Settings
+              </h2>
+              <p class="mt-1 text-blue-100 text-sm">
+                Control which sections are visible on your public research profile
+              </p>
             </div>
-
-            <!-- Patents Toggle -->
-            <div class="flex items-center justify-between">
-                <label for="showPatents" class="text-gray-700 font-medium">Patents</label>
-                <label class="toggle-btn">
-                    <input type="checkbox" id="showPatents">
-                    <span class="slider"></span>
-                </label>
+            
+            <!-- Loading spinner -->
+            <div id="loading" class="flex justify-center py-8 fade-in">
+              <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
             </div>
-
-            <!-- Projects Toggle -->
-            <div class="flex items-center justify-between">
-                <label for="showProjects" class="text-gray-700 font-medium">Projects</label>
+            
+            <!-- Settings Panel -->
+            <div id="settings-panel" class="hidden p-5 space-y-6 fade-in">
+              <!-- Publications Toggle -->
+              <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                <div>
+                  <label for="showPublications" class="text-gray-800 font-medium lg:text-xl block">Publications</label>
+                  <span class="text-gray-500 text-sm">Journal articles, conferences, books and chapters</span>
+                </div>
                 <label class="toggle-btn">
-                    <input type="checkbox" id="showProjects">
-                    <span class="slider"></span>
+                  <input type="checkbox" id="showPublications">
+                  <span class="slider"></span>
                 </label>
-            </div>
+              </div>
 
-            <!-- Dissertation Toggle -->
-            <div class="flex items-center justify-between">
-                <label for="showDissertation" class="text-gray-700 font-medium">Dissertation</label>
+              <!-- Patents Toggle -->
+              <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                <div>
+                  <label for="showPatents" class="text-gray-800 font-medium lg:text-xl block">Patents</label>
+                  <span class="text-gray-500 text-sm">Granted patents and applications</span>
+                </div>
                 <label class="toggle-btn">
-                    <input type="checkbox" id="showDissertation">
-                    <span class="slider"></span>
+                  <input type="checkbox" id="showPatents">
+                  <span class="slider"></span>
                 </label>
-            </div>
+              </div>
 
-            <!-- Save Button -->
-            <div class="mt-6">
+              <!-- Projects Toggle -->
+              <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                <div>
+                  <label for="showProjects" class="text-gray-800 font-medium lg:text-xl block">Projects</label>
+                  <span class="text-gray-500 text-sm">Research projects and collaborations</span>
+                </div>
+                <label class="toggle-btn">
+                  <input type="checkbox" id="showProjects">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <!-- Dissertation Toggle -->
+              <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                <div>
+                  <label for="showDissertation" class="text-gray-800 font-medium lg:text-xl block">Dissertations</label>
+                  <span class="text-gray-500 text-sm">PhD and Masters dissertations supervised</span>
+                </div>
+                <label class="toggle-btn">
+                  <input type="checkbox" id="showDissertation">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <!-- Save Button -->
+              <div class="mt-8 pt-5 border-t border-gray-100">
                 <button id="save-button"
-                    class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    Save Settings
+                  class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center">
+                  <i class="fas fa-save mr-2"></i>
+                  Save Settings
                 </button>
+              </div>
+
+              <!-- Status Message -->
+              <div id="status-message" class="mt-4 text-center hidden p-3 rounded-lg"></div>
             </div>
-
-            <!-- Status Message -->
-            <div id="status-message" class="mt-2 text-center hidden"></div>
+          </div>
+          
+          <!-- Info Card -->
+          <div class="bg-white rounded-xl shadow-md p-5 card-hover">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 pt-1">
+                <i class="fas fa-info-circle text-blue-500 text-xl"></i>
+              </div>
+              <div class="ml-4">
+                <h3 class="font-medium text-gray-800">About Visibility Controls</h3>
+                <p class="mt-1 text-gray-600">
+                  These settings determine which sections are displayed on your public research profile. 
+                  Toggle a section off to temporarily hide it from public view without deleting any data.
+                </p>
+                <p class="mt-3 text-gray-600">
+                  Changes will be reflected immediately after saving.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
+    </main>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const loadingElement = document.getElementById('loading');
-            const settingsPanel = document.getElementById('settings-panel');
-            const saveButton = document.getElementById('save-button');
-            const statusMessage = document.getElementById('status-message');
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Mobile menu elements
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const closeSidebarButton = document.getElementById("close-sidebar");
+      const sidebar = document.getElementById("sidebar");
+      const sidebarOverlay = document.getElementById("sidebar-overlay");
+      
+      // Settings panel elements
+      const loadingElement = document.getElementById('loading');
+      const settingsPanel = document.getElementById('settings-panel');
+      const saveButton = document.getElementById('save-button');
+      const statusMessage = document.getElementById('status-message');
 
-            // Toggle inputs
-            const showPublications = document.getElementById('showPublications');
-            const showPatents = document.getElementById('showPatents');
-            const showProjects = document.getElementById('showProjects');
-            const showDissertation = document.getElementById('showDissertation');
+      // Toggle inputs
+      const showPublications = document.getElementById('showPublications');
+      const showPatents = document.getElementById('showPatents');
+      const showProjects = document.getElementById('showProjects');
+      const showDissertation = document.getElementById('showDissertation');
 
-            // Fetch settings on page load
-            fetchSettings();
+      // Function to open sidebar
+      function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        sidebarOverlay.classList.remove("hidden");
+        document.body.classList.add("overflow-hidden");
+      }
 
-            // Save settings on button click
-            saveButton.addEventListener('click', saveSettings);
+      // Function to close sidebar
+      function closeSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        sidebarOverlay.classList.add("hidden");
+        document.body.classList.remove("overflow-hidden");
+      }
 
-            // Function to fetch current settings
-            async function fetchSettings() {
-                try {
-                    loadingElement.classList.remove('hidden');
-                    settingsPanel.classList.add('hidden');
+      // Event listeners for sidebar
+      if (mobileMenuButton) {
+        mobileMenuButton.addEventListener("click", openSidebar);
+      }
 
-                    const response = await fetch('/admin/get-settings');
-                    const data = await response.json();
+      if (closeSidebarButton) {
+        closeSidebarButton.addEventListener("click", closeSidebar);
+      }
 
-                    if (data.success) {
-                        const settings = data.settings;
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener("click", closeSidebar);
+      }
 
-                        // Set toggle states based on fetched settings
-                        showPublications.checked = settings.showPublications || false;
-                        showPatents.checked = settings.showPatents || false;
-                        showProjects.checked = settings.showProjects || false;
-                        showDissertation.checked = settings.showDissertation || false;
-
-                        // Show settings panel
-                        loadingElement.classList.add('hidden');
-                        settingsPanel.classList.remove('hidden');
-                    } else {
-                        showError('Error loading settings');
-                    }
-                } catch (error) {
-                    showError('Failed to connect to server');
-                }
-            }
-
-            // Function to save settings
-            async function saveSettings() {
-                try {
-                    // Show saving status
-                    showStatus('Saving...', 'text-blue-500');
-
-                    // Collect current toggle states
-                    const settings = {
-                        showPublications: showPublications.checked,
-                        showPatents: showPatents.checked,
-                        showProjects: showProjects.checked,
-                        showDissertation: showDissertation.checked
-                    };
-
-                    // Send to server
-                    const response = await fetch('/admin/update-settings', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ settings })
-                    });
-
-                    const data = await response.json();
-
-                    if (data.success) {
-                        showStatus('Settings saved successfully!', 'text-green-500');
-                        setTimeout(() => {
-                            statusMessage.classList.add('hidden');
-                        }, 3000);
-                    } else {
-                        showError('Error saving settings');
-                    }
-                } catch (error) {
-                    showError('Failed to connect to server');
-                }
-            }
-
-            // Helper function to show error message
-            function showError(message) {
-                showStatus(message, 'text-red-500');
-            }
-
-            // Helper function to show status message
-            function showStatus(message, className) {
-                statusMessage.textContent = message;
-                statusMessage.className = 'mt-2 text-center ' + className;
-                statusMessage.classList.remove('hidden');
-            }
+      // Close sidebar when clicking on a menu item on mobile
+      const sidebarLinks = sidebar.querySelectorAll("a");
+      sidebarLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          if (window.innerWidth < 768) {
+            closeSidebar();
+          }
         });
-    </script>
+      });
+
+      // Handle resize events for responsive sidebar
+      window.addEventListener("resize", () => {
+        if (window.innerWidth >= 768) {
+          sidebar.classList.remove("-translate-x-full");
+          sidebarOverlay.classList.add("hidden");
+          document.body.classList.remove("overflow-hidden");
+        } else {
+          sidebar.classList.add("-translate-x-full");
+        }
+      });
+
+      // Fetch settings on page load
+      fetchSettings();
+
+      // Save settings on button click
+      saveButton.addEventListener('click', saveSettings);
+
+      // Function to fetch current settings
+      async function fetchSettings() {
+        try {
+          loadingElement.classList.remove('hidden');
+          settingsPanel.classList.add('hidden');
+
+          // Simulate network delay for demonstration
+          setTimeout(async () => {
+            try {
+              const response = await fetch('/admin/get-settings');
+              const data = await response.json();
+
+              if (data.success) {
+                const settings = data.settings;
+
+                // Set toggle states based on fetched settings
+                showPublications.checked = settings.showPublications || false;
+                showPatents.checked = settings.showPatents || false;
+                showProjects.checked = settings.showProjects || false;
+                showDissertation.checked = settings.showDissertation || false;
+
+                // Show settings panel
+                loadingElement.classList.add('hidden');
+                settingsPanel.classList.remove('hidden');
+              } else {
+                showError('Error loading settings');
+              }
+            } catch (error) {
+              showError('Failed to connect to server');
+            }
+          }, 800); // Simulated delay
+        } catch (error) {
+          showError('Failed to connect to server');
+        }
+      }
+
+      // Function to save settings
+      async function saveSettings() {
+        try {
+          // Disable save button and show saving status
+          saveButton.disabled = true;
+          saveButton.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Saving...';
+          showStatus('Saving your settings...', 'bg-blue-100 text-blue-800');
+
+          // Collect current toggle states
+          const settings = {
+            showPublications: showPublications.checked,
+            showPatents: showPatents.checked,
+            showProjects: showProjects.checked,
+            showDissertation: showDissertation.checked
+          };
+
+          // Simulate network delay for demonstration
+          setTimeout(async () => {
+            try {
+              // Send to server
+              const response = await fetch('/admin/update-settings', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ settings })
+              });
+
+              const data = await response.json();
+
+              if (data.success) {
+                showStatus('Settings saved successfully!', 'bg-green-100 text-green-800');
+                setTimeout(() => {
+                  statusMessage.classList.add('hidden');
+                }, 3000);
+              } else {
+                showError('Error saving settings');
+              }
+            } catch (error) {
+              showError('Failed to connect to server');
+            } finally {
+              // Re-enable save button
+              saveButton.disabled = false;
+              saveButton.innerHTML = '<i class="fas fa-save mr-2"></i> Save Settings';
+            }
+          }, 1000); // Simulated delay
+        } catch (error) {
+          showError('Failed to connect to server');
+          saveButton.disabled = false;
+          saveButton.innerHTML = '<i class="fas fa-save mr-2"></i> Save Settings';
+        }
+      }
+
+      // Helper function to show error message
+      function showError(message) {
+        showStatus(message, 'bg-red-100 text-red-800');
+      }
+
+      // Helper function to show status message
+      function showStatus(message, className) {
+        statusMessage.innerHTML = message;
+        statusMessage.className = 'mt-4 text-center p-3 rounded-lg ' + className;
+        statusMessage.classList.remove('hidden');
+      }
+    });
+  </script>
 </body>
 
 </html>

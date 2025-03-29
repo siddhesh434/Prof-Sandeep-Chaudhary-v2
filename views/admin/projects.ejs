@@ -44,10 +44,9 @@
             </a>
           </li>
           <li class="mb-1 px-2">
-            <a href="/admin/fileupload.html"
-              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-              <i class="fas fa-users mr-3"></i>
-              <span>File Upload</span>
+            <a href="/admin/control.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fas fa-sliders-h mr-3"></i>
+              <span>Visibility Controls</span>
             </a>
           </li>
           <li class="mb-1 px-2">
@@ -546,26 +545,6 @@
         .value.trim();
       const projectType = document.getElementById("projectType").value;
       const role = document.getElementById("role").value;
-
-      if (title.length < 5) {
-        alert("Project title must be at least 5 characters long");
-        return false;
-      }
-
-      if (year.length < 4) {
-        alert("Project period must be valid");
-        return false;
-      }
-
-      if (funded.length < 2) {
-        alert("Funding agency must be at least 2 characters long");
-        return false;
-      }
-
-      if (collaborator.length < 2) {
-        alert("Collaborator must be at least 2 characters long");
-        return false;
-      }
 
       if (!projectType) {
         alert("Please select a project type");

@@ -44,10 +44,9 @@
             </a>
           </li>
           <li class="mb-1 px-2">
-            <a href="/admin/fileupload.html"
-              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-              <i class="fas fa-users mr-3"></i>
-              <span>File Upload</span>
+            <a href="/admin/control.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fas fa-sliders-h mr-3"></i>
+              <span>Visibility Controls</span>
             </a>
           </li>
           <li class="mb-1 px-2">
@@ -554,28 +553,9 @@
       const applicationNumber = document.getElementById("applicationNumber").value.trim();
       const description = document.getElementById("description").value.trim();
 
-      if (title.length < 5) {
-        alert("Patent title must be at least 5 characters long");
-        return false;
-      }
-
-      if (authors.length < 3) {
-        alert("Authors must be at least 3 characters long");
-        return false;
-      }
 
       if (!year || isNaN(year) || year < 1900 || year > 2100) {
         alert("Please enter a valid year between 1900 and 2100");
-        return false;
-      }
-
-      if (applicationNumber.length < 5) {
-        alert("Application number must be at least 5 characters long");
-        return false;
-      }
-
-      if (description.length < 10) {
-        alert("Description must be at least 10 characters long");
         return false;
       }
 

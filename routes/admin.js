@@ -35,7 +35,7 @@ router.get("/", (req, res) => {
 // Logout Route
 router.get("/logout", (req, res) => {
   req.session.destroy(() => {
-    res.redirect("/admin/login");
+    res.redirect("/");
   });
 });
 

@@ -197,7 +197,8 @@ const Visibility =
     })
   );
 app.get("/admin/control.html", (req, res) => {
-  res.render("admin/control");
+   if (!req.session.admin) return res.redirect("/admin/login");
+   res.render("admin/control", { adminID: req.session.admin });
 });
 
 app.post("/admin/update-settings", async (req, res) => {
@@ -1450,9 +1451,9 @@ app.get("/Dissertation.html", async (req, res) => {
   try {
     // Fetch all projects from the database
     const researchData = await Dissertation.find();
-
+    const settings = (await Visibility.findOne()) || {};
     // Render the Projects.ejs page and pass projects
-    res.render("Dissertation", { researchData });
+    res.render("Dissertation", { settings, researchData });
   } catch (error) {
     console.error("Error fetching projects:", error);
     res.status(500).send("Error loading projects");
