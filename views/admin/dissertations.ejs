@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dissertation Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-primary': '#10B981',
+                        'brand-secondary': '#3B82F6',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 sm:p-6">
+    <div class="container mx-auto max-w-7xl">
+        <h1 class="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 text-gray-800">Dissertation Management</h1>
+        
+        <!-- Dissertation Form -->
+        <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+            <form id="dissertationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="hidden" id="dissertationId">
+                
+                <div class="flex flex-col">
+                    <label class="mb-2 text-gray-700" for="name">Student Name</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        required 
+                        class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                        placeholder="Full Name"
+                    >
+                </div>
+                
+                <div class="flex flex-col">
+                    <label class="mb-2 text-gray-700" for="title">Dissertation Title</label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        name="title" 
+                        required 
+                        class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                    >
+                </div>
+                
+                <div class="flex flex-col">
+                    <label class="mb-2 text-gray-700" for="year">Year</label>
+                    <input 
+                        type="number" 
+                        id="year" 
+                        name="year" 
+                        required 
+                        min="1900"
+                        max="2100"
+                        class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                    >
+                </div>
+                
+                <div class="flex flex-col">
+                    <label class="mb-2 text-gray-700" for="coSupervisors">Co-Supervisors</label>
+                    <input 
+                        type="text" 
+                        id="coSupervisors" 
+                        name="coSupervisors"
+                        class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                        placeholder="e.g., Dr. Rajesh Gupta"
+                    >
+                </div>
+                
+                <div class="flex flex-col">
+                    <label class="mb-2 text-gray-700" for="degree">Degree Status</label>
+                    <select 
+                        id="degree" 
+                        name="degree" 
+                        required 
+                        class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                    >
+                        <option value="">Select Degree Status</option>
+                        <option value="PhD Thesis Awarded">PhD Thesis Awarded</option>
+                        <option value="PhD Thesis in progress">PhD Thesis in progress</option>
+                        <option value="MTech and MSc Awarded/Ongoing">MTech and MSc Awarded/Ongoing</option>
+                    </select>
+                </div>
+                
+                <div class="col-span-1 md:col-span-2 flex space-x-4 mt-2">
+                    <button 
+                        type="submit" 
+                        id="addButton"
+                        class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-green-700 transition duration-300"
+                    >
+                        Add Dissertation
+                    </button>
+                    <button 
+                        type="button" 
+                        id="updateButton"
+                        class="flex-1 bg-yellow-500 text-white p-3 rounded hover:bg-yellow-600 transition duration-300 hidden"
+                    >
+                        Update Dissertation
+                    </button>
+                    <button 
+                        type="button" 
+                        id="cancelEditButton"
+                        class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="mb-6 flex flex-wrap gap-4">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search dissertations..."
+                class="flex-grow border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            >
+            <select 
+                id="yearFilter"
+                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            >
+                <option value="">All Years</option>
+            </select>
+            <select 
+                id="degreeFilter"
+                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            >
+                <option value="">All Degrees</option>
+                <option value="PhD Thesis Awarded">PhD Thesis Awarded</option>
+                <option value="PhD Thesis in progress">PhD Thesis in progress</option>
+                <option value="MTech and MSc Awarded/Ongoing">MTech and MSc Awarded/Ongoing</option>
+            </select>
+            <button 
+                id="searchButton"
+                class="bg-brand-primary text-white p-2 rounded hover:bg-green-700 transition duration-300"
+            >
+                Search
+            </button>
+        </div>
+
+        <!-- Dissertations Grid -->
+        <div 
+            id="dissertationsGrid" 
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6"
+        >
+            <!-- Dissertations will be dynamically added here -->
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div 
+            id="deleteModal" 
+            class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4"
+        >
+            <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h2>
+                <p class="mb-6 text-gray-600">Are you sure you want to delete this dissertation?</p>
+                <div class="flex space-x-4">
+                    <button 
+                        id="confirmDeleteBtn"
+                        class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300"
+                    >
+                        Delete
+                    </button>
+                    <button 
+                        id="cancelDeleteBtn"
+                        class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const form = document.getElementById('dissertationForm');
+        const dissertationsGrid = document.getElementById('dissertationsGrid');
+        const addButton = document.getElementById('addButton');
+        const updateButton = document.getElementById('updateButton');
+        const cancelEditButton = document.getElementById('cancelEditButton');
+        const deleteModal = document.getElementById('deleteModal');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const searchInput = document.getElementById('searchInput');
+        const yearFilter = document.getElementById('yearFilter');
+        const degreeFilter = document.getElementById('degreeFilter');
+        const searchButton = document.getElementById('searchButton');
+
+        let currentDeletingDissertationId = null;
+        let dissertations = []; // Store dissertations for filtering
+
+        // Fetch Dissertations
+        async function fetchDissertations() {
+            try {
+                const response = await fetch('/dissertations');
+                dissertations = await response.json();
+                renderDissertations(dissertations);
+                populateYearFilter(dissertations);
+            } catch (error) {
+                console.error('Error fetching dissertations:', error);
+                alert('Failed to fetch dissertations. Please try again.');
+                
+                // For demo purposes - populate with sample data if fetch fails
+                const sampleData = [
+                    {
+                        _id: '1',
+                        name: "Sanchit Gupta",
+                        title: "Optimization of Sustainable Construction Materials for Industrial Applications",
+                        year: "2024",
+                        coSupervisors: "-",
+                        degree: "PhD Thesis Awarded"
+                    },
+                    {
+                        _id: '2',
+                        name: "Pooja Jain",
+                        title: "Utilization of fine micron size waste of vitrified porcelain stoneware tiles for sustainable and durable concrete",
+                        year: "2023",
+                        coSupervisors: "Dr. Rajesh Gupta",
+                        degree: "PhD Thesis Awarded"
+                    },
+                    {
+                        _id: '3',
+                        name: "Rajiv Kumar",
+                        title: "Development of Multi-Functional Nanomaterials for Environmental Remediation",
+                        year: "2023",
+                        coSupervisors: "Dr. Sunita Sharma",
+                        degree: "PhD Thesis in progress"
+                    }
+                ];
+                dissertations = sampleData;
+                renderDissertations(sampleData);
+                populateYearFilter(sampleData);
+            }
+        }
+
+        // Populate Year Filter Dropdown
+        function populateYearFilter(data) {
+            const years = [...new Set(data.map(item => item.year))].sort((a, b) => b - a);
+            yearFilter.innerHTML = '<option value="">All Years</option>';
+            years.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearFilter.appendChild(option);
+            });
+        }
+
+        // Render Dissertations as Cards
+        function renderDissertations(data) {
+            dissertationsGrid.innerHTML = data.map(dissertation => {
+                // Determine color badge based on degree
+                let badgeColor = '';
+                if (dissertation.degree === 'PhD Thesis Awarded') {
+                    badgeColor = 'bg-green-500';
+                } else if (dissertation.degree === 'PhD Thesis in progress') {
+                    badgeColor = 'bg-yellow-500';
+                } else {
+                    badgeColor = 'bg-blue-500';
+                }
+                
+                return `
+                <div class="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2 text-gray-800 line-clamp-2">${escapeHtml(dissertation.title)}</h3>
+                        <div class="flex items-center justify-between mb-3">
+                            <p class="text-gray-600 text-sm font-medium line-clamp-1">${escapeHtml(dissertation.name)}</p>
+                            <span class="text-sm text-gray-500">${dissertation.year}</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-xs px-2 py-1 rounded-full text-white ${badgeColor}">
+                                ${dissertation.degree}
+                            </span>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-sm text-gray-500">
+                                <span class="font-medium">Co-Supervisors:</span> 
+                                ${dissertation.coSupervisors === '-' ? 'None' : escapeHtml(dissertation.coSupervisors)}
+                            </p>
+                        </div>
+                        <div class="mt-4 flex space-x-2">
+                            <button 
+                                onclick="editDissertation('${dissertation._id}')"
+                                class="flex-1 bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition duration-300"
+                            >
+                                Edit
+                            </button>
+                            <button 
+                                onclick="confirmDelete('${dissertation._id}')"
+                                class="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-300"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // Search and Filter Dissertations
+        function searchAndFilterDissertations() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const selectedYear = yearFilter.value;
+            const selectedDegree = degreeFilter.value;
+
+            const filteredDissertations = dissertations.filter(dissertation => {
+                const matchesSearch = searchTerm === '' || 
+                    dissertation.title.toLowerCase().includes(searchTerm) || 
+                    dissertation.name.toLowerCase().includes(searchTerm);
+                
+                const matchesYear = selectedYear === '' || 
+                    dissertation.year.toString() === selectedYear;
+                
+                const matchesDegree = selectedDegree === '' ||
+                    dissertation.degree === selectedDegree;
+                
+                return matchesSearch && matchesYear && matchesDegree;
+            });
+
+            renderDissertations(filteredDissertations);
+        }
+
+        // Attach search event listeners
+        searchButton.addEventListener('click', searchAndFilterDissertations);
+        searchInput.addEventListener('input', searchAndFilterDissertations);
+        yearFilter.addEventListener('change', searchAndFilterDissertations);
+        degreeFilter.addEventListener('change', searchAndFilterDissertations);
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(unsafe) {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+
+        // Validate Form Inputs
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const title = document.getElementById('title').value.trim();
+            const year = document.getElementById('year').value;
+            const degree = document.getElementById('degree').value;
+
+            if (name.length < 3) {
+                alert('Student name must be at least 3 characters long');
+                return false;
+            }
+
+            if (title.length < 10) {
+                alert('Dissertation title must be at least 10 characters long');
+                return false;
+            }
+
+            if (year < 1900 || year > new Date().getFullYear()) {
+                alert(`Year must be between 1900 and ${new Date().getFullYear()}`);
+                return false;
+            }
+
+            if (!degree) {
+                alert('Please select a degree status');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Add Dissertation
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!validateForm()) return;
+
+            const dissertationData = {
+                name: document.getElementById('name').value.trim(),
+                title: document.getElementById('title').value.trim(),
+                year: document.getElementById('year').value,
+                coSupervisors: document.getElementById('coSupervisors').value.trim() || '-',
+                degree: document.getElementById('degree').value
+            };
+
+            try {
+                const response = await fetch('/dissertations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dissertationData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to add dissertation');
+                }
+
+                await fetchDissertations();
+                form.reset();
+            } catch (error) {
+                console.error('Error adding dissertation:', error);
+                alert(error.message);
+                
+                // For demo purposes - add to local array if server request fails
+                dissertationData._id = (Math.random() * 1000).toString();
+                dissertations.push(dissertationData);
+                renderDissertations(dissertations);
+                populateYearFilter(dissertations);
+                form.reset();
+            }
+        });
+
+        // Edit Dissertation
+        async function editDissertation(id) {
+            try {
+                const response = await fetch(`/dissertations/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch dissertation details');
+                }
+                
+                const dissertation = await response.json();
+                
+                // For demo purposes - find in local array if server request fails
+                const dissertationToEdit = dissertations.find(d => d._id === id) || dissertation;
+                
+                document.getElementById('name').value = dissertationToEdit.name;
+                document.getElementById('title').value = dissertationToEdit.title;
+                document.getElementById('year').value = dissertationToEdit.year;
+                document.getElementById('coSupervisors').value = dissertationToEdit.coSupervisors === '-' ? '' : dissertationToEdit.coSupervisors;
+                document.getElementById('degree').value = dissertationToEdit.degree;
+                document.getElementById('dissertationId').value = dissertationToEdit._id;
+                
+                addButton.classList.add('hidden');
+                updateButton.classList.remove('hidden');
+                cancelEditButton.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error fetching dissertation details:', error);
+                alert('Failed to load dissertation details');
+                
+                // For demo purposes - find in local array if server request fails
+                const dissertationToEdit = dissertations.find(d => d._id === id);
+                if (dissertationToEdit) {
+                    document.getElementById('name').value = dissertationToEdit.name;
+                    document.getElementById('title').value = dissertationToEdit.title;
+                    document.getElementById('year').value = dissertationToEdit.year;
+                    document.getElementById('coSupervisors').value = dissertationToEdit.coSupervisors === '-' ? '' : dissertationToEdit.coSupervisors;
+                    document.getElementById('degree').value = dissertationToEdit.degree;
+                    document.getElementById('dissertationId').value = dissertationToEdit._id;
+                    
+                    addButton.classList.add('hidden');
+                    updateButton.classList.remove('hidden');
+                    cancelEditButton.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Cancel Edit
+        cancelEditButton.addEventListener('click', () => {
+            form.reset();
+            addButton.classList.remove('hidden');
+            updateButton.classList.add('hidden');
+            cancelEditButton.classList.add('hidden');
+        });
+
+        // Update Dissertation
+        updateButton.addEventListener('click', async () => {
+            if (!validateForm()) return;
+
+            const id = document.getElementById('dissertationId').value;
+            const dissertationData = {
+                name: document.getElementById('name').value.trim(),
+                title: document.getElementById('title').value.trim(),
+                year: document.getElementById('year').value,
+                coSupervisors: document.getElementById('coSupervisors').value.trim() || '-',
+                degree: document.getElementById('degree').value
+            };
+
+            try {
+                const response = await fetch(`/dissertations/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dissertationData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to update dissertation');
+                }
+
+                await fetchDissertations();
+                form.reset();
+                addButton.classList.remove('hidden');
+                updateButton.classList.add('hidden');
+                cancelEditButton.classList.add('hidden');
+            } catch (error) {
+                console.error('Error updating dissertation:', error);
+                alert(error.message);
+                
+                // For demo purposes - update in local array if server request fails
+                const index = dissertations.findIndex(d => d._id === id);
+                if (index !== -1) {
+                    dissertations[index] = { ...dissertationData, _id: id };
+                    renderDissertations(dissertations);
+                    populateYearFilter(dissertations);
+                    form.reset();
+                    addButton.classList.remove('hidden');
+                    updateButton.classList.add('hidden');
+                    cancelEditButton.classList.add('hidden');
+                }
+            }
+        });
+
+        // Confirm Delete
+        function confirmDelete(id) {
+            currentDeletingDissertationId = id;
+            deleteModal.classList.remove('hidden');
+            deleteModal.classList.add('flex');
+        }
+
+        // Cancel Delete
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+            currentDeletingDissertationId = null;
+        });
+
+        // Confirm Delete Action
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (!currentDeletingDissertationId) return;
+
+            try {
+                const response = await fetch(`/dissertations/${currentDeletingDissertationId}`, { 
+                    method: 'DELETE' 
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to delete dissertation');
+                }
+
+                await fetchDissertations();
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+                currentDeletingDissertationId = null;
+            } catch (error) {
+                console.error('Error deleting dissertation:', error);
+                alert(error.message);
+                
+                // For demo purposes - remove from local array if server request fails
+                dissertations = dissertations.filter(d => d._id !== currentDeletingDissertationId);
+                renderDissertations(dissertations);
+                populateYearFilter(dissertations);
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+                currentDeletingDissertationId = null;
+            }
+        });
+
+        // Initial fetch
+        fetchDissertations();
+    </script>
+</body>
+</html>

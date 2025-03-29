@@ -101,6 +101,18 @@ const PatentSchema = new mongoose.Schema({
 
 const Patent = mongoose.model("Patent", PatentSchema);
 
+// Dissertation
+const DissertationSchema = new mongoose.Schema({
+  name: String,
+  title: String,
+  year: String,
+  coSupervisors: String,
+  degree: String,
+});
+
+const Dissertation = mongoose.model("Dissertation", DissertationSchema);
+
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -447,7 +459,7 @@ app.get("/conferences/year/:year", async (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////chapters///////////////////////////////////////////////////////
-// Book Chapter Routes
+
 // Book Chapter Routes
 
 // Render Book Chapter Admin Page
@@ -553,6 +565,411 @@ app.get("/chapters/search", async (req, res) => {
   }
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////projects////////////////////////////////////////////////////////
+
+// Project Routes
+
+// Render Project Admin Page
+app.get('/admin/projects.html', (req, res) => {
+  res.render("admin/projects")
+})
+
+// Create Project (POST)
+app.post("/projects", async (req, res) => {
+  try {
+    const newProject = new Project(req.body);
+    const savedProject = await newProject.save();
+    res.status(201).json(savedProject);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Read All Projects (GET)
+app.get("/projects", async (req, res) => {
+  try {
+    const projects = await Project.find().sort({ year: -1 }); // Sort by most recent year
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Read One Project (GET by ID)
+app.get("/projects/:id", async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+    res.json(project);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update Project (PUT)
+app.put("/projects/:id", async (req, res) => {
+  try {
+    const updatedProject = await Project.findByIdAndUpdate(
+      req.params.id, 
+      req.body,
+      { new: true, runValidators: true }
+    );
+    
+    if (!updatedProject) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+    res.json(updatedProject);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete Project (DELETE)
+app.delete("/projects/:id", async (req, res) => {
+  try {
+    const deletedProject = await Project.findByIdAndDelete(req.params.id);
+    if (!deletedProject) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+    res.json({ message: "Project deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Optional: Search Projects
+app.get("/projects/search", async (req, res) => {
+  try {
+    const { query, year, projectType, funded } = req.query;
+    
+    // Build a dynamic search query
+    let searchQuery = {};
+    
+    if (query) {
+      searchQuery.$or = [
+        { title: { $regex: query, $options: 'i' } },
+        { collaborator: { $regex: query, $options: 'i' } },
+        { role: { $regex: query, $options: 'i' } }
+      ];
+    }
+    
+    if (year) {
+      searchQuery.year = { $regex: year, $options: 'i' };
+    }
+    
+    if (projectType) {
+      searchQuery.projectType = { $regex: projectType, $options: 'i' };
+    }
+    
+    if (funded) {
+      searchQuery.funded = { $regex: funded, $options: 'i' };
+    }
+    
+    const projects = await Project.find(searchQuery)
+      .sort({ year: -1 })
+      .limit(50); // Limit to prevent overly broad searches
+    
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get projects by type
+app.get("/projects/type/:projectType", async (req, res) => {
+  try {
+    const projectType = req.params.projectType;
+    const projects = await Project.find({ projectType: projectType }).sort({ year: -1 });
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get projects by role
+app.get("/projects/role/:role", async (req, res) => {
+  try {
+    const role = req.params.role;
+    const projects = await Project.find({ role: { $regex: role, $options: 'i' } }).sort({ year: -1 });
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////Dissertation///////////////////////////////////////////////////
+// Dissertation Routes
+
+// Render Dissertation Admin Page
+app.get('/admin/dissertations.html', (req, res) => {
+  res.render("admin/dissertations")
+})
+
+// Create Dissertation (POST)
+app.post("/dissertations", async (req, res) => {
+  try {
+    const newDissertation = new Dissertation(req.body);
+    const savedDissertation = await newDissertation.save();
+    res.status(201).json(savedDissertation);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Read All Dissertations (GET)
+app.get("/dissertations", async (req, res) => {
+  try {
+    const dissertations = await Dissertation.find().sort({ year: -1 }); // Sort by most recent year
+    res.json(dissertations);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Read One Dissertation (GET by ID)
+app.get("/dissertations/:id", async (req, res) => {
+  try {
+    const dissertation = await Dissertation.findById(req.params.id);
+    if (!dissertation) {
+      return res.status(404).json({ message: "Dissertation not found" });
+    }
+    res.json(dissertation);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update Dissertation (PUT)
+app.put("/dissertations/:id", async (req, res) => {
+  try {
+    const updatedDissertation = await Dissertation.findByIdAndUpdate(
+      req.params.id, 
+      req.body,
+      { new: true, runValidators: true }
+    );
+    
+    if (!updatedDissertation) {
+      return res.status(404).json({ message: "Dissertation not found" });
+    }
+    res.json(updatedDissertation);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete Dissertation (DELETE)
+app.delete("/dissertations/:id", async (req, res) => {
+  try {
+    const deletedDissertation = await Dissertation.findByIdAndDelete(req.params.id);
+    if (!deletedDissertation) {
+      return res.status(404).json({ message: "Dissertation not found" });
+    }
+    res.json({ message: "Dissertation deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Optional: Search Dissertations
+app.get("/dissertations/search", async (req, res) => {
+  try {
+    const { query, year, degree } = req.query;
+    
+    // Build a dynamic search query
+    let searchQuery = {};
+    
+    if (query) {
+      searchQuery.$or = [
+        { name: { $regex: query, $options: 'i' } },
+        { title: { $regex: query, $options: 'i' } },
+        { coSupervisors: { $regex: query, $options: 'i' } }
+      ];
+    }
+    
+    if (year) {
+      searchQuery.year = { $regex: year, $options: 'i' };
+    }
+    
+    if (degree) {
+      searchQuery.degree = { $regex: degree, $options: 'i' };
+    }
+    
+    const dissertations = await Dissertation.find(searchQuery)
+      .sort({ year: -1 })
+      .limit(50); // Limit to prevent overly broad searches
+    
+    res.json(dissertations);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get dissertations by degree
+app.get("/dissertations/degree/:degree", async (req, res) => {
+  try {
+    const degree = req.params.degree;
+    const dissertations = await Dissertation.find({ degree: { $regex: degree, $options: 'i' } }).sort({ year: -1 });
+    res.json(dissertations);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get dissertations by supervisor
+app.get("/dissertations/supervisor/:supervisor", async (req, res) => {
+  try {
+    const supervisor = req.params.supervisor;
+    const dissertations = await Dissertation.find({ coSupervisors: { $regex: supervisor, $options: 'i' } }).sort({ year: -1 });
+    res.json(dissertations);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////patents/////////////////////////////////////////////////////
+// Patent Routes
+// Render Patent Admin Page
+app.get('/admin/patents.html', (req, res) => {
+  res.render("admin/patents")
+})
+
+// Create Patent (POST)
+app.post("/patents", async (req, res) => {
+  try {
+    const newPatent = new Patent(req.body);
+    const savedPatent = await newPatent.save();
+    res.status(201).json(savedPatent);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Read All Patents (GET)
+app.get("/patents", async (req, res) => {
+  try {
+    const patents = await Patent.find().sort({ year: -1 }); // Sort by most recent year
+    res.json(patents);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Read One Patent (GET by ID)
+app.get("/patents/:id", async (req, res) => {
+  try {
+    const patent = await Patent.findById(req.params.id);
+    if (!patent) {
+      return res.status(404).json({ message: "Patent not found" });
+    }
+    res.json(patent);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Update Patent (PUT)
+app.put("/patents/:id", async (req, res) => {
+  try {
+    const updatedPatent = await Patent.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+   
+    if (!updatedPatent) {
+      return res.status(404).json({ message: "Patent not found" });
+    }
+    res.json(updatedPatent);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Delete Patent (DELETE)
+app.delete("/patents/:id", async (req, res) => {
+  try {
+    const deletedPatent = await Patent.findByIdAndDelete(req.params.id);
+    if (!deletedPatent) {
+      return res.status(404).json({ message: "Patent not found" });
+    }
+    res.json({ message: "Patent deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Optional: Search Patents
+app.get("/patents/search", async (req, res) => {
+  try {
+    const { query, year, grantNumber, applicationNumber } = req.query;
+   
+    // Build a dynamic search query
+    let searchQuery = {};
+   
+    if (query) {
+      searchQuery.$or = [
+        { title: { $regex: query, $options: 'i' } },
+        { authors: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } }
+      ];
+    }
+   
+    if (year) {
+      searchQuery.year = parseInt(year);
+    }
+   
+    if (grantNumber) {
+      searchQuery.grantNumber = { $regex: grantNumber, $options: 'i' };
+    }
+   
+    if (applicationNumber) {
+      searchQuery.applicationNumber = { $regex: applicationNumber, $options: 'i' };
+    }
+   
+    const patents = await Patent.find(searchQuery)
+      .sort({ year: -1 })
+      .limit(50); // Limit to prevent overly broad searches
+   
+    res.json(patents);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get patents by year
+app.get("/patents/year/:year", async (req, res) => {
+  try {
+    const year = parseInt(req.params.year);
+    const patents = await Patent.find({ year: year }).sort({ grantDate: -1 });
+    res.json(patents);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get patents by author
+app.get("/patents/author/:authorName", async (req, res) => {
+  try {
+    const authorName = req.params.authorName;
+    const patents = await Patent.find({ authors: { $regex: authorName, $options: 'i' } }).sort({ year: -1 });
+    res.json(patents);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get('/admin/index.html',(req,res)=>{
   res.render("admin/index")
@@ -632,69 +1049,30 @@ app.get("/contact.html", async (req, res) => {
   res.render("contact");
 });
 
-const SHEET_ID_Dissertations = "1dWreGKaR-s9TjCFM5-U2LYS-uznRM7wg2o5ntdrPcDY"; // Replace with actual Sheet ID
-const API_KEY = "AIzaSyAVI_jtr5QRz9ixcg5XOOkmUwED4F2gtMk";   // Replace with actual API Key
-const RANGE_Dissertations = "Sheet1!A2:E";      // Adjust range based on sheet
 
-app.get('/Dissertation.html', async (req, res) => {
+
+app.get("/Dissertation.html", async (req, res) => {
   try {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID_Dissertations}/values/${RANGE_Dissertations}?key=${API_KEY}`;
-      const response = await axios.get(url);
+    // Fetch all projects from the database
+    const researchData = await Dissertation.find();
 
-      const rows = response.data.values || [];
-      const researchData = rows.map(row => ({
-          name: row[0] || "N/A",
-          title: row[1] || "N/A",
-          year: row[2] || "N/A",
-          coSupervisors: row[3] || "N/A",
-          degree: row[4] || "N/A"
-      }));
-      res.render('Dissertation', { researchData });
+    // Render the Projects.ejs page and pass projects
+    res.render("Dissertation", { researchData });
   } catch (error) {
-      console.error("Error fetching data:", error);
-      res.render('Dissertation', { researchData: [] });
+    console.error("Error fetching projects:", error);
+    res.status(500).send("Error loading projects");
   }
 });
 
-// app.get("/Projects.html", async (req, res) => {
-//   try {
-//     // Fetch all projects from the database
-//     const projects = await Project.find();
-
-//     // Render the Projects.ejs page and pass projects
-//     res.render("Projects", { projects });
-//   } catch (error) {
-//     console.error("Error fetching projects:", error);
-//     res.status(500).send("Error loading projects");
-//   }
-// });
-
-const SHEET_ID_Project = "1twUrNhruozD27bZxtuG799oEOSFGMDkMkYW1abBI2CM";
-const API_KEY_Project = "AIzaSyC2tMNGZLpLl7vioXIR1-U8KZ8F12t2Sbg"
-const RANGE_Project = "Sheet1!A1:F"; // Adjust based on your columns
-
 app.get("/Projects.html", async (req, res) => {
   try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID_Project}/values/${RANGE_Project}?key=${API_KEY_Project}`;
-    const response = await axios.get(url);
-    
-    // Convert sheet data into an array of objects
-    const rows = response.data.values;
-    const headers = rows[0]; // First row as headers
-    const projects = rows.slice(1).map(row => ({
-      title: row[0],
-      year: row[1],
-      funded: row[2],
-      collaborator: row[3],
-      projectType: row[4],
-      role: row[5]
-    }));
+    // Fetch all projects from the database
+    const projects = await Project.find();
 
-    // Render Projects.ejs with fetched data
+    // Render the Projects.ejs page and pass projects
     res.render("Projects", { projects });
-
   } catch (error) {
-    console.error("Error fetching projects from Google Sheets:", error);
+    console.error("Error fetching projects:", error);
     res.status(500).send("Error loading projects");
   }
 });

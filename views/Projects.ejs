@@ -429,7 +429,84 @@
           </div>
         </div>
       </div>
+
+    <!-- Others Projects Section -->
+      <div class="project-section">
+        <div class="section-title">
+          <h2>Other Projects</h2>
+        </div>
+        <h4 style="text-decoration: underline">Projects handled-</h4>
+        <!-- Search and Display Controls -->
+        <div class="table-controls">
+          <div class="entries-selector">
+            <label for="entries-select-consultancy">Show</label>
+            <select id="entries-select-consultancy" class="entries-select">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <span>entries</span>
+          </div>
+          <div class="search-container">
+            <input type="text" id="others-search" placeholder="Search projects..." class="search-input" />
+            <button id="search-btn-others" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="project-table" id="others-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Funded</th>
+                <th>Collaborator</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody id="others-body">
+              <% projects.filter(project=> project.projectType === "Others").forEach((project, index) => { %>
+                <tr class="consultancy-row" data-index="<%= index %>">
+                  <td>
+                    <%= project.title %>
+                  </td>
+                  <td>
+                    <%= project.year %>
+                  </td>
+                  <td>
+                    <%= project.funded %>
+                  </td>
+                  <td>
+                    <%= project.collaborator %>
+                  </td>
+                  <td>
+                    <%= project.role %>
+                  </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+          <div class="pagination-info">
+            Showing <span id="showing-start-others">1</span> to
+            <span id="showing-end-others">5</span> of
+            <span id="total-entries-others">0</span> entries
+          </div>
+          <div class="pagination-controls" id="pagination-controls-others">
+            <!-- Pagination buttons will be dynamically generated -->
+          </div>
+        </div>
+      </div>
     </div>
+
+  </div>
   </div>
   <%- include('partials/footer') %>
 

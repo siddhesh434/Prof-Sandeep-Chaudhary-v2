@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const projectTypes = [
         { id: 'sponsored', name: 'Sponsored Research Project', rowClass: 'sponsored-row' },
         { id: 'institute', name: 'Institute Level Project', rowClass: 'institute-row' },
-        { id: 'consultancy', name: 'Consultancy Project', rowClass: 'consultancy-row' }
+        { id: 'consultancy', name: 'Consultancy Project', rowClass: 'consultancy-row' },
+        { id: 'others', name: 'Other Project', rowClass: 'others-row' }
     ];
 
     // Initialize each project section

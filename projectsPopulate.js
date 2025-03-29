@@ -1,6 +1,4 @@
 // insert-projects.js - Script to insert research project data into MongoDB
-const XLSX = require("xlsx");
-const fs = require("fs");
 
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -347,19 +345,7 @@ const insertProjects = async () => {
   } catch (error) {
     console.error("Error inserting projects:", error);
   }
-};
-
-// Convert to worksheet
-const ws = XLSX.utils.json_to_sheet(ProjectData);
-
-// Create a new workbook
-const wb = XLSX.utils.book_new();
-XLSX.utils.book_append_sheet(wb, ws, "Projects");
-
-// Write to Excel file
-XLSX.writeFile(wb, "projects.xlsx");
-
-console.log("Excel file created: projects.xlsx");
+}
 
 // Run the function
 insertProjects();
