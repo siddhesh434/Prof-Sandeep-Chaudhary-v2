@@ -1,296 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Research Admin Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="bg-gray-100">
-    <div class="flex h-screen overflow-hidden relative">
-      <!-- Sidebar - hidden on mobile by default -->
-      <aside
-        id="sidebar"
-        class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block"
-      >
-        <div class="p-6 border-b border-blue-800">
-          <h2 class="text-xl font-bold tracking-wide">
-            Welcome, <%=adminID %>!
-          </h2>
-          <!-- Close button for mobile -->
-          <button
-            id="close-sidebar"
-            class="absolute top-4 right-4 text-white md:hidden"
-          >
-            <i class="fas fa-times text-xl"></i>
-          </button>
-        </div>
-        <nav class="mt-4">
-          <ul>
-            <li class="mb-1 px-2">
-              <a
-                href="#"
-                class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium"
-              >
-                <i class="fas fa-home mr-3"></i>
-                <span>Dashboard</span>
-              </a>
-            </li>
-            <li class="mb-1 px-2">
-              <a
-                href="#"
-                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-              >
-                <i class="fas fa-users mr-3"></i>
-                <span>Users</span>
-              </a>
-            </li>
-            <li class="mb-1 px-2">
-              <a
-                href="#"
-                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-              >
-                <i class="fas fa-chart-bar mr-3"></i>
-                <span>Statistics</span>
-              </a>
-            </li>
-            <li class="mb-1 px-2">
-              <a
-                href="#"
-                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-              >
-                <i class="fas fa-cog mr-3"></i>
-                <span>Settings</span>
-              </a>
-            </li>
-            <li class="mb-1 px-2">
-              <a
-                href="/admin/logout"
-                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-              >
-                <i class="fas fa-sign-out-alt mr-3"></i>
-                <span>Logout</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
 
-      <!-- Overlay for mobile sidebar -->
-      <div
-        id="sidebar-overlay"
-        class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"
-      ></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+</head>
 
-      <!-- Main Content -->
-      <main class="flex-1 overflow-y-auto">
-        <div class="p-4 md:p-6">
-          <!-- Header with mobile menu indicator -->
-          <div class="flex justify-between items-center mb-6 md:mb-8">
-            <div class="flex items-center">
-              <button
-                id="mobile-menu-button"
-                class="mr-3 text-gray-700 md:hidden"
-              >
-                <i class="fas fa-bars text-xl"></i>
-              </button>
-              <h1 class="text-xl md:text-2xl font-bold text-gray-800">
-                Research Management Dashboard
-              </h1>
-            </div>
-            <div class="flex items-center space-x-2 md:space-x-4">
-              <span class="text-gray-700 text-sm md:text-base hidden sm:inline"
-                >Welcome, Admin</span
-              >
-              <div
-                class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold"
-              >
-                A
-              </div>
+<body class="bg-gray-100">
+  <div class="flex h-screen overflow-hidden relative">
+    <!-- Sidebar - hidden on mobile by default -->
+    <aside id="sidebar"
+      class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
+      <div class="p-6 border-b border-blue-800">
+        <h2 class="text-xl font-bold tracking-wide">
+          Welcome, <%=adminID %>!
+        </h2>
+        <!-- Close button for mobile -->
+        <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <nav class="mt-4">
+        <ul>
+          <li class="mb-1 px-2">
+            <a href="#" class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
+              <i class="fas fa-home mr-3"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="#"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fas fa-users mr-3"></i>
+              <span>File Upload</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/logout"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fas fa-sign-out-alt mr-3"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+      <div class="p-4 md:p-6">
+        <!-- Header with mobile menu indicator -->
+        <div class="flex justify-between items-center mb-6 md:mb-8">
+          <div class="flex items-center">
+            <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+              Research Management Dashboard
+            </h1>
+          </div>
+          <div class="flex items-center space-x-2 md:space-x-4">
+            <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Welcome, Admin</span>
+            <div
+              class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
+              A
             </div>
           </div>
+        </div>
 
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
+          <!-- Manage Publications Card -->
           <div
-            class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8"
-          >
-            <!-- Manage Publications Card -->
-            <div
-              class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-            >
-              <div class="bg-blue-800 text-white p-4 md:p-5">
-                <h2 class="text-lg md:text-xl font-semibold flex items-center">
-                  <i class="fas fa-book mr-2 md:mr-3 text-xl md:text-2xl"></i>
-                  Manage Publications
-                </h2>
-              </div>
-              <div class="p-4 md:p-5">
-                <ul class="space-y-1 md:space-y-2">
-                  <li>
-                    <a
-                      href="/admin/publication.html"
-                      class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base"
-                    >
-                      <i class="fas fa-file-alt mr-2 text-blue-700"></i>
-                      Journal Publications
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/admin/conference.html"
-                      class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base"
-                    >
-                      <i class="fas fa-microphone mr-2 text-blue-700"></i>
-                      Conference Proceedings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/admin/book.html"
-                      class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base"
-                    >
-                      <i class="fas fa-book-open mr-2 text-blue-700"></i>
-                      Books
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/admin/chapters.html"
-                      class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base"
-                    >
-                      <i class="fas fa-bookmark mr-2 text-blue-700"></i>
-                      Chapters
-                    </a>
-                  </li>
-                </ul>
-              </div>
+            class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+            <div class="bg-blue-800 text-white p-4 md:p-5">
+              <h2 class="text-lg md:text-xl font-semibold flex items-center">
+                <i class="fas fa-book mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                Manage Publications
+              </h2>
             </div>
+            <div class="p-4 md:p-5">
+              <ul class="space-y-1 md:space-y-2">
+                <li>
+                  <a href="/admin/publication.html"
+                    class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base">
+                    <i class="fas fa-file-alt mr-2 text-blue-700"></i>
+                    Journal Publications
+                  </a>
+                </li>
+                <li>
+                  <a href="/admin/conference.html"
+                    class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base">
+                    <i class="fas fa-microphone mr-2 text-blue-700"></i>
+                    Conference Proceedings
+                  </a>
+                </li>
+                <li>
+                  <a href="/admin/book.html"
+                    class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base">
+                    <i class="fas fa-book-open mr-2 text-blue-700"></i>
+                    Books
+                  </a>
+                </li>
+                <li>
+                  <a href="/admin/chapters.html"
+                    class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base">
+                    <i class="fas fa-bookmark mr-2 text-blue-700"></i>
+                    Chapters
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-            <!-- Manage Projects Card -->
-            <div
-              class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-            >
-              <div class="bg-blue-800 text-white p-4 md:p-5">
-                <h2 class="text-lg md:text-xl font-semibold flex items-center">
-                  <i
-                    class="fas fa-project-diagram mr-2 md:mr-3 text-xl md:text-2xl"
-                  ></i>
-                  Manage Others
-                </h2>
-              </div>
-              <div class="p-4 md:p-5">
-                <ul class="space-y-1 md:space-y-2">
-                  <li>
-                    <a
-                      href="/admin/projects.html"
-                      class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base"
-                    >
-                      <i class="fas fa-flask mr-2 text-blue-700"></i>
-                      Projects Management
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/admin/patents.html"
-                      class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base"
-                    >
-                      <i class="fas fa-file-signature mr-2 text-blue-700"></i>
-                      Patents Management
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="/admin/dissertations.html"
-                      class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base"
-                    >
-                      <i class="fas fa-user-graduate mr-2 text-blue-700"></i>
-                      Dissertations Supervised
-                    </a>
-                  </li>
-                </ul>
-              </div>
+          <!-- Manage Projects Card -->
+          <div
+            class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+            <div class="bg-blue-800 text-white p-4 md:p-5">
+              <h2 class="text-lg md:text-xl font-semibold flex items-center">
+                <i class="fas fa-project-diagram mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                Manage Others
+              </h2>
+            </div>
+            <div class="p-4 md:p-5">
+              <ul class="space-y-1 md:space-y-2">
+                <li>
+                  <a href="/admin/projects.html"
+                    class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base">
+                    <i class="fas fa-flask mr-2 text-blue-700"></i>
+                    Projects Management
+                  </a>
+                </li>
+                <li>
+                  <a href="/admin/patents.html"
+                    class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base">
+                    <i class="fas fa-file-signature mr-2 text-blue-700"></i>
+                    Patents Management
+                  </a>
+                </li>
+                <li>
+                  <a href="/admin/dissertations.html"
+                    class="block p-2 md:p-3 rounded-md text-gray-800 hover:bg-gray-100 hover:pl-3 md:hover:pl-4 transition-all duration-200 font-medium text-sm md:text-base">
+                    <i class="fas fa-user-graduate mr-2 text-blue-700"></i>
+                    Dissertations Supervised
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
+  </div>
 
-    <!-- Floating action button for mobile -->
-    <button
-      id="mobile-fab"
-      class="md:hidden fixed bottom-4 right-4 bg-blue-800 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30"
-    >
-      <i class="fas fa-plus"></i>
-    </button>
+  <!-- Floating action button for mobile -->
+  <button id="mobile-fab"
+    class="md:hidden fixed bottom-4 right-4 bg-blue-800 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
+    <i class="fas fa-plus"></i>
+  </button>
 
-    <script>
-      // Mobile menu toggle functionality
-      const mobileMenuButton = document.getElementById("mobile-menu-button");
-      const closeSidebarButton = document.getElementById("close-sidebar");
-      const sidebar = document.getElementById("sidebar");
-      const sidebarOverlay = document.getElementById("sidebar-overlay");
-      const mobileFab = document.getElementById("mobile-fab");
+  <script>
+    // Mobile menu toggle functionality
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const closeSidebarButton = document.getElementById("close-sidebar");
+    const sidebar = document.getElementById("sidebar");
+    const sidebarOverlay = document.getElementById("sidebar-overlay");
+    const mobileFab = document.getElementById("mobile-fab");
 
-      // Function to open sidebar
-      function openSidebar() {
-        sidebar.classList.remove("-translate-x-full");
-        sidebarOverlay.classList.remove("hidden");
-        document.body.classList.add("overflow-hidden");
-      }
+    // Function to open sidebar
+    function openSidebar() {
+      sidebar.classList.remove("-translate-x-full");
+      sidebarOverlay.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+    }
 
-      // Function to close sidebar
-      function closeSidebar() {
-        sidebar.classList.add("-translate-x-full");
-        sidebarOverlay.classList.add("hidden");
-        document.body.classList.remove("overflow-hidden");
-      }
+    // Function to close sidebar
+    function closeSidebar() {
+      sidebar.classList.add("-translate-x-full");
+      sidebarOverlay.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
 
-      // Event listeners
-      if (mobileMenuButton) {
-        mobileMenuButton.addEventListener("click", openSidebar);
-      }
+    // Event listeners
+    if (mobileMenuButton) {
+      mobileMenuButton.addEventListener("click", openSidebar);
+    }
 
-      if (closeSidebarButton) {
-        closeSidebarButton.addEventListener("click", closeSidebar);
-      }
+    if (closeSidebarButton) {
+      closeSidebarButton.addEventListener("click", closeSidebar);
+    }
 
-      if (sidebarOverlay) {
-        sidebarOverlay.addEventListener("click", closeSidebar);
-      }
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener("click", closeSidebar);
+    }
 
-      // Optional: Close sidebar when clicking on a menu item on mobile
-      const sidebarLinks = sidebar.querySelectorAll("a");
-      sidebarLinks.forEach((link) => {
-        link.addEventListener("click", () => {
-          if (window.innerWidth < 768) {
-            // Only on mobile
-            closeSidebar();
-          }
-        });
-      });
-
-      // Optional: Toggle floating action button
-      if (mobileFab) {
-        mobileFab.addEventListener("click", () => {
-          // Add your action for the floating button here
-          // This could open a menu, add a new item, etc.
-        });
-      }
-
-      // Handle resize events - ensure sidebar is visible on desktop
-      window.addEventListener("resize", () => {
-        if (window.innerWidth >= 768) {
-          // md breakpoint
-          sidebar.classList.remove("-translate-x-full");
-          sidebarOverlay.classList.add("hidden");
-          document.body.classList.remove("overflow-hidden");
-        } else {
-          sidebar.classList.add("-translate-x-full");
+    // Optional: Close sidebar when clicking on a menu item on mobile
+    const sidebarLinks = sidebar.querySelectorAll("a");
+    sidebarLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth < 768) {
+          // Only on mobile
+          closeSidebar();
         }
       });
-    </script>
-  </body>
+    });
+
+    // Optional: Toggle floating action button
+    if (mobileFab) {
+      mobileFab.addEventListener("click", () => {
+        // Add your action for the floating button here
+        // This could open a menu, add a new item, etc.
+      });
+    }
+
+    // Handle resize events - ensure sidebar is visible on desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768) {
+        // md breakpoint
+        sidebar.classList.remove("-translate-x-full");
+        sidebarOverlay.classList.add("hidden");
+        document.body.classList.remove("overflow-hidden");
+      } else {
+        sidebar.classList.add("-translate-x-full");
+      }
+    });
+  </script>
+</body>
+
 </html>

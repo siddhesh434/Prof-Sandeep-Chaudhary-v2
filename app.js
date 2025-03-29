@@ -3,28 +3,29 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const path = require("path");
-const axios = require('axios');
+const axios = require("axios");
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3010;
-
 
 //////////////////////////////////////////// login / logout //////////////////////////////////////////////
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
 // Session configuration
-app.use(session({
-  secret: process.env.SESSION_SECRET || "fallback_secret_key", // Use .env value or fallback
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI,
-    collectionName: "sessions"
-  }),
-  cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1 day session
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "fallback_secret_key", // Use .env value or fallback
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      collectionName: "sessions",
+    }),
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 day session
+  })
+);
 
 // Import and use admin routes
 const adminRoutes = require("./routes/admin");
@@ -36,14 +37,13 @@ app.get("/admin", (req, res) => {
   res.render("admin/index", { adminID: req.session.admin }); // Render dashboard
 });
 
-
 const Admin = require("./models/Admin");
 async function createAdmin() {
   const existingAdmin = await Admin.findOne({ adminID: "admin123" });
   if (!existingAdmin) {
     const newAdmin = new Admin({
       adminID: "admin123",
-      password: "securepassword" // This will be hashed
+      password: "securepassword", // This will be hashed
     });
     await newAdmin.save();
     console.log("Admin created");
@@ -158,7 +158,304 @@ const DissertationSchema = new mongoose.Schema({
 
 const Dissertation = mongoose.model("Dissertation", DissertationSchema);
 
+/////////////////////////////////////////////////////////File Upload Functionality//////////////////////////////////////////////////////////////
 
+const multer = require("multer");
+const fs = require("fs");
+const morgan = require("morgan");
+const { v4: uuidv4 } = require("uuid");
+
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configure multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadsDir);
+  },
+  filename: function (req, file, cb) {
+    // Generate unique filename while preserving extension
+    const uniqueFilename = `${uuidv4()}${path.extname(file.originalname)}`;
+    cb(null, uniqueFilename);
+  },
+});
+
+// File filter for multer
+const fileFilter = (req, file, cb) => {
+  // Reject file if it seems dangerous
+  const fileTypes =
+    /jpeg|jpg|png|gif|pdf|doc|docx|xls|xlsx|txt|csv|zip|rar|tar|gz/;
+  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = fileTypes.test(file.mimetype);
+
+  if (extname && mimetype) {
+    return cb(null, true);
+  } else {
+    cb(
+      new Error(
+        "Invalid file type. Only common document and image formats are allowed."
+      )
+    );
+  }
+};
+
+// Configure multer upload
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: fileFilter,
+});
+
+// Define File Schema
+const FileSchema = new mongoose.Schema({
+  fileName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  description: {
+    type: String,
+    trim: true,
+  },
+  originalFilename: {
+    type: String,
+    required: true,
+  },
+  storedFilename: {
+    type: String,
+    required: true,
+  },
+  fileType: {
+    type: String,
+    required: true,
+  },
+  size: {
+    type: Number,
+    required: true,
+  },
+  uploadDate: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+// Add text indexes for search
+FileSchema.index({ fileName: "text", description: "text" });
+
+// Create File model
+const File = mongoose.model("File", FileSchema);
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(morgan("dev")); // Request logging
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: err.message || "Something went wrong on the server",
+  });
+});
+// Routes
+
+// Get all files
+app.get("/api/files", async (req, res) => {
+  try {
+    const files = await File.find().sort({ uploadDate: -1 });
+    res.json(files);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching files",
+      error: error.message,
+    });
+  }
+});
+
+// Search files
+app.get("/api/files/search", async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    if (!query || query.trim() === "") {
+      // If no query or empty query, return all files
+      const files = await File.find().sort({ uploadDate: -1 });
+      return res.json(files);
+    }
+
+    // MongoDB text search using text index
+    const files = await File.find(
+      { $text: { $search: query } },
+      { score: { $meta: "textScore" } }
+    ).sort({ score: { $meta: "textScore" } });
+
+    // If no results with text search, try regex search
+    if (files.length === 0) {
+      const regexFiles = await File.find({
+        $or: [
+          { fileName: { $regex: query, $options: "i" } },
+          { description: { $regex: query, $options: "i" } },
+        ],
+      }).sort({ uploadDate: -1 });
+
+      return res.json(regexFiles);
+    }
+
+    res.json(files);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error searching files",
+      error: error.message,
+    });
+  }
+});
+
+// Upload file
+app.post("/api/files/upload", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded",
+      });
+    }
+
+    const { fileName, fileDescription } = req.body;
+
+    // Basic validation
+    if (!fileName) {
+      // Remove uploaded file if fileName is missing
+      fs.unlinkSync(req.file.path);
+      return res.status(400).json({
+        success: false,
+        message: "File name is required",
+      });
+    }
+
+    // Create new file record
+    const newFile = new File({
+      fileName: fileName,
+      description: fileDescription || "",
+      originalFilename: req.file.originalname,
+      storedFilename: req.file.filename,
+      fileType: req.file.mimetype,
+      size: req.file.size,
+    });
+
+    // Save to database
+    const savedFile = await newFile.save();
+
+    res.status(201).json({
+      success: true,
+      message: "File uploaded successfully",
+      file: savedFile,
+    });
+  } catch (error) {
+    // Attempt to remove uploaded file if there was an error
+    if (req.file) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (unlinkError) {
+        console.error("Error removing file after failed upload:", unlinkError);
+      }
+    }
+    res.status(500).json({
+      success: false,
+      message: "Error uploading file",
+      error: error.message,
+    });
+  }
+});
+
+// Download file
+app.get("/api/files/download/:id", async (req, res) => {
+  try {
+    const file = await File.findById(req.params.id);
+
+    if (!file) {
+      return res.status(404).json({
+        success: false,
+        message: "File not found",
+      });
+    }
+
+    const filePath = path.join(uploadsDir, file.storedFilename);
+
+    // Check if file exists in filesystem
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({
+        success: false,
+        message: "File not found on server",
+      });
+    }
+
+    // Set appropriate headers
+    res.setHeader("Content-Type", file.fileType);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${file.originalFilename}"`
+    );
+
+    // Stream the file to client
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error downloading file",
+      error: error.message,
+    });
+  }
+});
+
+// Delete file
+app.delete("/api/files/:id", async (req, res) => {
+  try {
+    const file = await File.findById(req.params.id);
+
+    if (!file) {
+      return res.status(404).json({
+        success: false,
+        message: "File not found",
+      });
+    }
+
+    const filePath = path.join(uploadsDir, file.storedFilename);
+
+    // Delete file from filesystem if it exists
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    // Delete record from database
+    await File.findByIdAndDelete(req.params.id);
+
+    res.json({
+      success: true,
+      message: "File deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error deleting file",
+      error: error.message,
+    });
+  }
+});
+
+// Serve the frontend
+app.get("/admin/fileupload.html", (req, res) => {
+  res.render("admin/fileupload");
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -192,13 +489,12 @@ app.use((req, res, next) => {
   next();
 });
 
-
 /////////////////////////////////////////Book///////////////////////////////////////////////////////
 
-app.get('/admin/book.html',(req,res)=>{
-   if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+app.get("/admin/book.html", (req, res) => {
+  if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
   res.render("admin/book", { adminID: req.session.admin }); // Render dashboard
-})
+});
 
 app.post("/books", async (req, res) => {
   try {
@@ -235,13 +531,12 @@ app.get("/books/:id", async (req, res) => {
 
 // Update (PUT)
 app.put("/books/:id", async (req, res) => {
-  console.log("hi",req.body,"bi");
+  console.log("hi", req.body, "bi");
   try {
-    const updatedBook = await Book.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
-      { new: true, runValidators: true }
-    );
+    const updatedBook = await Book.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
     console.log(updatedBook);
     if (!updatedBook) {
       return res.status(404).json({ message: "Book not found" });
@@ -267,15 +562,14 @@ app.delete("/books/:id", async (req, res) => {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 /////////////////////////////////////////Publication///////////////////////////////////////////////////////
 // Publication Routes
 
 // Render Publication Admin Page
-app.get('/admin/publication.html', (req, res) => {
+app.get("/admin/publication.html", (req, res) => {
   if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
   res.render("admin/publication", { adminID: req.session.admin }); // Render dashboard
-})
+});
 
 // Create Publication (POST)
 app.post("/publications", async (req, res) => {
@@ -315,8 +609,8 @@ app.get("/publications/:id", async (req, res) => {
 app.put("/publications/:id", async (req, res) => {
   try {
     const updatedPublication = await Publication.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
+      req.params.id,
+      req.body,
       { new: true, runValidators: true }
     );
 
@@ -332,7 +626,9 @@ app.put("/publications/:id", async (req, res) => {
 // Delete Publication (DELETE)
 app.delete("/publications/:id", async (req, res) => {
   try {
-    const deletedPublication = await Publication.findByIdAndDelete(req.params.id);
+    const deletedPublication = await Publication.findByIdAndDelete(
+      req.params.id
+    );
     if (!deletedPublication) {
       return res.status(404).json({ message: "Publication not found" });
     }
@@ -346,29 +642,29 @@ app.delete("/publications/:id", async (req, res) => {
 app.get("/publications/search", async (req, res) => {
   try {
     const { query, year, journal } = req.query;
-    
+
     // Build a dynamic search query
     let searchQuery = {};
-    
+
     if (query) {
       searchQuery.$or = [
-        { title: { $regex: query, $options: 'i' } },
-        { author: { $regex: query, $options: 'i' } }
+        { title: { $regex: query, $options: "i" } },
+        { author: { $regex: query, $options: "i" } },
       ];
     }
-    
+
     if (year) {
       searchQuery.year = parseInt(year);
     }
-    
+
     if (journal) {
-      searchQuery.journal = { $regex: journal, $options: 'i' };
+      searchQuery.journal = { $regex: journal, $options: "i" };
     }
-    
+
     const publications = await Publication.find(searchQuery)
       .sort({ year: -1 })
       .limit(50); // Limit to prevent overly broad searches
-    
+
     res.json(publications);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -380,10 +676,10 @@ app.get("/publications/search", async (req, res) => {
 // Conference Routes
 
 // Render Conference Admin Page
-app.get('/admin/conference.html', (req, res) => {
+app.get("/admin/conference.html", (req, res) => {
   if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
   res.render("admin/conference", { adminID: req.session.admin }); // Render dashboard
-})
+});
 
 // Create Conference Proceeding (POST)
 app.post("/conferences", async (req, res) => {
@@ -411,7 +707,9 @@ app.get("/conferences/:id", async (req, res) => {
   try {
     const conference = await Conference.findById(req.params.id);
     if (!conference) {
-      return res.status(404).json({ message: "Conference proceeding not found" });
+      return res
+        .status(404)
+        .json({ message: "Conference proceeding not found" });
     }
     res.json(conference);
   } catch (error) {
@@ -423,13 +721,15 @@ app.get("/conferences/:id", async (req, res) => {
 app.put("/conferences/:id", async (req, res) => {
   try {
     const updatedConference = await Conference.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
+      req.params.id,
+      req.body,
       { new: true, runValidators: true }
     );
 
     if (!updatedConference) {
-      return res.status(404).json({ message: "Conference proceeding not found" });
+      return res
+        .status(404)
+        .json({ message: "Conference proceeding not found" });
     }
     res.json(updatedConference);
   } catch (error) {
@@ -442,7 +742,9 @@ app.delete("/conferences/:id", async (req, res) => {
   try {
     const deletedConference = await Conference.findByIdAndDelete(req.params.id);
     if (!deletedConference) {
-      return res.status(404).json({ message: "Conference proceeding not found" });
+      return res
+        .status(404)
+        .json({ message: "Conference proceeding not found" });
     }
     res.json({ message: "Conference proceeding deleted successfully" });
   } catch (error) {
@@ -454,29 +756,29 @@ app.delete("/conferences/:id", async (req, res) => {
 app.get("/conferences/search", async (req, res) => {
   try {
     const { query, year, conference } = req.query;
-    
+
     // Build a dynamic search query
     let searchQuery = {};
-    
+
     if (query) {
       searchQuery.$or = [
-        { title: { $regex: query, $options: 'i' } },
-        { author: { $regex: query, $options: 'i' } }
+        { title: { $regex: query, $options: "i" } },
+        { author: { $regex: query, $options: "i" } },
       ];
     }
-    
+
     if (year) {
       searchQuery.year = parseInt(year);
     }
-    
+
     if (conference) {
-      searchQuery.conference = { $regex: conference, $options: 'i' };
+      searchQuery.conference = { $regex: conference, $options: "i" };
     }
-    
+
     const conferences = await Conference.find(searchQuery)
       .sort({ year: -1 })
       .limit(50); // Limit to prevent overly broad searches
-    
+
     res.json(conferences);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -488,7 +790,7 @@ app.get("/conferences/search", async (req, res) => {
 // Get Unique Years for Filtering
 app.get("/conferences/years", async (req, res) => {
   try {
-    const years = await Conference.distinct('year');
+    const years = await Conference.distinct("year");
     res.json(years.sort((a, b) => b - a));
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -498,8 +800,9 @@ app.get("/conferences/years", async (req, res) => {
 // Get Conferences by Year
 app.get("/conferences/year/:year", async (req, res) => {
   try {
-    const conferences = await Conference.find({ year: parseInt(req.params.year) })
-      .sort({ date: 1 });
+    const conferences = await Conference.find({
+      year: parseInt(req.params.year),
+    }).sort({ date: 1 });
     res.json(conferences);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -512,10 +815,10 @@ app.get("/conferences/year/:year", async (req, res) => {
 // Book Chapter Routes
 
 // Render Book Chapter Admin Page
-app.get('/admin/chapters.html', (req, res) => {
+app.get("/admin/chapters.html", (req, res) => {
   if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
   res.render("admin/chapters", { adminID: req.session.admin }); // Render dashboard
-})
+});
 
 // Create Book Chapter (POST)
 app.post("/chapters", async (req, res) => {
@@ -555,11 +858,11 @@ app.get("/chapters/:id", async (req, res) => {
 app.put("/chapters/:id", async (req, res) => {
   try {
     const updatedChapter = await Chapter.findByIdAndUpdate(
-      req.params.id, 
+      req.params.id,
       req.body,
       { new: true, runValidators: true }
     );
-    
+
     if (!updatedChapter) {
       return res.status(404).json({ message: "Book chapter not found" });
     }
@@ -586,29 +889,29 @@ app.delete("/chapters/:id", async (req, res) => {
 app.get("/chapters/search", async (req, res) => {
   try {
     const { query, year, bookName } = req.query;
-    
+
     // Build a dynamic search query
     let searchQuery = {};
-    
+
     if (query) {
       searchQuery.$or = [
-        { chapterName: { $regex: query, $options: 'i' } },
-        { author: { $regex: query, $options: 'i' } }
+        { chapterName: { $regex: query, $options: "i" } },
+        { author: { $regex: query, $options: "i" } },
       ];
     }
-    
+
     if (year) {
       searchQuery.year = parseInt(year);
     }
-    
+
     if (bookName) {
-      searchQuery.bookName = { $regex: bookName, $options: 'i' };
+      searchQuery.bookName = { $regex: bookName, $options: "i" };
     }
-    
+
     const chapters = await Chapter.find(searchQuery)
       .sort({ year: -1 })
       .limit(50); // Limit to prevent overly broad searches
-    
+
     res.json(chapters);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -620,10 +923,10 @@ app.get("/chapters/search", async (req, res) => {
 // Project Routes
 
 // Render Project Admin Page
-app.get('/admin/projects.html', (req, res) => {
+app.get("/admin/projects.html", (req, res) => {
   if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
   res.render("admin/projects", { adminID: req.session.admin }); // Render dashboard
-})
+});
 
 // Create Project (POST)
 app.post("/projects", async (req, res) => {
@@ -663,11 +966,11 @@ app.get("/projects/:id", async (req, res) => {
 app.put("/projects/:id", async (req, res) => {
   try {
     const updatedProject = await Project.findByIdAndUpdate(
-      req.params.id, 
+      req.params.id,
       req.body,
       { new: true, runValidators: true }
     );
-    
+
     if (!updatedProject) {
       return res.status(404).json({ message: "Project not found" });
     }
@@ -694,34 +997,34 @@ app.delete("/projects/:id", async (req, res) => {
 app.get("/projects/search", async (req, res) => {
   try {
     const { query, year, projectType, funded } = req.query;
-    
+
     // Build a dynamic search query
     let searchQuery = {};
-    
+
     if (query) {
       searchQuery.$or = [
-        { title: { $regex: query, $options: 'i' } },
-        { collaborator: { $regex: query, $options: 'i' } },
-        { role: { $regex: query, $options: 'i' } }
+        { title: { $regex: query, $options: "i" } },
+        { collaborator: { $regex: query, $options: "i" } },
+        { role: { $regex: query, $options: "i" } },
       ];
     }
-    
+
     if (year) {
-      searchQuery.year = { $regex: year, $options: 'i' };
+      searchQuery.year = { $regex: year, $options: "i" };
     }
-    
+
     if (projectType) {
-      searchQuery.projectType = { $regex: projectType, $options: 'i' };
+      searchQuery.projectType = { $regex: projectType, $options: "i" };
     }
-    
+
     if (funded) {
-      searchQuery.funded = { $regex: funded, $options: 'i' };
+      searchQuery.funded = { $regex: funded, $options: "i" };
     }
-    
+
     const projects = await Project.find(searchQuery)
       .sort({ year: -1 })
       .limit(50); // Limit to prevent overly broad searches
-    
+
     res.json(projects);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -732,7 +1035,9 @@ app.get("/projects/search", async (req, res) => {
 app.get("/projects/type/:projectType", async (req, res) => {
   try {
     const projectType = req.params.projectType;
-    const projects = await Project.find({ projectType: projectType }).sort({ year: -1 });
+    const projects = await Project.find({ projectType: projectType }).sort({
+      year: -1,
+    });
     res.json(projects);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -743,7 +1048,9 @@ app.get("/projects/type/:projectType", async (req, res) => {
 app.get("/projects/role/:role", async (req, res) => {
   try {
     const role = req.params.role;
-    const projects = await Project.find({ role: { $regex: role, $options: 'i' } }).sort({ year: -1 });
+    const projects = await Project.find({
+      role: { $regex: role, $options: "i" },
+    }).sort({ year: -1 });
     res.json(projects);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -751,15 +1058,14 @@ app.get("/projects/role/:role", async (req, res) => {
 });
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 /////////////////////////////////////////////Dissertation///////////////////////////////////////////////////
 // Dissertation Routes
 
 // Render Dissertation Admin Page
-app.get('/admin/dissertations.html', (req, res) => {
+app.get("/admin/dissertations.html", (req, res) => {
   if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
   res.render("admin/dissertations", { adminID: req.session.admin }); // Render dashboard
-})
+});
 
 // Create Dissertation (POST)
 app.post("/dissertations", async (req, res) => {
@@ -799,11 +1105,11 @@ app.get("/dissertations/:id", async (req, res) => {
 app.put("/dissertations/:id", async (req, res) => {
   try {
     const updatedDissertation = await Dissertation.findByIdAndUpdate(
-      req.params.id, 
+      req.params.id,
       req.body,
       { new: true, runValidators: true }
     );
-    
+
     if (!updatedDissertation) {
       return res.status(404).json({ message: "Dissertation not found" });
     }
@@ -816,7 +1122,9 @@ app.put("/dissertations/:id", async (req, res) => {
 // Delete Dissertation (DELETE)
 app.delete("/dissertations/:id", async (req, res) => {
   try {
-    const deletedDissertation = await Dissertation.findByIdAndDelete(req.params.id);
+    const deletedDissertation = await Dissertation.findByIdAndDelete(
+      req.params.id
+    );
     if (!deletedDissertation) {
       return res.status(404).json({ message: "Dissertation not found" });
     }
@@ -830,30 +1138,30 @@ app.delete("/dissertations/:id", async (req, res) => {
 app.get("/dissertations/search", async (req, res) => {
   try {
     const { query, year, degree } = req.query;
-    
+
     // Build a dynamic search query
     let searchQuery = {};
-    
+
     if (query) {
       searchQuery.$or = [
-        { name: { $regex: query, $options: 'i' } },
-        { title: { $regex: query, $options: 'i' } },
-        { coSupervisors: { $regex: query, $options: 'i' } }
+        { name: { $regex: query, $options: "i" } },
+        { title: { $regex: query, $options: "i" } },
+        { coSupervisors: { $regex: query, $options: "i" } },
       ];
     }
-    
+
     if (year) {
-      searchQuery.year = { $regex: year, $options: 'i' };
+      searchQuery.year = { $regex: year, $options: "i" };
     }
-    
+
     if (degree) {
-      searchQuery.degree = { $regex: degree, $options: 'i' };
+      searchQuery.degree = { $regex: degree, $options: "i" };
     }
-    
+
     const dissertations = await Dissertation.find(searchQuery)
       .sort({ year: -1 })
       .limit(50); // Limit to prevent overly broad searches
-    
+
     res.json(dissertations);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -864,7 +1172,9 @@ app.get("/dissertations/search", async (req, res) => {
 app.get("/dissertations/degree/:degree", async (req, res) => {
   try {
     const degree = req.params.degree;
-    const dissertations = await Dissertation.find({ degree: { $regex: degree, $options: 'i' } }).sort({ year: -1 });
+    const dissertations = await Dissertation.find({
+      degree: { $regex: degree, $options: "i" },
+    }).sort({ year: -1 });
     res.json(dissertations);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -875,7 +1185,9 @@ app.get("/dissertations/degree/:degree", async (req, res) => {
 app.get("/dissertations/supervisor/:supervisor", async (req, res) => {
   try {
     const supervisor = req.params.supervisor;
-    const dissertations = await Dissertation.find({ coSupervisors: { $regex: supervisor, $options: 'i' } }).sort({ year: -1 });
+    const dissertations = await Dissertation.find({
+      coSupervisors: { $regex: supervisor, $options: "i" },
+    }).sort({ year: -1 });
     res.json(dissertations);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -887,10 +1199,10 @@ app.get("/dissertations/supervisor/:supervisor", async (req, res) => {
 ///////////////////////////////////////////patents/////////////////////////////////////////////////////
 // Patent Routes
 // Render Patent Admin Page
-app.get('/admin/patents.html', (req, res) => {
+app.get("/admin/patents.html", (req, res) => {
   if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
   res.render("admin/patents", { adminID: req.session.admin }); // Render dashboard
-})
+});
 
 // Create Patent (POST)
 app.post("/patents", async (req, res) => {
@@ -934,7 +1246,7 @@ app.put("/patents/:id", async (req, res) => {
       req.body,
       { new: true, runValidators: true }
     );
-   
+
     if (!updatedPatent) {
       return res.status(404).json({ message: "Patent not found" });
     }
@@ -961,34 +1273,35 @@ app.delete("/patents/:id", async (req, res) => {
 app.get("/patents/search", async (req, res) => {
   try {
     const { query, year, grantNumber, applicationNumber } = req.query;
-   
+
     // Build a dynamic search query
     let searchQuery = {};
-   
+
     if (query) {
       searchQuery.$or = [
-        { title: { $regex: query, $options: 'i' } },
-        { authors: { $regex: query, $options: 'i' } },
-        { description: { $regex: query, $options: 'i' } }
+        { title: { $regex: query, $options: "i" } },
+        { authors: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
       ];
     }
-   
+
     if (year) {
       searchQuery.year = parseInt(year);
     }
-   
+
     if (grantNumber) {
-      searchQuery.grantNumber = { $regex: grantNumber, $options: 'i' };
+      searchQuery.grantNumber = { $regex: grantNumber, $options: "i" };
     }
-   
+
     if (applicationNumber) {
-      searchQuery.applicationNumber = { $regex: applicationNumber, $options: 'i' };
+      searchQuery.applicationNumber = {
+        $regex: applicationNumber,
+        $options: "i",
+      };
     }
-   
-    const patents = await Patent.find(searchQuery)
-      .sort({ year: -1 })
-      .limit(50); // Limit to prevent overly broad searches
-   
+
+    const patents = await Patent.find(searchQuery).sort({ year: -1 }).limit(50); // Limit to prevent overly broad searches
+
     res.json(patents);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -1010,7 +1323,9 @@ app.get("/patents/year/:year", async (req, res) => {
 app.get("/patents/author/:authorName", async (req, res) => {
   try {
     const authorName = req.params.authorName;
-    const patents = await Patent.find({ authors: { $regex: authorName, $options: 'i' } }).sort({ year: -1 });
+    const patents = await Patent.find({
+      authors: { $regex: authorName, $options: "i" },
+    }).sort({ year: -1 });
     res.json(patents);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -1018,9 +1333,6 @@ app.get("/patents/author/:authorName", async (req, res) => {
 });
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1045,7 +1357,6 @@ app.get("/teaching.html", async (req, res) => {
 app.get("/Collaboration.html", async (req, res) => {
   res.render("Collaboration");
 });
-
 
 app.get("/ResearchMembers.html", async (req, res) => {
   res.render("ResearchMembers");
@@ -1098,8 +1409,6 @@ app.get("/contact.html", async (req, res) => {
   res.render("contact");
 });
 
-
-
 app.get("/Dissertation.html", async (req, res) => {
   try {
     // Fetch all projects from the database
@@ -1125,7 +1434,6 @@ app.get("/Projects.html", async (req, res) => {
     res.status(500).send("Error loading projects");
   }
 });
-
 
 app.get("/patents.html", async (req, res) => {
   try {
@@ -1434,4 +1742,3 @@ app.get("/researchGroups", async (req, res) => {
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
-
