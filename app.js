@@ -4,19 +4,23 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const path = require("path");
 const axios = require("axios");
+const multer = require("multer");
+const fs = require("fs");
+const morgan = require("morgan");
+const { v4: uuidv4 } = require("uuid");
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3010;
 
-//////////////////////////////////////////// login / logout //////////////////////////////////////////////
+//////////////////////////////////////////// Login / Logout //////////////////////////////////////////////
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
 // Session configuration
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "fallback_secret_key", // Use .env value or fallback
+    secret: process.env.SESSION_SECRET || "fallback_secret_key",
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
@@ -31,19 +35,22 @@ app.use(
 const adminRoutes = require("./routes/admin");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/admin", adminRoutes);
+
 // Root route
 app.get("/admin", (req, res) => {
-  if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
-  res.render("admin/index", { adminID: req.session.admin }); // Render dashboard
+  if (!req.session.admin) return res.redirect("/admin/login");
+  res.render("admin/index", { adminID: req.session.admin });
 });
 
 const Admin = require("./models/Admin");
+
+// Admin creation logic
 async function createAdmin() {
   const existingAdmin = await Admin.findOne({ adminID: "admin123" });
   if (!existingAdmin) {
     const newAdmin = new Admin({
       adminID: "admin123",
-      password: "securepassword", // This will be hashed
+      password: "securepassword",
     });
     await newAdmin.save();
     console.log("Admin created");
@@ -55,115 +62,132 @@ createAdmin();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-db.once("open", () => console.log("Connected to MongoDB"));
+// ✅ Updated Mongoose Connection (removed deprecated options)
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((error) => console.error("MongoDB connection error:", error));
 
-const ItemSchema = new mongoose.Schema({ name: String });
-const Item = mongoose.model("Item", ItemSchema);
+// ✅ Check if models already exist to prevent overwrite error
+const Item =
+  mongoose.models.Item ||
+  mongoose.model("Item", new mongoose.Schema({ name: String }));
 
-const publicationSchema = new mongoose.Schema({
-  author: String,
-  title: String,
-  journal: String,
-  year: Number,
-  volumePages: String,
-  publicationLink: String,
-  publicationDate: String,
-  impactFactor: Number,
-});
-const Publication = mongoose.model("Publication", publicationSchema);
+const Publication =
+  mongoose.models.Publication ||
+  mongoose.model(
+    "Publication",
+    new mongoose.Schema({
+      author: String,
+      title: String,
+      journal: String,
+      year: Number,
+      volumePages: String,
+      publicationLink: String,
+      publicationDate: String,
+      impactFactor: Number,
+    })
+  );
 
-// Conference Proceedings Schema
-const conferenceSchema = new mongoose.Schema({
-  author: String,
-  title: String,
-  conference: String,
-  date: String,
-  place: String,
-  year: Number,
-});
-const Conference = mongoose.model("Conference", conferenceSchema);
-// book
-const bookSchema = new mongoose.Schema({
-  author: String,
-  title: String,
-  year: Number,
-  isbn: String,
-  photo: String,
-});
+const Conference =
+  mongoose.models.Conference ||
+  mongoose.model(
+    "Conference",
+    new mongoose.Schema({
+      author: String,
+      title: String,
+      conference: String,
+      date: String,
+      place: String,
+      year: Number,
+    })
+  );
 
-const Book = mongoose.model("Book", bookSchema);
+const Book =
+  mongoose.models.Book ||
+  mongoose.model(
+    "Book",
+    new mongoose.Schema({
+      author: String,
+      title: String,
+      year: Number,
+      isbn: String,
+      photo: String,
+    })
+  );
 
-// Define the Chapter schema
-const ChapterSchema = new mongoose.Schema({
-  author: String,
-  chapterName: String,
-  bookName: String,
-  year: Number,
-  ISBN: String,
-  Page: String,
-});
-const Chapter = mongoose.model("Chapter", ChapterSchema);
+const Chapter =
+  mongoose.models.Chapter ||
+  mongoose.model(
+    "Chapter",
+    new mongoose.Schema({
+      author: String,
+      chapterName: String,
+      bookName: String,
+      year: Number,
+      ISBN: String,
+      Page: String,
+    })
+  );
 
-// Projects
-const ProjectSchema = new mongoose.Schema({
-  title: String,
-  year: String,
-  funded: String,
-  collaborator: String,
-  projectType: String,
-  role: String,
-});
-const Project = mongoose.model("Project", ProjectSchema);
+const Project =
+  mongoose.models.Project ||
+  mongoose.model(
+    "Project",
+    new mongoose.Schema({
+      title: String,
+      year: String,
+      funded: String,
+      collaborator: String,
+      projectType: String,
+      role: String,
+    })
+  );
 
-// Research Group
-const researchGroupSchema = new mongoose.Schema({
-  name: String,
-  position: String,
-  scholarLink: String,
-  scholarTopic: String,
-  year: String,
-  type: String,
-  photoUrl: String,
-});
+const ResearchGroup =
+  mongoose.models.ResearchGroup ||
+  mongoose.model(
+    "ResearchGroup",
+    new mongoose.Schema({
+      name: String,
+      position: String,
+      scholarLink: String,
+      scholarTopic: String,
+      year: String,
+      type: String,
+      photoUrl: String,
+    })
+  );
 
-const ResearchGroup = mongoose.model("ResearchGroup", researchGroupSchema);
+const Patent =
+  mongoose.models.Patent ||
+  mongoose.model(
+    "Patent",
+    new mongoose.Schema({
+      title: String,
+      authors: String,
+      year: Number,
+      applicationNumber: String,
+      grantNumber: String,
+      grantDate: String,
+      description: String,
+    })
+  );
 
-// patent
-const PatentSchema = new mongoose.Schema({
-  title: String,
-  authors: String,
-  year: Number,
-  applicationNumber: String,
-  grantNumber: String,
-  grantDate: String,
-  description: String,
-});
-
-const Patent = mongoose.model("Patent", PatentSchema);
-
-// Dissertation
-const DissertationSchema = new mongoose.Schema({
-  name: String,
-  title: String,
-  year: String,
-  coSupervisors: String,
-  degree: String,
-});
-
-const Dissertation = mongoose.model("Dissertation", DissertationSchema);
+const Dissertation =
+  mongoose.models.Dissertation ||
+  mongoose.model(
+    "Dissertation",
+    new mongoose.Schema({
+      name: String,
+      title: String,
+      year: String,
+      coSupervisors: String,
+      degree: String,
+    })
+  );
 
 /////////////////////////////////////////////////////////File Upload Functionality//////////////////////////////////////////////////////////////
-
-const multer = require("multer");
-const fs = require("fs");
-const morgan = require("morgan");
-const { v4: uuidv4 } = require("uuid");
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, "uploads");
@@ -173,26 +197,22 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Configure multer storage
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadsDir);
-  },
-  filename: function (req, file, cb) {
-    // Generate unique filename while preserving extension
-    const uniqueFilename = `${uuidv4()}${path.extname(file.originalname)}`;
-    cb(null, uniqueFilename);
-  },
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) =>
+    cb(null, `${uuidv4()}${path.extname(file.originalname)}`),
 });
 
 // File filter for multer
 const fileFilter = (req, file, cb) => {
-  // Reject file if it seems dangerous
-  const fileTypes =
+  const allowedTypes =
     /jpeg|jpg|png|gif|pdf|doc|docx|xls|xlsx|txt|csv|zip|rar|tar|gz/;
-  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = fileTypes.test(file.mimetype);
+  const isValidExt = allowedTypes.test(
+    path.extname(file.originalname).toLowerCase()
+  );
+  const isValidMime = allowedTypes.test(file.mimetype);
 
-  if (extname && mimetype) {
-    return cb(null, true);
+  if (isValidExt && isValidMime) {
+    cb(null, true);
   } else {
     cb(
       new Error(
@@ -204,49 +224,29 @@ const fileFilter = (req, file, cb) => {
 
 // Configure multer upload
 const upload = multer({
-  storage: storage,
+  storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-  fileFilter: fileFilter,
+  fileFilter,
 });
 
 // Define File Schema
-const FileSchema = new mongoose.Schema({
-  fileName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  description: {
-    type: String,
-    trim: true,
-  },
-  originalFilename: {
-    type: String,
-    required: true,
-  },
-  storedFilename: {
-    type: String,
-    required: true,
-  },
-  fileType: {
-    type: String,
-    required: true,
-  },
-  size: {
-    type: Number,
-    required: true,
-  },
-  uploadDate: {
-    type: Date,
-    default: Date.now,
-  },
-});
+const File =
+  mongoose.models.File ||
+  mongoose.model(
+    "File",
+    new mongoose.Schema({
+      fileName: { type: String, required: true, trim: true },
+      description: { type: String, trim: true },
+      originalFilename: { type: String, required: true },
+      storedFilename: { type: String, required: true },
+      fileType: { type: String, required: true },
+      size: { type: Number, required: true },
+      uploadDate: { type: Date, default: Date.now },
+    })
+  );
 
 // Add text indexes for search
-FileSchema.index({ fileName: "text", description: "text" });
-
-// Create File model
-const File = mongoose.model("File", FileSchema);
+File.schema.index({ fileName: "text", description: "text" });
 
 // Middleware
 app.use(express.json());
@@ -262,6 +262,7 @@ app.use((err, req, res, next) => {
     message: err.message || "Something went wrong on the server",
   });
 });
+
 // Routes
 
 // Get all files
@@ -284,18 +285,15 @@ app.get("/api/files/search", async (req, res) => {
     const { query } = req.query;
 
     if (!query || query.trim() === "") {
-      // If no query or empty query, return all files
       const files = await File.find().sort({ uploadDate: -1 });
       return res.json(files);
     }
 
-    // MongoDB text search using text index
     const files = await File.find(
       { $text: { $search: query } },
       { score: { $meta: "textScore" } }
     ).sort({ score: { $meta: "textScore" } });
 
-    // If no results with text search, try regex search
     if (files.length === 0) {
       const regexFiles = await File.find({
         $or: [
