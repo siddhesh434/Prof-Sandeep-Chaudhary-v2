@@ -9,6 +9,52 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3010;
 
+
+//////////////////////////////////////////// login / logout //////////////////////////////////////////////
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || "fallback_secret_key", // Use .env value or fallback
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: "sessions"
+  }),
+  cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1 day session
+}));
+
+// Import and use admin routes
+const adminRoutes = require("./routes/admin");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/admin", adminRoutes);
+// Root route
+app.get("/admin", (req, res) => {
+  if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+  res.render("admin/index", { adminID: req.session.admin }); // Render dashboard
+});
+
+
+const Admin = require("./models/Admin");
+async function createAdmin() {
+  const existingAdmin = await Admin.findOne({ adminID: "admin123" });
+  if (!existingAdmin) {
+    const newAdmin = new Admin({
+      adminID: "admin123",
+      password: "securepassword" // This will be hashed
+    });
+    await newAdmin.save();
+    console.log("Admin created");
+  } else {
+    console.log("Admin already exists");
+  }
+}
+createAdmin();
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -150,7 +196,8 @@ app.use((req, res, next) => {
 /////////////////////////////////////////Book///////////////////////////////////////////////////////
 
 app.get('/admin/book.html',(req,res)=>{
-  res.render("admin/book")
+   if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+  res.render("admin/book", { adminID: req.session.admin }); // Render dashboard
 })
 
 app.post("/books", async (req, res) => {
@@ -226,7 +273,8 @@ app.delete("/books/:id", async (req, res) => {
 
 // Render Publication Admin Page
 app.get('/admin/publication.html', (req, res) => {
-  res.render("admin/publication")
+  if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+  res.render("admin/publication", { adminID: req.session.admin }); // Render dashboard
 })
 
 // Create Publication (POST)
@@ -333,7 +381,8 @@ app.get("/publications/search", async (req, res) => {
 
 // Render Conference Admin Page
 app.get('/admin/conference.html', (req, res) => {
-  res.render("admin/conference")
+  if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+  res.render("admin/conference", { adminID: req.session.admin }); // Render dashboard
 })
 
 // Create Conference Proceeding (POST)
@@ -464,7 +513,8 @@ app.get("/conferences/year/:year", async (req, res) => {
 
 // Render Book Chapter Admin Page
 app.get('/admin/chapters.html', (req, res) => {
-  res.render("admin/chapters")
+  if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+  res.render("admin/chapters", { adminID: req.session.admin }); // Render dashboard
 })
 
 // Create Book Chapter (POST)
@@ -571,7 +621,8 @@ app.get("/chapters/search", async (req, res) => {
 
 // Render Project Admin Page
 app.get('/admin/projects.html', (req, res) => {
-  res.render("admin/projects")
+  if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+  res.render("admin/projects", { adminID: req.session.admin }); // Render dashboard
 })
 
 // Create Project (POST)
@@ -706,7 +757,8 @@ app.get("/projects/role/:role", async (req, res) => {
 
 // Render Dissertation Admin Page
 app.get('/admin/dissertations.html', (req, res) => {
-  res.render("admin/dissertations")
+  if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+  res.render("admin/dissertations", { adminID: req.session.admin }); // Render dashboard
 })
 
 // Create Dissertation (POST)
@@ -836,7 +888,8 @@ app.get("/dissertations/supervisor/:supervisor", async (req, res) => {
 // Patent Routes
 // Render Patent Admin Page
 app.get('/admin/patents.html', (req, res) => {
-  res.render("admin/patents")
+  if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+  res.render("admin/patents", { adminID: req.session.admin }); // Render dashboard
 })
 
 // Create Patent (POST)
@@ -970,10 +1023,6 @@ app.get("/patents/author/:authorName", async (req, res) => {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
-app.get('/admin/index.html',(req,res)=>{
-  res.render("admin/index")
-})
 
 app.get("/", async (req, res) => {
   res.render("index");

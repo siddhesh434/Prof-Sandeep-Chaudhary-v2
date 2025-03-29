@@ -152,6 +152,19 @@
       display: none;
     }
   }
+  .admin-login {
+  text-decoration: none;
+  background-color: #4f46e5;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background 0.3s ease-in-out;
+}
+
+.admin-login:hover {
+  background-color: #4338ca;
+}
 
 </style>
 
@@ -195,6 +208,7 @@
     <a href="facilities.html">Facilities</a>
     
     <a href="contact.html">Contact Us</a>
+    <a href="/admin/login" style="font-weight: bold;">Admin Login</a>
   </div>
 </nav>
 
@@ -328,6 +342,10 @@
           >Contact Us</a
         >
       </div>
+      
+      <div class="nav-icons">
+        <a href="/admin/login" class="admin-login">Admin Login</a>
+       </div>
 
       <div class="nav-icons">
        
@@ -339,7 +357,7 @@
           </span>
         </label>
       </div>
-
+     
     </nav>
   </div>
 </header>
