@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,10 +20,12 @@
         }
     </script>
 </head>
+
 <body class="bg-gray-100">
     <div class="flex h-screen overflow-hidden relative">
         <!-- Sidebar - hidden on mobile by default -->
-        <aside id="sidebar" class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
+        <aside id="sidebar"
+            class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
             <div class="p-6 border-b border-blue-800">
                 <h2 class="text-xl font-bold tracking-wide">Welcome, Admin!</h2>
                 <!-- Close button for mobile -->
@@ -33,37 +36,22 @@
             <nav class="mt-4">
                 <ul>
                     <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                        <a href="/admin"
+                            class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
                             <i class="fas fa-home mr-3"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                        <a href="/admin/fileupload.html"
+                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
                             <i class="fas fa-users mr-3"></i>
-                            <span>Users</span>
+                            <span>File Upload</span>
                         </a>
                     </li>
                     <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
-                            <i class="fas fa-bookmark mr-3"></i>
-                            <span>Chapters</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-chart-bar mr-3"></i>
-                            <span>Statistics</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-cog mr-3"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="/admin/logout" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                        <a href="/admin/logout"
+                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
                             <i class="fas fa-sign-out-alt mr-3"></i>
                             <span>Logout</span>
                         </a>
@@ -88,7 +76,8 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Welcome, Admin</span>
-                        <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
+                        <div
+                            class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
                             A
                         </div>
                     </div>
@@ -107,101 +96,62 @@
                         </div>
                     </div>
                 </div>
-        
+
                 <!-- Book Chapter Form -->
                 <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
                     <form id="chapterForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input type="hidden" id="chapterId">
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="author">Authors</label>
-                            <input 
-                                type="text" 
-                                id="author" 
-                                name="author" 
-                                required 
+                            <input type="text" id="author" name="author" required
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="Lastname, F.N. et al."
-                            >
+                                placeholder="Lastname, F.N. et al.">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="chapterName">Chapter Name</label>
-                            <input 
-                                type="text" 
-                                id="chapterName" 
-                                name="chapterName" 
-                                required 
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <input type="text" id="chapterName" name="chapterName" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="bookName">Book Name</label>
-                            <input 
-                                type="text" 
-                                id="bookName" 
-                                name="bookName" 
-                                required 
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <input type="text" id="bookName" name="bookName" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="year">Publication Year</label>
-                            <input 
-                                type="number" 
-                                id="year" 
-                                name="year" 
-                                required 
-                                min="1900"
-                                max="2100"
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <input type="number" id="year" name="year" required min="1900" max="2100"
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="isbn">ISBN</label>
-                            <input 
-                                type="text" 
-                                id="isbn" 
-                                name="isbn" 
+                            <input type="text" id="isbn" name="isbn"
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="978-XXX-XXX-XXX-X"
-                            >
+                                placeholder="978-XXX-XXX-XXX-X">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="pages">Page Range</label>
-                            <input 
-                                type="text" 
-                                id="pages" 
-                                name="pages" 
+                            <input type="text" id="pages" name="pages"
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="e.g., 193-205"
-                            >
+                                placeholder="e.g., 193-205">
                         </div>
-                        
+
                         <div class="col-span-1 md:col-span-2 flex space-x-4">
-                            <button 
-                                type="submit" 
-                                id="addButton"
-                                class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-blue-700 transition duration-300"
-                            >
+                            <button type="submit" id="addButton"
+                                class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-blue-700 transition duration-300">
                                 <i class="fas fa-plus mr-2"></i> Add Chapter
                             </button>
-                            <button 
-                                type="button" 
-                                id="updateButton"
-                                class="flex-1 bg-yellow-500 text-white p-3 rounded hover:bg-yellow-600 transition duration-300 hidden"
-                            >
+                            <button type="button" id="updateButton"
+                                class="flex-1 bg-yellow-500 text-white p-3 rounded hover:bg-yellow-600 transition duration-300 hidden">
                                 <i class="fas fa-edit mr-2"></i> Update Chapter
                             </button>
-                            <button 
-                                type="button" 
-                                id="cancelEditButton"
-                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden"
-                            >
+                            <button type="button" id="cancelEditButton"
+                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden">
                                 <i class="fas fa-times mr-2"></i> Cancel
                             </button>
                         </div>
@@ -210,28 +160,21 @@
 
                 <!-- Search and Filter Section -->
                 <div class="mb-6 flex flex-wrap gap-4 bg-white p-4 rounded-lg shadow-md">
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        placeholder="Search book chapters..."
-                        class="flex-grow border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                    >
-                    <select 
-                        id="yearFilter"
-                        class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                    >
+                    <input type="text" id="searchInput" placeholder="Search book chapters..."
+                        class="flex-grow border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                    <select id="yearFilter"
+                        class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         <option value="">All Years</option>
                     </select>
-                    <button 
-                        id="searchButton"
-                        class="bg-brand-secondary text-white p-2 rounded hover:bg-blue-700 transition duration-300 flex items-center"
-                    >
+                    <button id="searchButton"
+                        class="bg-brand-secondary text-white p-2 rounded hover:bg-blue-700 transition duration-300 flex items-center">
                         <i class="fas fa-search mr-2"></i> Search
                     </button>
                 </div>
 
                 <!-- Book Chapters Grid -->
-                <div id="chaptersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <div id="chaptersGrid"
+                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     <!-- Book chapters will be dynamically added here -->
                 </div>
             </div>
@@ -239,7 +182,8 @@
     </div>
 
     <!-- Floating action button for mobile -->
-    <button id="mobile-fab" class="md:hidden fixed bottom-4 right-4 bg-brand-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
+    <button id="mobile-fab"
+        class="md:hidden fixed bottom-4 right-4 bg-brand-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
         <i class="fas fa-plus"></i>
     </button>
 
@@ -249,16 +193,12 @@
             <h2 class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h2>
             <p class="mb-6 text-gray-600">Are you sure you want to delete this book chapter?</p>
             <div class="flex space-x-4">
-                <button 
-                    id="confirmDeleteBtn"
-                    class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300"
-                >
+                <button id="confirmDeleteBtn"
+                    class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300">
                     <i class="fas fa-trash-alt mr-2"></i> Delete
                 </button>
-                <button 
-                    id="cancelDeleteBtn"
-                    class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300"
-                >
+                <button id="cancelDeleteBtn"
+                    class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300">
                     <i class="fas fa-ban mr-2"></i> Cancel
                 </button>
             </div>
@@ -279,7 +219,7 @@
         const yearFilter = document.getElementById('yearFilter');
         const searchButton = document.getElementById('searchButton');
         const chapterCount = document.getElementById('chapterCount');
-        
+
         // Mobile menu elements
         const mobileMenuButton = document.getElementById("mobile-menu-button");
         const closeSidebarButton = document.getElementById("close-sidebar");
@@ -357,7 +297,7 @@
                 chapters = await response.json();
                 renderChapters(chapters);
                 populateYearFilter(chapters);
-                
+
                 // Update chapter count
                 chapterCount.textContent = chapters.length;
             } catch (error) {
@@ -432,30 +372,30 @@
             const selectedYear = yearFilter.value;
 
             const filteredChapters = chapters.filter(chap => {
-                const matchesSearch = searchTerm === '' || 
-                    chap.chapterName.toLowerCase().includes(searchTerm) || 
+                const matchesSearch = searchTerm === '' ||
+                    chap.chapterName.toLowerCase().includes(searchTerm) ||
                     chap.author.toLowerCase().includes(searchTerm) ||
                     chap.bookName.toLowerCase().includes(searchTerm);
-                
-                const matchesYear = selectedYear === '' || 
+
+                const matchesYear = selectedYear === '' ||
                     chap.year.toString() === selectedYear;
-                
+
                 return matchesSearch && matchesYear;
             });
 
             renderChapters(filteredChapters);
-            
+
             // Update filtered count with animation
             const countElement = document.getElementById('chapterCount');
             const currentCount = parseInt(countElement.textContent);
             const targetCount = filteredChapters.length;
-            
+
             // Simple animation for count change
             let startTime;
             function animateCount(timestamp) {
                 if (!startTime) startTime = timestamp;
                 const progress = (timestamp - startTime) / 300; // 300ms duration
-                
+
                 if (progress < 1) {
                     const currentValue = Math.floor(currentCount + (targetCount - currentCount) * progress);
                     countElement.textContent = currentValue;
@@ -464,7 +404,7 @@
                     countElement.textContent = targetCount;
                 }
             }
-            
+
             requestAnimationFrame(animateCount);
         }
 
@@ -476,11 +416,11 @@
         // Escape HTML to prevent XSS
         function escapeHtml(unsafe) {
             return unsafe
-                 .replace(/&/g, "&amp;")
-                 .replace(/</g, "&lt;")
-                 .replace(/>/g, "&gt;")
-                 .replace(/"/g, "&quot;")
-                 .replace(/'/g, "&#039;");
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
         // Validate Form Inputs
@@ -522,7 +462,7 @@
         // Add Book Chapter
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             if (!validateForm()) return;
 
             const chapterData = {
@@ -548,7 +488,7 @@
 
                 await fetchChapters();
                 form.reset();
-                
+
                 // Show success notification
                 showNotification('Chapter added successfully!', 'success');
             } catch (error) {
@@ -556,27 +496,25 @@
                 showNotification(error.message, 'error');
             }
         });
-        
+
         // Simple notification function
         function showNotification(message, type = 'info') {
             const notificationDiv = document.createElement('div');
-            notificationDiv.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
-                type === 'success' ? 'bg-green-500' : 
-                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
-            } text-white`;
-            
+            notificationDiv.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-green-500' :
+                    type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+                } text-white`;
+
             notificationDiv.innerHTML = `
                 <div class="flex items-center">
-                    <i class="fas fa-${
-                        type === 'success' ? 'check-circle' : 
-                        type === 'error' ? 'exclamation-circle' : 'info-circle'
-                    } mr-2"></i>
+                    <i class="fas fa-${type === 'success' ? 'check-circle' :
+                    type === 'error' ? 'exclamation-circle' : 'info-circle'
+                } mr-2"></i>
                     <span>${message}</span>
                 </div>
             `;
-            
+
             document.body.appendChild(notificationDiv);
-            
+
             setTimeout(() => {
                 notificationDiv.classList.add('opacity-0', 'transition-opacity', 'duration-500');
                 setTimeout(() => {
@@ -589,13 +527,13 @@
         async function editChapter(id) {
             try {
                 const response = await fetch(`/chapters/${id}`);
-                
+
                 if (!response.ok) {
                     throw new Error('Failed to fetch book chapter details');
                 }
-                
+
                 const chapter = await response.json();
-                
+
                 document.getElementById('author').value = chapter.author;
                 document.getElementById('chapterName').value = chapter.chapterName;
                 document.getElementById('bookName').value = chapter.bookName;
@@ -603,11 +541,11 @@
                 document.getElementById('isbn').value = chapter.ISBN || '';
                 document.getElementById('pages').value = chapter.Page || '';
                 document.getElementById('chapterId').value = chapter._id;
-                
+
                 addButton.classList.add('hidden');
                 updateButton.classList.remove('hidden');
                 cancelEditButton.classList.remove('hidden');
-                
+
                 // Scroll to form
                 form.scrollIntoView({ behavior: 'smooth' });
             } catch (error) {
@@ -655,7 +593,7 @@
                 addButton.classList.remove('hidden');
                 updateButton.classList.add('hidden');
                 cancelEditButton.classList.add('hidden');
-                
+
                 showNotification('Chapter updated successfully!', 'success');
             } catch (error) {
                 console.error('Error updating book chapter:', error);
@@ -682,8 +620,8 @@
             if (!currentDeletingChapterId) return;
 
             try {
-                const response = await fetch(`/chapters/${currentDeletingChapterId}`, { 
-                    method: 'DELETE' 
+                const response = await fetch(`/chapters/${currentDeletingChapterId}`, {
+                    method: 'DELETE'
                 });
 
                 if (!response.ok) {
@@ -695,7 +633,7 @@
                 deleteModal.classList.add('hidden');
                 deleteModal.classList.remove('flex');
                 currentDeletingChapterId = null;
-                
+
                 showNotification('Chapter deleted successfully!', 'success');
             } catch (error) {
                 console.error('Error deleting book chapter:', error);
@@ -707,4 +645,5 @@
         fetchChapters();
     </script>
 </body>
+
 </html>

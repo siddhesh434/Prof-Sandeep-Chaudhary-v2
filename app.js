@@ -452,10 +452,18 @@ app.delete("/api/files/:id", async (req, res) => {
 
 // Serve the frontend
 app.get("/admin/fileupload.html", (req, res) => {
+  if (!req.session.admin) return res.redirect("/admin/login");
   res.render("admin/fileupload");
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.get("/admin/adminControl.html", (req, res) => {
+  if (!req.session.admin) return res.redirect("/admin/login");
+  res.render("admin/adminControl");
+});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));

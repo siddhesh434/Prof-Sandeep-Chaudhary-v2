@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,10 +20,12 @@
         }
     </script>
 </head>
+
 <body class="bg-gray-100">
     <div class="flex h-screen overflow-hidden relative">
         <!-- Sidebar - hidden on mobile by default -->
-        <aside id="sidebar" class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
+        <aside id="sidebar"
+            class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
             <div class="p-6 border-b border-blue-800">
                 <h2 class="text-xl font-bold tracking-wide">Welcome, Admin!</h2>
                 <!-- Close button for mobile -->
@@ -33,55 +36,22 @@
             <nav class="mt-4">
                 <ul>
                     <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                        <a href="/admin"
+                            class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
                             <i class="fas fa-home mr-3"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                        <a href="/admin/fileupload.html"
+                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
                             <i class="fas fa-users mr-3"></i>
-                            <span>Users</span>
+                            <span>File Upload</span>
                         </a>
                     </li>
                     <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
-                            <i class="fas fa-user-graduate mr-3"></i>
-                            <span>Dissertations</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-book mr-3"></i>
-                            <span>Publications</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-flask mr-3"></i>
-                            <span>Projects</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-file-signature mr-3"></i>
-                            <span>Patents</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-chart-bar mr-3"></i>
-                            <span>Statistics</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-cog mr-3"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="#" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                        <a href="/admin/logout"
+                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
                             <i class="fas fa-sign-out-alt mr-3"></i>
                             <span>Logout</span>
                         </a>
@@ -108,7 +78,8 @@
                     </div>
                     <div class="flex items-center space-x-2 md:space-x-4">
                         <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Welcome, Admin</span>
-                        <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
+                        <div
+                            class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
                             A
                         </div>
                     </div>
@@ -144,95 +115,61 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Dissertation Form -->
                 <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Dissertation</h3>
                     <form id="dissertationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input type="hidden" id="dissertationId">
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="name">Student Name</label>
-                            <input 
-                                type="text" 
-                                id="name" 
-                                name="name" 
-                                required 
+                            <input type="text" id="name" name="name" required
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="Full Name"
-                            >
+                                placeholder="Full Name">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="title">Dissertation Title</label>
-                            <input 
-                                type="text" 
-                                id="title" 
-                                name="title" 
-                                required 
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <input type="text" id="title" name="title" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="year">Year</label>
-                            <input 
-                                type="number" 
-                                id="year" 
-                                name="year" 
-                                required 
-                                min="1900"
-                                max="2100"
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <input type="number" id="year" name="year" required min="1900" max="2100"
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="coSupervisors">Co-Supervisors</label>
-                            <input 
-                                type="text" 
-                                id="coSupervisors" 
-                                name="coSupervisors"
+                            <input type="text" id="coSupervisors" name="coSupervisors"
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="e.g., Dr. Rajesh Gupta"
-                            >
+                                placeholder="e.g., Dr. Rajesh Gupta">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="degree">Degree Status</label>
-                            <select 
-                                id="degree" 
-                                name="degree" 
-                                required 
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <select id="degree" name="degree" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                                 <option value="">Select Degree Status</option>
                                 <option value="PhD Thesis Awarded">PhD Thesis Awarded</option>
                                 <option value="PhD Thesis in progress">PhD Thesis in progress</option>
                                 <option value="MTech and MSc Awarded/Ongoing">MTech and MSc Awarded/Ongoing</option>
                             </select>
                         </div>
-                        
+
                         <div class="col-span-1 md:col-span-2 flex space-x-4 mt-2">
-                            <button 
-                                type="submit" 
-                                id="addButton"
-                                class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-blue-700 transition duration-300"
-                            >
+                            <button type="submit" id="addButton"
+                                class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-blue-700 transition duration-300">
                                 <i class="fas fa-plus mr-2"></i> Add Dissertation
                             </button>
-                            <button 
-                                type="button" 
-                                id="updateButton"
-                                class="flex-1 bg-yellow-500 text-white p-3 rounded hover:bg-yellow-600 transition duration-300 hidden"
-                            >
+                            <button type="button" id="updateButton"
+                                class="flex-1 bg-yellow-500 text-white p-3 rounded hover:bg-yellow-600 transition duration-300 hidden">
                                 <i class="fas fa-save mr-2"></i> Update Dissertation
                             </button>
-                            <button 
-                                type="button" 
-                                id="cancelEditButton"
-                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden"
-                            >
+                            <button type="button" id="cancelEditButton"
+                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden">
                                 <i class="fas fa-times mr-2"></i> Cancel
                             </button>
                         </div>
@@ -244,32 +181,22 @@
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Search & Filter</h3>
                     <div class="flex flex-wrap gap-4">
                         <div class="flex-grow">
-                            <input 
-                                type="text" 
-                                id="searchInput" 
-                                placeholder="Search dissertations..."
-                                class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <input type="text" id="searchInput" placeholder="Search dissertations..."
+                                class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         </div>
-                        <select 
-                            id="yearFilter"
-                            class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                        >
+                        <select id="yearFilter"
+                            class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                             <option value="">All Years</option>
                         </select>
-                        <select 
-                            id="degreeFilter"
-                            class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                        >
+                        <select id="degreeFilter"
+                            class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                             <option value="">All Degrees</option>
                             <option value="PhD Thesis Awarded">PhD Thesis Awarded</option>
                             <option value="PhD Thesis in progress">PhD Thesis in progress</option>
                             <option value="MTech and MSc Awarded/Ongoing">MTech and MSc Awarded/Ongoing</option>
                         </select>
-                        <button 
-                            id="searchButton"
-                            class="bg-brand-secondary text-white p-2 rounded hover:bg-blue-700 transition duration-300"
-                        >
+                        <button id="searchButton"
+                            class="bg-brand-secondary text-white p-2 rounded hover:bg-blue-700 transition duration-300">
                             <i class="fas fa-search mr-2"></i> Search
                         </button>
                     </div>
@@ -281,21 +208,18 @@
                 </div>
 
                 <!-- Delete Confirmation Modal -->
-                <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+                <div id="deleteModal"
+                    class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
                     <div class="bg-white rounded-lg p-6 max-w-sm w-full">
                         <h2 class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h2>
                         <p class="mb-6 text-gray-600">Are you sure you want to delete this dissertation?</p>
                         <div class="flex space-x-4">
-                            <button 
-                                id="confirmDeleteBtn"
-                                class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300"
-                            >
+                            <button id="confirmDeleteBtn"
+                                class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300">
                                 <i class="fas fa-trash mr-2"></i> Delete
                             </button>
-                            <button 
-                                id="cancelDeleteBtn"
-                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300"
-                            >
+                            <button id="cancelDeleteBtn"
+                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300">
                                 <i class="fas fa-times mr-2"></i> Cancel
                             </button>
                         </div>
@@ -306,7 +230,8 @@
     </div>
 
     <!-- Floating action button for mobile -->
-    <button id="mobile-fab" class="md:hidden fixed bottom-4 right-4 bg-blue-800 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
+    <button id="mobile-fab"
+        class="md:hidden fixed bottom-4 right-4 bg-blue-800 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
         <i class="fas fa-plus"></i>
     </button>
 
@@ -350,7 +275,7 @@
             } catch (error) {
                 console.error('Error fetching dissertations:', error);
                 alert('Failed to fetch dissertations. Please try again.');
-                
+
                 // For demo purposes - populate with sample data if fetch fails
                 const sampleData = [
                     {
@@ -433,7 +358,7 @@
                 } else {
                     badgeColor = 'bg-blue-500';
                 }
-                
+
                 return `
                 <div class="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105">
                     <div class="p-4">
@@ -479,16 +404,16 @@
             const selectedDegree = degreeFilter.value;
 
             const filteredDissertations = dissertations.filter(dissertation => {
-                const matchesSearch = searchTerm === '' || 
-                    dissertation.title.toLowerCase().includes(searchTerm) || 
+                const matchesSearch = searchTerm === '' ||
+                    dissertation.title.toLowerCase().includes(searchTerm) ||
                     dissertation.name.toLowerCase().includes(searchTerm);
-                
-                const matchesYear = selectedYear === '' || 
+
+                const matchesYear = selectedYear === '' ||
                     dissertation.year.toString() === selectedYear;
-                
+
                 const matchesDegree = selectedDegree === '' ||
                     dissertation.degree === selectedDegree;
-                
+
                 return matchesSearch && matchesYear && matchesDegree;
             });
 
@@ -504,11 +429,11 @@
         // Escape HTML to prevent XSS
         function escapeHtml(unsafe) {
             return unsafe
-                 .replace(/&/g, "&amp;")
-                 .replace(/</g, "&lt;")
-                 .replace(/>/g, "&gt;")
-                 .replace(/"/g, "&quot;")
-                 .replace(/'/g, "&#039;");
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
         // Validate Form Inputs
@@ -544,7 +469,7 @@
         // Add Dissertation
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             if (!validateForm()) return;
 
             const dissertationData = {
@@ -572,7 +497,7 @@
             } catch (error) {
                 console.error('Error adding dissertation:', error);
                 alert(error.message);
-                
+
                 // For demo purposes - add to local array if server request fails
                 dissertationData._id = (Math.random() * 1000).toString();
                 dissertations.push(dissertationData);
@@ -587,23 +512,23 @@
         async function editDissertation(id) {
             try {
                 const response = await fetch(`/dissertations/${id}`);
-                
+
                 if (!response.ok) {
                     throw new Error('Failed to fetch dissertation details');
                 }
-                
+
                 const dissertation = await response.json();
-                
+
                 // For demo purposes - find in local array if server request fails
                 const dissertationToEdit = dissertations.find(d => d._id === id) || dissertation;
-                
+
                 document.getElementById('name').value = dissertationToEdit.name;
                 document.getElementById('title').value = dissertationToEdit.title;
                 document.getElementById('year').value = dissertationToEdit.year;
                 document.getElementById('coSupervisors').value = dissertationToEdit.coSupervisors === '-' ? '' : dissertationToEdit.coSupervisors;
                 document.getElementById('degree').value = dissertationToEdit.degree;
                 document.getElementById('dissertationId').value = dissertationToEdit._id;
-                
+
                 addButton.classList.add('hidden');
                 updateButton.classList.remove('hidden');
                 cancelEditButton.classList.remove('hidden');
@@ -613,7 +538,7 @@
             } catch (error) {
                 console.error('Error fetching dissertation details:', error);
                 alert('Failed to load dissertation details');
-                
+
                 // For demo purposes - find in local array if server request fails
                 const dissertationToEdit = dissertations.find(d => d._id === id);
                 if (dissertationToEdit) {
@@ -623,7 +548,7 @@
                     document.getElementById('coSupervisors').value = dissertationToEdit.coSupervisors === '-' ? '' : dissertationToEdit.coSupervisors;
                     document.getElementById('degree').value = dissertationToEdit.degree;
                     document.getElementById('dissertationId').value = dissertationToEdit._id;
-                    
+
                     addButton.classList.add('hidden');
                     updateButton.classList.remove('hidden');
                     cancelEditButton.classList.remove('hidden');
@@ -675,7 +600,7 @@
             } catch (error) {
                 console.error('Error updating dissertation:', error);
                 alert(error.message);
-                
+
                 // For demo purposes - update in local array if server request fails
                 const index = dissertations.findIndex(d => d._id === id);
                 if (index !== -1) {
@@ -709,8 +634,8 @@
             if (!currentDeletingDissertationId) return;
 
             try {
-                const response = await fetch(`/dissertations/${currentDeletingDissertationId}`, { 
-                    method: 'DELETE' 
+                const response = await fetch(`/dissertations/${currentDeletingDissertationId}`, {
+                    method: 'DELETE'
                 });
 
                 if (!response.ok) {
@@ -725,7 +650,7 @@
             } catch (error) {
                 console.error('Error deleting dissertation:', error);
                 alert(error.message);
-                
+
                 // For demo purposes - remove from local array if server request fails
                 dissertations = dissertations.filter(d => d._id !== currentDeletingDissertationId);
                 renderDissertations(dissertations);
@@ -740,27 +665,28 @@
         fetchDissertations();
 
         // Mobile sidebar toggle functionality
-      mobileMenuButton.addEventListener("click", () => {
-        sidebar.classList.remove("-translate-x-full");
-        sidebarOverlay.classList.remove("hidden");
-      });
+        mobileMenuButton.addEventListener("click", () => {
+            sidebar.classList.remove("-translate-x-full");
+            sidebarOverlay.classList.remove("hidden");
+        });
 
-      closeSidebarButton.addEventListener("click", () => {
-        sidebar.classList.add("-translate-x-full");
-        sidebarOverlay.classList.add("hidden");
-      });
+        closeSidebarButton.addEventListener("click", () => {
+            sidebar.classList.add("-translate-x-full");
+            sidebarOverlay.classList.add("hidden");
+        });
 
-      sidebarOverlay.addEventListener("click", () => {
-        sidebar.classList.add("-translate-x-full");
-        sidebarOverlay.classList.add("hidden");
-      });
+        sidebarOverlay.addEventListener("click", () => {
+            sidebar.classList.add("-translate-x-full");
+            sidebarOverlay.classList.add("hidden");
+        });
 
-      // Mobile FAB functionality
-      mobileFab.addEventListener("click", () => {
-        // Scroll to the publication form
-        const publicationForm = document.getElementById("publicationForm");
-        publicationForm.scrollIntoView({ behavior: "smooth" });
-      });
+        // Mobile FAB functionality
+        mobileFab.addEventListener("click", () => {
+            // Scroll to the publication form
+            const publicationForm = document.getElementById("publicationForm");
+            publicationForm.scrollIntoView({ behavior: "smooth" });
+        });
     </script>
 </body>
+
 </html>

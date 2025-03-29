@@ -10,83 +10,146 @@
 </head>
 
 <body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">File Management System</h1>
-
-        <!-- Upload Form -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Upload New File</h2>
-            <form id="uploadForm" class="space-y-4">
-                <div>
-                    <label for="fileName" class="block text-sm font-medium text-gray-700 mb-1">File Name</label>
-                    <input type="text" id="fileName" name="fileName" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-
-                <div>
-                    <label for="fileDescription"
-                        class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea id="fileDescription" name="fileDescription" rows="3"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-                </div>
-
-                <div>
-                    <label for="fileUpload" class="block text-sm font-medium text-gray-700 mb-1">Select File</label>
-                    <input type="file" id="fileUpload" name="file" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-
-                <div>
-                    <button type="submit"
-                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <i class="fas fa-cloud-upload-alt mr-2"></i> Upload File
-                    </button>
-                </div>
-            </form>
-            <div id="uploadStatus" class="mt-4 hidden">
-                <div class="flex items-center">
-                    <div class="spinner mr-3">
-                        <div class="w-5 h-5 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin">
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600">Uploading file...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Files List with Search -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-700 mb-2 md:mb-0">Your Files</h2>
-                <div class="relative w-full md:w-64">
-                    <input type="text" id="searchInput" placeholder="Search files..."
-                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    <div class="absolute left-3 top-2.5 text-gray-400">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <button id="clearSearch" class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 hidden">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div id="searchInfo" class="mb-3 text-sm text-gray-500 hidden">
-                Showing results for "<span id="searchTerm"></span>"
-                <button id="resetSearch" class="ml-2 text-indigo-600 hover:text-indigo-800">
-                    Reset
+    <div class="flex h-screen overflow-hidden relative">
+        <!-- Sidebar - hidden on mobile by default -->
+        <aside id="sidebar"
+            class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
+            <div class="p-6 border-b border-blue-800">
+                <h2 class="text-xl font-bold tracking-wide">Welcome, Admin!</h2>
+                <!-- Close button for mobile -->
+                <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
+            <nav class="mt-4">
+                <ul>
+                    <li class="mb-1 px-2">
+                        <a href="/admin"
+                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                            <i class="fas fa-home mr-3"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="mb-1 px-2">
+                        <a href="/admin/fileupload.html"
+                            class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
+                            <i class="fas fa-file-upload mr-3"></i>
+                            <span>File Upload</span>
+                        </a>
+                    </li>
+                    <li class="mb-1 px-2">
+                        <a href="/admin/logout"
+                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                            <i class="fas fa-sign-out-alt mr-3"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
-            <div id="filesList" class="space-y-4">
-                <div class="text-center py-8 text-gray-500 italic">
-                    Loading files...
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <div class="p-4 md:p-6">
+                <!-- Header with mobile menu indicator -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center">
+                        <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">File Management System</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-700 hidden sm:inline">Welcome, Admin</span>
+                        <div
+                            class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
+                            A
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Form -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Upload New File</h2>
+                    <form id="uploadForm" class="space-y-4">
+                        <div>
+                            <label for="fileName" class="block text-sm font-medium text-gray-700 mb-1">File Name</label>
+                            <input type="text" id="fileName" name="fileName" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+
+                        <div>
+                            <label for="fileDescription"
+                                class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                            <textarea id="fileDescription" name="fileDescription" rows="3"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="fileUpload" class="block text-sm font-medium text-gray-700 mb-1">Select
+                                File</label>
+                            <input type="file" id="fileUpload" name="file" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+
+                        <div>
+                            <button type="submit"
+                                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <i class="fas fa-cloud-upload-alt mr-2"></i> Upload File
+                            </button>
+                        </div>
+                    </form>
+                    <div id="uploadStatus" class="mt-4 hidden">
+                        <div class="flex items-center">
+                            <div class="spinner mr-3">
+                                <div
+                                    class="w-5 h-5 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin">
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600">Uploading file...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files List with Search -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-700 mb-2 md:mb-0">Your Files</h2>
+                        <div class="relative w-full md:w-64">
+                            <input type="text" id="searchInput" placeholder="Search files..."
+                                class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <div class="absolute left-3 top-2.5 text-gray-400">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <button id="clearSearch"
+                                class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 hidden">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="searchInfo" class="mb-3 text-sm text-gray-500 hidden">
+                        Showing results for "<span id="searchTerm"></span>"
+                        <button id="resetSearch" class="ml-2 text-indigo-600 hover:text-indigo-800">
+                            Reset
+                        </button>
+                    </div>
+
+                    <div id="filesList" class="space-y-4">
+                        <div class="text-center py-8 text-gray-500 italic">
+                            Loading files...
+                        </div>
+                    </div>
+
+                    <div id="noSearchResults" class="text-center py-8 text-gray-500 italic hidden">
+                        No files match your search criteria.
+                    </div>
                 </div>
             </div>
-
-            <div id="noSearchResults" class="text-center py-8 text-gray-500 italic hidden">
-                No files match your search criteria.
-            </div>
-        </div>
+        </main>
     </div>
 
     <!-- Toast Notifications -->
@@ -103,6 +166,30 @@
             const searchTerm = document.getElementById('searchTerm');
             const resetSearch = document.getElementById('resetSearch');
             const noSearchResults = document.getElementById('noSearchResults');
+
+            // Sidebar controls for mobile
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const closeSidebarButton = document.getElementById('close-sidebar');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            // Toggle sidebar on mobile
+            mobileMenuButton.addEventListener('click', () => {
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+            });
+
+            // Close sidebar on mobile
+            closeSidebarButton.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            // Close sidebar when clicking overlay
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            });
 
             let allFiles = []; // Store all files for client-side filtering
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,94 +12,48 @@
             theme: {
                 extend: {
                     colors: {
-                       "brand-primary": "#3B82F6",
-                       "brand-secondary": "#10B981",
+                        "brand-primary": "#3B82F6",
+                        "brand-secondary": "#10B981",
                     }
                 }
             }
         }
     </script>
 </head>
+
 <body class="bg-gray-100">
     <div class="flex h-screen overflow-hidden relative">
         <!-- Sidebar - hidden on mobile by default -->
-        <aside
-            id="sidebar"
-            class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block"
-        >
+        <aside id="sidebar"
+            class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
             <div class="p-6 border-b border-blue-800">
                 <h2 class="text-xl font-bold tracking-wide">
                     Welcome, Admin!
                 </h2>
                 <!-- Close button for mobile -->
-                <button
-                    id="close-sidebar"
-                    class="absolute top-4 right-4 text-white md:hidden"
-                >
+                <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <nav class="mt-4">
                 <ul>
                     <li class="mb-1 px-2">
-                        <a
-                            href="#"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-                        >
+                        <a href="/admin"
+                            class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
                             <i class="fas fa-home mr-3"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="mb-1 px-2">
-                        <a
-                            href="#"
-                            class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium"
-                        >
-                            <i class="fas fa-microphone mr-3"></i>
-                            <span>Conference Proceedings</span>
+                        <a href="/admin/fileupload.html"
+                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                            <i class="fas fa-users mr-3"></i>
+                            <span>File Upload</span>
                         </a>
                     </li>
                     <li class="mb-1 px-2">
-                        <a
-                            href="#"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-                        >
-                            <i class="fas fa-file-alt mr-3"></i>
-                            <span>Journal Publications</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a
-                            href="#"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-                        >
-                            <i class="fas fa-book-open mr-3"></i>
-                            <span>Books</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a
-                            href="#"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-                        >
-                            <i class="fas fa-bookmark mr-3"></i>
-                            <span>Chapters</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a
-                            href="#"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-                        >
-                            <i class="fas fa-flask mr-3"></i>
-                            <span>Projects</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a
-                            href="#"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
-                        >
+                        <a href="/admin/logout"
+                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
                             <i class="fas fa-sign-out-alt mr-3"></i>
                             <span>Logout</span>
                         </a>
@@ -108,10 +63,7 @@
         </aside>
 
         <!-- Overlay for mobile sidebar -->
-        <div
-            id="sidebar-overlay"
-            class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"
-        ></div>
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
 
         <!-- Main Content -->
         <main class="flex-1 overflow-y-auto">
@@ -119,10 +71,7 @@
                 <!-- Header with mobile menu indicator -->
                 <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center">
-                        <button
-                            id="mobile-menu-button"
-                            class="mr-3 text-gray-700 md:hidden"
-                        >
+                        <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
                             <i class="fas fa-bars text-xl"></i>
                         </button>
                         <h1 class="text-xl md:text-2xl font-bold text-gray-800">
@@ -132,8 +81,7 @@
                     <div class="flex items-center space-x-2 md:space-x-4">
                         <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Welcome, Admin</span>
                         <div
-                            class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold"
-                        >
+                            class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
                             A
                         </div>
                     </div>
@@ -149,104 +97,63 @@
                         <p class="text-2xl font-bold text-gray-800" id="totalCount">0</p>
                     </div>
                 </div>
-                
+
                 <!-- Conference Form -->
                 <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
                     <h2 class="text-lg font-semibold mb-4 text-gray-800">Add New Conference Proceeding</h2>
                     <form id="conferenceForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input type="hidden" id="conferenceId">
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="author">Authors</label>
-                            <input 
-                                type="text" 
-                                id="author" 
-                                name="author" 
-                                required 
+                            <input type="text" id="author" name="author" required
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="Lastname, F.N. et al."
-                            >
+                                placeholder="Lastname, F.N. et al.">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="title">Paper Title</label>
-                            <input 
-                                type="text" 
-                                id="title" 
-                                name="title" 
-                                required 
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <input type="text" id="title" name="title" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="conference">Conference Name</label>
-                            <input 
-                                type="text" 
-                                id="conference" 
-                                name="conference" 
-                                required 
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <input type="text" id="conference" name="conference" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="date">Conference Date</label>
-                            <input 
-                                type="text" 
-                                id="date" 
-                                name="date" 
-                                required 
+                            <input type="text" id="date" name="date" required
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="e.g., April 23-24, 2024"
-                            >
+                                placeholder="e.g., April 23-24, 2024">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="place">Conference Location</label>
-                            <input 
-                                type="text" 
-                                id="place" 
-                                name="place" 
-                                required 
+                            <input type="text" id="place" name="place" required
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="City, Country"
-                            >
+                                placeholder="City, Country">
                         </div>
-                        
+
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="year">Year</label>
-                            <input 
-                                type="number" 
-                                id="year" 
-                                name="year" 
-                                required 
-                                min="1900"
-                                max="2100"
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <input type="number" id="year" name="year" required min="1900" max="2100"
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         </div>
-                        
+
                         <div class="col-span-1 md:col-span-2 flex space-x-4">
-                            <button 
-                                type="submit" 
-                                id="addButton"
-                                class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-blue-700 transition duration-300"
-                            >
+                            <button type="submit" id="addButton"
+                                class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-blue-700 transition duration-300">
                                 <i class="fas fa-plus mr-2"></i> Add Conference Proceeding
                             </button>
-                            <button 
-                                type="button" 
-                                id="updateButton"
-                                class="flex-1 bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition duration-300 hidden"
-                            >
+                            <button type="button" id="updateButton"
+                                class="flex-1 bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition duration-300 hidden">
                                 <i class="fas fa-save mr-2"></i> Update Proceeding
                             </button>
-                            <button 
-                                type="button" 
-                                id="cancelEditButton"
-                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden"
-                            >
+                            <button type="button" id="cancelEditButton"
+                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden">
                                 <i class="fas fa-times mr-2"></i> Cancel
                             </button>
                         </div>
@@ -262,58 +169,42 @@
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                     <i class="fas fa-search text-gray-400"></i>
                                 </span>
-                                <input 
-                                    type="text" 
-                                    id="searchInput" 
-                                    placeholder="Search conference proceedings..."
-                                    class="w-full border border-gray-300 pl-10 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                >
+                                <input type="text" id="searchInput" placeholder="Search conference proceedings..."
+                                    class="w-full border border-gray-300 pl-10 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                             </div>
                         </div>
                         <div>
-                            <select 
-                                id="yearFilter"
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                            >
+                            <select id="yearFilter"
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                                 <option value="">All Years</option>
                             </select>
                         </div>
-                        <button 
-                            id="searchButton"
-                            class="bg-brand-secondary text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
-                        >
+                        <button id="searchButton"
+                            class="bg-brand-secondary text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
                             <i class="fas fa-search mr-2"></i> Search
                         </button>
                     </div>
                 </div>
 
                 <!-- Conference Proceedings Grid -->
-                <div 
-                    id="conferencesGrid" 
-                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
-                >
+                <div id="conferencesGrid"
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                     <!-- Conference proceedings will be dynamically added here -->
                 </div>
 
                 <!-- Delete Confirmation Modal -->
-                <div 
-                    id="deleteModal" 
-                    class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4"
-                >
+                <div id="deleteModal"
+                    class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
                     <div class="bg-white rounded-lg p-6 max-w-sm w-full">
                         <h2 class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h2>
                         <p class="mb-6 text-gray-600">Are you sure you want to delete this conference proceeding?</p>
                         <div class="flex space-x-4">
-                            <button 
-                                id="confirmDeleteBtn"
-                                class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300"
-                            >
+                            <button id="confirmDeleteBtn"
+                                class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300">
                                 <i class="fas fa-trash-alt mr-2"></i> Delete
                             </button>
-                            <button 
-                                id="cancelDeleteBtn"
-                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300"
-                            >
+                            <button id="cancelDeleteBtn"
+                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300">
                                 <i class="fas fa-times mr-2"></i> Cancel
                             </button>
                         </div>
@@ -324,10 +215,8 @@
     </div>
 
     <!-- Floating action button for mobile -->
-    <button
-        id="mobile-fab"
-        class="md:hidden fixed bottom-4 right-4 bg-brand-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30"
-    >
+    <button id="mobile-fab"
+        class="md:hidden fixed bottom-4 right-4 bg-brand-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
         <i class="fas fa-plus"></i>
     </button>
 
@@ -433,20 +322,20 @@
             const selectedYear = yearFilter.value;
 
             const filteredConferences = conferences.filter(conf => {
-                const matchesSearch = searchTerm === '' || 
-                    conf.title.toLowerCase().includes(searchTerm) || 
+                const matchesSearch = searchTerm === '' ||
+                    conf.title.toLowerCase().includes(searchTerm) ||
                     conf.author.toLowerCase().includes(searchTerm) ||
                     conf.conference.toLowerCase().includes(searchTerm) ||
                     conf.place.toLowerCase().includes(searchTerm);
-                
-                const matchesYear = selectedYear === '' || 
+
+                const matchesYear = selectedYear === '' ||
                     conf.year.toString() === selectedYear;
-                
+
                 return matchesSearch && matchesYear;
             });
 
             renderConferences(filteredConferences);
-            
+
             // Update displayed count based on filtered results
             updateTotalCount(filteredConferences.length);
         }
@@ -459,11 +348,11 @@
         // Escape HTML to prevent XSS
         function escapeHtml(unsafe) {
             return unsafe
-                 .replace(/&/g, "&amp;")
-                 .replace(/</g, "&lt;")
-                 .replace(/>/g, "&gt;")
-                 .replace(/"/g, "&quot;")
-                 .replace(/'/g, "&#039;");
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
         // Validate Form Inputs
@@ -511,7 +400,7 @@
         // Add Conference Proceeding
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             if (!validateForm()) return;
 
             const conferenceData = {
@@ -547,13 +436,13 @@
         async function editConference(id) {
             try {
                 const response = await fetch(`/conferences/${id}`);
-                
+
                 if (!response.ok) {
                     throw new Error('Failed to fetch conference proceeding details');
                 }
-                
+
                 const conference = await response.json();
-                
+
                 document.getElementById('author').value = conference.author;
                 document.getElementById('title').value = conference.title;
                 document.getElementById('conference').value = conference.conference;
@@ -561,7 +450,7 @@
                 document.getElementById('place').value = conference.place;
                 document.getElementById('year').value = conference.year;
                 document.getElementById('conferenceId').value = conference._id;
-                
+
                 addButton.classList.add('hidden');
                 updateButton.classList.remove('hidden');
                 cancelEditButton.classList.remove('hidden');
@@ -635,8 +524,8 @@
             if (!currentDeletingConferenceId) return;
 
             try {
-                const response = await fetch(`/conferences/${currentDeletingConferenceId}`, { 
-                    method: 'DELETE' 
+                const response = await fetch(`/conferences/${currentDeletingConferenceId}`, {
+                    method: 'DELETE'
                 });
 
                 if (!response.ok) {
@@ -720,4 +609,5 @@
         fetchConferences();
     </script>
 </body>
+
 </html>
