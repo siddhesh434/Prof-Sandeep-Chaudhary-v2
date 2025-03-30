@@ -45,7 +45,7 @@ const researchGroupData = [
   {
     name: "Gaurav Sharma",
     position: "Junior Research Fellow",
-    scholarLink: "",
+    scholarLink: "https://sandeepiiti.in/research-group/",
     scholarTopic: "Sustainable bacterial cement composites using food waste",
     year: "2024 - 2027",
     type: "Research Scholar",
