@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex h-screen overflow-hidden relative">
+        <!-- Sidebar - hidden on mobile by default -->
+        <aside id="sidebar"
+          class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
+          <div class="p-6 border-b border-blue-800">
+            <h2 class="text-xl font-bold tracking-wide">
+              Welcome,Admin
+            </h2>
+            <!-- Close button for mobile -->
+            <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          <nav class="mt-4">
+            <ul>
+              <li class="mb-1 px-2">
+                <a href="/admin" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                  <i class="fas fa-home mr-3"></i>
+                  <span>Dashboard</span>
+                </a>
+              </li>
+              <li class="mb-1 px-2">
+                <a href="/admin/control.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                  <i class="fas fa-sliders-h mr-3"></i>
+                  <span>Visibility Controls</span>
+                </a>
+              </li>
+              <!-- <li class="mb-1 px-2">
+                <a href="/admin/fileupload.html"
+                  class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                  <i class="fas fa-users mr-3"></i>
+                  <span>File Upload</span>
+                </a>
+              </li> -->
+              <li class="mb-1 px-2">
+                <a href="/admin/formData" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                  <i class="fas fa-ticket-alt mr-3"></i>
+                  <span>User Requests</span>
+                </a>
+              </li>
+              <li class="mb-1 px-2">
+                <a href="/admin/cvGenerator.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                  <i class="fas fa-file-pdf mr-3"></i>
+                  <span>CV Generator</span>
+                </a>
+              </li>
+              <li class="mb-1 px-2">
+                <a href="/admin/logout"
+                  class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                  <i class="fas fa-sign-out-alt mr-3"></i>
+                  <span>Logout</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+      <div class="p-4 md:p-6">
+        <!-- Header with mobile menu indicator -->
+        <div class="flex justify-between items-center mb-6 md:mb-8">
+          <div class="flex items-center">
+            <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+              Curriculum Vitae Generator
+            </h1>
+          </div>
+          <div class="flex items-center space-x-2 md:space-x-4">
+            <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Profile</span>
+            <div
+              class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
+              S
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-4 md:gap-6 mb-6 md:mb-8">
+          <!-- CV Generator Card -->
+          <div
+            class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg">
+            <div class="bg-blue-800 text-white p-4 md:p-5">
+              <h2 class="text-lg md:text-xl font-semibold flex items-center">
+                <i class="fas fa-file-alt mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                Prof. Sandeep Chaudhary's CV Generator
+              </h2>
+            </div>
+            <div class="p-6 md:p-8 text-center">
+              <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+                Generate and download Prof. Sandeep Chaudhary's CV in PDF format. The document includes publications, books, book chapters, conference proceedings, patents, research projects, and supervised dissertations.
+              </p>
+              
+              <button id="downloadCV" class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors duration-300 shadow-md">
+                <i class="fas fa-download mr-2"></i>
+                Generate & Download CV
+              </button>
+              
+              <div class="mt-6">
+                <div id="loading" class="hidden mx-auto w-10 h-10 border-4 border-blue-200 border-t-blue-800 rounded-full animate-spin"></div>
+                
+                <div id="status" class="hidden mt-4 p-4 rounded-md text-center max-w-md mx-auto"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- CV Components Card -->
+          <div
+            class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg">
+            <div class="bg-blue-800 text-white p-4 md:p-5">
+              <h2 class="text-lg md:text-xl font-semibold flex items-center">
+                <i class="fas fa-list-check mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                CV Components
+              </h2>
+            </div>
+            <div class="p-4 md:p-5">
+              <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span class="text-gray-700">Publications</span>
+                </li>
+                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span class="text-gray-700">Books</span>
+                </li>
+                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span class="text-gray-700">Book Chapters</span>
+                </li>
+                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span class="text-gray-700">Conference Proceedings</span>
+                </li>
+                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span class="text-gray-700">Patents</span>
+                </li>
+                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span class="text-gray-700">Research Projects</span>
+                </li>
+                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span class="text-gray-700">Supervised Dissertations</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Floating action button for mobile -->
+  <button id="mobile-fab"
+    class="md:hidden fixed bottom-4 right-4 bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
+    <i class="fas fa-download"></i>
+  </button>
+
+  <script>
+    // Mobile menu toggle functionality
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const closeSidebarButton = document.getElementById("close-sidebar");
+    const sidebar = document.getElementById("sidebar");
+    const sidebarOverlay = document.getElementById("sidebar-overlay");
+    const mobileFab = document.getElementById("mobile-fab");
+
+    // Function to open sidebar
+    function openSidebar() {
+      sidebar.classList.remove("-translate-x-full");
+      sidebarOverlay.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+    }
+
+    // Function to close sidebar
+    function closeSidebar() {
+      sidebar.classList.add("-translate-x-full");
+      sidebarOverlay.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    // Event listeners
+    if (mobileMenuButton) {
+      mobileMenuButton.addEventListener("click", openSidebar);
+    }
+
+    if (closeSidebarButton) {
+      closeSidebarButton.addEventListener("click", closeSidebar);
+    }
+
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener("click", closeSidebar);
+    }
+
+    // Optional: Close sidebar when clicking on a menu item on mobile
+    const sidebarLinks = sidebar.querySelectorAll("a");
+    sidebarLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth < 768) {
+          // Only on mobile
+          closeSidebar();
+        }
+      });
+    });
+
+    // CV Download functionality
+    document.getElementById('downloadCV').addEventListener('click', function() {
+        const loadingIndicator = document.getElementById('loading');
+        const statusDiv = document.getElementById('status');
+        
+        // Show loading indicator
+        loadingIndicator.classList.remove('hidden');
+        statusDiv.classList.add('hidden');
+        
+        // Call the API endpoint to generate CV
+        fetch('/generate-cv', {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to generate CV');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            // Hide loading indicator
+            loadingIndicator.classList.add('hidden');
+            
+            // Create download link
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'Sandeep_Chaudhary_CV.pdf';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            // Show success message
+            statusDiv.textContent = 'CV generated successfully! Downloading...';
+            statusDiv.classList.remove('hidden');
+            statusDiv.classList.add('bg-green-100', 'text-green-800', 'p-4', 'rounded-md');
+        })
+        .catch(error => {
+            // Hide loading indicator
+            loadingIndicator.classList.add('hidden');
+            
+            // Show error message
+            statusDiv.textContent = 'Error: ' + error.message;
+            statusDiv.classList.remove('hidden');
+            statusDiv.classList.add('bg-red-100', 'text-red-800', 'p-4', 'rounded-md');
+            console.error('Error:', error);
+        });
+    });
+
+    // Mobile fab functionality (for quick download)
+    if (mobileFab) {
+      mobileFab.addEventListener("click", () => {
+        document.getElementById('downloadCV').click();
+      });
+    }
+
+    // Handle resize events - ensure sidebar is visible on desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768) {
+        // md breakpoint
+        sidebar.classList.remove("-translate-x-full");
+        sidebarOverlay.classList.add("hidden");
+        document.body.classList.remove("overflow-hidden");
+      } else {
+        sidebar.classList.add("-translate-x-full");
+      }
+    });
+  </script>
+</body>
+
+</html>

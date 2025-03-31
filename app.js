@@ -43,6 +43,12 @@ app.get("/admin", (req, res) => {
   res.render("admin/index", { adminID: req.session.admin });
 });
 
+// Root route
+app.get("/admin/formData", (req, res) => {
+  if (!req.session.admin) return res.redirect("/admin/login");
+  res.render("admin/formData", { adminID: req.session.admin });
+});
+
 const Admin = require("./models/Admin");
 
 // Admin creation logic
@@ -63,6 +69,44 @@ createAdmin();
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////CV////////////////////////////////////////////////////////////////////////
+// Serve static files
+const { exec } = require('child_process');
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Route to generate CV
+app.post('/generate-cv', (req, res) => {
+  // Execute the CV generator script
+  exec('node cvGenerator.js', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing CV generator: ${error}`);
+      return res.status(500).send('Error generating CV');
+    }
+    
+    const cvPath = path.join(__dirname, 'cv.pdf');
+    
+    // Check if the file exists
+    if (fs.existsSync(cvPath)) {
+      // Send the file
+      res.download(cvPath, 'Sandeep_Chaudhary_CV.pdf', (err) => {
+        if (err) {
+          console.error(`Error sending file: ${err}`);
+          res.status(500).send('Error downloading CV');
+        }
+      });
+    } else {
+      res.status(404).send('CV file not found');
+    }
+  });
+});
+
+// Serve the main HTML page
+app.get('/admin/cvGenerator.html', (req, res) => {
+  res.render('admin/cvGenerator');
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ✅ Updated Mongoose Connection (removed deprecated options)
 mongoose
   .connect(process.env.MONGO_URI)
@@ -183,6 +227,118 @@ const Dissertation =
       degree: String,
     })
   );
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////FORM////////////////////////////////////////////////////////////
+
+// Request Model
+const requestSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  contact: { type: String, required: true },
+  description: { type: String, required: true },
+  resolved: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now },
+  resolvedAt: { type: Date }
+});
+
+const Request = mongoose.model('Request', requestSchema);
+
+// Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Routes
+// Home page - Request Form
+app.get('/contact', (req, res) => {
+  res.render('contact', { successMessage: req.query.success });
+});
+
+app.get('/contactform', (req, res) => {
+  res.render('contactform', { successMessage: req.query.success });
+});
+
+// API - Create a new request
+app.post('/api/requests', async (req, res) => {
+  try {
+    const { name, email, contact, description } = req.body;
+    
+    // Validation
+    if (!name || !email || !contact || !description) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+    
+    const newRequest = new Request({
+      name,
+      email,
+      contact,
+      description
+    });
+    
+    await newRequest.save();
+    res.status(201).json({ message: 'Request submitted successfully', request: newRequest });
+  } catch (error) {
+    console.error('Error creating request:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// API - Get all requests
+app.get('/api/requests', async (req, res) => {
+  try {
+    const requests = await Request.find().sort({ createdAt: -1 });
+    res.json(requests);
+  } catch (error) {
+    console.error('Error fetching requests:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// API - Mark request as resolved
+app.put('/api/requests/:id/resolve', async (req, res) => {
+  try {
+    const request = await Request.findById(req.params.id);
+    
+    if (!request) {
+      return res.status(404).json({ message: 'Request not found' });
+    }
+    
+    request.resolved = true;
+    request.resolvedAt = new Date();
+    await request.save();
+    
+    res.json({ message: 'Request marked as resolved', request });
+  } catch (error) {
+    console.error('Error resolving request:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// API - Delete request
+app.delete('/api/requests/:id', async (req, res) => {
+  try {
+    const result = await Request.findByIdAndDelete(req.params.id);
+    
+    if (!result) {
+      return res.status(404).json({ message: 'Request not found' });
+    }
+    
+    res.json({ message: 'Request deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting request:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 /////////////////////////////////////////////////////////////////Control////////////////////////////////////////////////////////////////////
 
 const Visibility =
