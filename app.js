@@ -102,6 +102,7 @@ app.post('/generate-cv', (req, res) => {
 
 // Serve the main HTML page
 app.get('/admin/cvGenerator.html', (req, res) => {
+  if (!req.session.admin) return res.redirect("/admin/login");
   res.render('admin/cvGenerator');
 });
 
