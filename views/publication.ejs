@@ -396,171 +396,171 @@
   <%- include('partials/footer') %>
 
     <script>
-     document.addEventListener("DOMContentLoaded", function () {
-  // Initialize pagination and search for each section
-  initializeSection("journals", "publications-body", "publication-row");
-  initializeSection("conferences", "conferences-body", "conference-row");
-  initializeSection("books", "books-body", "book-row");
-  initializeSection("chapters", "chapters-body", "chapter-row");
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initialize pagination and search for each section
+        initializeSection("journals", "publications-body", "publication-row");
+        initializeSection("conferences", "conferences-body", "conference-row");
+        initializeSection("books", "books-body", "book-row");
+        initializeSection("chapters", "chapters-body", "chapter-row");
 
-  // Function to initialize pagination and search for a section
-  function initializeSection(sectionId, tbodyId, rowClass) {
-    // DOM elements
-    const entriesSelect = document.getElementById(
-      `entries-select-${sectionId}`
-    );
-    const publicationSearch = document.getElementById(
-      `publication-search-${sectionId}`
-    );
-    const searchBtn = document.getElementById(`search-btn-${sectionId}`);
-    const tbody = document.getElementById(tbodyId);
-    const paginationControls = document.getElementById(
-      `pagination-controls-${sectionId}`
-    );
-    const showingStart = document.getElementById(
-      `showing-start-${sectionId}`
-    );
-    const showingEnd = document.getElementById(`showing-end-${sectionId}`);
-    const totalEntries = document.getElementById(
-      `total-entries-${sectionId}`
-    );
+        // Function to initialize pagination and search for a section
+        function initializeSection(sectionId, tbodyId, rowClass) {
+          // DOM elements
+          const entriesSelect = document.getElementById(
+            `entries-select-${sectionId}`
+          );
+          const publicationSearch = document.getElementById(
+            `publication-search-${sectionId}`
+          );
+          const searchBtn = document.getElementById(`search-btn-${sectionId}`);
+          const tbody = document.getElementById(tbodyId);
+          const paginationControls = document.getElementById(
+            `pagination-controls-${sectionId}`
+          );
+          const showingStart = document.getElementById(
+            `showing-start-${sectionId}`
+          );
+          const showingEnd = document.getElementById(`showing-end-${sectionId}`);
+          const totalEntries = document.getElementById(
+            `total-entries-${sectionId}`
+          );
 
-    if (!tbody || !paginationControls) return;
+          if (!tbody || !paginationControls) return;
 
-    // Get all rows
-    const allRows = tbody.querySelectorAll(`.${rowClass}`);
+          // Get all rows
+          const allRows = tbody.querySelectorAll(`.${rowClass}`);
 
-    // Variables
-    let currentPage = 1;
-    let entriesPerPage = parseInt(entriesSelect ? entriesSelect.value : 5);
-    let filteredRows = [...allRows];
+          // Variables
+          let currentPage = 1;
+          let entriesPerPage = parseInt(entriesSelect ? entriesSelect.value : 5);
+          let filteredRows = [...allRows];
 
-    // Initialize pagination
-    function initializePagination() {
-      updatePagination();
-      showPage(currentPage);
-    }
+          // Initialize pagination
+          function initializePagination() {
+            updatePagination();
+            showPage(currentPage);
+          }
 
-    // Update pagination based on filtered rows
-    function updatePagination() {
-      const pageCount = Math.ceil(filteredRows.length / entriesPerPage);
-      paginationControls.innerHTML = "";
+          // Update pagination based on filtered rows
+          function updatePagination() {
+            const pageCount = Math.ceil(filteredRows.length / entriesPerPage);
+            paginationControls.innerHTML = "";
 
-      // Previous button
-      const prevBtn = document.createElement("button");
-      prevBtn.innerHTML = "&laquo;";
-      prevBtn.addEventListener("click", () => {
-        if (currentPage > 1) {
-          currentPage--;
-          showPage(currentPage);
-          updatePagination(); // Regenerate the pagination buttons
+            // Previous button
+            const prevBtn = document.createElement("button");
+            prevBtn.innerHTML = "&laquo;";
+            prevBtn.addEventListener("click", () => {
+              if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+                updatePagination(); // Regenerate the pagination buttons
+              }
+            });
+            paginationControls.appendChild(prevBtn);
+
+            // Page buttons (show max 5 buttons)
+            const maxVisibleButtons = 5;
+
+            // Calculate start and end page to ensure current page is centered when possible
+            let startPage = Math.max(
+              1,
+              currentPage - Math.floor(maxVisibleButtons / 2)
+            );
+            let endPage = Math.min(pageCount, startPage + maxVisibleButtons - 1);
+
+            // Adjust start page if we're near the end
+            if (endPage - startPage + 1 < maxVisibleButtons) {
+              startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+              const pageBtn = document.createElement("button");
+              pageBtn.textContent = i;
+              pageBtn.dataset.page = i;
+              pageBtn.addEventListener("click", () => {
+                currentPage = parseInt(i);
+                showPage(currentPage);
+                updatePagination(); // Regenerate the pagination buttons
+              });
+              if (i === currentPage) {
+                pageBtn.classList.add("active");
+              }
+              paginationControls.appendChild(pageBtn);
+            }
+
+            // Next button
+            const nextBtn = document.createElement("button");
+            nextBtn.innerHTML = "&raquo;";
+            nextBtn.addEventListener("click", () => {
+              if (currentPage < pageCount) {
+                currentPage++;
+                showPage(currentPage);
+                updatePagination(); // Regenerate the pagination buttons
+              }
+            });
+            paginationControls.appendChild(nextBtn);
+          }
+
+          // Show current page
+          function showPage(page) {
+            // Hide all rows
+            allRows.forEach((row) => {
+              row.style.display = "none";
+            });
+
+            // Show rows for current page
+            const start = (page - 1) * entriesPerPage;
+            const end = start + entriesPerPage;
+
+            filteredRows.forEach((row, index) => {
+              if (index >= start && index < end) {
+                row.style.display = "table-row";
+              }
+            });
+
+            // Update info text
+            if (showingStart && showingEnd && totalEntries) {
+              showingStart.textContent = filteredRows.length ? start + 1 : 0;
+              showingEnd.textContent = Math.min(end, filteredRows.length);
+              totalEntries.textContent = filteredRows.length;
+            }
+          }
+
+          // Filter rows based on search input
+          function filterRows() {
+            const searchTerm = publicationSearch.value.toLowerCase();
+            filteredRows = [...allRows].filter((row) => {
+              const text = row.textContent.toLowerCase();
+              return text.includes(searchTerm);
+            });
+
+            currentPage = 1;
+            updatePagination();
+            showPage(currentPage);
+          }
+
+          // Event listeners
+          if (entriesSelect) {
+            entriesSelect.addEventListener("change", function () {
+              entriesPerPage = parseInt(this.value);
+              currentPage = 1;
+              updatePagination();
+              showPage(currentPage);
+            });
+          }
+
+          if (searchBtn) {
+            searchBtn.addEventListener("click", filterRows);
+          }
+
+          if (publicationSearch) {
+            publicationSearch.addEventListener("keyup", function () {
+              filterRows();
+            });
+          }
+
+          // Initialize on page load
+          initializePagination();
         }
       });
-      paginationControls.appendChild(prevBtn);
-
-      // Page buttons (show max 5 buttons)
-      const maxVisibleButtons = 5;
-      
-      // Calculate start and end page to ensure current page is centered when possible
-      let startPage = Math.max(
-        1,
-        currentPage - Math.floor(maxVisibleButtons / 2)
-      );
-      let endPage = Math.min(pageCount, startPage + maxVisibleButtons - 1);
-
-      // Adjust start page if we're near the end
-      if (endPage - startPage + 1 < maxVisibleButtons) {
-        startPage = Math.max(1, endPage - maxVisibleButtons + 1);
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        const pageBtn = document.createElement("button");
-        pageBtn.textContent = i;
-        pageBtn.dataset.page = i;
-        pageBtn.addEventListener("click", () => {
-          currentPage = parseInt(i);
-          showPage(currentPage);
-          updatePagination(); // Regenerate the pagination buttons
-        });
-        if (i === currentPage) {
-          pageBtn.classList.add("active");
-        }
-        paginationControls.appendChild(pageBtn);
-      }
-
-      // Next button
-      const nextBtn = document.createElement("button");
-      nextBtn.innerHTML = "&raquo;";
-      nextBtn.addEventListener("click", () => {
-        if (currentPage < pageCount) {
-          currentPage++;
-          showPage(currentPage);
-          updatePagination(); // Regenerate the pagination buttons
-        }
-      });
-      paginationControls.appendChild(nextBtn);
-    }
-
-    // Show current page
-    function showPage(page) {
-      // Hide all rows
-      allRows.forEach((row) => {
-        row.style.display = "none";
-      });
-
-      // Show rows for current page
-      const start = (page - 1) * entriesPerPage;
-      const end = start + entriesPerPage;
-
-      filteredRows.forEach((row, index) => {
-        if (index >= start && index < end) {
-          row.style.display = "table-row";
-        }
-      });
-
-      // Update info text
-      if (showingStart && showingEnd && totalEntries) {
-        showingStart.textContent = filteredRows.length ? start + 1 : 0;
-        showingEnd.textContent = Math.min(end, filteredRows.length);
-        totalEntries.textContent = filteredRows.length;
-      }
-    }
-
-    // Filter rows based on search input
-    function filterRows() {
-      const searchTerm = publicationSearch.value.toLowerCase();
-      filteredRows = [...allRows].filter((row) => {
-        const text = row.textContent.toLowerCase();
-        return text.includes(searchTerm);
-      });
-
-      currentPage = 1;
-      updatePagination();
-      showPage(currentPage);
-    }
-
-    // Event listeners
-    if (entriesSelect) {
-      entriesSelect.addEventListener("change", function () {
-        entriesPerPage = parseInt(this.value);
-        currentPage = 1;
-        updatePagination();
-        showPage(currentPage);
-      });
-    }
-
-    if (searchBtn) {
-      searchBtn.addEventListener("click", filterRows);
-    }
-
-    if (publicationSearch) {
-      publicationSearch.addEventListener("keyup", function () {
-        filterRows();
-      });
-    }
-
-    // Initialize on page load
-    initializePagination();
-  }
-});
     </script>

@@ -1,507 +1,424 @@
 <%- include('partials/header') %>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="index.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="index.css">
 
-<!-- Moving Bulletin -->
-<div class="moving-bulletin">
-  <div class="bulletin-content">
-    <strong>Latest News :</strong> GOBAiR receives the Best Product Award in
-    Rural Innovators Conclave 2025
-  </div>
-</div>
-<!-- Hero Image Section -->
-<div class="hero-image">
-  <div class="container">
-    <div class="hero-text">
-      <h1>SCORE</h1>
-      <p>Sustainable COnstruction REsearch Group</p>
+  <!-- Moving Bulletin -->
+  <div class="moving-bulletin">
+    <div class="bulletin-content">
+      <strong>Latest News :</strong> GOBAiR receives the Best Product Award in
+      Rural Innovators Conclave 2025
     </div>
   </div>
-</div>
-<!-- Main Content -->
-<div class="container main-wrapper">
-  <!-- Two Column Layout for About Section -->
-  <div class="two-column-layout">
-    <!-- About SCORE Section -->
-    <section class="about-score-section">
-      <h2>
-        About <span class="highlight">S</span>ustainable
-        <span class="highlight">CO</span>nstruction
-        <span class="highlight">RE</span>search Group
-      </h2>
-      <p>
-        Sustainable COnstruction REsearch group, abbreviated as SCORE, is the
-        brainchild of Prof. Sandeep Chaudhary. SCORE recognizes the need for
-        sustainability in the construction industry and has been actively
-        working towards achieving the same. SCORE is a multi-disciplinary
-        research group with members and collaborations across different
-        countries from both industry and academia.
-      </p>
-    </section>
-
-    <!-- About PI Section -->
-    <section class="about-pi-section">
-      <h2>About Professor</h2>
-      <div class="pi-profile">
-        <div class="pi-img">
-          <img
-            src="https://sandeepiiti.in/static/images/displaypic.png"
-            alt="Prof. Sandeep Chaudhary"
-          />
-        </div>
-        <div class="pi-info">
-          <h3>Prof. Sandeep Chaudhary</h3>
-          <p>
-            Prof. Chaudhary is currently working as Professor, Department of
-            Civil Engineering, and Dean of Administration, at the Indian
-            Institute of Technology Indore. He has over 27 years of professional
-            experience as an academician, a researcher and an industry expert in
-            sustainable construction practices and structural engineering. His
-            current focus is towards translational researches on sustainable
-            construction materials and rural development initiatives. He is
-            engaged in several multidisciplinary and international collaborative
-            research to develop sustainable global solutions.
-          </p>
-          <a
-            href="aboutPI.html"
-            class="pi_more"
-            style="color: var(--primary-color)"
-            >Click here to read more about him</a
-          >
-        </div>
+  <!-- Hero Image Section -->
+  <div class="hero-image">
+    <div class="container">
+      <div class="hero-text">
+        <h1>SCORE</h1>
+        <p>Sustainable COnstruction REsearch Group</p>
       </div>
-    </section>
-  </div>
-
-  <!-- Mission Vision Section -->
-  <div class="two-column-layout">
-    <!-- Mission Section -->
-    <section class="mission">
-      <h3>Our Mission</h3>
-      <p>
-        SCORE aims to develop sustainable industry ready solutions to the global
-        challenges in the field of construction industry and rural development.
-        SCORE welcomes the participation of all stakeholders to make this vision
-        a reality.
-      </p>
-      <p>
-        SCORE has recently expanded its scope of work to focus on rural
-        development. This is in light of the fact that two-third of the
-        population in India resides in villages. As a part of rural development
-        SCORE is also working towards livelihood creation, clean energy and
-        sanitation.
-      </p>
-    </section>
-
-    <!-- SDG Alignment Section -->
-    <section class="vision">
-      <h3>SDG Alignment</h3>
-      <p>
-        SCORE aligns with the United Nations Sustainability Development Goals
-        (SDG), with a keen focus towards:
-      </p>
-      <br />
-      <p style="font-weight: bold">
-        United Nations Sustainable Development Goals
-      </p>
-      <div class="sdg-icons">
-        <div class="sdg-tag" data-sdg="9">
-          <img
-            src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-09.jpg"
-            alt="SDG 9"
-            class="sdg-icon"
-          />
-          <span class="sdg-tooltip"
-            >Industry, Innovation and Infrastructure</span
-          >
-        </div>
-        <div class="sdg-tag" data-sdg="11">
-          <img
-            src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg"
-            alt="SDG 11"
-            class="sdg-icon"
-          />
-          <span class="sdg-tooltip">Sustainable Cities and Communities</span>
-        </div>
-        <div class="sdg-tag" data-sdg="12">
-          <img
-            src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg"
-            alt="SDG 12"
-            class="sdg-icon"
-          />
-          <span class="sdg-tooltip"
-            >Responsible Consumption and Production</span
-          >
-        </div>
-      </div>
-    </section>
-  </div>
-  <!-- Research Areas Section with Clickable Hexagons and Description Panel -->
-  <!-- Modal -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <img id="modal-image" src="" alt="Research Area" />
-      <h2 id="modal-title"></h2>
-      <p id="modal-description"></p>
     </div>
   </div>
+  <!-- Main Content -->
+  <div class="container main-wrapper">
+    <!-- Two Column Layout for About Section -->
+    <div class="two-column-layout">
+      <!-- About SCORE Section -->
+      <section class="about-score-section">
+        <h2>
+          About <span class="highlight">S</span>ustainable
+          <span class="highlight">CO</span>nstruction
+          <span class="highlight">RE</span>search Group
+        </h2>
+        <p>
+          Sustainable COnstruction REsearch group, abbreviated as SCORE, is the
+          brainchild of Prof. Sandeep Chaudhary. SCORE recognizes the need for
+          sustainability in the construction industry and has been actively
+          working towards achieving the same. SCORE is a multi-disciplinary
+          research group with members and collaborations across different
+          countries from both industry and academia.
+        </p>
+      </section>
 
-  <!-- Research Areas Section -->
-  <section class="research-areas-section">
-    <h2>Key Research Areas</h2>
-    <div class="hexagon-container">
-      <div
-        class="hexagon-item"
-        onclick="openModal(this)"
-        data-title="Sustainable Materials"
-        data-image="https://www.aranca.com/assets/uploads/blogs/greenconban.jpg"
-        data-description="Eco-friendly building materials through innovative methods"
-      >
-        <div class="hexagon-content">
-          <div
-            class="hexagon-bg"
-            style="
+      <!-- About PI Section -->
+      <section class="about-pi-section">
+        <h2>About Professor</h2>
+        <div class="pi-profile">
+          <div class="pi-img">
+            <img src="https://sandeepiiti.in/static/images/displaypic.png" alt="Prof. Sandeep Chaudhary" />
+          </div>
+          <div class="pi-info">
+            <h3>Prof. Sandeep Chaudhary</h3>
+            <p>
+              Prof. Chaudhary is currently working as Professor, Department of
+              Civil Engineering, and Dean of Administration, at the Indian
+              Institute of Technology Indore. He has over 27 years of professional
+              experience as an academician, a researcher and an industry expert in
+              sustainable construction practices and structural engineering. His
+              current focus is towards translational researches on sustainable
+              construction materials and rural development initiatives. He is
+              engaged in several multidisciplinary and international collaborative
+              research to develop sustainable global solutions.
+            </p>
+            <a href="aboutPI.html" class="pi_more" style="color: var(--primary-color)">Click here to read more about
+              him</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Mission Vision Section -->
+    <div class="two-column-layout">
+      <!-- Mission Section -->
+      <section class="mission">
+        <h3>Our Mission</h3>
+        <p>
+          SCORE aims to develop sustainable industry ready solutions to the global
+          challenges in the field of construction industry and rural development.
+          SCORE welcomes the participation of all stakeholders to make this vision
+          a reality.
+        </p>
+        <p>
+          SCORE has recently expanded its scope of work to focus on rural
+          development. This is in light of the fact that two-third of the
+          population in India resides in villages. As a part of rural development
+          SCORE is also working towards livelihood creation, clean energy and
+          sanitation.
+        </p>
+      </section>
+
+      <!-- SDG Alignment Section -->
+      <section class="vision">
+        <h3>SDG Alignment</h3>
+        <p>
+          SCORE aligns with the United Nations Sustainability Development Goals
+          (SDG), with a keen focus towards:
+        </p>
+        <br />
+        <p style="font-weight: bold">
+          United Nations Sustainable Development Goals
+        </p>
+        <div class="sdg-icons">
+          <div class="sdg-tag" data-sdg="9">
+            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-09.jpg" alt="SDG 9" class="sdg-icon" />
+            <span class="sdg-tooltip">Industry, Innovation and Infrastructure</span>
+          </div>
+          <div class="sdg-tag" data-sdg="11">
+            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg" alt="SDG 11" class="sdg-icon" />
+            <span class="sdg-tooltip">Sustainable Cities and Communities</span>
+          </div>
+          <div class="sdg-tag" data-sdg="12">
+            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg" alt="SDG 12" class="sdg-icon" />
+            <span class="sdg-tooltip">Responsible Consumption and Production</span>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- Research Areas Section with Clickable Hexagons and Description Panel -->
+    <!-- Modal -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img id="modal-image" src="" alt="Research Area" />
+        <h2 id="modal-title"></h2>
+        <p id="modal-description"></p>
+      </div>
+    </div>
+
+    <!-- Research Areas Section -->
+    <section class="research-areas-section">
+      <h2>Key Research Areas</h2>
+      <div class="hexagon-container">
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Sustainable Materials"
+          data-image="https://www.aranca.com/assets/uploads/blogs/greenconban.jpg"
+          data-description="Eco-friendly building materials through innovative methods">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
               background-image: url('https://www.aranca.com/assets/uploads/blogs/greenconban.jpg');
-            "
-          ></div>
-          <div class="hexagon-icon"><i class="fas fa-flask"></i></div>
-          <h3>Sustainable Materials</h3>
-          <p style="text-decoration: underline">click me</p>
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-flask"></i></div>
+            <h3>Sustainable Materials</h3>
+            <p style="text-decoration: underline">click me</p>
+          </div>
         </div>
-      </div>
 
-      <div
-        class="hexagon-item"
-        onclick="openModal(this)"
-        data-title="Structural Engineering"
-        data-image="images/knu.jpg"
-        data-description="Sustainable principles applied to structural designs"
-      >
-        <div class="hexagon-content">
-          <div
-            class="hexagon-bg"
-            style="background-image: url('images/knu.jpg')"
-          ></div>
-          <div class="hexagon-icon"><i class="fas fa-building"></i></div>
-          <h3>Structural Engineering</h3>
-          <p style="text-decoration: underline">click me</p>
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Structural Engineering"
+          data-image="images/knu.jpg" data-description="Sustainable principles applied to structural designs">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="background-image: url('images/knu.jpg')"></div>
+            <div class="hexagon-icon"><i class="fas fa-building"></i></div>
+            <h3>Structural Engineering</h3>
+            <p style="text-decoration: underline">click me</p>
+          </div>
         </div>
-      </div>
-      <div
-        class="hexagon-item"
-        onclick="openModal(this)"
-        data-title="Cyber Physical Systems"
-        data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHudr0MQE3ESDh5GF6LNnqHnBLvTtAbuuTeg&s"
-        data-description="Digital technologies integration with construction processes"
-      >
-        <div class="hexagon-content">
-          <div
-            class="hexagon-bg"
-            style="
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Cyber Physical Systems"
+          data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHudr0MQE3ESDh5GF6LNnqHnBLvTtAbuuTeg&s"
+          data-description="Digital technologies integration with construction processes">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
               background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHudr0MQE3ESDh5GF6LNnqHnBLvTtAbuuTeg&s');
-            "
-          ></div>
-          <div class="hexagon-icon"><i class="fas fa-microchip"></i></div>
-          <h3>Cyber Physical Systems</h3>
-          <p style="text-decoration: underline">Click me</p>
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-microchip"></i></div>
+            <h3>Cyber Physical Systems</h3>
+            <p style="text-decoration: underline">Click me</p>
+          </div>
         </div>
-      </div>
 
-      <div
-        class="hexagon-item"
-        onclick="openModal(this)"
-        data-title="Advanced Characterization"
-        data-image="https://www.dti.dk/_/media/90014&w=1460&h=808&r=cover&_filename=90014_Big%20Science%20-%20construction.jpg"
-        data-description="Cutting-edge techniques for material analysis"
-      >
-        <div class="hexagon-content">
-          <div
-            class="hexagon-bg"
-            style="
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Advanced Characterization"
+          data-image="https://www.dti.dk/_/media/90014&w=1460&h=808&r=cover&_filename=90014_Big%20Science%20-%20construction.jpg"
+          data-description="Cutting-edge techniques for material analysis">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
               background-image: url('https://www.dti.dk/_/media/90014&w=1460&h=808&r=cover&_filename=90014_Big%20Science%20-%20construction.jpg');
-            "
-          ></div>
-          <div class="hexagon-icon"><i class="fas fa-microscope"></i></div>
-          <h3>Advanced Characterization</h3>
-          <p style="text-decoration: underline">Click me</p>
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-microscope"></i></div>
+            <h3>Advanced Characterization</h3>
+            <p style="text-decoration: underline">Click me</p>
+          </div>
         </div>
-      </div>
 
-      <div
-        class="hexagon-item"
-        onclick="openModal(this)"
-        data-title="Rural Development"
-        data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkP7sQcwp0a79JR6m74vmIjSPWdTt0fa5dX-PfIotUBW9HqFFWhGI5giC82-tToGys950&usqp=CAU"
-        data-description="Sustainable housing solutions for rural communities"
-      >
-        <div class="hexagon-content">
-          <div
-            class="hexagon-bg"
-            style="
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Rural Development"
+          data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkP7sQcwp0a79JR6m74vmIjSPWdTt0fa5dX-PfIotUBW9HqFFWhGI5giC82-tToGys950&usqp=CAU"
+          data-description="Sustainable housing solutions for rural communities">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
               background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkP7sQcwp0a79JR6m74vmIjSPWdTt0fa5dX-PfIotUBW9HqFFWhGI5giC82-tToGys950&usqp=CAU');
-            "
-          ></div>
-          <div class="hexagon-icon"><i class="fas fa-home"></i></div>
-          <h3>Rural Development</h3>
-          <p style="text-decoration: underline">Click me</p>
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-home"></i></div>
+            <h3>Rural Development</h3>
+            <p style="text-decoration: underline">Click me</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Key Technologies -->
-  <section class="section innovations">
-    <h2>Key Technologies</h2>
-    <div class="innovation-grid">
-      <div class="innovation-item">
-        <div class="innovation-img">
-          <img
-            src="/images/bi-layered-bricks.jpg"
-            alt="Naturally coloured bi-layered bricks"
-          />
+    <!-- Key Technologies -->
+    <section class="section innovations">
+      <h2>Key Technologies</h2>
+      <div class="innovation-grid">
+        <div class="innovation-item">
+          <div class="innovation-img">
+            <img src="/images/bi-layered-bricks.jpg" alt="Naturally coloured bi-layered bricks" />
+          </div>
+          <div class="innovation-content">
+            <h3>Naturally Coloured Bi-layered Bricks</h3>
+            <p>
+              A cost-effective architectural brick developed by upcycling
+              dimensional stone wastes. This was the first technology transferred
+              to the industry from SCORE.
+            </p>
+            <div class="innovation-features">
+              <span>Cost-effective</span>
+              <span>Upcycled materials</span>
+              <span>Architectural quality</span>
+            </div>
+          </div>
         </div>
-        <div class="innovation-content">
-          <h3>Naturally Coloured Bi-layered Bricks</h3>
-          <p>
-            A cost-effective architectural brick developed by upcycling
-            dimensional stone wastes. This was the first technology transferred
-            to the industry from SCORE.
-          </p>
-          <div class="innovation-features">
-            <span>Cost-effective</span>
-            <span>Upcycled materials</span>
-            <span>Architectural quality</span>
+        <div class="innovation-item">
+          <div class="innovation-img">
+            <img src="/images/gobair-bricks.jpg" alt="GOBAiR-fly ash bricks" />
+          </div>
+          <div class="innovation-content">
+            <h3>GOBAiR-fly Ash Bricks</h3>
+            <p>
+              A special class of light-weight brick developed by using cow dung as
+              a foaming agent. This innovation has received several awards and
+              accolades for its sustainable approach.
+            </p>
+            <div class="innovation-features">
+              <span>Lightweight</span>
+              <span>Sustainable</span>
+              <span>Award-winning</span>
+            </div>
           </div>
         </div>
       </div>
-      <div class="innovation-item">
-        <div class="innovation-img">
-          <img src="/images/gobair-bricks.jpg" alt="GOBAiR-fly ash bricks" />
-        </div>
-        <div class="innovation-content">
-          <h3>GOBAiR-fly Ash Bricks</h3>
-          <p>
-            A special class of light-weight brick developed by using cow dung as
-            a foaming agent. This innovation has received several awards and
-            accolades for its sustainable approach.
-          </p>
-          <div class="innovation-features">
-            <span>Lightweight</span>
-            <span>Sustainable</span>
-            <span>Award-winning</span>
-          </div>
-        </div>
+      <div class="more-technologies">
+        <a href="/keyTechnology.html" class="more-tech-link">More Technologies →</a>
       </div>
-    </div>
-    <div class="more-technologies">
-      <a href="/keyTechnology.html" class="more-tech-link"
-        >More Technologies →</a
-      >
-    </div>
-  </section>
-</div>
+    </section>
+  </div>
 
-<!-- Carousel Section -->
-<div class="carousel-section">
-  <div class="container">
-    <h2>Latest Achievements & Recognition</h2>
-    <div class="carousel-container">
-      <div class="carousel-track">
-        <div class="carousel-slide">
-          <div class="carousel-content">
-            <img src="/images/scoreCarousel/C1.jpg" alt="SCORE Award 1" />
-            <div class="text-overlay">
-              <h3>Newspaper</h3>
-              <p>
-                Recognized for the development of sustainable construction
-                materials
-              </p>
+  <!-- Carousel Section -->
+  <div class="carousel-section">
+    <div class="container">
+      <h2>Latest Achievements & Recognition</h2>
+      <div class="carousel-container">
+        <div class="carousel-track">
+          <div class="carousel-slide">
+            <div class="carousel-content">
+              <img src="/images/scoreCarousel/C1.jpg" alt="SCORE Award 1" />
+              <div class="text-overlay">
+                <h3>Newspaper</h3>
+                <p>
+                  Recognized for the development of sustainable construction
+                  materials
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="carousel-content">
+              <img src="/images/scoreCarousel/c2.png" alt="SCORE Project 1" />
+              <div class="text-overlay">
+                <h3>Bricks</h3>
+                <p>
+                  Providing sustainable housing solutions in 50+ villages across
+                  India
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="carousel-content">
+              <img src="/images/scoreCarousel/c3.jpg" alt="SCORE Publication 1" />
+              <div class="text-overlay">
+                <h3>Research Publication</h3>
+                <p>Published in prestigious journals with over 1000+ citations</p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="carousel-content">
+              <img src="/images/scoreCarousel/c4.jpg" alt="SCORE Collaboration 1" />
+              <div class="text-overlay">
+                <h3>Industry Partnerships</h3>
+                <p>
+                  Collaborating with 25+ construction companies to implement
+                  sustainable practices
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="carousel-content">
+              <img src="/images/scoreCarousel/c5.jpg" alt="SCORE Event 1" />
+              <div class="text-overlay">
+                <h3>Annual Sustainability Summit</h3>
+                <p>
+                  Bringing together experts from around the world to discuss
+                  sustainable construction
+                </p>
+              </div>
             </div>
           </div>
         </div>
-        <div class="carousel-slide">
-          <div class="carousel-content">
-            <img src="/images/scoreCarousel/c2.png" alt="SCORE Project 1" />
-            <div class="text-overlay">
-              <h3>Bricks</h3>
-              <p>
-                Providing sustainable housing solutions in 50+ villages across
-                India
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-slide">
-          <div class="carousel-content">
-            <img src="/images/scoreCarousel/c3.jpg" alt="SCORE Publication 1" />
-            <div class="text-overlay">
-              <h3>Research Publication</h3>
-              <p>Published in prestigious journals with over 1000+ citations</p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-slide">
-          <div class="carousel-content">
-            <img
-              src="/images/scoreCarousel/c4.jpg"
-              alt="SCORE Collaboration 1"
-            />
-            <div class="text-overlay">
-              <h3>Industry Partnerships</h3>
-              <p>
-                Collaborating with 25+ construction companies to implement
-                sustainable practices
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-slide">
-          <div class="carousel-content">
-            <img src="/images/scoreCarousel/c5.jpg" alt="SCORE Event 1" />
-            <div class="text-overlay">
-              <h3>Annual Sustainability Summit</h3>
-              <p>
-                Bringing together experts from around the world to discuss
-                sustainable construction
-              </p>
-            </div>
-          </div>
-        </div>
+        <button class="carousel-prev">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
+        <button class="carousel-next">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6"></path>
+          </svg>
+        </button>
       </div>
-      <button class="carousel-prev">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M15 18l-6-6 6-6"></path>
-        </svg>
-      </button>
-      <button class="carousel-next">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M9 18l6-6-6-6"></path>
-        </svg>
-      </button>
     </div>
   </div>
-</div>
 
-<%- include('partials/footer') %>
+  <%- include('partials/footer') %>
 
-<!-- JavaScript for carousel -->
-<script>
-  function openModal(element) {
-    document.getElementById("modal-title").textContent =
-      element.getAttribute("data-title");
-    document.getElementById("modal-image").src =
-      element.getAttribute("data-image");
-    document.getElementById("modal-description").textContent =
-      element.getAttribute("data-description");
+    <!-- JavaScript for carousel -->
+    <script>
+      function openModal(element) {
+        document.getElementById("modal-title").textContent =
+          element.getAttribute("data-title");
+        document.getElementById("modal-image").src =
+          element.getAttribute("data-image");
+        document.getElementById("modal-description").textContent =
+          element.getAttribute("data-description");
 
-    document.getElementById("modal").style.display = "flex";
-  }
+        document.getElementById("modal").style.display = "flex";
+      }
 
-  document.querySelector(".close").addEventListener("click", function () {
-    document.getElementById("modal").style.display = "none";
-  });
-
-  window.onclick = function (event) {
-    if (event.target == document.getElementById("modal")) {
-      document.getElementById("modal").style.display = "none";
-    }
-  };
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const track = document.querySelector(".carousel-track");
-    const slides = Array.from(document.querySelectorAll(".carousel-slide"));
-    const nextButton = document.querySelector(".carousel-next");
-    const prevButton = document.querySelector(".carousel-prev");
-
-    let slideWidth = slides[0].getBoundingClientRect().width;
-    let slideIndex = 0;
-    let autoPlayInterval;
-
-    // Position slides next to one another
-    const setSlidePosition = (slide, index) => {
-      slide.style.left = slideWidth * index + "px";
-    };
-
-    slides.forEach(setSlidePosition);
-
-    const updateSlideWidth = () => {
-      slideWidth = slides[0].getBoundingClientRect().width;
-      slides.forEach(setSlidePosition);
-      moveToSlide(track, slides[slideIndex]);
-    };
-
-    window.addEventListener("resize", updateSlideWidth);
-
-    const moveToSlide = (track, targetSlide) => {
-      const amountToMove = targetSlide.style.left;
-      track.style.transform = "translateX(-" + amountToMove + ")";
-    };
-
-    const updateSlideIndex = (current, target) => {
-      slides[current].classList.remove("current-slide");
-      slides[target].classList.add("current-slide");
-    };
-
-    const nextSlide = () => {
-      slideIndex = slideIndex === slides.length - 1 ? 0 : slideIndex + 1;
-      moveToSlide(track, slides[slideIndex]);
-    };
-
-    const prevSlide = () => {
-      slideIndex = slideIndex === 0 ? slides.length - 1 : slideIndex - 1;
-      moveToSlide(track, slides[slideIndex]);
-    };
-
-    // Button event listeners
-    nextButton.addEventListener("click", nextSlide);
-    prevButton.addEventListener("click", prevSlide);
-
-    // Auto play functionality
-    const startAutoPlay = () => {
-      autoPlayInterval = setInterval(nextSlide, 1000); // Change slide every 1 seconds
-    };
-
-    const stopAutoPlay = () => {
-      clearInterval(autoPlayInterval);
-    };
-
-    // Start auto play on load
-    startAutoPlay();
-
-    // Stop auto play when hovering over carousel
-    const carouselContainer = document.querySelector(".carousel-container");
-    carouselContainer.addEventListener("mouseenter", stopAutoPlay);
-    carouselContainer.addEventListener("mouseleave", startAutoPlay);
-
-    // SDG Tag hover effects
-    const sdgTags = document.querySelectorAll(".sdg-tag");
-    sdgTags.forEach((tag) => {
-      tag.addEventListener("mouseenter", () => {
-        tag.querySelector(".sdg-tooltip").style.opacity = "1";
+      document.querySelector(".close").addEventListener("click", function () {
+        document.getElementById("modal").style.display = "none";
       });
 
-      tag.addEventListener("mouseleave", () => {
-        tag.querySelector(".sdg-tooltip").style.opacity = "0";
+      window.onclick = function (event) {
+        if (event.target == document.getElementById("modal")) {
+          document.getElementById("modal").style.display = "none";
+        }
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const track = document.querySelector(".carousel-track");
+        const slides = Array.from(document.querySelectorAll(".carousel-slide"));
+        const nextButton = document.querySelector(".carousel-next");
+        const prevButton = document.querySelector(".carousel-prev");
+
+        let slideWidth = slides[0].getBoundingClientRect().width;
+        let slideIndex = 0;
+        let autoPlayInterval;
+
+        // Position slides next to one another
+        const setSlidePosition = (slide, index) => {
+          slide.style.left = slideWidth * index + "px";
+        };
+
+        slides.forEach(setSlidePosition);
+
+        const updateSlideWidth = () => {
+          slideWidth = slides[0].getBoundingClientRect().width;
+          slides.forEach(setSlidePosition);
+          moveToSlide(track, slides[slideIndex]);
+        };
+
+        window.addEventListener("resize", updateSlideWidth);
+
+        const moveToSlide = (track, targetSlide) => {
+          const amountToMove = targetSlide.style.left;
+          track.style.transform = "translateX(-" + amountToMove + ")";
+        };
+
+        const updateSlideIndex = (current, target) => {
+          slides[current].classList.remove("current-slide");
+          slides[target].classList.add("current-slide");
+        };
+
+        const nextSlide = () => {
+          slideIndex = slideIndex === slides.length - 1 ? 0 : slideIndex + 1;
+          moveToSlide(track, slides[slideIndex]);
+        };
+
+        const prevSlide = () => {
+          slideIndex = slideIndex === 0 ? slides.length - 1 : slideIndex - 1;
+          moveToSlide(track, slides[slideIndex]);
+        };
+
+        // Button event listeners
+        nextButton.addEventListener("click", nextSlide);
+        prevButton.addEventListener("click", prevSlide);
+
+        // Auto play functionality
+        const startAutoPlay = () => {
+          autoPlayInterval = setInterval(nextSlide, 1000); // Change slide every 1 seconds
+        };
+
+        const stopAutoPlay = () => {
+          clearInterval(autoPlayInterval);
+        };
+
+        // Start auto play on load
+        startAutoPlay();
+
+        // Stop auto play when hovering over carousel
+        const carouselContainer = document.querySelector(".carousel-container");
+        carouselContainer.addEventListener("mouseenter", stopAutoPlay);
+        carouselContainer.addEventListener("mouseleave", startAutoPlay);
+
+        // SDG Tag hover effects
+        const sdgTags = document.querySelectorAll(".sdg-tag");
+        sdgTags.forEach((tag) => {
+          tag.addEventListener("mouseenter", () => {
+            tag.querySelector(".sdg-tooltip").style.opacity = "1";
+          });
+
+          tag.addEventListener("mouseleave", () => {
+            tag.querySelector(".sdg-tooltip").style.opacity = "0";
+          });
+        });
       });
-    });
-  });
-</script>
+    </script>
