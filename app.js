@@ -69,6 +69,7 @@ const dissertationRoutes = require("./routes/dissertations");
 const cvRoutes = require("./routes/cv");
 const contactRoutes = require("./routes/contact");
 const controlRoutes = require("./routes/control");
+const ResearchGroup=require("./routes/researchGroup")
 //const fileRoutes = require("./routes/files");
 // Use routes
 app.use("/admin", adminRoutes);
@@ -79,6 +80,7 @@ app.use("/", dissertationRoutes);
 app.use("/", cvRoutes);
 app.use("/", contactRoutes);
 app.use("/", controlRoutes);
+app.use('/',ResearchGroup);
 //app.use("/", fileRoutes);
 // Root routes
 app.get("/", (req, res) => res.render("index"));

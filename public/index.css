@@ -1,39 +1,4 @@
-/* Global CSS Variables */
-:root {
-  --primary-color: #5ab9a8;
-  --secondary-bg: #f4f4f4;
-  --text-color: #333;
-  --card-bg: #ffffff;
-}
 
-/* Dark Mode Variables */
-:root.dark-mode {
-  --primary-color: #5ab9a8;
-  --secondary-bg: #2c2c2c;
-  --text-color: #e0e0e0;
-  --card-bg: #3a3a3a;
-}
-
-/* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Arial", sans-serif;
-  line-height: 1.6;
-  background-color: var(--secondary-bg);
-  color: var(--text-color);
-}
-
-.container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
 
 /* Responsive Typography */
 h1,
