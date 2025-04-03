@@ -1,16 +1,27 @@
 <%- include('partials/header') %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="SCORE - Sustainable Construction Research Group at IIT Indore, led by Prof. Sandeep Chaudhary. Focused on sustainable construction materials, structural engineering, and rural development." />
+  <meta name="keywords"
+    content="SCORE, Sustainable Construction, Research Group, IIT Indore, Prof. Sandeep Chaudhary, Sustainable Materials, Structural Engineering, Rural Development" />
+  <meta property="og:title" content="SCORE - Sustainable Construction Research Group" />
+  <meta property="og:description"
+    content="Leading research group at IIT Indore focused on sustainable construction, structural engineering, and rural development initiatives." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://your-domain.com" />
+  <meta property="og:image" content="/images/score.png" />
+  <link rel="canonical" href="https://your-domain.com" />
   <link rel="stylesheet" href="index.css">
 
   <!-- Moving Bulletin -->
-  <div class="moving-bulletin">
+  <div class="moving-bulletin" role="alert">
     <div class="bulletin-content">
       <strong>Latest News :</strong> GOBAiR receives the Best Product Award in
       Rural Innovators Conclave 2025
     </div>
   </div>
   <!-- Hero Image Section -->
-  <div class="hero-image">
+  <div class="hero-image" role="banner">
     <div class="container">
       <div class="hero-text">
         <h1>SCORE</h1>
@@ -23,13 +34,13 @@
     <!-- Two Column Layout for About Section -->
     <div class="two-column-layout">
       <!-- About SCORE Section -->
-      <section class="about-score-section">
+      <section class="about-score-section" itemscope itemtype="https://schema.org/Organization">
         <h2>
           About <span class="highlight">S</span>ustainable
           <span class="highlight">CO</span>nstruction
           <span class="highlight">RE</span>search Group
         </h2>
-        <p>
+        <p itemprop="description">
           Sustainable COnstruction REsearch group, abbreviated as SCORE, is the
           brainchild of Prof. Sandeep Chaudhary. SCORE recognizes the need for
           sustainability in the construction industry and has been actively
@@ -40,15 +51,16 @@
       </section>
 
       <!-- About PI Section -->
-      <section class="about-pi-section">
+      <section class="about-pi-section" itemscope itemtype="https://schema.org/Person">
         <h2>About Professor</h2>
         <div class="pi-profile">
           <div class="pi-img">
-            <img src="https://sandeepiiti.in/static/images/displaypic.png" alt="Prof. Sandeep Chaudhary" />
+            <img src="https://sandeepiiti.in/static/images/displaypic.png" alt="Prof. Sandeep Chaudhary"
+              itemprop="image" />
           </div>
           <div class="pi-info">
-            <h3>Prof. Sandeep Chaudhary</h3>
-            <p>
+            <h3 itemprop="name">Prof. Sandeep Chaudhary</h3>
+            <p itemprop="description">
               Prof. Chaudhary is currently working as Professor, Department of
               Civil Engineering, and Dean of Administration, at the Indian
               Institute of Technology Indore. He has over 27 years of professional
@@ -59,8 +71,8 @@
               engaged in several multidisciplinary and international collaborative
               research to develop sustainable global solutions.
             </p>
-            <a href="aboutPI.html" class="pi_more" style="color: var(--primary-color)">Click here to read more about
-              him</a>
+            <a href="aboutPI.html" class="pi_more" style="color: var(--primary-color)"
+              aria-label="Learn more about Prof. Sandeep Chaudhary">Click here to read more about him</a>
           </div>
         </div>
       </section>
@@ -69,9 +81,9 @@
     <!-- Mission Vision Section -->
     <div class="two-column-layout">
       <!-- Mission Section -->
-      <section class="mission">
+      <section class="mission" itemscope itemtype="https://schema.org/Organization">
         <h3>Our Mission</h3>
-        <p>
+        <p itemprop="description">
           SCORE aims to develop sustainable industry ready solutions to the global
           challenges in the field of construction industry and rural development.
           SCORE welcomes the participation of all stakeholders to make this vision
@@ -97,17 +109,20 @@
         <p style="font-weight: bold">
           United Nations Sustainable Development Goals
         </p>
-        <div class="sdg-icons">
-          <div class="sdg-tag" data-sdg="9">
-            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-09.jpg" alt="SDG 9" class="sdg-icon" />
+        <div class="sdg-icons" role="list">
+          <div class="sdg-tag" data-sdg="9" role="listitem">
+            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-09.jpg"
+              alt="SDG 9 - Industry, Innovation and Infrastructure" class="sdg-icon" />
             <span class="sdg-tooltip">Industry, Innovation and Infrastructure</span>
           </div>
-          <div class="sdg-tag" data-sdg="11">
-            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg" alt="SDG 11" class="sdg-icon" />
+          <div class="sdg-tag" data-sdg="11" role="listitem">
+            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg"
+              alt="SDG 11 - Sustainable Cities and Communities" class="sdg-icon" />
             <span class="sdg-tooltip">Sustainable Cities and Communities</span>
           </div>
-          <div class="sdg-tag" data-sdg="12">
-            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg" alt="SDG 12" class="sdg-icon" />
+          <div class="sdg-tag" data-sdg="12" role="listitem">
+            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg"
+              alt="SDG 12 - Responsible Consumption and Production" class="sdg-icon" />
             <span class="sdg-tooltip">Responsible Consumption and Production</span>
           </div>
         </div>
@@ -125,17 +140,17 @@
     </div>
 
     <!-- Research Areas Section -->
-    <section class="research-areas-section">
+    <section class="research-areas-section" itemscope itemtype="https://schema.org/ResearchProject">
       <h2>Key Research Areas</h2>
-      <div class="hexagon-container">
+      <div class="hexagon-container" role="list">
         <div class="hexagon-item" onclick="openModal(this)" data-title="Sustainable Materials"
           data-image="https://www.aranca.com/assets/uploads/blogs/greenconban.jpg"
-          data-description="Eco-friendly building materials through innovative methods">
+          data-description="Eco-friendly building materials through innovative methods" role="listitem">
           <div class="hexagon-content">
             <div class="hexagon-bg" style="
               background-image: url('https://www.aranca.com/assets/uploads/blogs/greenconban.jpg');
             "></div>
-            <div class="hexagon-icon"><i class="fas fa-flask"></i></div>
+            <div class="hexagon-icon" aria-hidden="true"><i class="fas fa-flask"></i></div>
             <h3>Sustainable Materials</h3>
             <p style="text-decoration: underline">click me</p>
           </div>
@@ -192,16 +207,16 @@
     </section>
 
     <!-- Key Technologies -->
-    <section class="section innovations">
+    <section class="section innovations" itemscope itemtype="https://schema.org/Product">
       <h2>Key Technologies</h2>
       <div class="innovation-grid">
-        <div class="innovation-item">
+        <div class="innovation-item" itemscope itemtype="https://schema.org/Product">
           <div class="innovation-img">
-            <img src="/images/bi-layered-bricks.jpg" alt="Naturally coloured bi-layered bricks" />
+            <img src="/images/bi-layered-bricks.jpg" alt="Naturally coloured bi-layered bricks" itemprop="image" />
           </div>
           <div class="innovation-content">
-            <h3>Naturally Coloured Bi-layered Bricks</h3>
-            <p>
+            <h3 itemprop="name">Naturally Coloured Bi-layered Bricks</h3>
+            <p itemprop="description">
               A cost-effective architectural brick developed by upcycling
               dimensional stone wastes. This was the first technology transferred
               to the industry from SCORE.
@@ -239,62 +254,62 @@
   </div>
 
   <!-- Carousel Section -->
-  <div class="carousel-section">
+  <div class="carousel-section" itemscope itemtype="https://schema.org/ItemList">
     <div class="container">
       <h2>Latest Achievements & Recognition</h2>
       <div class="carousel-container">
-        <div class="carousel-track">
-          <div class="carousel-slide">
+        <div class="carousel-track" role="list">
+          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
             <div class="carousel-content">
-              <img src="/images/scoreCarousel/C1.jpg" alt="SCORE Award 1" />
+              <img src="/images/scoreCarousel/C1.jpg" alt="SCORE Award 1" itemprop="image" />
               <div class="text-overlay">
-                <h3>Newspaper</h3>
-                <p>
+                <h3 itemprop="name">Newspaper</h3>
+                <p itemprop="description">
                   Recognized for the development of sustainable construction
                   materials
                 </p>
               </div>
             </div>
           </div>
-          <div class="carousel-slide">
+          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
             <div class="carousel-content">
-              <img src="/images/scoreCarousel/c2.png" alt="SCORE Project 1" />
+              <img src="/images/scoreCarousel/c2.png" alt="SCORE Project 1" itemprop="image" />
               <div class="text-overlay">
-                <h3>Bricks</h3>
-                <p>
+                <h3 itemprop="name">Bricks</h3>
+                <p itemprop="description">
                   Providing sustainable housing solutions in 50+ villages across
                   India
                 </p>
               </div>
             </div>
           </div>
-          <div class="carousel-slide">
+          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
             <div class="carousel-content">
-              <img src="/images/scoreCarousel/c3.jpg" alt="SCORE Publication 1" />
+              <img src="/images/scoreCarousel/c3.jpg" alt="SCORE Publication 1" itemprop="image" />
               <div class="text-overlay">
-                <h3>Research Publication</h3>
-                <p>Published in prestigious journals with over 1000+ citations</p>
+                <h3 itemprop="name">Research Publication</h3>
+                <p itemprop="description">Published in prestigious journals with over 1000+ citations</p>
               </div>
             </div>
           </div>
-          <div class="carousel-slide">
+          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
             <div class="carousel-content">
-              <img src="/images/scoreCarousel/c4.jpg" alt="SCORE Collaboration 1" />
+              <img src="/images/scoreCarousel/c4.jpg" alt="SCORE Collaboration 1" itemprop="image" />
               <div class="text-overlay">
-                <h3>Industry Partnerships</h3>
-                <p>
+                <h3 itemprop="name">Industry Partnerships</h3>
+                <p itemprop="description">
                   Collaborating with 25+ construction companies to implement
                   sustainable practices
                 </p>
               </div>
             </div>
           </div>
-          <div class="carousel-slide">
+          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
             <div class="carousel-content">
-              <img src="/images/scoreCarousel/c5.jpg" alt="SCORE Event 1" />
+              <img src="/images/scoreCarousel/c5.jpg" alt="SCORE Event 1" itemprop="image" />
               <div class="text-overlay">
-                <h3>Annual Sustainability Summit</h3>
-                <p>
+                <h3 itemprop="name">Annual Sustainability Summit</h3>
+                <p itemprop="description">
                   Bringing together experts from around the world to discuss
                   sustainable construction
                 </p>

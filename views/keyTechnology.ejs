@@ -1,291 +1,302 @@
 <%- include('partials/header') %>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="keyTech.css" />
-<link rel="stylesheet" href="styles.css" />
-<div class="page-section">
-  <div class="container">
-    <h2 class="section-title">KEY TECHNOLOGIES</h2>
-    <p class="section-description">
-      Explore our cutting-edge technologies that drive innovation and excellence
-      in the industry.
-    </p>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Key Technologies by SCORE Research Group - Innovative solutions in sustainable construction, low carbon materials, waste upcycling, and IoT applications" />
+  <meta name="keywords"
+    content="SCORE Research Group, Key Technologies, Sustainable Construction, Low Carbon Solutions, Waste Upcycling, IoT Devices, Building Products, Rural Development, Structural Simulations" />
+  <meta name="author" content="SCORE Research Group" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Key Technologies - SCORE Research Group" />
+  <meta property="og:description"
+    content="Cutting-edge technologies in sustainable construction, materials science, and rural development by SCORE Research Group" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="http://www.SustainableConstructionLab.com/keyTechnology.html" />
+  <meta property="og:image" content="/images/keyTech/t001.jpg" />
+  <link rel="canonical" href="http://www.SustainableConstructionLab.com/keyTechnology.html" />
+  <link rel="stylesheet" href="keyTech.css" />
+  <link rel="stylesheet" href="styles.css" />
 
-    <!-- Filter tags -->
-    <div class="filter-controls">
-      <div class="filter-tags">
-        <button class="filter-tag active" data-filter="all">All</button>
-        <button class="filter-tag" data-filter="highlighted">
-          Highlighted technologies
-        </button>
-        <button class="filter-tag" data-filter="industrial">
-          Ready for industrial use
-        </button>
-        <button class="filter-tag" data-filter="lowcarbon">
-          Low carbon solutions
-        </button>
-        <button class="filter-tag" data-filter="building">
-          Building products
-        </button>
-        <button class="filter-tag" data-filter="materials">
-          Material for construction application
-        </button>
-        <button class="filter-tag" data-filter="waste">Waste upcycling</button>
-        <button class="filter-tag" data-filter="research">
-          Fundamental researches
-        </button>
-        <button class="filter-tag" data-filter="iot">IoT devices</button>
-        <button class="filter-tag" data-filter="rural">
-          Rural development
-        </button>
-        <button class="filter-tag" data-filter="lightweight">
-          Lightweight construction
-        </button>
-        <button class="filter-tag" data-filter="simulation">
-          Structural simulations
-        </button>
-        <button class="filter-tag" data-filter="latest">
-          Latest development
+  <div class="page-section" itemscope itemtype="https://schema.org/ItemList">
+    <div class="container">
+      <h1 class="section-title" itemprop="name">KEY TECHNOLOGIES</h1>
+      <p class="section-description" itemprop="description">
+        Explore our cutting-edge technologies that drive innovation and excellence
+        in the industry.
+      </p>
+
+      <!-- Filter tags -->
+      <div class="filter-controls" role="group" aria-label="Technology filters">
+        <div class="filter-tags" role="list">
+          <button class="filter-tag active" data-filter="all" role="listitem" aria-pressed="true">All</button>
+          <button class="filter-tag" data-filter="highlighted" role="listitem" aria-pressed="false">
+            Highlighted technologies
+          </button>
+          <button class="filter-tag" data-filter="industrial" role="listitem" aria-pressed="false">
+            Ready for industrial use
+          </button>
+          <button class="filter-tag" data-filter="lowcarbon" role="listitem" aria-pressed="false">
+            Low carbon solutions
+          </button>
+          <button class="filter-tag" data-filter="building" role="listitem" aria-pressed="false">
+            Building products
+          </button>
+          <button class="filter-tag" data-filter="materials" role="listitem" aria-pressed="false">
+            Material for construction application
+          </button>
+          <button class="filter-tag" data-filter="waste" role="listitem" aria-pressed="false">Waste upcycling</button>
+          <button class="filter-tag" data-filter="research" role="listitem" aria-pressed="false">
+            Fundamental researches
+          </button>
+          <button class="filter-tag" data-filter="iot" role="listitem" aria-pressed="false">IoT devices</button>
+          <button class="filter-tag" data-filter="rural" role="listitem" aria-pressed="false">
+            Rural development
+          </button>
+          <button class="filter-tag" data-filter="lightweight" role="listitem" aria-pressed="false">
+            Lightweight construction
+          </button>
+          <button class="filter-tag" data-filter="simulation" role="listitem" aria-pressed="false">
+            Structural simulations
+          </button>
+          <button class="filter-tag" data-filter="latest" role="listitem" aria-pressed="false">
+            Latest development
+          </button>
+        </div>
+        <button id="clear-filters" class="clear-filters-btn" aria-label="Clear all filters">
+          Clear Filters
         </button>
       </div>
-      <button id="clear-filters" class="clear-filters-btn">
-        Clear Filters
-      </button>
-    </div>
 
-    <div class="tech-container" id="tech-container">
-      <!-- JavaScript will populate this area with technology cards -->
+      <div class="tech-container" id="tech-container" role="list">
+        <!-- JavaScript will populate this area with technology cards -->
+      </div>
     </div>
   </div>
-</div>
 
-<%- include('partials/footer') %>
-<script>
-  // Technology items data with tags
-  const technologies = [
-    {
-      title: "GOBAiR",
-      description:
-        "Cow dung based foaming agent for devloping lightweight thermally insulated structures. First of its kind application, patent filed.",
-      imageUrl: "/images/keyTech/t001.jpg",
-      tags: [
-        "lowcarbon",
-        "industrial",
-        "materials",
-        "waste",
-        "rural",
-        "latest",
-      ],
-    },
-    {
-      title: "GOBAiR-Fly ash bricks",
-      description:
-        "Fly ash bricks are improved through the use of an innovative cow dung based foaming agent. The bricks have been developed for both compression and vibration based casting at industrial scale. The bricks have 30% less weight and are expected to improve thermal and sound insulation.",
-      imageUrl: "/images/keyTech/t014.jpg",
-      tags: ["highlighted", "building", "latest", "waste", "rural"],
-    },
-    {
-      title: "GoBricks",
-      description:
-        "GoBricks are 100% recyclable cow dung stabilized bricks with improved manufacturing process. The bricks are designed for thermal insulation in animal shelters, and have an extremely low manufacturing cost.",
-      imageUrl: "/images/keyTech/t002.jpg",
-      tags: ["industrial", "building", "latest", "rural"],
-    },
-    {
-      title: "Naturally colored bricks",
-      description:
-        "Aesthatically pleasing bricks prepared by using, stone industry wastes as natural colors.",
-      imageUrl: "/images/keyTech/t003.png",
-      tags: ["highlighted", "industrial", "building", "waste", "rural"],
-    },
-    {
-      title: "SAFER Concrete",
-      description:
-        "A specially designed concrete for Slip And Fall Event Reduction (aka SAFER). Designed for elderly, children and stairway related applications.",
-      imageUrl: "/images/keyTech/t015.jpg",
-      tags: ["building", "waste", "latest"],
-    },
-    {
-      title: "AUTUM",
-      description:
-        "Autonomous Unit for Thermal Utility Management (aka AUTUM) is an IoT device, which can monitor and optimize thermal comfort while reducing energy needs. The device can also isolate energy leaks and help for energy efficiency.",
-      imageUrl: "/images/keyTech/t005.png",
-      tags: ["building", "iot"],
-    },
-    {
-      title: "PARVAT",
-      description:
-        "PARVAT is an integrated cycberphysical system designed for accident prevention in hilly roads. PARVAT accounts for weather, pavement and traffic conditions to regulate the traffic movement.",
-      imageUrl: "/images/keyTech/t004.png",
-      tags: ["building", "iot"],
-    },
-    {
-      title: "Waste based bacterial self-healing concrete",
-      description:
-        "Bacterial self-healing is improved through the use of a special type of waste based additive. The resulting concrete has double the compressive strength, lower effective carbon footprint and lower effective costs.",
-      imageUrl: "/images/keyTech/t008.png",
-      tags: ["highlighted", "lowcarbon", "building", "waste"],
-    },
-    {
-      title: "Therm-mechanically treated aggregates",
-      description:
-        "Mixed recycled aggregates have been improved using an optmized thermo-mechanical treatment process. The treated aggregate perform similar to Natural aggregates, satisfy all codal provisions, and have lower carbon footprint and cost than natural aggregates. Recycling plants have been designed for Indian sub-continent.",
-      imageUrl: "/images/keyTech/t009.jpg",
-      tags: ["industrial", "lowcarbon", "highlighted", "materials", "waste"],
-    },
-    {
-      title: "Conplas Pver Blocks",
-      description:
-        "A patented design for paver block prepared using plastic as a raw material.",
-      imageUrl: "/images/keyTech/t012.jpg",
-      tags: ["industrial", "building", "waste"],
-    },
-    {
-      title: "Paver block utilizing rubber waste",
-      description:
-        "A patented design for paver block prepared using rubber as a raw material.",
-      imageUrl: "/images/keyTech/t013.png",
-      tags: ["industrial", "building", "waste"],
-    },
-    {
-      title: "Rubberized self-compacting concrete",
-      description:
-        "A specially developed self compacting concrete with upcycled waster tryre rubber. The concrete has high energy absorption capacity and is suitable for developing crash barriers and machine foundations.",
-      imageUrl: "/images/keyTech/t010.jpg",
-      tags: ["building", "waste"],
-    },
-    {
-      title: "Thixotropy based fluid flow model",
-      description:
-        "A new mathematical model has been developed to describe the flow behaviour of cementitious mixes, after extensive rheological investigations. The model better describes the reversible and irreversible rheological changes and can improve 3D printing process.",
-      imageUrl: "/images/keyTech/t006.png",
-      tags: ["research"],
-    },
-    {
-      title: "Simulation based risk assessment and deign of safety guidelines",
-      description:
-        "Simulations have been used to correlate lab scale experimental investigations with field applications. Simulation identifies the risk associated with new construction materials and designs suitable safety guidelines..",
-      imageUrl: "/images/keyTech/t007.jpg",
-      tags: ["research", "simulation"],
-    },
-  ];
+  <%- include('partials/footer') %>
+    <script>
+      // Technology items data with tags
+      const technologies = [
+        {
+          title: "GOBAiR",
+          description:
+            "Cow dung based foaming agent for devloping lightweight thermally insulated structures. First of its kind application, patent filed.",
+          imageUrl: "/images/keyTech/t001.jpg",
+          tags: [
+            "lowcarbon",
+            "industrial",
+            "materials",
+            "waste",
+            "rural",
+            "latest",
+          ],
+        },
+        {
+          title: "GOBAiR-Fly ash bricks",
+          description:
+            "Fly ash bricks are improved through the use of an innovative cow dung based foaming agent. The bricks have been developed for both compression and vibration based casting at industrial scale. The bricks have 30% less weight and are expected to improve thermal and sound insulation.",
+          imageUrl: "/images/keyTech/t014.jpg",
+          tags: ["highlighted", "building", "latest", "waste", "rural"],
+        },
+        {
+          title: "GoBricks",
+          description:
+            "GoBricks are 100% recyclable cow dung stabilized bricks with improved manufacturing process. The bricks are designed for thermal insulation in animal shelters, and have an extremely low manufacturing cost.",
+          imageUrl: "/images/keyTech/t002.jpg",
+          tags: ["industrial", "building", "latest", "rural"],
+        },
+        {
+          title: "Naturally colored bricks",
+          description:
+            "Aesthatically pleasing bricks prepared by using, stone industry wastes as natural colors.",
+          imageUrl: "/images/keyTech/t003.png",
+          tags: ["highlighted", "industrial", "building", "waste", "rural"],
+        },
+        {
+          title: "SAFER Concrete",
+          description:
+            "A specially designed concrete for Slip And Fall Event Reduction (aka SAFER). Designed for elderly, children and stairway related applications.",
+          imageUrl: "/images/keyTech/t015.jpg",
+          tags: ["building", "waste", "latest"],
+        },
+        {
+          title: "AUTUM",
+          description:
+            "Autonomous Unit for Thermal Utility Management (aka AUTUM) is an IoT device, which can monitor and optimize thermal comfort while reducing energy needs. The device can also isolate energy leaks and help for energy efficiency.",
+          imageUrl: "/images/keyTech/t005.png",
+          tags: ["building", "iot"],
+        },
+        {
+          title: "PARVAT",
+          description:
+            "PARVAT is an integrated cycberphysical system designed for accident prevention in hilly roads. PARVAT accounts for weather, pavement and traffic conditions to regulate the traffic movement.",
+          imageUrl: "/images/keyTech/t004.png",
+          tags: ["building", "iot"],
+        },
+        {
+          title: "Waste based bacterial self-healing concrete",
+          description:
+            "Bacterial self-healing is improved through the use of a special type of waste based additive. The resulting concrete has double the compressive strength, lower effective carbon footprint and lower effective costs.",
+          imageUrl: "/images/keyTech/t008.png",
+          tags: ["highlighted", "lowcarbon", "building", "waste"],
+        },
+        {
+          title: "Therm-mechanically treated aggregates",
+          description:
+            "Mixed recycled aggregates have been improved using an optmized thermo-mechanical treatment process. The treated aggregate perform similar to Natural aggregates, satisfy all codal provisions, and have lower carbon footprint and cost than natural aggregates. Recycling plants have been designed for Indian sub-continent.",
+          imageUrl: "/images/keyTech/t009.jpg",
+          tags: ["industrial", "lowcarbon", "highlighted", "materials", "waste"],
+        },
+        {
+          title: "Conplas Pver Blocks",
+          description:
+            "A patented design for paver block prepared using plastic as a raw material.",
+          imageUrl: "/images/keyTech/t012.jpg",
+          tags: ["industrial", "building", "waste"],
+        },
+        {
+          title: "Paver block utilizing rubber waste",
+          description:
+            "A patented design for paver block prepared using rubber as a raw material.",
+          imageUrl: "/images/keyTech/t013.png",
+          tags: ["industrial", "building", "waste"],
+        },
+        {
+          title: "Rubberized self-compacting concrete",
+          description:
+            "A specially developed self compacting concrete with upcycled waster tryre rubber. The concrete has high energy absorption capacity and is suitable for developing crash barriers and machine foundations.",
+          imageUrl: "/images/keyTech/t010.jpg",
+          tags: ["building", "waste"],
+        },
+        {
+          title: "Thixotropy based fluid flow model",
+          description:
+            "A new mathematical model has been developed to describe the flow behaviour of cementitious mixes, after extensive rheological investigations. The model better describes the reversible and irreversible rheological changes and can improve 3D printing process.",
+          imageUrl: "/images/keyTech/t006.png",
+          tags: ["research"],
+        },
+        {
+          title: "Simulation based risk assessment and deign of safety guidelines",
+          description:
+            "Simulations have been used to correlate lab scale experimental investigations with field applications. Simulation identifies the risk associated with new construction materials and designs suitable safety guidelines..",
+          imageUrl: "/images/keyTech/t007.jpg",
+          tags: ["research", "simulation"],
+        },
+      ];
 
-  // Function to filter and display technology cards
-  function filterTechCards() {
-    const container = document.getElementById("tech-container");
-    container.innerHTML = ""; // Clear existing cards
+      // Function to filter and display technology cards
+      function filterTechCards() {
+        const container = document.getElementById("tech-container");
+        container.innerHTML = ""; // Clear existing cards
 
-    // Get all active filters
-    const activeFilters = Array.from(
-      document.querySelectorAll(".filter-tag.active")
-    )
-      .map((tag) => tag.getAttribute("data-filter"))
-      .filter((filter) => filter !== "all"); // Exclude 'all' from specific filters
+        // Get all active filters
+        const activeFilters = Array.from(document.querySelectorAll(".filter-tag.active"))
+          .map((tag) => tag.getAttribute("data-filter"))
+          .filter((filter) => filter !== "all"); // Exclude 'all' from specific filters
 
-    // Check if "All" button is active or no filters are selected
-    const showAll =
-      document.querySelector('.filter-tag[data-filter="all"].active') !==
-        null || activeFilters.length === 0;
+        // Check if "All" button is active or no filters are selected
+        const showAll = document.querySelector('.filter-tag[data-filter="all"].active') !== null || activeFilters.length === 0;
 
-    technologies.forEach((tech) => {
-      // Show all cards if "All" is selected or no filters are active
-      if (showAll) {
-        createCard(tech, container);
-        return;
+        technologies.forEach((tech, index) => {
+          // Show all cards if "All" is selected or no filters are active
+          if (showAll) {
+            createCard(tech, container, index);
+            return;
+          }
+
+          // Check if the tech has at least one of the active filters
+          const matchesFilter = activeFilters.every((filter) => tech.tags.includes(filter));
+          if (matchesFilter) {
+            createCard(tech, container, index);
+          }
+        });
       }
 
-      // Check if the tech has at least one of the active filters
-      const matchesFilter = activeFilters.every((filter) =>
-        tech.tags.includes(filter)
-      );
-      if (matchesFilter) {
-        createCard(tech, container);
+      // Helper function to create a card
+      function createCard(tech, container, index) {
+        const card = document.createElement("div");
+        card.className = "tech-card";
+        card.setAttribute("data-tags", tech.tags.join(" "));
+        card.setAttribute("itemscope", "");
+        card.setAttribute("itemtype", "https://schema.org/Product");
+        card.setAttribute("role", "listitem");
+        card.setAttribute("aria-label", tech.title);
+
+        card.innerHTML = `
+      <div class="tech-image">
+        <img src="${tech.imageUrl}" alt="${tech.title}" itemprop="image">
+      </div>
+      <div class="tech-content">
+        <h3 itemprop="name">${tech.title}</h3>
+        <p itemprop="description">${tech.description}</p>
+        <div class="card-tags" role="list">
+          ${tech.tags.map((tag) => `<span class="card-tag" role="listitem">${tag}</span>`).join("")}
+        </div>
+      </div>
+    `;
+
+        container.appendChild(card);
       }
-    });
-  }
 
-  // Helper function to create a card
-  function createCard(tech, container) {
-    const card = document.createElement("div");
-    card.className = "tech-card";
-    card.setAttribute("data-tags", tech.tags.join(" "));
+      // Initialize the page
+      document.addEventListener("DOMContentLoaded", function () {
+        // Initial load of all cards
+        filterTechCards();
 
-    card.innerHTML = `
-                <div class="tech-image">
-                    <img src="${tech.imageUrl}" alt="${tech.title}">
-                </div>
-                <div class="tech-content">
-                    <h3>${tech.title}</h3>
-                    <p>${tech.description}</p>
-                    <div class="card-tags">
-                        ${tech.tags
-                          .map((tag) => `<span class="card-tag">${tag}</span>`)
-                          .join("")}
-                    </div>
-                </div>
-            `;
+        // Set up filter buttons - allowing multiple selection
+        const filterButtons = document.querySelectorAll(".filter-tag");
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const filter = this.getAttribute("data-filter");
+            const isActive = this.classList.contains("active");
 
-    container.appendChild(card);
-  }
+            // Special handling for "All" button
+            if (filter === "all") {
+              // Deactivate all other filters when "All" is clicked
+              filterButtons.forEach((btn) => {
+                btn.classList.remove("active");
+                btn.setAttribute("aria-pressed", "false");
+              });
+              this.classList.add("active");
+              this.setAttribute("aria-pressed", "true");
+            } else {
+              // If clicking a specific filter, deactivate "All"
+              document.querySelector('.filter-tag[data-filter="all"]').classList.remove("active");
+              document.querySelector('.filter-tag[data-filter="all"]').setAttribute("aria-pressed", "false");
 
-  // Initialize the page
-  document.addEventListener("DOMContentLoaded", function () {
-    // Initial load of all cards
-    filterTechCards();
+              // Toggle active state for clicked filter
+              this.classList.toggle("active");
+              this.setAttribute("aria-pressed", !isActive);
+            }
 
-    // Set up filter buttons - allowing multiple selection
-    const filterButtons = document.querySelectorAll(".filter-tag");
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        const filter = this.getAttribute("data-filter");
+            // Update displayed cards
+            filterTechCards();
+          });
+        });
 
-        // Special handling for "All" button
-        if (filter === "all") {
-          // Deactivate all other filters when "All" is clicked
+        // Clear filters button
+        document.getElementById("clear-filters").addEventListener("click", function () {
+          // Reset to only "All" being active
           filterButtons.forEach((btn) => {
             btn.classList.remove("active");
+            btn.setAttribute("aria-pressed", "false");
           });
-          this.classList.add("active");
-        } else {
-          // If clicking a specific filter, deactivate "All"
-          document
-            .querySelector('.filter-tag[data-filter="all"]')
-            .classList.remove("active");
+          document.querySelector('.filter-tag[data-filter="all"]').classList.add("active");
+          document.querySelector('.filter-tag[data-filter="all"]').setAttribute("aria-pressed", "true");
 
-          // Toggle active state for clicked filter
-          this.classList.toggle("active");
-        }
-
-        // Update displayed cards
-        filterTechCards();
-      });
-    });
-
-    // Clear filters button
-    document
-      .getElementById("clear-filters")
-      .addEventListener("click", function () {
-        // Reset to only "All" being active
-        filterButtons.forEach((btn) => {
-          btn.classList.remove("active");
+          // Update displayed cards
+          filterTechCards();
         });
-        document
-          .querySelector('.filter-tag[data-filter="all"]')
-          .classList.add("active");
 
-        // Update displayed cards
-        filterTechCards();
-      });
-
-    // Theme toggle functionality (if needed)
-    const themeSwitch = document.querySelector(".theme-switch input");
-    if (themeSwitch) {
-      themeSwitch.addEventListener("change", function (e) {
-        if (e.target.checked) {
-          document.documentElement.setAttribute("data-theme", "light");
-        } else {
-          document.documentElement.setAttribute("data-theme", "dark");
+        // Theme toggle functionality (if needed)
+        const themeSwitch = document.querySelector(".theme-switch input");
+        if (themeSwitch) {
+          themeSwitch.addEventListener("change", function (e) {
+            if (e.target.checked) {
+              document.documentElement.setAttribute("data-theme", "light");
+            } else {
+              document.documentElement.setAttribute("data-theme", "dark");
+            }
+          });
         }
       });
-    }
-  });
-</script>
+    </script>

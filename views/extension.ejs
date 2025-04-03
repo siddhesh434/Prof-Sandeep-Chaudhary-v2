@@ -1,799 +1,460 @@
 <%- include('partials/header') %>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<style>
-  /* Main Content Styling */
-  .main-wrapper {
-    background-color: var(--background-color);
-    padding: 60px 0;
-  }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Extension Activities of Prof. Sandeep Chaudhary - Government Advisory Roles, International Contributions, and National Contributions in Civil Engineering and Sustainable Construction" />
+  <meta name="keywords"
+    content="Prof. Sandeep Chaudhary, Extension Activities, Government Advisory, International Contributions, National Contributions, Civil Engineering, Sustainable Construction, IIT Indore" />
+  <meta name="author" content="Prof. Sandeep Chaudhary" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Extension Activities - Prof. Sandeep Chaudhary" />
+  <meta property="og:description"
+    content="Professional contributions and advisory roles of Prof. Sandeep Chaudhary in government, international, and national organizations" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://your-domain.com/extension" />
+  <meta property="og:image" content="/images/iitlogo.jpg" />
+  <link rel="canonical" href="https://your-domain.com/extension" />
+  <link rel="stylesheet" href="extension.css">
 
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  /* Section Title */
-  .section-title {
-    text-align: center;
-    margin-bottom: 50px;
-  }
-
-  .section-title h1 {
-    font-size: 2.5rem;
-    color: var(--text-color);
-    margin-bottom: 15px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-
-  .title-underline {
-    height: 4px;
-    width: 80px;
-    background: var(--primary-color);
-    margin: 0 auto;
-    position: relative;
-  }
-
-  .title-underline:after {
-    content: "";
-    position: absolute;
-    height: 4px;
-    width: 40px;
-    background: var(--primary-color);
-    left: 45px;
-    top: 0;
-    opacity: 0.5;
-  }
-
-  /* Grid Layout */
-  .content-grid {
-    width: 80vw;
-    display: flex;
-  flex-direction: column;
-    gap: 50px;
-  }
-
-  /* Card Styling */
-  .content-card {
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .content-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-  }
-
-  .card-header {
-    background-color: var(--secondary-bg);
-    padding: 20px 25px;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .header-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 20px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  }
-
-  .header-icon i {
-    font-size: 24px;
-    color: white;
-  }
-
-  .card-header h2 {
-    font-size: 1.8rem;
-    color: var(--text-color);
-    margin: 0;
-    font-weight: 600;
-  }
-
-  .card-body {
-    padding: 30px 25px;
-  }
-
-  /* Elegant List Styling */
-  .elegant-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .elegant-list li {
-    margin-bottom: 25px;
-    padding-bottom: 25px;
-    border-bottom: 1px solid var(--border-color);
-    position: relative;
-    padding-left: 20px;
-    transition: all 0.3s ease;
-  }
-
-  .elegant-list li:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
-
-  .elegant-list li:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 9px;
-    height: 8px;
-    width: 8px;
-    background: var(--primary-color);
-    border-radius: 50%;
-  }
-
-  .elegant-list li:hover {
-    transform: translateX(5px);
-  }
-
-  .elegant-list li:hover:before {
-    background: var(--primary-color);
-    transform: scale(1.5);
-  }
-
-  .position-title {
-    display: block;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 5px;
-  }
-
-  .position-org {
-    display: block;
-    font-size: 1rem;
-    margin-bottom: 5px;
-  }
-
-  .position-details {
-    display: block;
-    font-size: 0.9rem;
-    opacity: 0.7;
-    font-style: italic;
-  }
-
-  /* Responsive Adjustments */
-  @media (max-width: 1200px) {
-    .content-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .section-title h1 {
-      font-size: 2rem;
-    }
-
-    .card-header h2 {
-      font-size: 1.5rem;
-    }
-
-    .header-icon {
-      width: 40px;
-      height: 40px;
-    }
-
-    .header-icon i {
-      font-size: 18px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .main-wrapper {
-      padding: 40px 0;
-    }
-
-    .section-title {
-      margin-bottom: 30px;
-    }
-
-    .card-header {
-      padding: 15px;
-    }
-
-    .card-body {
-      padding: 20px 15px;
-    }
-
-    .position-title {
-      font-size: 1rem;
-    }
-  }
-</style>
-
-<!-- Main Content -->
-<div class="main-wrapper">
-  <div class="container">
-    <!-- Main Section Title -->
-    <div class="section-title">
-      <h1>Extension Activities</h1>
-      <div class="title-underline"></div>
-    </div>
-
-    <!-- Main Content Grid -->
-    <div class="content-grid">
-      <!-- Government Positions -->
-      <div class="content-card">
-        <div class="card-header">
-          <div class="header-icon">
-            <i class="fas fa-landmark"></i>
-          </div>
-          <h2>Government Advisory Roles</h2>
-        </div>
-        <div class="card-body">
-          <ul class="elegant-list">
-            <li>
-              <span class="position-title">Convener</span>
-              <span class="position-org">Panel for Preparing Roadmap, SSD 06/P1, Bureau of Indian Standards, New Delhi</span>
-              <span class="position-details">Bureau of Indian Standards, New Delhi</span>
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org">Construction and Related Engineering Services Sectional Committee of Bureau of Indian Standards, New Delhi</span>
-              <span class="position-details">Bureau of Indian Standards, New Delhi</span>
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org">Working Group (WG02) for revision of IS 1542: 1992 Sand for Plaster – Specification</span>
-              <span class="position-details">Bureau of Indian Standards, New Delhi</span>
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org">Pre Construction Services Sub Committee SSD 06: 01</span>
-              <span class="position-details">Bureau of Indian Standards, New Delhi</span>
-            </li>
-            <li>
-              <span class="position-title">AICTE Representative</span>
-              <span class="position-org">All India Council for Technical Education</span>
-              <span class="position-details">India</span>
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org">Expert Committee of All India Council for Technical Education</span>
-              <span class="position-details">All India Council for Technical Education</span>
-            </li>
-            <li>
-              <span class="position-title">Expert</span>
-              <span class="position-org">Selection Boards of Public Service Commission of different states of India</span>
-              <span class="position-details">India</span>
-            </li>
-            
-          </ul>
-        </div>
-      </div>
-      <!-- International Section -->
-      <div class="content-card">
-        <div class="card-header">
-          <div class="header-icon">
-            <i class="fas fa-globe"></i>
-          </div>
-          <h2>International Contributions</h2>
-        </div>
-        <div class="card-body">
-          <ul class="elegant-list">
-            <li>
-              <span class="position-title">Secretary</span>
-              <span class="position-org"
-                >Technical Committee on "Life Cycle Maintenance of Concrete
-                Infrastructures (TC-LCM)" of Asian Concrete Federation</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Associate Editor</span>
-              <span class="position-org">"Cleaner Materials", Elsevier</span>
-            </li>
-            <li>
-              <span class="position-title"
-                >International Steering Committee Member</span
-              >
-              <span class="position-org"
-                >The 10th Asia-Pacific Young Researcher Graduate Symposium
-                2019</span
-              >
-              <span class="position-details"
-                >Curtin University, Perth, Australia (December 06-08,
-                2023)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Chairman</span>
-              <span class="position-org"
-                >Expert Advice Group of Scientific School "Green Future" for
-                young scientists</span
-              >
-              <span class="position-details"
-                >Laboratory on Recycling Fuel Waste Energy, NPI, Russia (May
-                28-June 06, 2023)</span
-              >
-            </li>
-            <li>
-              <span class="position-title"
-                >International Steering Committee Member</span
-              >
-              <span class="position-org"
-                >The 9th Asia-Pacific Young Researcher Graduate Symposium
-                2019</span
-              >
-              <span class="position-details"
-                >Tongji University, Shanghai, China (December 19-20, 2019)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Scientific Committee Member</span>
-              <span class="position-org"
-                >3rd ACF Symposium on Assessment and Intervention of Existing
-                Structures</span
-              >
-              <span class="position-details"
-                >Hokkaido University, Sapporo, Japan (September 10-11,
-                2019)</span
-              >
-            </li>
-            <li>
-              <span class="position-title"
-                >International Steering Committee Member</span
-              >
-              <span class="position-org"
-                >The 8th Asia-Pacific Young Researcher Graduate Symposium
-                2017</span
-              >
-              <span class="position-details"
-                >University of Tokyo, Japan (September 07-08, 2017)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Chair</span>
-              <span class="position-org"
-                >Technical Committee 1: Design of the Asian Concrete
-                Federation</span
-              >
-              <span class="position-details">Since October 2016</span>
-            </li>
-            <li>
-              <span class="position-title">Session Chair</span>
-              <span class="position-org"
-                >7th International Conference of Asian Concrete Federation on
-                Sustainable Concrete</span
-              >
-              <span class="position-details"
-                >Hanoi, Vietnam (October 30-November 02, 2016)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Session Chair</span>
-              <span class="position-org"
-                >The 7th Asia-Pacific Young Researcher Graduate Symposium
-                2015</span
-              >
-              <span class="position-details"
-                >University of Malaya, Malaysia (August 20-21, 2015)</span
-              >
-            </li>
-            <li>
-              <span class="position-title"
-                >International Steering Committee Member</span
-              >
-              <span class="position-org"
-                >The 7th Asia-Pacific Young Researcher Graduate Symposium
-                2015</span
-              >
-              <span class="position-details"
-                >University of Malaya, Malaysia (August 20-21, 2015)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Session Chair</span>
-              <span class="position-org"
-                >The 6th Asia-Pacific Young Researcher Graduate Symposium
-                2014</span
-              >
-              <span class="position-details"
-                >SIIT, Thammasat University Thailand (July 31-August 01,
-                2014)</span
-              >
-            </li>
-            <li>
-              <span class="position-title"
-                >International Steering Committee Member</span
-              >
-              <span class="position-org"
-                >The 6th Asia-Pacific Young Researcher Graduate Symposium
-                2014</span
-              >
-              <span class="position-details"
-                >SIIT, Thammasat University Thailand (July 31-August 01,
-                2014)</span
-              >
-            </li>
-            <li>
-              <span class="position-title"
-                >International Scientific Committee Member</span
-              >
-              <span class="position-org"
-                >10th International Symposium on Innovation & Utilization of
-                High-Performance Concrete</span
-              >
-              <span class="position-details"
-                >Beijing, China (September 16-18, 2014)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Chair</span>
-              <span class="position-org"
-                >The 5th Asia-Pacific Young Researcher Graduate Symposium
-                2013</span
-              >
-              <span class="position-details"
-                >Malaviya National Institute of Technology Jaipur (October
-                15-16, 2013)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Co-Chairman</span>
-              <span class="position-org"
-                >Mini Symposium on Durability and Life Cycle Maintenance of
-                Structure</span
-              >
-              <span class="position-details"
-                >First International Conference on Performance-based and
-                Life-Cycle Structural Engineering (PLSE 2012), Hong Kong, China
-                (December 05-07, 2012)</span
-              >
-            </li>
-            <li>
-              <span class="position-title"
-                >International Steering Committee Member</span
-              >
-              <span class="position-org"
-                >The 4th Asia-Pacific Young Researcher Graduate Symposium
-                2012</span
-              >
-              <span class="position-details"
-                >The Hong Kong Polytechnic University (December 4-5, 2012)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Invited Lecturer</span>
-              <span class="position-org"
-                >International Symposium on "Structural Assessment and
-                Remediation of Infrastructure"</span
-              >
-              <span class="position-details"
-                >Namseoul University, Cheonan, Choongnam-do, Korea (November 03,
-                2010)</span
-              >
-            </li>
-          </ul>
-        </div>
+  <!-- Main Content -->
+  <div class="main-wrapper" itemscope itemtype="https://schema.org/Person">
+    <div class="container">
+      <!-- Main Section Title -->
+      <div class="section-title">
+        <h1 itemprop="name">Extension Activities</h1>
+        <div class="title-underline"></div>
       </div>
 
-      <!-- National Section -->
-      <div class="content-card">
-        <div class="card-header">
-          <div class="header-icon">
-            <i class="fas fa-flag"></i>
+      <!-- Main Content Grid -->
+      <div class="content-grid">
+        <!-- Government Positions -->
+        <div class="content-card" itemscope itemtype="https://schema.org/Role">
+          <div class="card-header">
+            <div class="header-icon" aria-hidden="true">
+              <i class="fas fa-landmark"></i>
+            </div>
+            <h2>Government Advisory Roles</h2>
           </div>
-          <h2>National Contributions</h2>
+          <div class="card-body">
+            <ul class="elegant-list" role="list">
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Convener</span>
+                <span class="position-org" itemprop="organization">Panel for Preparing Roadmap, SSD 06/P1, Bureau of
+                  Indian Standards, New Delhi</span>
+                <span class="position-details" itemprop="location">Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Construction and Related Engineering Services
+                  Sectional Committee of Bureau of Indian Standards, New Delhi</span>
+                <span class="position-details" itemprop="location">Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Working Group (WG02) for revision of IS 1542: 1992
+                  Sand for Plaster – Specification</span>
+                <span class="position-details" itemprop="location">Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Pre Construction Services Sub Committee SSD 06:
+                  01</span>
+                <span class="position-details" itemprop="location">Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">AICTE Representative</span>
+                <span class="position-org" itemprop="organization">All India Council for Technical Education</span>
+                <span class="position-details" itemprop="location">India</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Expert Committee of All India Council for Technical
+                  Education</span>
+                <span class="position-details" itemprop="location">All India Council for Technical Education</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Expert</span>
+                <span class="position-org" itemprop="organization">Selection Boards of Public Service Commission of
+                  different states of India</span>
+                <span class="position-details" itemprop="location">India</span>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="card-body">
-          <ul class="elegant-list">
-            
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org">Construction and Related Engineering Services Sectional Committee of Bureau of Indian Standards, New Delhi</span>
-              <span class="position-details">Bureau of Indian Standards, New Delhi</span>
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org">Working Group (WG02) for revision of IS 1542: 1992 Sand for Plaster – Specification</span>
-              <span class="position-details">Bureau of Indian Standards, New Delhi</span>
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org">Pre Construction Services Sub Committee SSD 06: 01</span>
-              <span class="position-details">Bureau of Indian Standards, New Delhi</span>
-            </li>
-            <li>
-              <span class="position-title">AICTE Representative</span>
-              <span class="position-org">All India Council for Technical Education</span>
-              <span class="position-details">India</span>
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org">Expert Committee of All India Council for Technical Education</span>
-              <span class="position-details">All India Council for Technical Education</span>
-            </li>
-            <li>
-              <span class="position-title">Expert</span>
-              <span class="position-org">Selection Boards of Public Service Commission of different states of India</span>
-              <span class="position-details">India</span>
-            </li>
-            
-            <li>
-              <span class="position-title">Associate Editor</span>
-              <span class="position-org"
-                >Journal of The Institution of Engineers (India): Series A,
-                Springer</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Convener</span>
-              <span class="position-org"
-                >Panel for Preparing Roadmap, SSD 06/P1, Bureau of Indian
-                Standards, New Delhi</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >Construction and Related Engineering Services Sectional
-                Committee of Bureau of Indian Standards, New Delhi</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Expert</span>
-              <span class="position-org"
-                >Selection Boards of Public Service Commission of different
-                states of India</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >Working Group (WG02) for revision of IS 1542: 1992 Sand for
-                Plaster– Specification</span
-              >
-              <span class="position-details"
-                >Bureau of Indian Standards, New Delhi</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >Pre Construction Services Sub Committee SSD 06: 01</span
-              >
-              <span class="position-details"
-                >Bureau of Indian Standards, New Delhi</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Coordinator</span>
-              <span class="position-org"
-                >Centralised Counselling of M.Tech. for National Institutes of
-                Technology of India (2014)</span
-              >
-              <span class="position-details"
-                >30 Institutes and 36,000 students participated</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >Technical Committee, Centralised Counselling of M.Tech. for
-                National Institutes of Technology</span
-              >
-              <span class="position-details">2015, 2016</span>
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >Board of Directors of Executive Excellence Program of
-                Association of Infrastructure Industry (India)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >Executive Body of "Indian Concrete Institute- Rajasthan State
-                Centre"</span
-              >
-              <span class="position-details">Two-year term 2011-2013</span>
-            </li>
-            <li>
-              <span class="position-title">Convener</span>
-              <span class="position-org"
-                >Conference on Sustainable Habitat, Energy, Climate Change and
-                Environment</span
-              >
-              <span class="position-details"
-                >Under Madhya Pradesh Vigyan Sammelan & Expo (MPVS-2021) jointly
-                organized by IIT Indore, MPCST and Vigyan Bharati (December
-                22-25, 2021)</span
-              >
-            </li>
-            <li>
-              <span class="position-title"
-                >Independent Expert Committee Member</span
-              >
-              <span class="position-org"
-                >National Educational Alliance for Technology (NEAT) scheme of
-                MHRD, Govt of India (2020)</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >Expert Committee of UGC for assessment of fulfillment of
-                criteria by Benett University, Greater Noida</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Preliminary Committee Member</span>
-              <span class="position-org"
-                >Evaluating proposals submitted to Shashtri Indo Canadian
-                Institute</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Jury Member</span>
-              <span class="position-org"
-                >Evaluating consultants for the construction of AICTE Campus in
-                Jaipur</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >Academic Advisory Committee of Applied Mechanics Department,
-                SVNIT Surat</span
-              >
-              <span class="position-details">Surat, India (2012-2013)</span>
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >Committee of Courses, Civil Engineering Department, College of
-                Technology & Engineering, MPUAT, Udaipur</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Subject Expert</span>
-              <span class="position-org"
-                >Board of Studies of the Department of Civil Engineering</span
-              >
-              <span class="position-details"
-                >G.H. Raisoni Institute of Engineering and Management,
-                Jalgaon</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Expert</span>
-              <span class="position-org"
-                >Academic Audit of affiliated institutes of Gujarat
-                Technological University</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Expert</span>
-              <span class="position-org"
-                >Faculty Selections in Thapar Institute of Engineering &
-                Technology, Patiala</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Expert</span>
-              <span class="position-org"
-                >Curriculum Revision Workshop of M. Tech. (Structural
-                Engineering) program of SVNIT Surat</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Member</span>
-              <span class="position-org"
-                >DRISHTI CPS Foundation, Technology Innovation Hub, Indian
-                Institute of Technology Indore</span
-              >
-              <span class="position-details"
-                >Core Committee member/Hub Governing Body Member/Strategic Task
-                Force Member</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Expert</span>
-              <span class="position-org"
-                >Curriculum Development Workshop of Civil Engineering Department
-                of NIT Sikkim</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Expert</span>
-              <span class="position-org"
-                >Recruitment of faculty of Civil Engineering Department of NIT
-                Sikkim</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Mentor</span>
-              <span class="position-org"
-                >Faculty and students of Dr. Babasaheb Ambedkar College of
-                Engineering & Research, Nagpur</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Technical Committee Member</span>
-              <span class="position-org"
-                >International Conference on Advances in Civil Engineering</span
-              >
-              <span class="position-details"
-                >K L University, Andhra Pradesh, India</span
-              >
-            </li>
-            <li>
-              <span class="position-title">Technical Committee Member</span>
-              <span class="position-org"
-                >International Conference on Advances in Concrete, Structural
-                and Geotechnical Engineering</span
-              >
-              <span class="position-details">BITS Pilani, Pilani, India</span>
-            </li>
-            <li>
-              <span class="position-title">Special Invitee</span>
-              <span class="position-org"
-                >Workshop on "Curriculum Development for Implementing Academic
-                Autonomy"</span
-              >
-              <span class="position-details"
-                >Ujjain Engineering College, Ujjain, India</span
-              >
-            </li>
-          </ul>
+        <!-- International Section -->
+        <div class="content-card" itemscope itemtype="https://schema.org/Role">
+          <div class="card-header">
+            <div class="header-icon" aria-hidden="true">
+              <i class="fas fa-globe"></i>
+            </div>
+            <h2>International Contributions</h2>
+          </div>
+          <div class="card-body">
+            <ul class="elegant-list" role="list">
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Secretary</span>
+                <span class="position-org" itemprop="organization">Technical Committee on "Life Cycle Maintenance of
+                  Concrete Infrastructures (TC-LCM)" of Asian Concrete Federation</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Associate Editor</span>
+                <span class="position-org" itemprop="organization">"Cleaner Materials", Elsevier</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">International Steering Committee Member</span>
+                <span class="position-org" itemprop="organization">The 10th Asia-Pacific Young Researcher Graduate
+                  Symposium 2019</span>
+                <span class="position-details" itemprop="location">Curtin University, Perth, Australia (December 06-08,
+                  2023)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Chairman</span>
+                <span class="position-org" itemprop="organization">Expert Advice Group of Scientific School "Green
+                  Future" for young scientists</span>
+                <span class="position-details" itemprop="location">Laboratory on Recycling Fuel Waste Energy, NPI,
+                  Russia (May 28-June 06, 2023)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">International Steering Committee Member</span>
+                <span class="position-org" itemprop="organization">The 9th Asia-Pacific Young Researcher Graduate
+                  Symposium 2019</span>
+                <span class="position-details" itemprop="location">Tongji University, Shanghai, China (December 19-20,
+                  2019)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Scientific Committee Member</span>
+                <span class="position-org" itemprop="organization">3rd ACF Symposium on Assessment and Intervention of
+                  Existing Structures</span>
+                <span class="position-details" itemprop="location">Hokkaido University, Sapporo, Japan (September 10-11,
+                  2019)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">International Steering Committee Member</span>
+                <span class="position-org" itemprop="organization">The 8th Asia-Pacific Young Researcher Graduate
+                  Symposium 2017</span>
+                <span class="position-details" itemprop="location">University of Tokyo, Japan (September 07-08,
+                  2017)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Chair</span>
+                <span class="position-org" itemprop="organization">Technical Committee 1: Design of the Asian Concrete
+                  Federation</span>
+                <span class="position-details" itemprop="location">Since October 2016</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Session Chair</span>
+                <span class="position-org" itemprop="organization">7th International Conference of Asian Concrete
+                  Federation on Sustainable Concrete</span>
+                <span class="position-details" itemprop="location">Hanoi, Vietnam (October 30-November 02, 2016)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Session Chair</span>
+                <span class="position-org" itemprop="organization">The 7th Asia-Pacific Young Researcher Graduate
+                  Symposium 2015</span>
+                <span class="position-details" itemprop="location">University of Malaya, Malaysia (August 20-21,
+                  2015)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">International Steering Committee Member</span>
+                <span class="position-org" itemprop="organization">The 7th Asia-Pacific Young Researcher Graduate
+                  Symposium 2015</span>
+                <span class="position-details" itemprop="location">University of Malaya, Malaysia (August 20-21,
+                  2015)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Session Chair</span>
+                <span class="position-org" itemprop="organization">The 6th Asia-Pacific Young Researcher Graduate
+                  Symposium 2014</span>
+                <span class="position-details" itemprop="location">SIIT, Thammasat University Thailand (July 31-August
+                  01, 2014)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">International Steering Committee Member</span>
+                <span class="position-org" itemprop="organization">The 6th Asia-Pacific Young Researcher Graduate
+                  Symposium 2014</span>
+                <span class="position-details" itemprop="location">SIIT, Thammasat University Thailand (July 31-August
+                  01, 2014)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">International Scientific Committee Member</span>
+                <span class="position-org" itemprop="organization">10th International Symposium on Innovation &
+                  Utilization of High-Performance Concrete</span>
+                <span class="position-details" itemprop="location">Beijing, China (September 16-18, 2014)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Chair</span>
+                <span class="position-org" itemprop="organization">The 5th Asia-Pacific Young Researcher Graduate
+                  Symposium 2013</span>
+                <span class="position-details" itemprop="location">Malaviya National Institute of Technology Jaipur
+                  (October 15-16, 2013)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Co-Chairman</span>
+                <span class="position-org" itemprop="organization">Mini Symposium on Durability and Life Cycle
+                  Maintenance of Structure</span>
+                <span class="position-details" itemprop="location">First International Conference on Performance-based
+                  and Life-Cycle Structural Engineering (PLSE 2012), Hong Kong, China (December 05-07, 2012)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">International Steering Committee Member</span>
+                <span class="position-org" itemprop="organization">The 4th Asia-Pacific Young Researcher Graduate
+                  Symposium 2012</span>
+                <span class="position-details" itemprop="location">The Hong Kong Polytechnic University (December 4-5,
+                  2012)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Invited Lecturer</span>
+                <span class="position-org" itemprop="organization">International Symposium on "Structural Assessment and
+                  Remediation of Infrastructure"</span>
+                <span class="position-details" itemprop="location">Namseoul University, Cheonan, Choongnam-do, Korea
+                  (November 03, 2010)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- National Section -->
+        <div class="content-card" itemscope itemtype="https://schema.org/Role">
+          <div class="card-header">
+            <div class="header-icon" aria-hidden="true">
+              <i class="fas fa-flag"></i>
+            </div>
+            <h2>National Contributions</h2>
+          </div>
+          <div class="card-body">
+            <ul class="elegant-list" role="list">
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Construction and Related Engineering Services
+                  Sectional Committee of Bureau of Indian Standards, New Delhi</span>
+                <span class="position-details" itemprop="location">Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Working Group (WG02) for revision of IS 1542: 1992
+                  Sand for Plaster – Specification</span>
+                <span class="position-details" itemprop="location">Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Pre Construction Services Sub Committee SSD 06:
+                  01</span>
+                <span class="position-details" itemprop="location">Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">AICTE Representative</span>
+                <span class="position-org" itemprop="organization">All India Council for Technical Education</span>
+                <span class="position-details" itemprop="location">India</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Expert Committee of All India Council for Technical
+                  Education</span>
+                <span class="position-details" itemprop="location">All India Council for Technical Education</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Expert</span>
+                <span class="position-org" itemprop="organization">Selection Boards of Public Service Commission of
+                  different states of India</span>
+                <span class="position-details" itemprop="location">India</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Associate Editor</span>
+                <span class="position-org" itemprop="organization">Journal of The Institution of Engineers (India):
+                  Series A, Springer</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Convener</span>
+                <span class="position-org" itemprop="organization">Panel for Preparing Roadmap, SSD 06/P1, Bureau of
+                  Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Construction and Related Engineering Services
+                  Sectional Committee of Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Expert</span>
+                <span class="position-org" itemprop="organization">Selection Boards of Public Service Commission of
+                  different states of India</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Working Group (WG02) for revision of IS 1542: 1992
+                  Sand for Plaster– Specification</span>
+                <span class="position-details" itemprop="location">Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Pre Construction Services Sub Committee SSD 06:
+                  01</span>
+                <span class="position-details" itemprop="location">Bureau of Indian Standards, New Delhi</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Coordinator</span>
+                <span class="position-org" itemprop="organization">Centralised Counselling of M.Tech. for National
+                  Institutes of Technology of India (2014)</span>
+                <span class="position-details" itemprop="location">30 Institutes and 36,000 students participated</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Technical Committee, Centralised Counselling of
+                  M.Tech. for National Institutes of Technology</span>
+                <span class="position-details" itemprop="location">2015, 2016</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Board of Directors of Executive Excellence Program of
+                  Association of Infrastructure Industry (India)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Executive Body of "Indian Concrete Institute-
+                  Rajasthan State Centre"</span>
+                <span class="position-details" itemprop="location">Two-year term 2011-2013</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Convener</span>
+                <span class="position-org" itemprop="organization">Conference on Sustainable Habitat, Energy, Climate
+                  Change and Environment</span>
+                <span class="position-details" itemprop="location">Under Madhya Pradesh Vigyan Sammelan & Expo
+                  (MPVS-2021) jointly organized by IIT Indore, MPCST and Vigyan Bharati (December 22-25, 2021)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Independent Expert Committee Member</span>
+                <span class="position-org" itemprop="organization">National Educational Alliance for Technology (NEAT)
+                  scheme of MHRD, Govt of India (2020)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Expert Committee of UGC for assessment of fulfillment
+                  of criteria by Benett University, Greater Noida</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Preliminary Committee Member</span>
+                <span class="position-org" itemprop="organization">Evaluating proposals submitted to Shashtri Indo
+                  Canadian Institute</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Jury Member</span>
+                <span class="position-org" itemprop="organization">Evaluating consultants for the construction of AICTE
+                  Campus in Jaipur</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Academic Advisory Committee of Applied Mechanics
+                  Department, SVNIT Surat</span>
+                <span class="position-details" itemprop="location">Surat, India (2012-2013)</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">Committee of Courses, Civil Engineering Department,
+                  College of Technology & Engineering, MPUAT, Udaipur</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Subject Expert</span>
+                <span class="position-org" itemprop="organization">Board of Studies of the Department of Civil
+                  Engineering</span>
+                <span class="position-details" itemprop="location">G.H. Raisoni Institute of Engineering and Management,
+                  Jalgaon</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Expert</span>
+                <span class="position-org" itemprop="organization">Academic Audit of affiliated institutes of Gujarat
+                  Technological University</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Expert</span>
+                <span class="position-org" itemprop="organization">Faculty Selections in Thapar Institute of Engineering
+                  & Technology, Patiala</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Expert</span>
+                <span class="position-org" itemprop="organization">Curriculum Revision Workshop of M. Tech. (Structural
+                  Engineering) program of SVNIT Surat</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Member</span>
+                <span class="position-org" itemprop="organization">DRISHTI CPS Foundation, Technology Innovation Hub,
+                  Indian Institute of Technology Indore</span>
+                <span class="position-details" itemprop="location">Core Committee member/Hub Governing Body
+                  Member/Strategic Task Force Member</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Expert</span>
+                <span class="position-org" itemprop="organization">Curriculum Development Workshop of Civil Engineering
+                  Department of NIT Sikkim</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Expert</span>
+                <span class="position-org" itemprop="organization">Recruitment of faculty of Civil Engineering
+                  Department of NIT Sikkim</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Mentor</span>
+                <span class="position-org" itemprop="organization">Faculty and students of Dr. Babasaheb Ambedkar
+                  College of Engineering & Research, Nagpur</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Technical Committee Member</span>
+                <span class="position-org" itemprop="organization">International Conference on Advances in Civil
+                  Engineering</span>
+                <span class="position-details" itemprop="location">K L University, Andhra Pradesh, India</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Technical Committee Member</span>
+                <span class="position-org" itemprop="organization">International Conference on Advances in Concrete,
+                  Structural and Geotechnical Engineering</span>
+                <span class="position-details" itemprop="location">BITS Pilani, Pilani, India</span>
+              </li>
+              <li itemscope itemtype="https://schema.org/Role" role="listitem">
+                <span class="position-title" itemprop="roleName">Special Invitee</span>
+                <span class="position-org" itemprop="organization">Workshop on "Curriculum Development for Implementing
+                  Academic Autonomy"</span>
+                <span class="position-details" itemprop="location">Ujjain Engineering College, Ujjain, India</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<%- include('partials/footer') %>
+  <%- include('partials/footer') %>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Add staggered animation effect to list items
-    const listItems = document.querySelectorAll(".elegant-list li");
-    listItems.forEach((item, index) => {
-      item.style.opacity = "0";
-      item.style.transform = "translateY(20px)";
-      item.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add staggered animation effect to list items
+        const listItems = document.querySelectorAll(".elegant-list li");
+        listItems.forEach((item, index) => {
+          item.style.opacity = "0";
+          item.style.transform = "translateY(20px)";
+          item.style.transition = "opacity 0.5s ease, transform 0.5s ease";
 
-      setTimeout(() => {
-        item.style.opacity = "1";
-        item.style.transform = "translateY(0)";
-      }, 100 * index);
-    });
+          setTimeout(() => {
+            item.style.opacity = "1";
+            item.style.transform = "translateY(0)";
+          }, 100 * index);
+        });
 
-    // Add hover effect to cards
-    const cards = document.querySelectorAll(".content-card");
-    cards.forEach((card) => {
-      const header = card.querySelector(".card-header");
-      const icon = card.querySelector(".header-icon");
+        // Add hover effect to cards
+        const cards = document.querySelectorAll(".content-card");
+        cards.forEach((card) => {
+          const header = card.querySelector(".card-header");
+          const icon = card.querySelector(".header-icon");
 
-      card.addEventListener("mouseenter", function () {
-        header.style.background = "var(--primary-color)";
-        header.style.color = "white";
-        icon.style.background = "white";
-        icon.querySelector("i").style.color = "var(--primary-color)";
+          card.addEventListener("mouseenter", function () {
+            header.style.background = "var(--primary-color)";
+            header.style.color = "white";
+            icon.style.background = "white";
+            icon.querySelector("i").style.color = "var(--primary-color)";
+          });
+
+          card.addEventListener("mouseleave", function () {
+            header.style.background = "var(--secondary-bg)";
+            header.style.color = "var(--text-color)";
+            icon.style.background = "var(--primary-color)";
+            icon.querySelector("i").style.color = "white";
+          });
+        });
       });
-
-      card.addEventListener("mouseleave", function () {
-        header.style.background = "var(--secondary-bg)";
-        header.style.color = "var(--text-color)";
-        icon.style.background = "var(--primary-color)";
-        icon.querySelector("i").style.color = "white";
-      });
-    });
-  });
-</script>
+    </script>

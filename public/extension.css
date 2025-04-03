@@ -1,0 +1,214 @@
+
+/* Main Content Styling */
+.main-wrapper {
+  background-color: var(--background-color);
+  padding: 60px 0;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Section Title */
+.section-title {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-title h1 {
+  font-size: 2.5rem;
+  color: var(--text-color);
+  margin-bottom: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.title-underline {
+  height: 4px;
+  width: 80px;
+  background: var(--primary-color);
+  margin: 0 auto;
+  position: relative;
+}
+
+.title-underline:after {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 40px;
+  background: var(--primary-color);
+  left: 45px;
+  top: 0;
+  opacity: 0.5;
+}
+
+/* Grid Layout */
+.content-grid {
+  width: 73vw;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+/* Card Styling */
+.content-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background-color: var(--secondary-bg);
+  padding: 20px 25px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.header-icon i {
+  font-size: 24px;
+  color: white;
+}
+
+.card-header h2 {
+  font-size: 1.8rem;
+  color: var(--text-color);
+  margin: 0;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 30px 25px;
+}
+
+/* Elegant List Styling */
+.elegant-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.elegant-list li {
+  margin-bottom: 25px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+  padding-left: 20px;
+  transition: all 0.3s ease;
+}
+
+.elegant-list li:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.elegant-list li:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  height: 8px;
+  width: 8px;
+  background: var(--primary-color);
+  border-radius: 50%;
+}
+
+.elegant-list li:hover {
+  transform: translateX(5px);
+}
+
+.elegant-list li:hover:before {
+  background: var(--primary-color);
+  transform: scale(1.5);
+}
+
+.position-title {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 5px;
+}
+
+.position-org {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.position-details {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title h1 {
+    font-size: 2rem;
+  }
+
+  .card-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .header-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .header-icon i {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-wrapper {
+    padding: 40px 0;
+  }
+
+  .section-title {
+    margin-bottom: 30px;
+  }
+
+  .card-header {
+    padding: 15px;
+  }
+
+  .card-body {
+    padding: 20px 15px;
+  }
+
+  .position-title {
+    font-size: 1rem;
+  }
+}
