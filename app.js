@@ -70,6 +70,7 @@ const cvRoutes = require("./routes/cv");
 const contactRoutes = require("./routes/contact");
 const controlRoutes = require("./routes/control");
 const ResearchGroup=require("./routes/researchGroup")
+const ExtensionActivity=require("./routes/extension")
 //const fileRoutes = require("./routes/files");
 // Use routes
 app.use("/admin", adminRoutes);
@@ -81,6 +82,8 @@ app.use("/", cvRoutes);
 app.use("/", contactRoutes);
 app.use("/", controlRoutes);
 app.use('/',ResearchGroup);
+app.use('/',ExtensionActivity);
+
 //app.use("/", fileRoutes);
 // Root routes
 app.get("/", (req, res) => res.render("index"));
@@ -103,7 +106,6 @@ app.get("/existingCollab.html", (req, res) => res.render("existingCollab"));
 app.get("/researchCollab.html", (req, res) => res.render("researchCollab"));
 app.get("/phdOpportunities.html", (req, res) => res.render("phdOpportunities"));
 app.get("/internships.html", (req, res) => res.render("internships"));
-app.get("/extension.html", (req, res) => res.render("extension"));
 
 // MongoDB Connection
 mongoose

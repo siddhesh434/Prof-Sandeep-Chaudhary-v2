@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension Activity Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-primary': '#3B82F6',
+                        'brand-secondary': '#10B981',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100">
+    <div class="flex h-screen overflow-hidden relative">
+        <!-- Sidebar - hidden on mobile by default -->
+        <aside id="sidebar"
+            class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
+            <div class="p-6 border-b border-blue-800">
+                <h2 class="text-xl font-bold tracking-wide">Welcome, Admin!</h2>
+                <!-- Close button for mobile -->
+                <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <nav class="mt-4">
+                <ul>
+                    <li class="mb-1 px-2">
+                        <a href="/admin"
+                            class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
+                            <i class="fas fa-home mr-3"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="mb-1 px-2">
+                        <a href="/admin/control.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                          <i class="fas fa-sliders-h mr-3"></i>
+                          <span>Visibility Controls</span>
+                        </a>
+                      </li>
+                      <li class="mb-1 px-2">
+                        <a href="/admin/files.html"
+                          class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                          <i class="fas fa-users mr-3"></i>
+                          <span>File Upload</span>
+                        </a>
+                      </li>
+                      <li class="mb-1 px-2">
+                        <a href="/admin/formData" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                          <i class="fas fa-ticket-alt mr-3"></i>
+                          <span>User Requests</span>
+                        </a>
+                      </li>
+                      <li class="mb-1 px-2">
+                        <a href="/admin/cvGenerator.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                          <i class="fas fa-file-pdf mr-3"></i>
+                          <span>CV Generator</span>
+                        </a>
+                      </li>
+                    <li class="mb-1 px-2">
+                        <a href="/admin/logout"
+                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+                            <i class="fas fa-sign-out-alt mr-3"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <div class="p-4 md:p-6">
+                <!-- Header with mobile menu indicator -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex items-center">
+                        <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">Extension Activity Management</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Welcome, Admin</span>
+                        <div
+                            class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
+                            A
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Count Card -->
+                <div class="bg-gradient-to-r from-brand-secondary to-blue-700 text-white rounded-lg shadow-md p-4 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-semibold">Total Extension Activities</h2>
+                            <p class="text-sm opacity-80">Manage all your extension activities in one place</p>
+                        </div>
+                        <div class="text-3xl font-bold flex items-center">
+                            <span id="activityCount">0</span>
+                            <i class="fas fa-handshake ml-3 text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extension Activity Form -->
+                <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+                    <form id="activityForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="hidden" id="activityId">
+
+                        <div class="flex flex-col">
+                            <label class="mb-2 text-gray-700" for="role">Role Category</label>
+                            <select id="role" name="role" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                                <option value="">Select Role Category</option>
+                                <option value="Government Advisory Roles">Government Advisory Roles</option>
+                                <option value="International Contributions">International Contributions</option>
+                                <option value="National Contributions">National Contributions</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Dynamic "Other Role" field that appears when "Other" is selected -->
+                        <div id="otherRoleContainer" class="flex flex-col hidden">
+                            <label class="mb-2 text-gray-700" for="otherRole">Specify Other Role</label>
+                            <input type="text" id="otherRole" name="otherRole"
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                placeholder="Specify role category">
+                        </div>
+
+                        <div class="flex flex-col">
+                            <label class="mb-2 text-gray-700" for="title">Title/Position</label>
+                            <input type="text" id="title" name="title" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                placeholder="e.g., Member, Convener, Chair">
+                        </div>
+
+                        <div class="flex flex-col md:col-span-2">
+                            <label class="mb-2 text-gray-700" for="description">Description</label>
+                            <textarea id="description" name="description" required rows="3"
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                placeholder="Detailed description of the activity"></textarea>
+                        </div>
+
+                        <div class="flex flex-col">
+                            <label class="mb-2 text-gray-700" for="location">Additonal (eg: location)</label>
+                            <input type="text" id="location" name="location" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                placeholder="Where the activity takes place">
+                        </div>
+
+                        <div class="col-span-1 md:col-span-2 flex space-x-4 mt-2">
+                            <button type="submit" id="addButton"
+                                class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-blue-700 transition duration-300">
+                                <i class="fas fa-plus mr-2"></i> Add Activity
+                            </button>
+                            <button type="button" id="updateButton"
+                                class="flex-1 bg-yellow-500 text-white p-3 rounded hover:bg-yellow-600 transition duration-300 hidden">
+                                <i class="fas fa-edit mr-2"></i> Update Activity
+                            </button>
+                            <button type="button" id="cancelEditButton"
+                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden">
+                                <i class="fas fa-times mr-2"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Search and Filter Section -->
+                <div class="mb-6 flex flex-wrap gap-4 bg-white p-4 rounded-lg shadow-md">
+                    <input type="text" id="searchInput" placeholder="Search activities..."
+                        class="flex-grow border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                    <select id="roleFilter"
+                        class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                        <option value="">All Roles</option>
+                        <option value="Government Advisory Roles">Government Advisory Roles</option>
+                        <option value="International Contributions">International Contributions</option>
+                        <option value="National Contributions">National Contributions</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <button id="searchButton"
+                        class="bg-brand-secondary text-white p-2 rounded hover:bg-blue-700 transition duration-300 flex items-center">
+                        <i class="fas fa-search mr-2"></i> Search
+                    </button>
+                </div>
+
+                <!-- Extension Activities Grid -->
+                <div id="activitiesGrid"
+                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <!-- Extension activities will be dynamically added here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Floating action button for mobile -->
+    <button id="mobile-fab"
+        class="md:hidden fixed bottom-4 right-4 bg-brand-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h2>
+            <p class="mb-6 text-gray-600">Are you sure you want to delete this extension activity?</p>
+            <div class="flex space-x-4">
+                <button id="confirmDeleteBtn"
+                    class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300">
+                    <i class="fas fa-trash-alt mr-2"></i> Delete
+                </button>
+                <button id="cancelDeleteBtn"
+                    class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300">
+                    <i class="fas fa-ban mr-2"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const form = document.getElementById('activityForm');
+        const activitiesGrid = document.getElementById('activitiesGrid');
+        const addButton = document.getElementById('addButton');
+        const updateButton = document.getElementById('updateButton');
+        const cancelEditButton = document.getElementById('cancelEditButton');
+        const deleteModal = document.getElementById('deleteModal');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const searchInput = document.getElementById('searchInput');
+        const roleFilter = document.getElementById('roleFilter');
+        const searchButton = document.getElementById('searchButton');
+        const activityCount = document.getElementById('activityCount');
+        const roleSelect = document.getElementById('role');
+        const otherRoleContainer = document.getElementById('otherRoleContainer');
+        const otherRoleInput = document.getElementById('otherRole');
+
+        // Mobile menu elements
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const closeSidebarButton = document.getElementById("close-sidebar");
+        const sidebar = document.getElementById("sidebar");
+        const sidebarOverlay = document.getElementById("sidebar-overlay");
+        const mobileFab = document.getElementById("mobile-fab");
+
+        let currentDeletingActivityId = null;
+        let activities = []; // Store extension activities for filtering
+
+        // Toggle "Other Role" field when role selection changes
+        roleSelect.addEventListener('change', function() {
+            if (this.value === 'Other') {
+                otherRoleContainer.classList.remove('hidden');
+                otherRoleInput.setAttribute('required', 'required');
+            } else {
+                otherRoleContainer.classList.add('hidden');
+                otherRoleInput.removeAttribute('required');
+            }
+        });
+
+        // Mobile menu toggle functionality
+        function openSidebar() {
+            sidebar.classList.remove("-translate-x-full");
+            sidebarOverlay.classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+        }
+
+        function closeSidebar() {
+            sidebar.classList.add("-translate-x-full");
+            sidebarOverlay.classList.add("hidden");
+            document.body.classList.remove("overflow-hidden");
+        }
+
+        // Event listeners for sidebar
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener("click", openSidebar);
+        }
+
+        if (closeSidebarButton) {
+            closeSidebarButton.addEventListener("click", closeSidebar);
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener("click", closeSidebar);
+        }
+
+        // Close sidebar when clicking on a menu item on mobile
+        const sidebarLinks = sidebar.querySelectorAll("a");
+        sidebarLinks.forEach((link) => {
+            link.addEventListener("click", () => {
+                if (window.innerWidth < 768) {
+                    // Only on mobile
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Handle resize events - ensure sidebar is visible on desktop
+        window.addEventListener("resize", () => {
+            if (window.innerWidth >= 768) {
+                // md breakpoint
+                sidebar.classList.remove("-translate-x-full");
+                sidebarOverlay.classList.add("hidden");
+                document.body.classList.remove("overflow-hidden");
+            } else {
+                sidebar.classList.add("-translate-x-full");
+            }
+        });
+
+        // Optional: Toggle floating action button
+        if (mobileFab) {
+            mobileFab.addEventListener("click", () => {
+                // Scroll to the form section
+                const formElement = document.getElementById('activityForm');
+                formElement.scrollIntoView({ behavior: 'smooth' });
+                // Focus on the first input
+                document.getElementById('role').focus();
+            });
+        }
+
+        // Fetch Extension Activities
+        async function fetchActivities() {
+            try {
+                const response = await fetch('/api/activities');
+                activities = await response.json();
+                renderActivities(activities);
+                
+                // Update activity count
+                activityCount.textContent = activities.length;
+            } catch (error) {
+                console.error('Error fetching extension activities:', error);
+                showNotification('Failed to fetch extension activities. Please try again.', 'error');
+                // Initialize with empty array if fetch fails
+                activities = [];
+                renderActivities(activities);
+            }
+        }
+
+        // Render Extension Activities as Cards
+        function renderActivities(acts) {
+            if (acts.length === 0) {
+                activitiesGrid.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i class="fas fa-info-circle text-gray-400 text-4xl mb-3"></i>
+                        <p class="text-gray-500">No activities found. Add your first activity using the form above.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            activitiesGrid.innerHTML = acts.map(activity => `
+                <div class="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1">
+                    <div class="bg-blue-50 px-4 py-2 border-b border-blue-100">
+                        <h3 class="font-bold text-lg text-gray-800 line-clamp-2">${escapeHtml(activity.title)}</h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="mb-2">
+                            <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                ${escapeHtml(activity.role)}
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-3 text-sm line-clamp-3">
+                            <i class="fas fa-info-circle text-brand-secondary mr-2"></i>${escapeHtml(activity.description)}
+                        </p>
+                        <p class="text-gray-500 text-sm mb-3">
+                            <i class="fas fa-map-marker-alt text-brand-secondary mr-2"></i>${escapeHtml(activity.location)}
+                        </p>
+                        <div class="mt-4 flex space-x-2">
+                            <button 
+                                onclick="editActivity('${activity._id}')"
+                                class="flex-1 bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition duration-300 flex items-center justify-center"
+                            >
+                                <i class="fas fa-edit mr-1"></i> Edit
+                            </button>
+                            <button 
+                                onclick="confirmDelete('${activity._id}')"
+                                class="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-300 flex items-center justify-center"
+                            >
+                                <i class="fas fa-trash-alt mr-1"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Search and Filter Extension Activities
+        function searchAndFilterActivities() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const selectedRole = roleFilter.value;
+
+            const filteredActivities = activities.filter(activity => {
+                const matchesSearch = searchTerm === '' ||
+                    activity.title.toLowerCase().includes(searchTerm) ||
+                    activity.description.toLowerCase().includes(searchTerm) ||
+                    activity.location.toLowerCase().includes(searchTerm);
+
+                const matchesRole = selectedRole === '' ||
+                    activity.role === selectedRole;
+
+                return matchesSearch && matchesRole;
+            });
+
+            renderActivities(filteredActivities);
+
+            // Update filtered count with animation
+            const countElement = document.getElementById('activityCount');
+            const currentCount = parseInt(countElement.textContent);
+            const targetCount = filteredActivities.length;
+
+            // Simple animation for count change
+            let startTime;
+            function animateCount(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = (timestamp - startTime) / 300; // 300ms duration
+
+                if (progress < 1) {
+                    const currentValue = Math.floor(currentCount + (targetCount - currentCount) * progress);
+                    countElement.textContent = currentValue;
+                    requestAnimationFrame(animateCount);
+                } else {
+                    countElement.textContent = targetCount;
+                }
+            }
+
+            requestAnimationFrame(animateCount);
+        }
+
+        // Attach search event listeners
+        searchButton.addEventListener('click', searchAndFilterActivities);
+        searchInput.addEventListener('input', searchAndFilterActivities);
+        roleFilter.addEventListener('change', searchAndFilterActivities);
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Validate Form Inputs
+        function validateForm() {
+            const role = document.getElementById('role').value.trim();
+            const title = document.getElementById('title').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const location = document.getElementById('location').value.trim();
+
+            if (!role || !title || !description || !location) {
+                showNotification('All fields are required', 'error');
+                return false;
+            }
+            
+            // Check if "Other" is selected but no value provided
+            if (role === 'Other' && !otherRoleInput.value.trim()) {
+                showNotification('Please specify the other role category', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Get the actual role value (considering "Other" option)
+        function getActualRoleValue() {
+            const roleValue = document.getElementById('role').value;
+            if (roleValue === 'Other') {
+                return document.getElementById('otherRole').value.trim();
+            }
+            return roleValue;
+        }
+
+        // Add Extension Activity
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!validateForm()) return;
+
+            const activityData = {
+                role: getActualRoleValue(),
+                title: document.getElementById('title').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                location: document.getElementById('location').value.trim()
+            };
+
+            try {
+                const response = await fetch('/api/activities', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(activityData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to add activity. Server returned ' + response.status);
+                }
+                
+                const newActivity = await response.json();
+                activities.push(newActivity);
+                renderActivities(activities);
+                activityCount.textContent = activities.length;
+                
+                form.reset();
+                otherRoleContainer.classList.add('hidden'); // Hide the other input
+                showNotification('Activity added successfully!', 'success');
+            } catch (error) {
+                console.error('Error adding extension activity:', error);
+                showNotification(error.message, 'error');
+            }
+        });
+
+        // Simple notification function
+        function showNotification(message, type = 'info') {
+            const notificationDiv = document.createElement('div');
+            notificationDiv.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-green-500' :
+                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            } text-white`;
+
+            notificationDiv.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${
+                        type === 'success' ? 'check-circle' :
+                        type === 'error' ? 'exclamation-circle' : 'info-circle'
+                    } mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notificationDiv);
+
+            setTimeout(() => {
+                notificationDiv.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                setTimeout(() => {
+                    document.body.removeChild(notificationDiv);
+                }, 500);
+            }, 3000);
+        }
+
+        // Edit Extension Activity
+        window.editActivity = async function(id) {
+            try {
+                const response = await fetch(`/api/activities/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch activity details');
+                }
+                
+                const activity = await response.json();
+                
+                // Set form values
+                document.getElementById('activityId').value = activity._id;
+                
+                // Handle role selection including "Other"
+                const standardRoles = ['Academic Service', 'Industry Collaboration', 'Community Outreach'];
+                if (standardRoles.includes(activity.role)) {
+                    document.getElementById('role').value = activity.role;
+                    otherRoleContainer.classList.add('hidden');
+                } else {
+                    document.getElementById('role').value = 'Other';
+                    document.getElementById('otherRole').value = activity.role;
+                    otherRoleContainer.classList.remove('hidden');
+                    otherRoleInput.setAttribute('required', 'required');
+                }
+                
+                document.getElementById('title').value = activity.title;
+                document.getElementById('description').value = activity.description;
+                document.getElementById('location').value = activity.location;
+
+                addButton.classList.add('hidden');
+                updateButton.classList.remove('hidden');
+                cancelEditButton.classList.remove('hidden');
+
+                // Scroll to form
+                form.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error fetching extension activity details:', error);
+                showNotification('Failed to load activity details', 'error');
+            }
+        };
+
+        // Cancel Edit
+        cancelEditButton.addEventListener('click', () => {
+            form.reset();
+            otherRoleContainer.classList.add('hidden');
+            addButton.classList.remove('hidden');
+            updateButton.classList.add('hidden');
+            cancelEditButton.classList.add('hidden');
+        });
+
+        // Update Extension Activity
+        updateButton.addEventListener('click', async () => {
+            if (!validateForm()) return;
+
+            const id = document.getElementById('activityId').value;
+            const activityData = {
+                role: getActualRoleValue(),
+                title: document.getElementById('title').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                location: document.getElementById('location').value.trim()
+            };
+
+            try {
+                const response = await fetch(`/api/activities/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(activityData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to update activity. Server returned ' + response.status);
+                }
+                
+                const updatedActivity = await response.json();
+                
+                // Update the activity in the local array
+                const index = activities.findIndex(a => a._id === id);
+                if (index !== -1) {
+                    activities[index] = updatedActivity;
+                    renderActivities(activities);
+                }
+
+                form.reset();
+                otherRoleContainer.classList.add('hidden');
+                addButton.classList.remove('hidden');
+                updateButton.classList.add('hidden');
+                cancelEditButton.classList.add('hidden');
+
+                showNotification('Activity updated successfully!', 'success');
+            } catch (error) {
+                console.error('Error updating extension activity:', error);
+                showNotification(error.message, 'error');
+            }
+        });
+
+        // Confirm Delete
+        window.confirmDelete = function(id) {
+            currentDeletingActivityId = id;
+            deleteModal.classList.remove('hidden');
+            deleteModal.classList.add('flex');
+        }
+
+        // Cancel Delete
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+            currentDeletingActivityId = null;
+        });
+
+        // Confirm Delete Action
+        confirmDeleteBtn.addEventListener('click', async () => {
+            if (!currentDeletingActivityId) return;
+
+            try {
+                const response = await fetch(`/api/activities/${currentDeletingActivityId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to delete activity. Server returned ' + response.status);
+                }
+                
+                // Remove from local array
+                activities = activities.filter(a => a._id !== currentDeletingActivityId);
+                renderActivities(activities);
+                activityCount.textContent = activities.length;
+                
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+                currentDeletingActivityId = null;
+
+                showNotification('Activity deleted successfully!', 'success');
+            } catch (error) {
+                console.error('Error deleting extension activity:', error);
+                showNotification(error.message, 'error');
+            }
+        });
+
+        // Initialize the page
+        fetchActivities();
+    </script>
+</body>
+
+</html>
