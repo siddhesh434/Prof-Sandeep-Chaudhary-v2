@@ -1,202 +1,226 @@
 <%- include('partials/header') %>
 
-<!-- Add Font Awesome in your header partial or include it here -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Contact Prof. Sandeep Chaudhary - Professor of Civil Engineering at IIT Indore, specializing in Sustainable Construction and Structural Engineering. Get in touch for research collaborations, PhD opportunities, and internships." />
+    <meta name="keywords"
+        content="Sandeep Chaudhary, IIT Indore, Civil Engineering, Sustainable Construction, Structural Engineering, Research Collaboration, PhD Opportunities, Internships, Contact Information" />
+    <meta name="author" content="Prof. Sandeep Chaudhary" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="Contact Prof. Sandeep Chaudhary - Sustainable Construction Research Group" />
+    <meta property="og:description"
+        content="Connect with Prof. Sandeep Chaudhary at IIT Indore for research collaborations, PhD opportunities, and internships in Sustainable Construction and Structural Engineering." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://www.SustainableConstructionLab.com/contact" />
+    <meta property="og:image" content="/images/profile.jpg" />
+    <link rel="canonical" href="http://www.SustainableConstructionLab.com/contact" />
 
-<style>
-.contact-page {
-    background: linear-gradient(135deg, var(--background-color) 0%, 100%);
-    min-height: 100vh;
-    padding: 4rem 0;
-    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
-    line-height: 1.6;
-}
+    <!-- Add Font Awesome in your header partial or include it here -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
+    <style>
+        .contact-page {
+            background: linear-gradient(135deg, var(--background-color) 0%, 100%);
+            min-height: 100vh;
+            padding: 4rem 0;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+        }
 
-.section {
-    margin-bottom: 4rem;
-    padding: 3rem 0;
-    background-color: var(--secondary-bg);
-    border-radius: 12px;
-    box-shadow: var(--soft-shadow);
-    transition: var(--transition);
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
 
-.section:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-}
+        .section {
+            margin-bottom: 4rem;
+            padding: 3rem 0;
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: var(--soft-shadow);
+            transition: var(--transition);
+        }
 
-.section-title {
-    text-align: center;
-    margin-bottom: 2.5rem;
-    color: var(--primary-color);
-    font-size: 2.75rem;
-    font-weight: 700;
-    position: relative;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+        .section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
 
-.section-title::before,
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--primary-color);
-}
+        .section-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: var(--primary-color);
+            font-size: 2.75rem;
+            font-weight: 700;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-.section-title::before {
-    width: 120px;
-    height: 4px;
-    opacity: 0.3;
-}
+        .section-title::before,
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+        }
 
-.section-title::after {
-    width: 60px;
-    height: 6px;
-}
+        .section-title::before {
+            width: 120px;
+            height: 4px;
+            opacity: 0.3;
+        }
 
-.contact-card {
-    background-color: var(--secondary-bg);
-    border-radius: 15px;
-    padding: 2.5rem;
-    box-shadow: var(--soft-shadow);
-    border-left: 5px solid var(--primary-color);
-    transition: var(--transition);
-}
+        .section-title::after {
+            width: 60px;
+            height: 6px;
+        }
 
-.contact-card:hover {
-    transform: scale(1.02);
-}
+        .contact-card {
+            background-color: var(--secondary-bg);
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: var(--soft-shadow);
+            border-left: 5px solid var(--primary-color);
+            transition: var(--transition);
+        }
 
-.contact-details h2 {
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    font-weight: 600;
-}
+        .contact-card:hover {
+            transform: scale(1.02);
+        }
 
-.contact-location {
-    color: var(--text-color);
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
-}
+        .contact-details h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
 
-.contact-methods {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
+        .contact-location {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
 
-.contact-methods p {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: var(--text-color);
-}
+        .contact-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
 
-.contact-methods i {
-    color: var(--secondary-color);
-    font-size: 1.2rem;
-}
+        .contact-methods p {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-color);
+        }
 
-.contact-methods a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: var(--transition);
-}
+        .contact-methods i {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
 
-.contact-methods a:hover {
-    color: var(--accent-color);
-    text-decoration: underline;
-}
+        .contact-methods a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
 
-@media screen and (max-width: 768px) {
-    .contact-page {
-        padding: 2rem 0;
-    }
+        .contact-methods a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
 
-    .section-title {
-        font-size: 2.25rem;
-    }
+        @media screen and (max-width: 768px) {
+            .contact-page {
+                padding: 2rem 0;
+            }
 
-    .contact-card {
-        padding: 1.5rem;
-    }
+            .section-title {
+                font-size: 2.25rem;
+            }
 
-    .contact-methods {
-        flex-direction: column;
-    }
-}
+            .contact-card {
+                padding: 1.5rem;
+            }
 
-@media screen and (max-width: 480px) {
-    .section-title {
-        font-size: 1.8rem;
-    }
+            .contact-methods {
+                flex-direction: column;
+            }
+        }
 
-    .contact-card {
-        padding: 1rem;
-    }
-}
-</style>
-<main class="contact-page">
-    <!-- Contact Information Section -->
-    <section>
-        <div class="container">
-            <h1 class="section-title">Contact Information</h1>
-            <div class="contact-card">
-                <div class="contact-details">
-                    <h2>Prof. Sandeep Chaudhary</h2>
-                    <p class="contact-location">
-                        Room No 403, Chromium Building<br>
-                        Department of Civil Engineering<br>
-                        Indian Institute of Technology Indore<br>
-                        Khandwa Road, Simrol-453552<br>
-                        Madhya Pradesh – (INDIA)
-                    </p>
-                    <div class="contact-methods">
-                        <p class="email">
-                            <i class="fas fa-envelope"></i> 
-                            <a href="mailto:schaudhary@iiti.ac.in">schaudhary [at] iiti.ac.in</a>
-                        </p>
-                        <p class="phone">
-                            <i class="fas fa-phone"></i> 
-                            91-731-6603256 (Ext code 3256)
-                        </p>
+        @media screen and (max-width: 480px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .contact-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+
+    <main class="contact-page" itemscope itemtype="https://schema.org/Person">
+        <!-- Contact Information Section -->
+        <section>
+            <div class="container">
+                <h1 class="section-title">Contact Information</h1>
+                <div class="contact-card">
+                    <div class="contact-details">
+                        <h2 itemprop="name">Prof. Sandeep Chaudhary</h2>
+                        <div itemprop="worksFor" itemscope itemtype="https://schema.org/Organization">
+                            <meta itemprop="name" content="Indian Institute of Technology Indore" />
+                            <meta itemprop="department" content="Department of Civil Engineering" />
+                            <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                                <p class="contact-location">
+                                    <span itemprop="streetAddress">Room No 403, Chromium Building</span><br>
+                                    <span itemprop="department">Department of Civil Engineering</span><br>
+                                    <span itemprop="name">Indian Institute of Technology Indore</span><br>
+                                    <span itemprop="streetAddress">Khandwa Road, Simrol</span><br>
+                                    <span itemprop="postalCode">453552</span><br>
+                                    <span itemprop="addressRegion">Madhya Pradesh</span><br>
+                                    <span itemprop="addressCountry">INDIA</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="contact-methods">
+                            <p class="email">
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
+                                <a href="mailto:schaudhary@iiti.ac.in" itemprop="email">schaudhary [at] iiti.ac.in</a>
+                            </p>
+                            <p class="phone">
+                                <i class="fas fa-phone" aria-hidden="true"></i>
+                                <span itemprop="telephone">91-731-6603256 (Ext code 3256)</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-     <br>
-    <!-- PhD/JRF Opportunities Section -->
-    <section>
-        <div class="container">
-            <%- include('phdOpportunities') %>
-        </div>
-    </section>
-     <br>
-    <!-- Internship Opportunities Section -->
-    <section>
-        <div class="container">
-        <%- include('internships') %>
-      </div>
-    </section>
-    <br>
-    <!-- Form -->
-    <section>
-        <div class="container">
-        <%- include('contactform') %>
-      </div>
-    </section>
-</main>
+        </section>
+        <br>
+        <!-- PhD/JRF Opportunities Section -->
+        <section>
+            <div class="container">
+                <%- include('phdOpportunities') %>
+            </div>
+        </section>
+        <br>
+        <!-- Internship Opportunities Section -->
+        <section>
+            <div class="container">
+                <%- include('internships') %>
+            </div>
+        </section>
+        <br>
+        <!-- Form -->
+        <section>
+            <div class="container">
+                <%- include('contactform') %>
+            </div>
+        </section>
+    </main>
 
-<%- include('partials/footer') %>
+    <%- include('partials/footer') %>
