@@ -221,6 +221,32 @@
         card.setAttribute("role", "listitem");
         card.setAttribute("aria-label", tech.title);
 
+        // Add structured data for the product
+        const productSchema = {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": tech.title,
+          "description": tech.description,
+          "image": tech.imageUrl,
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "price": "0",
+            "priceCurrency": "INR"
+          },
+          "brand": {
+            "@type": "Brand",
+            "name": "Sustainable Construction Lab"
+          },
+          "category": "Construction Technology"
+        };
+
+        // Add the schema as a script tag
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.text = JSON.stringify(productSchema);
+        card.appendChild(script);
+
         card.innerHTML = `
       <div class="tech-image">
         <img src="${tech.imageUrl}" alt="${tech.title}" itemprop="image">
