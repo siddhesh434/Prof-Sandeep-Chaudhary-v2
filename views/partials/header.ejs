@@ -27,23 +27,20 @@
   <script>
     // Run this script immediately, before DOM is fully loaded
     (function () {
-      // Apply theme immediately
-      const savedTheme = localStorage.getItem("theme") || "dark";
-      document.documentElement.setAttribute("data-theme", savedTheme);
+      // Apply dark theme by default
+      document.documentElement.setAttribute("data-theme", "dark");
 
       // Pre-set the checkbox state in the HTML
-      if (savedTheme === "dark") {
-        document.write(
-          "<style>#theme-toggle{opacity:0}#theme-toggle.ready{opacity:1}</style>"
-        );
-        // This will run after the DOM is loaded to check the checkbox
-        document.addEventListener("DOMContentLoaded", function () {
-          document.getElementById("theme-toggle").checked = true;
-        });
-      }
+      document.write(
+        "<style>#theme-toggle{opacity:0}#theme-toggle.ready{opacity:1}</style>"
+      );
+
+      // This will run after the DOM is loaded to check the checkbox
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("theme-toggle").checked = true;
+      });
     })();
   </script>
-
 
   <!-- Toggle Button -->
   <button class="xzy1__toggle-btn" onclick="toggleNavbar()" aria-label="Toggle navigation menu">☰ Menu</button>
@@ -163,7 +160,7 @@
 
         <div class="nav-icons">
           <label class="theme-switch" aria-label="Toggle dark mode">
-            <input type="checkbox" id="theme-toggle" />
+            <input type="checkbox" id="theme-toggle" checked />
             <span class="slider">
               <i class="fas fa-sun sun-icon icon" aria-hidden="true"></i>
               <i class="fas fa-moon moon-icon icon" aria-hidden="true"></i>
@@ -179,11 +176,12 @@
     document.addEventListener("DOMContentLoaded", function () {
       const themeToggle = document.getElementById("theme-toggle");
 
-      // Get saved theme
-      const savedTheme = localStorage.getItem("theme") || "dark";
+      // Set dark theme as default
+      document.documentElement.setAttribute("data-theme", "dark");
+      localStorage.setItem("theme", "dark");
 
       // Set the toggle position
-      themeToggle.checked = savedTheme === "dark";
+      themeToggle.checked = true;
 
       // Make toggle visible after its state is set
       setTimeout(() => themeToggle.classList.add("ready"), 50);
