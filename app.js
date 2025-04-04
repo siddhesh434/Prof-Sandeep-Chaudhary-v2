@@ -153,7 +153,7 @@ const contactRoutes = require("./routes/contact");
 const controlRoutes = require("./routes/control");
 const ResearchGroup = require("./routes/researchGroup");
 const ExtensionActivity = require("./routes/extension");
-//const fileRoutes = require("./routes/files");
+const fileRoutes = require("./routes/files");
 // Use routes
 app.use("/admin", adminRoutes);
 app.use("/", publicationRoutes);
@@ -166,7 +166,7 @@ app.use("/", controlRoutes);
 app.use("/", ResearchGroup);
 app.use("/", ExtensionActivity);
 
-//app.use("/", fileRoutes);
+app.use("/", fileRoutes);
 // Root routes
 app.get("/", (req, res) => res.render("index"));
 app.get("/index.html", (req, res) => res.render("index"));
