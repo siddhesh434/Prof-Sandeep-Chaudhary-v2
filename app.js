@@ -81,25 +81,6 @@ app.get("/robots.txt", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "robots.txt"));
 });
 
-app.get("/sitemap.xml", (req, res) => {
-  res.type("application/xml");
-  res.sendFile(path.join(__dirname, "public", "sitemap.xml"));
-});
-
-app.get("/sitemap.html", (req, res) => {
-  res.render("sitemap", {
-    title: "Sitemap - SCORE Research Group",
-    description: "Complete site structure of SCORE Research Group website",
-  });
-});
-
-app.get("/sitemap2.html", (req, res) => {
-  res.render("sitemap2", {
-    title: "Sitemap - SCORE Research Group",
-    description: "Complete site structure of SCORE Research Group website",
-  });
-});
-
 // Google Site Verification Route
 app.get("/googlef5c0188d6e6ea5f5.html", (req, res) => {
   res.setHeader("Content-Type", "text/html");
