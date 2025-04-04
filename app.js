@@ -93,6 +93,13 @@ app.get("/sitemap.html", (req, res) => {
   });
 });
 
+app.get("/sitemap2.html", (req, res) => {
+  res.render("sitemap2", {
+    title: "Sitemap - SCORE Research Group",
+    description: "Complete site structure of SCORE Research Group website",
+  });
+});
+
 // Google Site Verification Route
 app.get("/googlef5c0188d6e6ea5f5.html", (req, res) => {
   res.setHeader("Content-Type", "text/html");
