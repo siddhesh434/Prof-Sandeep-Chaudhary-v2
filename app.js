@@ -34,7 +34,7 @@ app.use((req, res, next) => {
       "Sandeep Chaudhary, Sustainable Construction, IIT Indore, Civil Engineering, Research, Structural Engineering",
     author: "Prof. Sandeep Chaudhary",
     ogImage: "/images/profile.jpg",
-    canonical: `http://www.SustainableConstructionLab.com${req.path}`,
+    canonical: `https://sustainableconstructionlab.com${req.path}`,
   };
   next();
 });
