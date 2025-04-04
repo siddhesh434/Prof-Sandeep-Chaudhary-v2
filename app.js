@@ -78,12 +78,36 @@ app.use((req, res, next) => {
 // SEO Routes
 app.get("/robots.txt", (req, res) => {
   res.type("text/plain");
-  res.sendFile(path.join(__dirname, "public", "robots.txt"));
+  const robotsPath = path.join(__dirname, "public", "robots.txt");
+
+  // Get file stats to set Last-Modified header
+  fs.stat(robotsPath, (err, stats) => {
+    if (err) {
+      console.error("Error getting robots.txt stats:", err);
+      return res.sendFile(robotsPath);
+    }
+
+    // Set Last-Modified header based on file modification time
+    res.set("Last-Modified", stats.mtime.toUTCString());
+    res.sendFile(robotsPath);
+  });
 });
 
 app.get("/sitemap.xml", (req, res) => {
   res.type("application/xml");
-  res.sendFile(path.join(__dirname, "public", "sitemap.xml"));
+  const sitemapPath = path.join(__dirname, "public", "sitemap.xml");
+
+  // Get file stats to set Last-Modified header
+  fs.stat(sitemapPath, (err, stats) => {
+    if (err) {
+      console.error("Error getting sitemap stats:", err);
+      return res.sendFile(sitemapPath);
+    }
+
+    // Set Last-Modified header based on file modification time
+    res.set("Last-Modified", stats.mtime.toUTCString());
+    res.sendFile(sitemapPath);
+  });
 });
 
 app.get("/sitemap2.html", (req, res) => res.render("sitemap"));
@@ -98,7 +122,24 @@ app.get("/sitemap.html", (req, res) => {
 // Google Site Verification Route
 app.get("/googlef5c0188d6e6ea5f5.html", (req, res) => {
   res.setHeader("Content-Type", "text/html");
-  res.send("google-site-verification: googlef5c0188d6e6ea5f5.html");
+
+  // Get file stats to set Last-Modified header
+  const verificationPath = path.join(
+    __dirname,
+    "public",
+    "googlef5c0188d6e6ea5f5.html"
+  );
+
+  fs.stat(verificationPath, (err, stats) => {
+    if (err) {
+      console.error("Error getting verification file stats:", err);
+      return res.send("google-site-verification: googlef5c0188d6e6ea5f5.html");
+    }
+
+    // Set Last-Modified header based on file modification time
+    res.set("Last-Modified", stats.mtime.toUTCString());
+    res.send("google-site-verification: googlef5c0188d6e6ea5f5.html");
+  });
 });
 
 // Import routes
