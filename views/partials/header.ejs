@@ -16,14 +16,26 @@
   <meta property="og:image" content="/images/iitlogo.jpg" />
   <link rel="canonical" href="https://sustainableconstructionlab.com" />
   <title>Research Lab - IIT Indore</title>
-  <link href="https://cdn.tailwindcss.com" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <!-- External CSS with fallbacks -->
+  <link href="https://cdn.tailwindcss.com" rel="stylesheet"
+    onerror="this.onerror=null; this.href='/css/tailwind-fallback.css';">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"
+    onerror="this.onerror=null; this.href='/css/fontawesome-fallback.css';">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet"
+    onerror="this.onerror=null; this.href='/css/roboto-fallback.css';">
+
   <!-- Google Site Verification -->
   <meta name="google-site-verification" content="googlef5c0188d6e6ea5f5" />
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/header.css" as="style">
+  <link rel="preload" href="/styles.css" as="style">
 </head>
 
 <body>
-  <link rel="stylesheet" href="header.css" />
+  <link rel="stylesheet" href="/header.css" />
+  <link rel="stylesheet" href="/styles.css" />
   <script>
     // Run this script immediately, before DOM is fully loaded
     (function () {
