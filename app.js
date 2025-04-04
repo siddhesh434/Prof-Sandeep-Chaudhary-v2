@@ -93,6 +93,12 @@ app.get("/sitemap.html", (req, res) => {
   });
 });
 
+// Google Site Verification Route
+app.get("/googlef5c0188d6e6ea5f5.html", (req, res) => {
+  res.setHeader("Content-Type", "text/html");
+  res.send("google-site-verification: googlef5c0188d6e6ea5f5.html");
+});
+
 // Import routes
 const adminRoutes = require("./routes/admin");
 const publicationRoutes = require("./routes/publications");

@@ -132,4 +132,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <!-- Google Verification File -->
+  <url>
+    <loc>http://www.SustainableConstructionLab.com/googlef5c0188d6e6ea5f5.html</loc>
+    <lastmod>2024-04-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
 </urlset> 
