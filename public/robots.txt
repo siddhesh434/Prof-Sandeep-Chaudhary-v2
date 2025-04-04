@@ -1,0 +1,34 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /aboutPI.html
+Allow: /Education.html
+Allow: /keyTechnology.html
+Allow: /contact
+Allow: /research.html
+Allow: /publications.html
+Allow: /extension.html
+Allow: /ongoingResearch.html
+Allow: /ResearchMembers.html
+Allow: /phdOpportunities.html
+Allow: /internships.html
+Allow: /teaching.html
+Allow: /facilities.html
+Allow: /positions.html
+Allow: /Awards.html
+Allow: /Grants.html
+Allow: /Collaboration.html
+Allow: /existingCollab.html
+Allow: /researchCollab.html
+
+# Disallow admin and private routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /temp/
+
+# Sitemap location
+Sitemap: http://www.SustainableConstructionLab.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 10 

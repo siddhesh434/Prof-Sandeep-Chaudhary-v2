@@ -24,6 +24,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(morgan("dev"));
 
+// SEO Middleware - Set common meta tags
+app.use((req, res, next) => {
+  res.locals.seo = {
+    title: "SCORE Research Group - Sustainable Construction Research",
+    description:
+      "Research group led by Prof. Sandeep Chaudhary at IIT Indore, focusing on sustainable construction, structural engineering, and rural development.",
+    keywords:
+      "Sandeep Chaudhary, Sustainable Construction, IIT Indore, Civil Engineering, Research, Structural Engineering",
+    author: "Prof. Sandeep Chaudhary",
+    ogImage: "/images/profile.jpg",
+    canonical: `http://www.SustainableConstructionLab.com${req.path}`,
+  };
+  next();
+});
+
 // View engine setup
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -60,6 +75,24 @@ app.use((req, res, next) => {
   next();
 });
 
+// SEO Routes
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain");
+  res.sendFile(path.join(__dirname, "public", "robots.txt"));
+});
+
+app.get("/sitemap.xml", (req, res) => {
+  res.type("application/xml");
+  res.sendFile(path.join(__dirname, "public", "sitemap.xml"));
+});
+
+app.get("/sitemap.html", (req, res) => {
+  res.render("sitemap", {
+    title: "Sitemap - SCORE Research Group",
+    description: "Complete site structure of SCORE Research Group website",
+  });
+});
+
 // Import routes
 const adminRoutes = require("./routes/admin");
 const publicationRoutes = require("./routes/publications");
@@ -69,8 +102,8 @@ const dissertationRoutes = require("./routes/dissertations");
 const cvRoutes = require("./routes/cv");
 const contactRoutes = require("./routes/contact");
 const controlRoutes = require("./routes/control");
-const ResearchGroup=require("./routes/researchGroup")
-const ExtensionActivity=require("./routes/extension")
+const ResearchGroup = require("./routes/researchGroup");
+const ExtensionActivity = require("./routes/extension");
 //const fileRoutes = require("./routes/files");
 // Use routes
 app.use("/admin", adminRoutes);
@@ -81,8 +114,8 @@ app.use("/", dissertationRoutes);
 app.use("/", cvRoutes);
 app.use("/", contactRoutes);
 app.use("/", controlRoutes);
-app.use('/',ResearchGroup);
-app.use('/',ExtensionActivity);
+app.use("/", ResearchGroup);
+app.use("/", ExtensionActivity);
 
 //app.use("/", fileRoutes);
 // Root routes
@@ -112,6 +145,23 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.error("MongoDB connection error:", error));
+
+// Custom 404 handler - MUST BE AFTER ALL ROUTES
+app.use((req, res, next) => {
+  res.status(404).render("404", {
+    title: "Page Not Found - SCORE Research Group",
+    description: "The page you are looking for could not be found.",
+  });
+});
+
+// Error handler - MUST BE THE LAST MIDDLEWARE
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render("500", {
+    title: "Server Error - SCORE Research Group",
+    description: "An internal server error occurred.",
+  });
+});
 
 // Start server
 app.listen(PORT, () =>

@@ -1,0 +1,84 @@
+<%- include('partials/header') %>
+
+    <div class="page-section">
+        <div class="container">
+            <div class="error-container">
+                <h1 class="section-title">500</h1>
+                <h2>Server Error</h2>
+                <p>We're sorry, but something went wrong on our end. Please try again later or contact us if the problem
+                    persists.</p>
+                <div class="error-actions">
+                    <a href="/" class="btn btn-primary">Return to Homepage</a>
+                    <a href="/contact" class="btn btn-secondary">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .error-container {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .error-container h1 {
+            font-size: 6rem;
+            color: var(--primary-color);
+            margin: 0;
+            line-height: 1;
+        }
+
+        .error-container h2 {
+            color: var(--secondary-color);
+            margin: 1rem 0;
+            font-size: 2rem;
+        }
+
+        .error-container p {
+            color: var(--text-color);
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-bg);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+
+    <%- include('partials/footer') %>
