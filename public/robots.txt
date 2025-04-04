@@ -28,7 +28,7 @@ Disallow: /private/
 Disallow: /temp/
 
 # Sitemap location
-Sitemap: http://www.SustainableConstructionLab.com/sitemap.xml
+Sitemap: https://prof-sandeep-chaudhary-v2.vercel.app/sitemap.xml
 
 # Crawl-delay
 Crawl-delay: 10 
