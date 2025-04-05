@@ -4,7 +4,7 @@ Allow: /index.html
 Allow: /aboutPI.html
 Allow: /Education.html
 Allow: /keyTechnology.html
-Allow: /contact.html
+Allow: /contact
 Allow: /research.html
 Allow: /publications.html
 Allow: /extension.html
