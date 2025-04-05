@@ -540,19 +540,6 @@
             font-size: 1rem;
         }
 
-        .filter-btn {
-            padding: 8px 15px;
-            font-size: 0.9rem;
-        }
-
-        .filters {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            justify-content: flex-start;
-            gap: 8px;
-        }
-
         .resource-meta {
             grid-template-columns: 1fr;
         }
