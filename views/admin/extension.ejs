@@ -119,6 +119,14 @@
                 <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
                     <form id="activityForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input type="hidden" id="activityId">
+                        
+                        <!-- Serial Number field - Added -->
+                        <div class="flex flex-col">
+                            <label class="mb-2 text-gray-700" for="serialNumber">Serial Number</label>
+                            <input type="number" id="serialNumber" name="serialNumber" required
+                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                placeholder="Enter serial number">
+                        </div>
 
                         <div class="flex flex-col">
                             <label class="mb-2 text-gray-700" for="role">Role Category</label>
@@ -155,7 +163,7 @@
                         </div>
 
                         <div class="flex flex-col">
-                            <label class="mb-2 text-gray-700" for="location">Additonal (eg: location)</label>
+                            <label class="mb-2 text-gray-700" for="location">Additional (eg: location)</label>
                             <input type="text" id="location" name="location" required
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
                                 placeholder="Where the activity takes place">
@@ -324,7 +332,7 @@
                 const formElement = document.getElementById('activityForm');
                 formElement.scrollIntoView({ behavior: 'smooth' });
                 // Focus on the first input
-                document.getElementById('role').focus();
+                document.getElementById('serialNumber').focus();
             });
         }
 
@@ -361,7 +369,10 @@
             activitiesGrid.innerHTML = acts.map(activity => `
                 <div class="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1">
                     <div class="bg-blue-50 px-4 py-2 border-b border-blue-100">
-                        <h3 class="font-bold text-lg text-gray-800 line-clamp-2">${escapeHtml(activity.title)}</h3>
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-lg text-gray-800 line-clamp-2">${escapeHtml(activity.title)}</h3>
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">#${escapeHtml(activity.serialNumber || 'N/A')}</span>
+                        </div>
                     </div>
                     <div class="p-4">
                         <div class="mb-2">
@@ -403,7 +414,8 @@
                 const matchesSearch = searchTerm === '' ||
                     activity.title.toLowerCase().includes(searchTerm) ||
                     activity.description.toLowerCase().includes(searchTerm) ||
-                    activity.location.toLowerCase().includes(searchTerm);
+                    activity.location.toLowerCase().includes(searchTerm) ||
+                    (activity.serialNumber && activity.serialNumber.toString().includes(searchTerm));
 
                 const matchesRole = selectedRole === '' ||
                     activity.role === selectedRole;
@@ -443,7 +455,8 @@
 
         // Escape HTML to prevent XSS
         function escapeHtml(unsafe) {
-            return unsafe
+            if (unsafe === undefined || unsafe === null) return '';
+            return String(unsafe)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
@@ -453,12 +466,13 @@
 
         // Validate Form Inputs
         function validateForm() {
+            const serialNumber = document.getElementById('serialNumber').value.trim();
             const role = document.getElementById('role').value.trim();
             const title = document.getElementById('title').value.trim();
             const description = document.getElementById('description').value.trim();
             const location = document.getElementById('location').value.trim();
 
-            if (!role || !title || !description || !location) {
+            if (!serialNumber || !role || !title || !description || !location) {
                 showNotification('All fields are required', 'error');
                 return false;
             }
@@ -488,6 +502,7 @@
             if (!validateForm()) return;
 
             const activityData = {
+                serialNumber: document.getElementById('serialNumber').value.trim(),
                 role: getActualRoleValue(),
                 title: document.getElementById('title').value.trim(),
                 description: document.getElementById('description').value.trim(),
@@ -560,9 +575,10 @@
                 
                 // Set form values
                 document.getElementById('activityId').value = activity._id;
+                document.getElementById('serialNumber').value = activity.serialNumber || '';
                 
                 // Handle role selection including "Other"
-                const standardRoles = ['Academic Service', 'Industry Collaboration', 'Community Outreach'];
+                const standardRoles = ['Government Advisory Roles', 'International Contributions', 'National Contributions'];
                 if (standardRoles.includes(activity.role)) {
                     document.getElementById('role').value = activity.role;
                     otherRoleContainer.classList.add('hidden');
@@ -604,6 +620,7 @@
 
             const id = document.getElementById('activityId').value;
             const activityData = {
+                serialNumber: document.getElementById('serialNumber').value.trim(),
                 role: getActualRoleValue(),
                 title: document.getElementById('title').value.trim(),
                 description: document.getElementById('description').value.trim(),

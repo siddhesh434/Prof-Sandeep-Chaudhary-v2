@@ -65,7 +65,7 @@ router.get('/api/activities/:id', async (req, res) => {
 // POST create a new extension activity
 router.post('/api/activities', async (req, res) => {
   try {
-    const { role, title, description, location } = req.body;
+    const { serialNumber, role, title, description, location } = req.body;
     
     // Validate required fields
     if (!role || !title || !description || !location) {
@@ -73,6 +73,7 @@ router.post('/api/activities', async (req, res) => {
     }
     
     const newActivity = new ExtensionActivity({
+      serialNumber,
       role,
       title,
       description,
@@ -90,7 +91,7 @@ router.post('/api/activities', async (req, res) => {
 // PUT update an extension activity
 router.put('/api/activities/:id', async (req, res) => {
   try {
-    const { role, title, description, location } = req.body;
+    const { serialNumber, role, title, description, location } = req.body;
     
     // Validate required fields
     if (!role || !title || !description || !location) {
@@ -99,7 +100,7 @@ router.put('/api/activities/:id', async (req, res) => {
     
     const updatedActivity = await ExtensionActivity.findByIdAndUpdate(
       req.params.id,
-      { role, title, description, location },
+      { serialNumber, role, title, description, location },
       { new: true, runValidators: true }
     );
     

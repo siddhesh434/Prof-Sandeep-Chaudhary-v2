@@ -44,6 +44,16 @@
           roleGroups[activity.role].push(activity);
         });
         
+        // Sort activities within each role group by serialNumber
+        Object.keys(roleGroups).forEach(role => {
+          roleGroups[role].sort((a, b) => {
+            // Check if serialNumber exists and is a number, if not use 0 as default
+            const aSerial = a.serialNumber !== undefined ? Number(a.serialNumber) : 0;
+            const bSerial = b.serialNumber !== undefined ? Number(b.serialNumber) : 0;
+            return aSerial - bSerial; // Sort in ascending order
+          });
+        });
+        
         // Loop through each role group
         Object.keys(roleGroups).forEach(role => { 
         %>

@@ -9,8 +9,9 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
 });
 
-// Define the Extension Activity schema
+// Define the Extension Activity schema with serial number
 const ExtensionActivitySchema = new mongoose.Schema({
+  serialNumber: Number,  // Add serialNumber field
   role: String,
   title: String,
   description: String,
@@ -386,14 +387,23 @@ const extensionActivityData = [
 ];
 
 // Insert data function
+// Insert data function
 const insertExtensionActivities = async () => {
   try {
     // Delete existing data (optional)
     await ExtensionActivity.deleteMany({});
     console.log("Deleted existing extension activities");
 
+    // Add serial numbers to the data
+    const extensionActivityDataWithSerialNumbers = extensionActivityData.map((activity, index) => {
+      return {
+        ...activity,
+        serialNumber: index + 1  // Add serialNumber starting from 1
+      };
+    });
+
     // Insert new data
-    const result = await ExtensionActivity.insertMany(extensionActivityData);
+    const result = await ExtensionActivity.insertMany(extensionActivityDataWithSerialNumbers);
     console.log(`${result.length} extension activities inserted successfully`);
 
     // Close connection

@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 // Define the Extension Activity schema
 const ExtensionActivitySchema = new mongoose.Schema({
+  serialNumber: {
+    type: Number,
+    required: true
+  },
   role: {
     type: String,
     required: true,
