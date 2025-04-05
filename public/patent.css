@@ -33,7 +33,6 @@ html[data-theme="light"] {
 }
 
 body {
-  font-family: 'Arial', sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
