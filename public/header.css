@@ -13,6 +13,10 @@
 --border-color: #444;
 }
 
+html, body {
+  overflow-y: scroll !important; /* forces scrollbar even if not needed */
+}
+
 /* Light theme */
 html[data-theme="light"] {
 --primary-color: #33B38D;
