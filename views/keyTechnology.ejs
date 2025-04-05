@@ -87,11 +87,22 @@
         </button>
       </div>
 
-      <div class="tech-container" id="tech-container" role="list">
+      <div class="tech-container" id="tech-container" role="list" itemprop="itemListElement">
         <!-- JavaScript will populate this area with technology cards -->
       </div>
     </div>
   </div>
+
+  <!-- Add structured data for the ItemList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Key Technologies by SCORE Research Group",
+    "description": "Explore our cutting-edge technologies that drive innovation and excellence in the industry.",
+    "itemListElement": []
+  }
+  </script>
 
   <%- include('partials/footer') %>
     <script>
@@ -272,6 +283,7 @@
         // Add the schema as a script tag
         const script = document.createElement('script');
         script.type = 'application/ld+json';
+        script.setAttribute('data-product', 'true');
         script.text = JSON.stringify(productSchema);
         card.appendChild(script);
 
@@ -295,6 +307,9 @@
       document.addEventListener("DOMContentLoaded", function () {
         // Initial load of all cards
         filterTechCards();
+
+        // Update the ItemList structured data
+        updateItemListSchema();
 
         // Set up filter buttons - allowing multiple selection
         const filterButtons = document.querySelectorAll(".filter-tag");
@@ -324,6 +339,8 @@
 
             // Update displayed cards
             filterTechCards();
+            // Update the ItemList structured data
+            updateItemListSchema();
           });
         });
 
@@ -339,6 +356,8 @@
 
           // Update displayed cards
           filterTechCards();
+          // Update the ItemList structured data
+          updateItemListSchema();
         });
 
         // Theme toggle functionality (if needed)
@@ -353,4 +372,47 @@
           });
         }
       });
+
+      // Function to update the ItemList structured data
+      function updateItemListSchema() {
+        // Get all active filters
+        const activeFilters = Array.from(document.querySelectorAll(".filter-tag.active"))
+          .map((tag) => tag.getAttribute("data-filter"))
+          .filter((filter) => filter !== "all"); // Exclude 'all' from specific filters
+
+        // Check if "All" button is active or no filters are selected
+        const showAll = document.querySelector('.filter-tag[data-filter="all"].active') !== null || activeFilters.length === 0;
+
+        // Filter technologies based on active filters
+        const filteredTechnologies = showAll
+          ? technologies
+          : technologies.filter(tech => activeFilters.every(filter => tech.tags.includes(filter)));
+
+        // Create the itemListElement array
+        const itemListElements = filteredTechnologies.map((tech, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "Product",
+            "name": tech.title,
+            "description": tech.description,
+            "image": tech.imageUrl
+          }
+        }));
+
+        // Update the ItemList structured data
+        const itemListSchema = {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "Key Technologies by SCORE Research Group",
+          "description": "Explore our cutting-edge technologies that drive innovation and excellence in the industry.",
+          "itemListElement": itemListElements
+        };
+
+        // Find and update the ItemList script tag
+        const itemListScript = document.querySelector('script[type="application/ld+json"]:not([data-product])');
+        if (itemListScript) {
+          itemListScript.textContent = JSON.stringify(itemListSchema);
+        }
+      }
     </script>
