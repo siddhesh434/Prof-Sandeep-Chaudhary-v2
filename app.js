@@ -156,6 +156,7 @@ const ExtensionActivity = require("./routes/extension");
 const fileRoutes = require("./routes/files");
 const eResourceRoutes = require("./routes/eResources");
 const books = require("./routes/book");
+const conferences = require("./routes/conference");
 
 // Use routes
 app.use("/admin", adminRoutes);
@@ -172,6 +173,7 @@ app.use("/", ExtensionActivity);
 app.use("/", fileRoutes);
 app.use("/", eResourceRoutes);
 app.use("/", books);
+app.use("/", conferences);
 
 // Root routes
 app.get("/", (req, res) => res.render("index"));
