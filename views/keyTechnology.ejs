@@ -14,7 +14,28 @@
   <meta property="og:image" content="/images/keyTech/t001.jpg" />
   <link rel="canonical" href="http://www.SustainableConstructionLab.com/keyTechnology.html" />
   <link rel="stylesheet" href="keyTech.css" />
-  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Static structured data for key products -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Naturally Coloured Bi-layered Bricks",
+    "description": "A cost-effective architectural brick developed by upcycling dimensional stone wastes. This was the first technology transferred to the industry from SCORE.",
+    "image": "https://sustainableconstructionlab.com/images/bi-layered-bricks.jpg",
+    "offers": {
+      "@type": "Offer",
+      "availability": "https://schema.org/InStock",
+      "price": "0",
+      "priceCurrency": "INR"
+    },
+    "brand": {
+      "@type": "Brand",
+      "name": "Sustainable Construction Lab"
+    },
+    "category": "Construction Technology"
+  }
+  </script>
 
   <div class="page-section" itemscope itemtype="https://schema.org/ItemList">
     <div class="container">
@@ -89,6 +110,13 @@
             "rural",
             "latest",
           ],
+        },
+        {
+          title: "Naturally Coloured Bi-layered Bricks",
+          description:
+            "A cost-effective architectural brick developed by upcycling dimensional stone wastes. This was the first technology transferred to the industry from SCORE.",
+          imageUrl: "https://sustainableconstructionlab.com/images/bi-layered-bricks.jpg",
+          tags: ["highlighted", "industrial", "building", "waste", "rural"],
         },
         {
           title: "GOBAiR-Fly ash bricks",
@@ -220,6 +248,32 @@
         card.setAttribute("itemtype", "https://schema.org/Product");
         card.setAttribute("role", "listitem");
         card.setAttribute("aria-label", tech.title);
+
+        // Add structured data for the product
+        const productSchema = {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": tech.title,
+          "description": tech.description,
+          "image": tech.imageUrl,
+          "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "price": "0",
+            "priceCurrency": "INR"
+          },
+          "brand": {
+            "@type": "Brand",
+            "name": "Sustainable Construction Lab"
+          },
+          "category": "Construction Technology"
+        };
+
+        // Add the schema as a script tag
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.text = JSON.stringify(productSchema);
+        card.appendChild(script);
 
         card.innerHTML = `
       <div class="tech-image">

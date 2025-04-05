@@ -12,38 +12,47 @@
   <meta property="og:description"
     content="Leading research group at IIT Indore focused on sustainable construction and structural engineering" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://prof-sandeep-chaudhary-v2.vercel.app" />
+  <meta property="og:url" content="https://sustainableconstructionlab.com" />
   <meta property="og:image" content="/images/iitlogo.jpg" />
-  <link rel="canonical" href="https://prof-sandeep-chaudhary-v2.vercel.app" />
+  <link rel="canonical" href="https://sustainableconstructionlab.com" />
   <title>Research Lab - IIT Indore</title>
-  <link href="https://cdn.tailwindcss.com" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <!-- External CSS with fallbacks -->
+  <link href="https://cdn.tailwindcss.com" rel="stylesheet"
+    onerror="this.onerror=null; this.href='/css/tailwind-fallback.css';">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"
+    onerror="this.onerror=null; this.href='/css/fontawesome-fallback.css';">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet"
+    onerror="this.onerror=null; this.href='/css/roboto-fallback.css';">
+
   <!-- Google Site Verification -->
   <meta name="google-site-verification" content="googlef5c0188d6e6ea5f5" />
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/header.css" as="style">
+  <link rel="preload" href="/styles.css" as="style">
 </head>
 
 <body>
-  <link rel="stylesheet" href="header.css" />
+  <link rel="stylesheet" href="/header.css" />
+  <link rel="stylesheet" href="/styles.css" />
   <script>
     // Run this script immediately, before DOM is fully loaded
     (function () {
-      // Apply theme immediately
-      const savedTheme = localStorage.getItem("theme") || "dark";
-      document.documentElement.setAttribute("data-theme", savedTheme);
+      // Apply dark theme by default
+      document.documentElement.setAttribute("data-theme", "dark");
 
       // Pre-set the checkbox state in the HTML
-      if (savedTheme === "dark") {
-        document.write(
-          "<style>#theme-toggle{opacity:0}#theme-toggle.ready{opacity:1}</style>"
-        );
-        // This will run after the DOM is loaded to check the checkbox
-        document.addEventListener("DOMContentLoaded", function () {
-          document.getElementById("theme-toggle").checked = true;
-        });
-      }
+      document.write(
+        "<style>#theme-toggle{opacity:0}#theme-toggle.ready{opacity:1}</style>"
+      );
+
+      // This will run after the DOM is loaded to check the checkbox
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("theme-toggle").checked = true;
+      });
     })();
   </script>
-
 
   <!-- Toggle Button -->
   <button class="xzy1__toggle-btn" onclick="toggleNavbar()" aria-label="Toggle navigation menu">☰ Menu</button>
@@ -163,7 +172,7 @@
 
         <div class="nav-icons">
           <label class="theme-switch" aria-label="Toggle dark mode">
-            <input type="checkbox" id="theme-toggle" />
+            <input type="checkbox" id="theme-toggle" checked />
             <span class="slider">
               <i class="fas fa-sun sun-icon icon" aria-hidden="true"></i>
               <i class="fas fa-moon moon-icon icon" aria-hidden="true"></i>
@@ -179,11 +188,12 @@
     document.addEventListener("DOMContentLoaded", function () {
       const themeToggle = document.getElementById("theme-toggle");
 
-      // Get saved theme
-      const savedTheme = localStorage.getItem("theme") || "dark";
+      // Set dark theme as default
+      document.documentElement.setAttribute("data-theme", "dark");
+      localStorage.setItem("theme", "dark");
 
       // Set the toggle position
-      themeToggle.checked = savedTheme === "dark";
+      themeToggle.checked = true;
 
       // Make toggle visible after its state is set
       setTimeout(() => themeToggle.classList.add("ready"), 50);

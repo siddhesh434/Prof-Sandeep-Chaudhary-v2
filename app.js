@@ -34,7 +34,7 @@ app.use((req, res, next) => {
       "Sandeep Chaudhary, Sustainable Construction, IIT Indore, Civil Engineering, Research, Structural Engineering",
     author: "Prof. Sandeep Chaudhary",
     ogImage: "/images/profile.jpg",
-    canonical: `http://www.SustainableConstructionLab.com${req.path}`,
+    canonical: `https://sustainableconstructionlab.com${req.path}`,
   };
   next();
 });
@@ -153,7 +153,7 @@ const contactRoutes = require("./routes/contact");
 const controlRoutes = require("./routes/control");
 const ResearchGroup = require("./routes/researchGroup");
 const ExtensionActivity = require("./routes/extension");
-//const fileRoutes = require("./routes/files");
+const fileRoutes = require("./routes/files");
 // Use routes
 app.use("/admin", adminRoutes);
 app.use("/", publicationRoutes);
@@ -166,7 +166,7 @@ app.use("/", controlRoutes);
 app.use("/", ResearchGroup);
 app.use("/", ExtensionActivity);
 
-//app.use("/", fileRoutes);
+app.use("/", fileRoutes);
 // Root routes
 app.get("/", (req, res) => res.render("index"));
 app.get("/index.html", (req, res) => res.render("index"));

@@ -1,13 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <%- body %>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary Meta Tags -->
+  <title>
+    <%= typeof title !=='undefined' ? title : 'SCORE Research Group - Sustainable Construction Research' %>
+  </title>
+  <meta name="title"
+    content="<%= typeof title !== 'undefined' ? title : 'SCORE Research Group - Sustainable Construction Research' %>">
+  <meta name="description"
+    content="<%= typeof description !== 'undefined' ? description : 'Research group led by Prof. Sandeep Chaudhary at IIT Indore, focusing on sustainable construction, structural engineering, and rural development.' %>">
+  <meta name="keywords"
+    content="<%= typeof keywords !== 'undefined' ? keywords : 'Sandeep Chaudhary, Sustainable Construction, IIT Indore, Civil Engineering, Research, Structural Engineering' %>">
+  <meta name="author" content="Prof. Sandeep Chaudhary">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url"
+    content="https://sustainableconstructionlab.com<%= typeof path !== 'undefined' ? path : '/' %>">
+  <meta property="og:title"
+    content="<%= typeof title !== 'undefined' ? title : 'SCORE Research Group - Sustainable Construction Research' %>">
+  <meta property="og:description"
+    content="<%= typeof description !== 'undefined' ? description : 'Research group led by Prof. Sandeep Chaudhary at IIT Indore, focusing on sustainable construction, structural engineering, and rural development.' %>">
+  <meta property="og:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : '/images/profile.jpg' %>">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url"
+    content="https://sustainableconstructionlab.com<%= typeof path !== 'undefined' ? path : '/' %>">
+  <meta property="twitter:title"
+    content="<%= typeof title !== 'undefined' ? title : 'SCORE Research Group - Sustainable Construction Research' %>">
+  <meta property="twitter:description"
+    content="<%= typeof description !== 'undefined' ? description : 'Research group led by Prof. Sandeep Chaudhary at IIT Indore, focusing on sustainable construction, structural engineering, and rural development.' %>">
+  <meta property="twitter:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : '/images/profile.jpg' %>">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://sustainableconstructionlab.com<%= typeof path !== 'undefined' ? path : '/' %>">
+
+  <!-- Google Site Verification -->
+  <meta name="google-site-verification" content="googlef5c0188d6e6ea5f5" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "SCORE Research Group",
+      "url": "https://sustainableconstructionlab.com",
+      "logo": "https://sustainableconstructionlab.com/images/score.png",
+      "description": "Sustainable Construction Research group at IIT Indore, led by Prof. Sandeep Chaudhary",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Room No 403, Chromium Building, Department of Civil Engineering",
+        "addressLocality": "Simrol",
+        "addressRegion": "Madhya Pradesh",
+        "postalCode": "453552",
+        "addressCountry": "IN"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-731-660-3256",
+        "contactType": "researcher",
+        "email": "schaudhary@iiti.ac.in"
+      }
+    }
+    </script>
+</head>
+
+<body itemscope itemtype="https://schema.org/WebPage">
+  <%- body %>
+
+    <!-- Scripts -->
     <script src="/js/main.js"></script>
-  </body>
+
+    <!-- Structured Data for Current Page -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "<%= typeof title !== 'undefined' ? title : 'SCORE Research Group - Sustainable Construction Research' %>",
+      "description": "<%= typeof description !== 'undefined' ? description : 'Research group led by Prof. Sandeep Chaudhary at IIT Indore, focusing on sustainable construction, structural engineering, and rural development.' %>",
+      "url": "https://sustainableconstructionlab.com<%= typeof path !== 'undefined' ? path : '/' %>",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "SCORE Research Group",
+        "url": "https://sustainableconstructionlab.com"
+      }
+    }
+    </script>
+</body>
+
 </html>
