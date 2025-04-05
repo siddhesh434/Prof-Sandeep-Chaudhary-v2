@@ -18,7 +18,10 @@
 --card-tag-bg: rgba(90, 185, 168, 0.15);
 --card-tag-text: rgba(255, 255, 255, 0.8);
 }
-
+html {
+    overflow-y: scroll !important;
+  }
+  
 /* Light theme */
 html[data-theme="light"] {
 --primary-color: #3a9d8d;

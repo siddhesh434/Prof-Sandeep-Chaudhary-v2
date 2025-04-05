@@ -1,313 +1,323 @@
 <%- include('partials/header') %>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>eResources - Prof. Sandeep Chaudhary</title>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 
-<!-- SEO Meta Tags -->
-<meta name="description"
-    content="Access eResources from Prof. Sandeep Chaudhary's Sustainable Construction Research Group at IIT Indore. Download research papers, presentations, and educational materials." />
-<meta name="keywords"
-    content="eResources, Sandeep Chaudhary, IIT Indore, Civil Engineering, Sustainable Construction, Structural Engineering, Research Materials, Educational Resources" />
-<meta name="author" content="Prof. Sandeep Chaudhary" />
-<meta name="robots" content="index, follow" />
-<meta property="og:title" content="eResources - Prof. Sandeep Chaudhary's Sustainable Construction Research Group" />
-<meta property="og:description"
-    content="Access and download research papers, presentations, and educational materials from Prof. Sandeep Chaudhary's Sustainable Construction Research Group at IIT Indore." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="http://www.SustainableConstructionLab.com/eResources" />
-<meta property="og:image" content="/images/profile.jpg" />
-<link rel="canonical" href="http://www.SustainableConstructionLab.com/eResources" />
+    <link rel="stylesheet" href="eResources.css">
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eResources - Prof. Sandeep Chaudhary</title>
 
-<!-- Google Fonts -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Access eResources from Prof. Sandeep Chaudhary's Sustainable Construction Research Group at IIT Indore. Download research papers, presentations, and educational materials." />
+    <meta name="keywords"
+        content="eResources, Sandeep Chaudhary, IIT Indore, Civil Engineering, Sustainable Construction, Structural Engineering, Research Materials, Educational Resources" />
+    <meta name="author" content="Prof. Sandeep Chaudhary" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title"
+        content="eResources - Prof. Sandeep Chaudhary's Sustainable Construction Research Group" />
+    <meta property="og:description"
+        content="Access and download research papers, presentations, and educational materials from Prof. Sandeep Chaudhary's Sustainable Construction Research Group at IIT Indore." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://www.SustainableConstructionLab.com/eResources" />
+    <meta property="og:image" content="/images/profile.jpg" />
+    <link rel="canonical" href="http://www.SustainableConstructionLab.com/eResources" />
 
-<link rel="stylesheet" href="eResources.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<div class="header-section">
-    <div class="container1">
-        <h1 class="page-title">e-Resources Library</h1>
-        <p class="page-description">
-            Explore our collection of research papers, presentations, and educational materials from the Sustainable Construction Research Group at IIT Indore.
-        </p>
-    </div>
-</div>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 
-<main class="container1 main-container">
-    <div class="content-wrapper">
-        <div class="search-section">
-            <div class="search-container">
-                <input type="text" id="resourceSearch" placeholder="Search for resources..." aria-label="Search resources">
-                <button id="searchButton" aria-label="Search">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
+    <link rel="stylesheet" href="eResources.css">
 
-            <div class="filters" id="filters">
-                <button class="filter-btn active" data-filter="all">
-                    <i class="fas fa-layer-group"></i> All Resources
-                </button>
-                <button class="filter-btn" data-filter="pdf">
-                    <i class="fas fa-file-pdf"></i> PDF Documents
-                </button>
-                <button class="filter-btn" data-filter="doc">
-                    <i class="fas fa-file-word"></i> Word Documents
-                </button>
-                <button class="filter-btn" data-filter="ppt">
-                    <i class="fas fa-file-powerpoint"></i> Presentations
-                </button>
-                <button class="filter-btn" data-filter="img">
-                    <i class="fas fa-image"></i> Images
-                </button>
-            </div>
-        </div>
-
-        <div id="loading" class="loading">
-            <div class="loading-spinner"></div>
-            <p>Loading resources...</p>
-        </div>
-
-        <div id="resourcesContainer" class="resources-container">
-            <!-- Resources will be loaded here dynamically -->
-        </div>
-
-        <div id="pagination" class="pagination">
-            <!-- Pagination will be added here dynamically -->
-        </div>
-
-        <div id="noResources" class="no-resources" style="display: none;">
-            <i class="fas fa-search"></i>
-            <p>No resources found matching your search criteria.</p>
+    <div class="header-section">
+        <div class="container1">
+            <h1 class="page-title">e-Resources Library</h1>
+            <p class="page-description">
+                Explore our collection of research papers, presentations, and educational materials from the Sustainable
+                Construction Research Group at IIT Indore.
+            </p>
         </div>
     </div>
-</main>
 
-<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-    <i class="fas fa-moon"></i>
-</button>
+    <main class="container1 main-container">
+        <div class="content-wrapper">
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" id="resourceSearch" placeholder="Search for resources..."
+                        aria-label="Search resources">
+                    <button id="searchButton" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
 
-<%- include('partials/footer') %>
+                <div class="filters" id="filters">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-layer-group"></i> All Resources
+                    </button>
+                    <button class="filter-btn" data-filter="pdf">
+                        <i class="fas fa-file-pdf"></i> PDF Documents
+                    </button>
+                    <button class="filter-btn" data-filter="doc">
+                        <i class="fas fa-file-word"></i> Word Documents
+                    </button>
+                    <button class="filter-btn" data-filter="ppt">
+                        <i class="fas fa-file-powerpoint"></i> Presentations
+                    </button>
+                    <button class="filter-btn" data-filter="img">
+                        <i class="fas fa-image"></i> Images
+                    </button>
+                </div>
+            </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const htmlElement = document.documentElement;
-        const themeIcon = themeToggle.querySelector('i');
-        
-        // Check if user has a saved preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            htmlElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        }
-        
-        themeToggle.addEventListener('click', function() {
-            const currentTheme = htmlElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            htmlElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        });
-        
-        function updateThemeIcon(theme) {
-            if (theme === 'light') {
-                themeIcon.className = 'fas fa-moon';
-            } else {
-                themeIcon.className = 'fas fa-sun';
-            }
-        }
-        
-        // Variables for pagination
-        let currentPage = 1;
-        let resourcesPerPage = 12;
-        let allResources = [];
-        let filteredResources = [];
-        
-        // Get all resources from API
-        fetchResources();
-        
-        // Filter buttons functionality
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remove active class from all buttons
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Add active class to clicked button
-                this.classList.add('active');
-                
-                // Apply filter
-                const filterValue = this.getAttribute('data-filter');
-                filterResources(filterValue);
-            });
-        });
-        
-        // Search functionality
-        const searchInput = document.getElementById('resourceSearch');
-        const searchButton = document.getElementById('searchButton');
-        
-        searchButton.addEventListener('click', function() {
-            applySearch();
-        });
-        
-        searchInput.addEventListener('keyup', function(event) {
-            applySearch();
-        });
-        
-        function applySearch() {
-            const searchTerm = searchInput.value.trim().toLowerCase();
-            
-            if (searchTerm === '') {
-                // If search is empty, reset to current filter
-                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-                filterResources(activeFilter);
-                return;
-            }
-            
-            // Filter resources based on search term
-            filteredResources = allResources.filter(resource => {
-                return resource.fileName.toLowerCase().includes(searchTerm) || 
-                       (resource.description && resource.description.toLowerCase().includes(searchTerm)) ||
-                       resource.originalFilename.toLowerCase().includes(searchTerm);
-            });
-            
-            currentPage = 1;
-            renderResources();
-        }
-        
-        // Fetch resources from the API
-        function fetchResources() {
-            const loadingElement = document.getElementById('loading');
-            loadingElement.style.display = 'flex';
-            
-            fetch('/api/eresources')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading resources...</p>
+            </div>
+
+            <div id="resourcesContainer" class="resources-container">
+                <!-- Resources will be loaded here dynamically -->
+            </div>
+
+            <div id="pagination" class="pagination">
+                <!-- Pagination will be added here dynamically -->
+            </div>
+
+            <div id="noResources" class="no-resources" style="display: none;">
+                <i class="fas fa-search"></i>
+                <p>No resources found matching your search criteria.</p>
+            </div>
+        </div>
+    </main>
+
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <%- include('partials/footer') %>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Theme toggle functionality
+                const themeToggle = document.getElementById('themeToggle');
+                const htmlElement = document.documentElement;
+                const themeIcon = themeToggle.querySelector('i');
+
+                // Check if user has a saved preference
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme) {
+                    htmlElement.setAttribute('data-theme', savedTheme);
+                    updateThemeIcon(savedTheme);
+                }
+
+                themeToggle.addEventListener('click', function () {
+                    const currentTheme = htmlElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+                    htmlElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    updateThemeIcon(newTheme);
+                });
+
+                function updateThemeIcon(theme) {
+                    if (theme === 'light') {
+                        themeIcon.className = 'fas fa-moon';
+                    } else {
+                        themeIcon.className = 'fas fa-sun';
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    allResources = data;
-                    filteredResources = [...allResources];
+                }
+
+                // Variables for pagination
+                let currentPage = 1;
+                let resourcesPerPage = 12;
+                let allResources = [];
+                let filteredResources = [];
+
+                // Get all resources from API
+                fetchResources();
+
+                // Filter buttons functionality
+                const filterButtons = document.querySelectorAll('.filter-btn');
+
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        // Remove active class from all buttons
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                        // Add active class to clicked button
+                        this.classList.add('active');
+
+                        // Apply filter
+                        const filterValue = this.getAttribute('data-filter');
+                        filterResources(filterValue);
+                    });
+                });
+
+                // Search functionality
+                const searchInput = document.getElementById('resourceSearch');
+                const searchButton = document.getElementById('searchButton');
+
+                searchButton.addEventListener('click', function () {
+                    applySearch();
+                });
+
+                searchInput.addEventListener('keyup', function (event) {
+                    applySearch();
+                });
+
+                function applySearch() {
+                    const searchTerm = searchInput.value.trim().toLowerCase();
+
+                    if (searchTerm === '') {
+                        // If search is empty, reset to current filter
+                        const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                        filterResources(activeFilter);
+                        return;
+                    }
+
+                    // Filter resources based on search term
+                    filteredResources = allResources.filter(resource => {
+                        return resource.fileName.toLowerCase().includes(searchTerm) ||
+                            (resource.description && resource.description.toLowerCase().includes(searchTerm)) ||
+                            resource.originalFilename.toLowerCase().includes(searchTerm);
+                    });
+
+                    currentPage = 1;
                     renderResources();
-                    loadingElement.style.display = 'none';
-                })
-                .catch(error => {
-                    console.error('Error fetching resources:', error);
-                    loadingElement.style.display = 'none';
-                    document.getElementById('noResources').style.display = 'flex';
-                    document.getElementById('noResources').innerHTML = `
+                }
+
+                // Fetch resources from the API
+                function fetchResources() {
+                    const loadingElement = document.getElementById('loading');
+                    loadingElement.style.display = 'flex';
+
+                    fetch('/api/eresources')
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            allResources = data;
+                            filteredResources = [...allResources];
+                            renderResources();
+                            loadingElement.style.display = 'none';
+                        })
+                        .catch(error => {
+                            console.error('Error fetching resources:', error);
+                            loadingElement.style.display = 'none';
+                            document.getElementById('noResources').style.display = 'flex';
+                            document.getElementById('noResources').innerHTML = `
                         <i class="fas fa-exclamation-triangle"></i>
                         <p>Error loading resources. Please try again later.</p>
                     `;
-                });
-        }
-        
-        // Filter resources based on file type
-        function filterResources(filter) {
-            if (filter === 'all') {
-                filteredResources = [...allResources];
-            } else {
-                filteredResources = allResources.filter(resource => {
-                    const fileType = resource.fileType.toLowerCase();
-                    
-                    switch(filter) {
-                        case 'pdf':
-                            return fileType.includes('pdf');
-                        case 'doc':
-                            return fileType.includes('doc') || fileType.includes('word');
-                        case 'ppt':
-                            return fileType.includes('presentation') || fileType.includes('powerpoint') || fileType.includes('ppt');
-                        case 'img':
-                            return fileType.includes('image') || fileType.includes('jpeg') || fileType.includes('png') || fileType.includes('gif');
-                        default:
-                            return true;
-                    }
-                });
-            }
-            
-            // Reset to first page when filtering
-            currentPage = 1;
-            renderResources();
-        }
-        
-        // Render resources based on current filters and pagination
-        function renderResources() {
-            const resourcesContainer = document.getElementById('resourcesContainer');
-            const noResourcesElement = document.getElementById('noResources');
-            const paginationElement = document.getElementById('pagination');
-            
-            // Check if there are any resources to display
-            if (filteredResources.length === 0) {
-                resourcesContainer.innerHTML = '';
-                noResourcesElement.style.display = 'flex';
-                paginationElement.innerHTML = '';
-                return;
-            }
-            
-            noResourcesElement.style.display = 'none';
-            
-            // Calculate pagination
-            const totalPages = Math.ceil(filteredResources.length / resourcesPerPage);
-            const startIndex = (currentPage - 1) * resourcesPerPage;
-            const endIndex = Math.min(startIndex + resourcesPerPage, filteredResources.length);
-            const currentResources = filteredResources.slice(startIndex, endIndex);
-            
-            // Generate HTML for resources
-            resourcesContainer.innerHTML = '';
-            
-            currentResources.forEach((resource, index) => {
-                const card = document.createElement('div');
-                card.className = 'resource-card';
-                card.style.animationDelay = `${index * 0.05}s`;
-                
-                // Determine file type icon
-                const fileType = resource.fileType.toLowerCase();
-                let iconClass = 'fas fa-file';
-                let fileTypeName = 'Document';
-                
-                if (fileType.includes('pdf')) {
-                    iconClass = 'fas fa-file-pdf';
-                    fileTypeName = 'PDF';
-                } else if (fileType.includes('word') || fileType.includes('doc')) {
-                    iconClass = 'fas fa-file-word';
-                    fileTypeName = 'Word Document';
-                } else if (fileType.includes('presentation') || fileType.includes('powerpoint') || fileType.includes('ppt')) {
-                    iconClass = 'fas fa-file-powerpoint';
-                    fileTypeName = 'Presentation';
-                } else if (fileType.includes('excel') || fileType.includes('sheet') || fileType.includes('xls')) {
-                    iconClass = 'fas fa-file-excel';
-                    fileTypeName = 'Spreadsheet';
-                } else if (fileType.includes('image') || fileType.includes('jpeg') || fileType.includes('png') || fileType.includes('gif')) {
-                    iconClass = 'fas fa-image';
-                    fileTypeName = 'Image';
-                } else if (fileType.includes('zip') || fileType.includes('rar') || fileType.includes('tar') || fileType.includes('gz')) {
-                    iconClass = 'fas fa-file-archive';
-                    fileTypeName = 'Archive';
+                        });
                 }
-                
-                // Format file size
-                const formattedSize = formatFileSize(resource.size);
-                
-                // Format date
-                const formattedDate = new Date(resource.uploadDate).toLocaleDateString('en-US', {
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric'
-                });
-                
-                card.innerHTML = `
-                    <div class="resource-thumbnail">
-                        ${resource.image 
-                            ? `<img src="${resource.image}" alt="${resource.fileName}">`
-                            : `<div class="resource-icon-container"><i class="${iconClass} resource-icon"></i></div>`
+
+                // Filter resources based on file type
+                function filterResources(filter) {
+                    if (filter === 'all') {
+                        filteredResources = [...allResources];
+                    } else {
+                        filteredResources = allResources.filter(resource => {
+                            const fileType = resource.fileType.toLowerCase();
+
+                            switch (filter) {
+                                case 'pdf':
+                                    return fileType.includes('pdf');
+                                case 'doc':
+                                    return fileType.includes('doc') || fileType.includes('word');
+                                case 'ppt':
+                                    return fileType.includes('presentation') || fileType.includes('powerpoint') || fileType.includes('ppt');
+                                case 'img':
+                                    return fileType.includes('image') || fileType.includes('jpeg') || fileType.includes('png') || fileType.includes('gif');
+                                default:
+                                    return true;
+                            }
+                        });
+                    }
+
+                    // Reset to first page when filtering
+                    currentPage = 1;
+                    renderResources();
+                }
+
+                // Render resources based on current filters and pagination
+                function renderResources() {
+                    const resourcesContainer = document.getElementById('resourcesContainer');
+                    const noResourcesElement = document.getElementById('noResources');
+                    const paginationElement = document.getElementById('pagination');
+
+                    // Check if there are any resources to display
+                    if (filteredResources.length === 0) {
+                        resourcesContainer.innerHTML = '';
+                        noResourcesElement.style.display = 'flex';
+                        paginationElement.innerHTML = '';
+                        return;
+                    }
+
+                    noResourcesElement.style.display = 'none';
+
+                    // Calculate pagination
+                    const totalPages = Math.ceil(filteredResources.length / resourcesPerPage);
+                    const startIndex = (currentPage - 1) * resourcesPerPage;
+                    const endIndex = Math.min(startIndex + resourcesPerPage, filteredResources.length);
+                    const currentResources = filteredResources.slice(startIndex, endIndex);
+
+                    // Generate HTML for resources
+                    resourcesContainer.innerHTML = '';
+
+                    currentResources.forEach((resource, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'resource-card';
+                        card.style.animationDelay = `${index * 0.05}s`;
+
+                        // Determine file type icon
+                        const fileType = resource.fileType.toLowerCase();
+                        let iconClass = 'fas fa-file';
+                        let fileTypeName = 'Document';
+
+                        if (fileType.includes('pdf')) {
+                            iconClass = 'fas fa-file-pdf';
+                            fileTypeName = 'PDF';
+                        } else if (fileType.includes('word') || fileType.includes('doc')) {
+                            iconClass = 'fas fa-file-word';
+                            fileTypeName = 'Word Document';
+                        } else if (fileType.includes('presentation') || fileType.includes('powerpoint') || fileType.includes('ppt')) {
+                            iconClass = 'fas fa-file-powerpoint';
+                            fileTypeName = 'Presentation';
+                        } else if (fileType.includes('excel') || fileType.includes('sheet') || fileType.includes('xls')) {
+                            iconClass = 'fas fa-file-excel';
+                            fileTypeName = 'Spreadsheet';
+                        } else if (fileType.includes('image') || fileType.includes('jpeg') || fileType.includes('png') || fileType.includes('gif')) {
+                            iconClass = 'fas fa-image';
+                            fileTypeName = 'Image';
+                        } else if (fileType.includes('zip') || fileType.includes('rar') || fileType.includes('tar') || fileType.includes('gz')) {
+                            iconClass = 'fas fa-file-archive';
+                            fileTypeName = 'Archive';
                         }
+
+                        // Format file size
+                        const formattedSize = formatFileSize(resource.size);
+
+                        // Format date
+                        const formattedDate = new Date(resource.uploadDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        });
+
+                        card.innerHTML = `
+                    <div class="resource-thumbnail">
+                        ${resource.image
+                                ? `<img src="${resource.image}" alt="${resource.fileName}">`
+                                : `<div class="resource-icon-container"><i class="${iconClass} resource-icon"></i></div>`
+                            }
                     </div>
                     <div class="resource-content">
                         <h3 class="resource-title">${resource.fileName}</h3>
@@ -339,102 +349,102 @@
                             </div>
                         </div>
                     `;
-                    
-                    resourcesContainer.appendChild(card);
-                    
-                    // Add event listener to download button
-                    const downloadBtn = card.querySelector('.download-btn');
-                    downloadBtn.addEventListener('click', function() {
-                        const resourceId = this.getAttribute('data-id');
-                        downloadResource(resourceId);
+
+                        resourcesContainer.appendChild(card);
+
+                        // Add event listener to download button
+                        const downloadBtn = card.querySelector('.download-btn');
+                        downloadBtn.addEventListener('click', function () {
+                            const resourceId = this.getAttribute('data-id');
+                            downloadResource(resourceId);
+                        });
                     });
-                });
-                
-                // Generate pagination
-                generatePagination(totalPages);
-            }
-            
-            // Generate pagination controls
-            function generatePagination(totalPages) {
-                const paginationElement = document.getElementById('pagination');
-                
-                if (totalPages <= 1) {
-                    paginationElement.innerHTML = '';
-                    return;
+
+                    // Generate pagination
+                    generatePagination(totalPages);
                 }
-                
-                let paginationHTML = '';
-                
-                // Previous button
-                paginationHTML += `
+
+                // Generate pagination controls
+                function generatePagination(totalPages) {
+                    const paginationElement = document.getElementById('pagination');
+
+                    if (totalPages <= 1) {
+                        paginationElement.innerHTML = '';
+                        return;
+                    }
+
+                    let paginationHTML = '';
+
+                    // Previous button
+                    paginationHTML += `
                     <button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                 `;
-                
-                // Page numbers
-                const maxDisplayedPages = 5;
-                let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
-                let endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
-                
-                if (endPage - startPage + 1 < maxDisplayedPages) {
-                    startPage = Math.max(1, endPage - maxDisplayedPages + 1);
-                }
-                
-                if (startPage > 1) {
-                    paginationHTML += `<button onclick="changePage(1)">1</button>`;
-                    if (startPage > 2) {
-                        paginationHTML += `<button disabled>...</button>`;
+
+                    // Page numbers
+                    const maxDisplayedPages = 5;
+                    let startPage = Math.max(1, currentPage - Math.floor(maxDisplayedPages / 2));
+                    let endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
+
+                    if (endPage - startPage + 1 < maxDisplayedPages) {
+                        startPage = Math.max(1, endPage - maxDisplayedPages + 1);
                     }
-                }
-                
-                for (let i = startPage; i <= endPage; i++) {
-                    paginationHTML += `
+
+                    if (startPage > 1) {
+                        paginationHTML += `<button onclick="changePage(1)">1</button>`;
+                        if (startPage > 2) {
+                            paginationHTML += `<button disabled>...</button>`;
+                        }
+                    }
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        paginationHTML += `
                         <button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
                             ${i}
                         </button>
                     `;
-                }
-                
-                if (endPage < totalPages) {
-                    if (endPage < totalPages - 1) {
-                        paginationHTML += `<button disabled>...</button>`;
                     }
-                    paginationHTML += `<button onclick="changePage(${totalPages})">${totalPages}</button>`;
-                }
-                
-                // Next button
-                paginationHTML += `
+
+                    if (endPage < totalPages) {
+                        if (endPage < totalPages - 1) {
+                            paginationHTML += `<button disabled>...</button>`;
+                        }
+                        paginationHTML += `<button onclick="changePage(${totalPages})">${totalPages}</button>`;
+                    }
+
+                    // Next button
+                    paginationHTML += `
                     <button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 `;
-                
-                paginationElement.innerHTML = paginationHTML;
-                
-                // Add event listeners to pagination buttons
-                window.changePage = function(page) {
-                    currentPage = page;
-                    renderResources();
-                    // Scroll to top of resources container with smooth animation
-                    document.getElementById('resourcesContainer').scrollIntoView({ behavior: 'smooth' });
-                };
-            }
-            
-            // Download resource
-            function downloadResource(id) {
-                window.location.href = `/api/eresources/download/${id}`;
-            }
-            
-            // Helper function to format file size
-            function formatFileSize(bytes) {
-                if (bytes === 0) return '0 Bytes';
-                
-                const k = 1024;
-                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-            }
-        });
-    </script>
+
+                    paginationElement.innerHTML = paginationHTML;
+
+                    // Add event listeners to pagination buttons
+                    window.changePage = function (page) {
+                        currentPage = page;
+                        renderResources();
+                        // Scroll to top of resources container with smooth animation
+                        document.getElementById('resourcesContainer').scrollIntoView({ behavior: 'smooth' });
+                    };
+                }
+
+                // Download resource
+                function downloadResource(id) {
+                    window.location.href = `/api/eresources/download/${id}`;
+                }
+
+                // Helper function to format file size
+                function formatFileSize(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+                    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+                }
+            });
+        </script>

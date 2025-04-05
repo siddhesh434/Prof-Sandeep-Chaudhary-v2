@@ -12,7 +12,10 @@
         --card-bg: #292d36;
         --border-color: #444;
       }
-
+      html {
+        overflow-y: scroll !important;
+      }
+      
       /* Light theme */
       html[data-theme="light"] {
         --primary-color: #3a9d8d;

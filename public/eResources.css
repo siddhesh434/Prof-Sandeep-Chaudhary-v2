@@ -107,6 +107,10 @@
         max-width: 600px;
         margin: 0 auto;
     }
+    html {
+        overflow-y: scroll !important;
+      }
+      
 
     .search-container input {
         width: 100%;
