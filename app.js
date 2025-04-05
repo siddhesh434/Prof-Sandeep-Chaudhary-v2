@@ -157,6 +157,7 @@ const fileRoutes = require("./routes/files");
 const eResourceRoutes = require("./routes/eResources");
 const books = require("./routes/book");
 const conferences = require("./routes/conference");
+const chapters = require("./routes/chapter");
 
 // Use routes
 app.use("/admin", adminRoutes);
@@ -174,6 +175,7 @@ app.use("/", fileRoutes);
 app.use("/", eResourceRoutes);
 app.use("/", books);
 app.use("/", conferences);
+app.use("/", chapters);
 
 // Root routes
 app.get("/", (req, res) => res.render("index"));
