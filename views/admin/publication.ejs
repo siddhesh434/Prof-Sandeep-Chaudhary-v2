@@ -19,6 +19,23 @@
       },
     };
   </script>
+  <style>
+    .animate-fade-in-out {
+      animation: fadeIn 0.3s ease-in;
+    }
+    .fade-out {
+      animation: fadeOut 0.5s ease-out;
+      opacity: 0;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  </style>
 </head>
 
 <body class="bg-gray-100">
@@ -52,6 +69,13 @@
               class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
               <i class="fas fa-users mr-3"></i>
               <span>File Upload</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/eResources.html"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fas fa-file-alt mr-3"></i>
+              <span>e-Resources</span>
             </a>
           </li>
           <li class="mb-1 px-2">
@@ -275,389 +299,488 @@
   </button>
 
   <script>
-    // DOM Elements
-    const form = document.getElementById("publicationForm");
-    const publicationsGrid = document.getElementById("publicationsGrid");
-    const addButton = document.getElementById("addButton");
-    const updateButton = document.getElementById("updateButton");
-    const cancelEditButton = document.getElementById("cancelEditButton");
-    const deleteModal = document.getElementById("deleteModal");
-    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-    const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
-    const searchInput = document.getElementById("searchInput");
-    const yearFilter = document.getElementById("yearFilter");
-    const searchButton = document.getElementById("searchButton");
-    const publicationCount = document.getElementById("publicationCount");
-    const currentYearCount = document.getElementById("currentYearCount");
-    const avgImpactFactor = document.getElementById("avgImpactFactor");
-    const topJournal = document.getElementById("topJournal");
+ // DOM Elements
+const form = document.getElementById("publicationForm");
+const publicationsGrid = document.getElementById("publicationsGrid");
+const addButton = document.getElementById("addButton");
+const updateButton = document.getElementById("updateButton");
+const cancelEditButton = document.getElementById("cancelEditButton");
+const deleteModal = document.getElementById("deleteModal");
+const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+const searchInput = document.getElementById("searchInput");
+const yearFilter = document.getElementById("yearFilter");
+const searchButton = document.getElementById("searchButton");
+const publicationCount = document.getElementById("publicationCount");
+const currentYearCount = document.getElementById("currentYearCount");
+const avgImpactFactor = document.getElementById("avgImpactFactor");
+const topJournal = document.getElementById("topJournal");
 
-    // Mobile menu elements
-    const mobileMenuButton = document.getElementById("mobile-menu-button");
-    const closeSidebarButton = document.getElementById("close-sidebar");
-    const sidebar = document.getElementById("sidebar");
-    const sidebarOverlay = document.getElementById("sidebar-overlay");
-    const mobileFab = document.getElementById("mobile-fab");
+// Mobile menu elements
+const mobileMenuButton = document.getElementById("mobile-menu-button");
+const closeSidebarButton = document.getElementById("close-sidebar");
+const sidebar = document.getElementById("sidebar");
+const sidebarOverlay = document.getElementById("sidebar-overlay");
+const mobileFab = document.getElementById("mobile-fab");
 
-    let currentDeletingPublicationId = null;
-    let publications = []; // Store publications for filtering
+let currentDeletingPublicationId = null;
+let publications = []; // Store publications for filtering
 
-    // Fetch Publications
-    async function fetchPublications() {
-      try {
-        // Simulating a fetch call for demonstration purposes
-        // In a real app, you would fetch from an API
-        const response = await fetch("/publications");
-        publications = await response.json();
-
-        renderPublications(publications);
-        populateYearFilter(publications);
-        updateStats(publications);
-      } catch (error) {
-        console.error("Error fetching publications:", error);
-        alert("Failed to fetch publications. Please try again.");
-      }
+// Fetch Publications
+async function fetchPublications() {
+  try {
+    // Fetch from your actual API endpoint
+    const response = await fetch("/publications");
+    if (!response.ok) {
+      throw new Error("Failed to fetch publications");
     }
+    publications = await response.json();
 
-    // Update Statistics
-    function updateStats(pubs) {
-      publicationCount.textContent = pubs.length;
+    renderPublications(publications);
+    populateYearFilter(publications);
+    updateStats(publications);
+  } catch (error) {
+    console.error("Error fetching publications:", error);
+    alert("Failed to fetch publications. Please try again.");
+  }
+}
 
-      const currentYear = new Date().getFullYear();
-      const thisYearPubs = pubs.filter((pub) => pub.year === currentYear);
-      currentYearCount.textContent = thisYearPubs.length;
+// Update Statistics
+function updateStats(pubs) {
+  publicationCount.textContent = pubs.length;
 
-      const totalImpact = pubs.reduce(
-        (sum, pub) => sum + pub.impactFactor,
-        0
-      );
-      avgImpactFactor.textContent = (totalImpact / pubs.length).toFixed(2);
+  const currentYear = new Date().getFullYear();
+  const thisYearPubs = pubs.filter((pub) => pub.year === currentYear);
+  currentYearCount.textContent = thisYearPubs.length;
 
-      // Find most common journal
-      const journalCounts = {};
-      pubs.forEach((pub) => {
-        journalCounts[pub.journal] = (journalCounts[pub.journal] || 0) + 1;
-      });
+  // Avoid division by zero
+  if (pubs.length > 0) {
+    const totalImpact = pubs.reduce(
+      (sum, pub) => sum + (parseFloat(pub.impactFactor) || 0),
+      0
+    );
+    avgImpactFactor.textContent = (totalImpact / pubs.length).toFixed(2);
+  } else {
+    avgImpactFactor.textContent = "0.00";
+  }
 
-      let maxCount = 0;
-      let maxJournal = "";
-      for (const journal in journalCounts) {
-        if (journalCounts[journal] > maxCount) {
-          maxCount = journalCounts[journal];
-          maxJournal = journal;
-        }
-      }
-
-      topJournal.textContent = maxJournal || "-";
+  // Find most common journal
+  const journalCounts = {};
+  pubs.forEach((pub) => {
+    if (pub.journal) {
+      journalCounts[pub.journal] = (journalCounts[pub.journal] || 0) + 1;
     }
+  });
 
-    // Populate Year Filter Dropdown
-    function populateYearFilter(pubs) {
-      const years = [...new Set(pubs.map((pub) => pub.year))].sort(
-        (a, b) => b - a
-      );
-      yearFilter.innerHTML = '<option value="">All Years</option>';
-      years.forEach((year) => {
-        const option = document.createElement("option");
-        option.value = year;
-        option.textContent = year;
-        yearFilter.appendChild(option);
-      });
+  let maxCount = 0;
+  let maxJournal = "";
+  for (const journal in journalCounts) {
+    if (journalCounts[journal] > maxCount) {
+      maxCount = journalCounts[journal];
+      maxJournal = journal;
     }
+  }
 
-    // Render Publications as Cards
-    function renderPublications(pubs) {
-      publicationsGrid.innerHTML = pubs
-        .map(
-          (publication) => `
-                <div class="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2 text-gray-800 line-clamp-2">${escapeHtml(
-            publication.title
-          )}</h3>
-                        <p class="text-gray-600 text-sm mb-2 italic line-clamp-1">${escapeHtml(
-            publication.author
-          )}</p>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm text-gray-500 line-clamp-1">${escapeHtml(
-            publication.journal
-          )}</span>
-                            <span class="text-sm text-gray-500">${publication.year
-            }</span>
-                        </div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm text-blue-600">Impact Factor: ${publication.impactFactor.toFixed(
-              2
-            )}</span>
-                            ${publication.publicationLink
-              ? `
-                                <a 
-                                    href="${publication.publicationLink}" 
-                                    target="_blank" 
-                                    class="text-sm text-brand-primary hover:underline"
-                                >
-                                    <i class="fas fa-external-link-alt mr-1"></i> View
-                                </a>
-                            `
-              : ""
-            }
-                        </div>
-                        <div class="mt-4 flex space-x-2">
-                            <button 
-                                onclick="editPublication('${publication._id}')"
-                                class="flex-1 bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition duration-300 flex items-center justify-center"
+  topJournal.textContent = maxJournal || "-";
+}
+
+// Populate Year Filter Dropdown
+function populateYearFilter(pubs) {
+  const years = [...new Set(pubs.map((pub) => pub.year))].sort(
+    (a, b) => b - a
+  );
+  yearFilter.innerHTML = '<option value="">All Years</option>';
+  years.forEach((year) => {
+    const option = document.createElement("option");
+    option.value = year;
+    option.textContent = year;
+    yearFilter.appendChild(option);
+  });
+}
+
+// Render Publications as Cards
+function renderPublications(pubs) {
+  if (pubs.length === 0) {
+    publicationsGrid.innerHTML = `
+      <div class="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 text-center p-8">
+        <p class="text-gray-500">No publications found. Add your first publication using the form above.</p>
+      </div>
+    `;
+    return;
+  }
+
+  publicationsGrid.innerHTML = pubs
+    .map(
+      (publication) => `
+            <div class="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2 text-gray-800 line-clamp-2">${escapeHtml(
+                      publication.title
+                    )}</h3>
+                    <p class="text-gray-600 text-sm mb-2 italic line-clamp-1">${escapeHtml(
+                      publication.author
+                    )}</p>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-500 line-clamp-1">${escapeHtml(
+                          publication.journal
+                        )}</span>
+                        <span class="text-sm text-gray-500">${publication.year}</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-blue-600">Impact Factor: ${(
+                          parseFloat(publication.impactFactor) || 0
+                        ).toFixed(2)}</span>
+                        ${
+                          publication.publicationLink
+                            ? `
+                            <a 
+                                href="${publication.publicationLink}" 
+                                target="_blank" 
+                                class="text-sm text-brand-primary hover:underline"
                             >
-                                <i class="fas fa-edit mr-1"></i> Edit
-                            </button>
-                            <button 
-                                onclick="confirmDelete('${publication._id}')"
-                                class="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-300 flex items-center justify-center"
-                            >
-                                <i class="fas fa-trash-alt mr-1"></i> Delete
-                            </button>
-                        </div>
+                                <i class="fas fa-external-link-alt mr-1"></i> View
+                            </a>
+                        `
+                            : ""
+                        }
+                    </div>
+                    <div class="mt-4 flex space-x-2">
+                        <button 
+                            onclick="editPublication('${publication._id}')"
+                            class="flex-1 bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition duration-300 flex items-center justify-center"
+                        >
+                            <i class="fas fa-edit mr-1"></i> Edit
+                        </button>
+                        <button 
+                            onclick="confirmDelete('${publication._id}')"
+                            class="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-300 flex items-center justify-center"
+                        >
+                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                        </button>
                     </div>
                 </div>
-            `
-        )
-        .join("");
+            </div>
+        `
+    )
+    .join("");
+}
+
+// Search and Filter Publications
+function searchAndFilterPublications() {
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  const selectedYear = yearFilter.value;
+
+  const filteredPublications = publications.filter((pub) => {
+    const matchesSearch =
+      searchTerm === "" ||
+      (pub.title && pub.title.toLowerCase().includes(searchTerm)) ||
+      (pub.author && pub.author.toLowerCase().includes(searchTerm)) ||
+      (pub.journal && pub.journal.toLowerCase().includes(searchTerm));
+
+    const matchesYear =
+      selectedYear === "" || pub.year.toString() === selectedYear;
+
+    return matchesSearch && matchesYear;
+  });
+
+  renderPublications(filteredPublications);
+}
+
+// Attach search event listeners
+searchButton.addEventListener("click", searchAndFilterPublications);
+searchInput.addEventListener("input", searchAndFilterPublications);
+yearFilter.addEventListener("change", searchAndFilterPublications);
+
+// Escape HTML to prevent XSS
+function escapeHtml(unsafe) {
+  if (!unsafe) return "";
+  return unsafe
+    .toString()
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Show success message
+function showSuccessMessage(message) {
+  // Create success message element
+  const successAlert = document.createElement('div');
+  successAlert.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 animate-fade-in-out';
+  successAlert.innerHTML = `
+    <div class="flex items-center">
+      <i class="fas fa-check-circle mr-2"></i>
+      <span>${message}</span>
+    </div>
+  `;
+  
+  // Add to body
+  document.body.appendChild(successAlert);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    successAlert.classList.add('fade-out');
+    setTimeout(() => {
+      document.body.removeChild(successAlert);
+    }, 500);
+  }, 3000);
+}
+
+// Add this CSS to your <head> section:
+// <style>
+//   .animate-fade-in-out {
+//     animation: fadeIn 0.3s ease-in;
+//   }
+//   .fade-out {
+//     animation: fadeOut 0.5s ease-out;
+//     opacity: 0;
+//   }
+//   @keyframes fadeIn {
+//     from { opacity: 0; transform: translateY(-20px); }
+//     to { opacity: 1; transform: translateY(0); }
+//   }
+//   @keyframes fadeOut {
+//     from { opacity: 1; }
+//     to { opacity: 0; }
+//   }
+// </style>
+
+// Validate Form Inputs
+function validateForm() {
+  const author = document.getElementById("author").value.trim();
+  const title = document.getElementById("title").value.trim();
+  const journal = document.getElementById("journal").value.trim();
+  const year = document.getElementById("year").value;
+  const publicationLink = document.getElementById("publicationLink").value.trim();
+
+  if (!author || !title || !journal || !year) {
+    alert("Please fill out all required fields");
+    return false;
+  }
+
+  if (year < 1900 || year > new Date().getFullYear()) {
+    alert(`Year must be between 1900 and ${new Date().getFullYear()}`);
+    return false;
+  }
+
+  if (publicationLink && !publicationLink.startsWith("http")) {
+    alert("Publication link must be a valid URL");
+    return false;
+  }
+
+  return true;
+}
+
+// Add Publication
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if (!validateForm()) return;
+
+  const publicationData = {
+    author: document.getElementById("author").value.trim(),
+    title: document.getElementById("title").value.trim(),
+    journal: document.getElementById("journal").value.trim(),
+    year: parseInt(document.getElementById("year").value),
+    volumePages: document.getElementById("volumePages").value.trim(),
+    publicationLink: document.getElementById("publicationLink").value.trim(),
+    impactFactor: parseFloat(document.getElementById("impactFactor").value) || 0,
+  };
+
+  try {
+    const response = await fetch("/publications", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(publicationData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to add publication");
     }
 
-    // Search and Filter Publications
-    function searchAndFilterPublications() {
-      const searchTerm = searchInput.value.toLowerCase().trim();
-      const selectedYear = yearFilter.value;
+    await fetchPublications();
+    form.reset();
+    
+    // Show success message
+    showSuccessMessage("Publication added successfully!");
+    
+  } catch (error) {
+    console.error("Error adding publication:", error);
+    alert(error.message);
+  }
+});
 
-      const filteredPublications = publications.filter((pub) => {
-        const matchesSearch =
-          searchTerm === "" ||
-          pub.title.toLowerCase().includes(searchTerm) ||
-          pub.author.toLowerCase().includes(searchTerm) ||
-          pub.journal.toLowerCase().includes(searchTerm);
+// Edit Publication
+window.editPublication = function (id) {
+  if (!id) {
+    console.error("No publication ID provided for editing");
+    return;
+  }
 
-        const matchesYear =
-          selectedYear === "" || pub.year.toString() === selectedYear;
+  const publication = publications.find((pub) => pub._id === id);
 
-        return matchesSearch && matchesYear;
-      });
+  if (!publication) {
+    console.error(`Publication with ID ${id} not found`);
+    return;
+  }
 
-      renderPublications(filteredPublications);
+  document.getElementById("author").value = publication.author || "";
+  document.getElementById("title").value = publication.title || "";
+  document.getElementById("journal").value = publication.journal || "";
+  document.getElementById("year").value = publication.year || "";
+  document.getElementById("volumePages").value = publication.volumePages || "";
+  document.getElementById("publicationLink").value = publication.publicationLink || "";
+  document.getElementById("impactFactor").value = publication.impactFactor || "";
+  document.getElementById("publicationId").value = publication._id;
+
+  addButton.classList.add("hidden");
+  updateButton.classList.remove("hidden");
+  cancelEditButton.classList.remove("hidden");
+  
+  // Scroll to form
+  form.scrollIntoView({ behavior: "smooth" });
+};
+
+// Cancel Edit
+cancelEditButton.addEventListener("click", () => {
+  form.reset();
+  document.getElementById("publicationId").value = "";
+  addButton.classList.remove("hidden");
+  updateButton.classList.add("hidden");
+  cancelEditButton.classList.add("hidden");
+});
+
+// Update Publication
+updateButton.addEventListener("click", async () => {
+  if (!validateForm()) return;
+
+  const id = document.getElementById("publicationId").value;
+  
+  if (!id) {
+    console.error("No publication ID found for update");
+    alert("Error: Publication ID not found");
+    return;
+  }
+
+  const publicationData = {
+    author: document.getElementById("author").value.trim(),
+    title: document.getElementById("title").value.trim(),
+    journal: document.getElementById("journal").value.trim(),
+    year: parseInt(document.getElementById("year").value),
+    volumePages: document.getElementById("volumePages").value.trim(),
+    publicationLink: document.getElementById("publicationLink").value.trim(),
+    impactFactor: parseFloat(document.getElementById("impactFactor").value) || 0,
+  };
+
+  try {
+    console.log(`Updating publication with ID: ${id}`);
+    
+    const response = await fetch(`/publications/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(publicationData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to update publication");
     }
 
-    // Attach search event listeners
-    searchButton.addEventListener("click", searchAndFilterPublications);
-    searchInput.addEventListener("input", searchAndFilterPublications);
-    yearFilter.addEventListener("change", searchAndFilterPublications);
+    await fetchPublications();
+    form.reset();
+    document.getElementById("publicationId").value = "";
+    addButton.classList.remove("hidden");
+    updateButton.classList.add("hidden");
+    cancelEditButton.classList.add("hidden");
+    
+    // Show success message
+    showSuccessMessage("Publication updated successfully!");
+    
+  } catch (error) {
+    console.error("Error updating publication:", error);
+    alert(error.message);
+  }
+});
 
-    // Escape HTML to prevent XSS
-    function escapeHtml(unsafe) {
-      return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+// Confirm Delete
+window.confirmDelete = function(id) {
+  if (!id) {
+    console.error("No publication ID provided for deletion");
+    return;
+  }
+  
+  console.log(`Confirming deletion of publication with ID: ${id}`);
+  currentDeletingPublicationId = id;
+  deleteModal.classList.remove("hidden");
+  deleteModal.classList.add("flex");
+};
+
+// Cancel Delete
+cancelDeleteBtn.addEventListener("click", () => {
+  deleteModal.classList.add("hidden");
+  deleteModal.classList.remove("flex");
+  currentDeletingPublicationId = null;
+});
+
+// Confirm Delete Action
+confirmDeleteBtn.addEventListener("click", async () => {
+  if (!currentDeletingPublicationId) {
+    console.error("No publication ID to delete");
+    return;
+  }
+
+  try {
+    console.log(`Deleting publication with ID: ${currentDeletingPublicationId}`);
+    
+    const response = await fetch(`/publications/${currentDeletingPublicationId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to delete publication");
     }
 
-    // Validate Form Inputs
-    function validateForm() {
-      const author = document.getElementById("author").value.trim();
-      const title = document.getElementById("title").value.trim();
-      const journal = document.getElementById("journal").value.trim();
-      const year = document.getElementById("year").value;
-      const publicationLink = document
-        .getElementById("publicationLink")
-        .value.trim();
+    await fetchPublications();
+    deleteModal.classList.add("hidden");
+    deleteModal.classList.remove("flex");
+    currentDeletingPublicationId = null;
+    
+    // Show success message
+    showSuccessMessage("Publication deleted successfully!");
+    
+  } catch (error) {
+    console.error("Error deleting publication:", error);
+    alert(error.message);
+  }
+});
 
-      if (year < 1900 || year > new Date().getFullYear()) {
-        alert(`Year must be between 1900 and ${new Date().getFullYear()}`);
-        return false;
-      }
+// Initial fetch
+fetchPublications();
 
-      if (publicationLink && !publicationLink.startsWith("http")) {
-        alert("Publication link must be a valid URL");
-        return false;
-      }
+// Mobile sidebar toggle functionality
+mobileMenuButton.addEventListener("click", () => {
+  sidebar.classList.remove("-translate-x-full");
+  sidebarOverlay.classList.remove("hidden");
+});
 
-      return true;
-    }
+closeSidebarButton.addEventListener("click", () => {
+  sidebar.classList.add("-translate-x-full");
+  sidebarOverlay.classList.add("hidden");
+});
 
-    // Add Publication
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+sidebarOverlay.addEventListener("click", () => {
+  sidebar.classList.add("-translate-x-full");
+  sidebarOverlay.classList.add("hidden");
+});
 
-      if (!validateForm()) return;
-
-      const publicationData = {
-        author: document.getElementById("author").value.trim(),
-        title: document.getElementById("title").value.trim(),
-        journal: document.getElementById("journal").value.trim(),
-        year: parseInt(document.getElementById("year").value),
-        volumePages: document.getElementById("volumePages").value.trim(),
-        publicationLink: document
-          .getElementById("publicationLink")
-          .value.trim(),
-        impactFactor:
-          parseFloat(document.getElementById("impactFactor").value) || 0,
-      };
-
-      try {
-        // For demonstration, we'll add to the local array
-        // In a real app, you would send to an API
-        publicationData._id = (publications.length + 1).toString();
-        publications.push(publicationData);
-
-        renderPublications(publications);
-        populateYearFilter(publications);
-        updateStats(publications);
-        form.reset();
-      } catch (error) {
-        console.error("Error adding publication:", error);
-        alert(error.message);
-      }
-    });
-
-    // Edit Publication
-    window.editPublication = function (id) {
-      const publication = publications.find((pub) => pub._id === id);
-
-      if (publication) {
-        document.getElementById("author").value = publication.author;
-        document.getElementById("title").value = publication.title;
-        document.getElementById("journal").value = publication.journal;
-        document.getElementById("year").value = publication.year;
-        document.getElementById("volumePages").value =
-          publication.volumePages || "";
-        document.getElementById("publicationLink").value =
-          publication.publicationLink || "";
-        document.getElementById("impactFactor").value =
-          publication.impactFactor || "";
-        document.getElementById("publicationId").value = publication._id;
-
-        addButton.classList.add("hidden");
-        updateButton.classList.remove("hidden");
-        cancelEditButton.classList.remove("hidden");
-      }
-    };
-
-    // Cancel Edit
-    cancelEditButton.addEventListener("click", () => {
-      form.reset();
-      addButton.classList.remove("hidden");
-      updateButton.classList.add("hidden");
-      cancelEditButton.classList.add("hidden");
-    });
-
-    // Update Publication
-    updateButton.addEventListener("click", async () => {
-      if (!validateForm()) return;
-
-      const id = document.getElementById("publicationId").value;
-      const publicationData = {
-        author: document.getElementById("author").value.trim(),
-        title: document.getElementById("title").value.trim(),
-        journal: document.getElementById("journal").value.trim(),
-        year: document.getElementById("year").value,
-        volumePages: document.getElementById("volumePages").value.trim(),
-        publicationLink: document
-          .getElementById("publicationLink")
-          .value.trim(),
-        impactFactor: document.getElementById("impactFactor").value || 0,
-      };
-
-      try {
-        const response = await fetch(`/publications/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(publicationData),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.message || "Failed to update publication"
-          );
-        }
-
-        await fetchPublications();
-        form.reset();
-        addButton.classList.remove("hidden");
-        updateButton.classList.add("hidden");
-        cancelEditButton.classList.add("hidden");
-      } catch (error) {
-        console.error("Error updating publication:", error);
-        alert(error.message);
-      }
-    });
-
-    // Confirm Delete
-    function confirmDelete(id) {
-      currentDeletingPublicationId = id;
-      deleteModal.classList.remove("hidden");
-      deleteModal.classList.add("flex");
-    }
-
-    // Cancel Delete
-    cancelDeleteBtn.addEventListener("click", () => {
-      deleteModal.classList.add("hidden");
-      deleteModal.classList.remove("flex");
-      currentDeletingPublicationId = null;
-    });
-
-    // Confirm Delete Action
-    confirmDeleteBtn.addEventListener("click", async () => {
-      if (!currentDeletingPublicationId) return;
-
-      try {
-        const response = await fetch(
-          `/publications/${currentDeletingPublicationId}`,
-          {
-            method: "DELETE",
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.message || "Failed to delete publication"
-          );
-        }
-
-        await fetchPublications();
-        deleteModal.classList.add("hidden");
-        deleteModal.classList.remove("flex");
-        currentDeletingPublicationId = null;
-      } catch (error) {
-        console.error("Error deleting publication:", error);
-        alert(error.message);
-      }
-    });
-
-    // Initial fetch
-    fetchPublications();
-
-    // Mobile sidebar toggle functionality
-    mobileMenuButton.addEventListener("click", () => {
-      sidebar.classList.remove("-translate-x-full");
-      sidebarOverlay.classList.remove("hidden");
-    });
-
-    closeSidebarButton.addEventListener("click", () => {
-      sidebar.classList.add("-translate-x-full");
-      sidebarOverlay.classList.add("hidden");
-    });
-
-    sidebarOverlay.addEventListener("click", () => {
-      sidebar.classList.add("-translate-x-full");
-      sidebarOverlay.classList.add("hidden");
-    });
-
-    // Mobile FAB functionality
-    mobileFab.addEventListener("click", () => {
-      // Scroll to the publication form
-      const publicationForm = document.getElementById("publicationForm");
-      publicationForm.scrollIntoView({ behavior: "smooth" });
-    });
+// Mobile FAB functionality
+mobileFab.addEventListener("click", () => {
+  // Scroll to the publication form
+  form.scrollIntoView({ behavior: "smooth" });
+});
   </script>
 </body>
 
