@@ -168,8 +168,8 @@ app.use("/", dissertationRoutes);
 app.use("/", cvRoutes);
 app.use("/", contactRoutes);
 app.use("/", controlRoutes);
-app.use("/", ResearchGroup);
 app.use("/", ExtensionActivity);
+app.use("/", ResearchGroup);
 
 app.use("/", fileRoutes);
 app.use("/", eResourceRoutes);
