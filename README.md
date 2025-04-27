@@ -71,7 +71,8 @@ The website is deployed on Microsoft Azure with domain setup via GoDaddy. Deploy
 
 ## Contributors
 
-- [Your Name](https://github.com/yourusername) - Lead Developer
+- [Adi Jain](https://github.com/adijain123) - Lead Developer
+- [Siddhesh Waje](https://github.com/siddhesh434) - Lead Developer
 
 ## License
 
