@@ -76,7 +76,7 @@ The website is deployed on Microsoft Azure with domain setup via GoDaddy. Deploy
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 
