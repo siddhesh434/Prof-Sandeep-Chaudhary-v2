@@ -27,17 +27,12 @@ Follow these steps to set up the project locally:
      ```
    - Replace the placeholders with your actual MongoDB credentials and a strong session secret
 
-4. **Initialize the modules**
+4. **Start the development server**
    ```
-   npm install
-   ```
-
-5. **Start the development server**
-   ```
-   npm run dev
+   node app.js
    ```
 
-6. **Access the application**
+5. **Access the application**
    - Open your browser and navigate to `http://localhost:3010`
    - The admin panel is available at `http://localhost:3010/admin`
 
