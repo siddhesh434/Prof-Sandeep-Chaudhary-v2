@@ -248,7 +248,7 @@
 <%- include('partials/footer') %>
 
 <script>
- document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     // Initialize pagination and search for each section
     initializeSection("awarded", "awarded-body", "student-row");
     initializeSection("progress", "progress-body", "student-row");
@@ -269,7 +269,19 @@
         if (!tbody || !paginationControls) return;
 
         // Get all rows
-        const allRows = tbody.querySelectorAll(`.${rowClass}`);
+        const allRows = Array.from(tbody.querySelectorAll(`.${rowClass}`));
+        
+        // Sort rows by year in descending order (most recent first)
+        allRows.sort((a, b) => {
+            const yearA = parseInt(a.querySelector('td:nth-child(3)').textContent);
+            const yearB = parseInt(b.querySelector('td:nth-child(3)').textContent);
+            return yearB - yearA; // Descending order
+        });
+        
+        // Reappend rows in sorted order
+        allRows.forEach(row => {
+            tbody.appendChild(row);
+        });
 
         // Variables
         let currentPage = 1;
@@ -290,11 +302,12 @@
             // Previous button
             const prevBtn = document.createElement("button");
             prevBtn.innerHTML = "&laquo;";
+            prevBtn.disabled = currentPage === 1;
             prevBtn.addEventListener("click", () => {
                 if (currentPage > 1) {
                     currentPage--;
                     showPage(currentPage);
-                    updatePaginationButtons();
+                    updatePagination(); // Update the entire pagination control
                 }
             });
             paginationControls.appendChild(prevBtn);
@@ -305,47 +318,77 @@
             let endPage = Math.min(pageCount, startPage + maxVisibleButtons - 1);
 
             // Adjust start page if we're near the end
-            if (endPage - startPage + 1 < maxVisibleButtons) {
+            if (endPage - startPage + 1 < maxVisibleButtons && startPage > 1) {
                 startPage = Math.max(1, endPage - maxVisibleButtons + 1);
             }
 
+            // First page button (if not already showing)
+            if (startPage > 1) {
+                const firstPageBtn = document.createElement("button");
+                firstPageBtn.textContent = "1";
+                firstPageBtn.addEventListener("click", () => {
+                    currentPage = 1;
+                    showPage(currentPage);
+                    updatePagination();
+                });
+                paginationControls.appendChild(firstPageBtn);
+                
+                // Ellipsis after first page (if needed)
+                if (startPage > 2) {
+                    const ellipsis = document.createElement("span");
+                    ellipsis.textContent = "...";
+                    ellipsis.className = "pagination-ellipsis";
+                    paginationControls.appendChild(ellipsis);
+                }
+            }
+
+            // Generate page buttons
             for (let i = startPage; i <= endPage; i++) {
                 const pageBtn = document.createElement("button");
                 pageBtn.textContent = i;
-                pageBtn.dataset.page = i;
+                if (i === currentPage) {
+                    pageBtn.classList.add("active");
+                }
                 pageBtn.addEventListener("click", () => {
-                    currentPage = parseInt(i);
+                    currentPage = i;
                     showPage(currentPage);
-                    updatePaginationButtons();
+                    updatePagination();
                 });
                 paginationControls.appendChild(pageBtn);
+            }
+
+            // Last page button (if not already showing)
+            if (endPage < pageCount) {
+                // Add ellipsis before last page (if needed)
+                if (endPage < pageCount - 1) {
+                    const ellipsis = document.createElement("span");
+                    ellipsis.textContent = "...";
+                    ellipsis.className = "pagination-ellipsis";
+                    paginationControls.appendChild(ellipsis);
+                }
+                
+                const lastPageBtn = document.createElement("button");
+                lastPageBtn.textContent = pageCount;
+                lastPageBtn.addEventListener("click", () => {
+                    currentPage = pageCount;
+                    showPage(currentPage);
+                    updatePagination();
+                });
+                paginationControls.appendChild(lastPageBtn);
             }
 
             // Next button
             const nextBtn = document.createElement("button");
             nextBtn.innerHTML = "&raquo;";
+            nextBtn.disabled = currentPage === pageCount;
             nextBtn.addEventListener("click", () => {
                 if (currentPage < pageCount) {
                     currentPage++;
                     showPage(currentPage);
-                    updatePaginationButtons();
+                    updatePagination(); // Update the entire pagination control
                 }
             });
             paginationControls.appendChild(nextBtn);
-
-            updatePaginationButtons();
-        }
-
-        // Update active button
-        function updatePaginationButtons() {
-            const buttons = paginationControls.querySelectorAll("button");
-            buttons.forEach((button) => {
-                if (button.dataset.page == currentPage) {
-                    button.classList.add("active");
-                } else {
-                    button.classList.remove("active");
-                }
-            });
         }
 
         // Show current page
