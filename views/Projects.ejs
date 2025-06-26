@@ -89,8 +89,7 @@
 
 <% projects
   .filter(project => project.projectType === "Sponsored Research Project" && project.role === "As Principal Investigator")
-  .sort((a, b) => Number(String(b.year).slice(-4) -
-  Number(String(a.year).slice(-4))) // sort by year (descending)
+  .sort((a, b) => Number(String(b.year).slice(-4) - Number(String(a.year).slice(-4))) // sort by year (descending)
   .forEach((project, index) => { %>
 <% }) %>
 
@@ -136,6 +135,7 @@
                   </thead>
                   <tbody id="pi-body">
                     <% projects .filter(project=> project.projectType === "Sponsored Research Project" && project.role
+                    .sort((a, b) => Number(String(b.year).slice(-4) - Number(String(a.year).slice(-4))) // sort by year (descending)
                       ===
                       "As Principal Investigator"
                       ) .forEach((project, index) => { %>
