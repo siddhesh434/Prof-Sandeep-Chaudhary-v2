@@ -89,7 +89,8 @@
 
 <% projects
   .filter(project => project.projectType === "Sponsored Research Project" && project.role === "As Principal Investigator")
-  .sort((a, b) => b.year - a.year) // sort by year (descending)
+  .sort((a, b) => Number(String(b.year).slice(-4) -
+  Number(String(a.year).slice(-4))) // sort by year (descending)
   .forEach((project, index) => { %>
 <% }) %>
 
