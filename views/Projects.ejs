@@ -86,13 +86,6 @@
         </div>
         <% } %>
 
-
-<!-- <% projects
-  .filter(project => project.projectType === "Sponsored Research Project" && project.role === "As Principal Investigator")
-  .sort((a, b) => Number(String(b.year).slice(-4) - Number(String(a.year).slice(-4))) // sort by year (descending)
-  .forEach((project, index) => { %>
-<% }) %> -->
-
           <!-- Sponsored Research Projects Section -->
           <div class="project-section">
             <div class="section-title">
@@ -134,9 +127,7 @@
                     </tr>
                   </thead>
                   <tbody id="pi-body">
-                    <% projects .filter(project=> project.projectType === "Sponsored Research Project" && project.role
-                     ===
-                      "As Principal Investigator"
+                    <% projects .filter(project=> project.projectType === "Sponsored Research Project" && project.role === "As Principal Investigator"
                       ) .forEach((project, index) => { %>
                       <tr class="pi-row" data-index="<%= index %>">
                         <td>
