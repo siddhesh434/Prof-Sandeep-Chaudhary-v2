@@ -33,6 +33,7 @@
             class="fab fa-google"></i> Google Scholar</a>
       </div>
 
+
       <% if (settings.showProjects) { %>
         <!-- Project Summary -->
         <div class="project-summary">
@@ -84,6 +85,13 @@
           </div>
         </div>
         <% } %>
+
+
+<% projects
+  .filter(project => project.projectType === "Sponsored Research Project" && project.role === "As Principal Investigator")
+  .sort((a, b) => b.year - a.year) // sort by year (descending)
+  .forEach((project, index) => { %>
+<% }) %>
 
           <!-- Sponsored Research Projects Section -->
           <div class="project-section">
