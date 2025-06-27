@@ -58,7 +58,6 @@
             class="fab fa-google"></i> Google Scholar</a>
       </div>
 
-<<<<<<< HEAD
       <%
         // Sort projects by end year for each category
         const piProjects = projects
@@ -151,8 +150,6 @@
             return getEndYear(b.year) - getEndYear(a.year);
           });
       %>
-=======
->>>>>>> 2331eb7be05a8ddace2de1af76a1033286464328
 
       <% if (settings.showProjects) { %>
         <!-- Project Summary -->
@@ -215,290 +212,12 @@
               </select>
               <span>entries</span>
             </div>
-<<<<<<< HEAD
             <div class="search-container">
               <input type="text" id="pi-search" placeholder="Search Principal Investigator projects..."
                 class="search-input" />
               <button id="search-btn-pi" class="search-button">
                 <i class="fas fa-search"></i>
               </button>
-=======
-
-            <!-- Principal Investigator Projects -->
-            <div class="role-subsection">
-              <h3>As Principal Investigator</h3>
-              <div class="table-controls">
-                <div class="entries-selector">
-                  <label for="entries-select-pi">Show</label>
-                  <select id="entries-select-pi" class="entries-select">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                  </select>
-                  <span>entries</span>
-                </div>
-                <div class="search-container">
-                  <input type="text" id="pi-search" placeholder="Search Principal Investigator projects..."
-                    class="search-input" />
-                  <button id="search-btn-pi" class="search-button">
-                    <i class="fas fa-search"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="table-wrapper">
-                <table class="project-table" id="pi-table">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Year</th>
-                      <th>Funded</th>
-                      <th>Collaborator</th>
-                    </tr>
-                  </thead>
-                  <tbody id="pi-body">
-                    <% projects .filter(project=> project.projectType === "Sponsored Research Project" && project.role === "As Principal Investigator"
-                      ) .forEach((project, index) => { %>
-                      <tr class="pi-row" data-index="<%= index %>">
-                        <td>
-                          <%= project.title %>
-                        </td>
-                        <td>
-                          <%= project.year %>
-                        </td>
-                        <td>
-                          <%= project.funded %>
-                        </td>
-                        <td>
-                          <%= project.collaborator %>
-                        </td>
-                      </tr>
-                      <% }) %>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="pagination-container">
-                <div class="pagination-info">
-                  Showing <span id="showing-start-pi">1</span> to
-                  <span id="showing-end-pi">5</span> of
-                  <span id="total-entries-pi">0</span> entries
-                </div>
-                <div class="pagination-controls" id="pagination-controls-pi">
-                  <!-- Pagination buttons will be dynamically generated -->
-                </div>
-              </div>
-            </div>
-
-            <!-- Co-Principal Investigator Projects -->
-            <div class="role-subsection">
-              <h3>As Co-Principal Investigator</h3>
-              <div class="table-controls">
-                <div class="entries-selector">
-                  <label for="entries-select-copi">Show</label>
-                  <select id="entries-select-copi" class="entries-select">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                  </select>
-                  <span>entries</span>
-                </div>
-                <div class="search-container">
-                  <input type="text" id="copi-search" placeholder="Search Co-Principal Investigator projects..."
-                    class="search-input" />
-                  <button id="search-btn-copi" class="search-button">
-                    <i class="fas fa-search"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="table-wrapper">
-                <table class="project-table" id="copi-table">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Year</th>
-                      <th>Funded</th>
-                      <th>Collaborator</th>
-                    </tr>
-                  </thead>
-                  <tbody id="copi-body">
-                    <% projects .filter(project=> project.projectType === "Sponsored Research Project" && project.role
-                      ===
-                      "As Co-Principal Investigator" ) .forEach((project, index) => { %>
-                      <tr class="copi-row" data-index="<%= index %>">
-                        <td>
-                          <%= project.title %>
-                        </td>
-                        <td>
-                          <%= project.year %>
-                        </td>
-                        <td>
-                          <%= project.funded %>
-                        </td>
-                        <td>
-                          <%= project.collaborator %>
-                        </td>
-                      </tr>
-                      <% }) %>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="pagination-container">
-                <div class="pagination-info">
-                  Showing <span id="showing-start-copi">1</span> to
-                  <span id="showing-end-copi">5</span> of
-                  <span id="total-entries-copi">0</span> entries
-                </div>
-                <div class="pagination-controls" id="pagination-controls-copi">
-                  <!-- Pagination buttons will be dynamically generated -->
-                </div>
-              </div>
-            </div>
-
-            <!-- Scientist Mentor Projects -->
-            <div class="role-subsection">
-              <h3>As Scientist Mentor</h3>
-              <div class="table-controls">
-                <div class="entries-selector">
-                  <label for="entries-select-scientist-mentor">Show</label>
-                  <select id="entries-select-scientist-mentor" class="entries-select">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                  </select>
-                  <span>entries</span>
-                </div>
-                <div class="search-container">
-                  <input type="text" id="scientist-mentor-search" placeholder="Search Scientist Mentor projects..."
-                    class="search-input" />
-                  <button id="search-btn-scientist-mentor" class="search-button">
-                    <i class="fas fa-search"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="table-wrapper">
-                <table class="project-table" id="scientist-mentor-table">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Year</th>
-                      <th>Funded</th>
-                      <th>Collaborator</th>
-                    </tr>
-                  </thead>
-                  <tbody id="scientist-mentor-body">
-                    <% projects .filter(project=> project.projectType === "Sponsored Research Project" && project.role
-                      ===
-                      "As Scientist Mentor" )
-                      .forEach((project, index) => { %>
-                      <tr class="scientist-mentor-row" data-index="<%= index %>">
-                        <td>
-                          <%= project.title %>
-                        </td>
-                        <td>
-                          <%= project.year %>
-                        </td>
-                        <td>
-                          <%= project.funded %>
-                        </td>
-                        <td>
-                          <%= project.collaborator %>
-                        </td>
-                      </tr>
-                      <% }) %>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="pagination-container">
-                <div class="pagination-info">
-                  Showing <span id="showing-start-scientist-mentor">1</span> to
-                  <span id="showing-end-scientist-mentor">5</span> of
-                  <span id="total-entries-scientist-mentor">0</span> entries
-                </div>
-                <div class="pagination-controls" id="pagination-controls-scientist-mentor">
-                  <!-- Pagination buttons will be dynamically generated -->
-                </div>
-              </div>
-            </div>
-
-            <!-- Guide Projects -->
-            <div class="role-subsection">
-              <h3>As a Guide</h3>
-              <div class="table-controls">
-                <div class="entries-selector">
-                  <label for="entries-select-guide">Show</label>
-                  <select id="entries-select-guide" class="entries-select">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                  </select>
-                  <span>entries</span>
-                </div>
-                <div class="search-container">
-                  <input type="text" id="guide-search" placeholder="Search Guide projects..." class="search-input" />
-                  <button id="search-btn-guide" class="search-button">
-                    <i class="fas fa-search"></i>
-                  </button>
-                </div>
-              </div>
-
-              <div class="table-wrapper">
-                <table class="project-table" id="guide-table">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Year</th>
-                      <th>Funded</th>
-                      <th>Collaborator</th>
-                    </tr>
-                  </thead>
-                  <tbody id="guide-body">
-                    <% projects .filter(project=> project.projectType === "Sponsored Research Project" && project.role
-                      ===
-                      "As a Guide" )
-                      .forEach((project, index) => { %>
-                      <tr class="guide-row" data-index="<%= index %>">
-                        <td>
-                          <%= project.title %>
-                        </td>
-                        <td>
-                          <%= project.year %>
-                        </td>
-                        <td>
-                          <%= project.funded %>
-                        </td>
-                        <td>
-                          <%= project.collaborator %>
-                        </td>
-                      </tr>
-                      <% }) %>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="pagination-container">
-                <div class="pagination-info">
-                  Showing <span id="showing-start-guide">1</span> to
-                  <span id="showing-end-guide">5</span> of
-                  <span id="total-entries-guide">0</span> entries
-                </div>
-                <div class="pagination-controls" id="pagination-controls-guide">
-                  <!-- Pagination buttons will be dynamically generated -->
-                </div>
-              </div>
->>>>>>> 2331eb7be05a8ddace2de1af76a1033286464328
             </div>
           </div>
 
@@ -949,9 +668,5 @@
         // Initial display
         displayRows();
       });
-<<<<<<< HEAD
     });
   </script>
-=======
-    </script>
->>>>>>> 2331eb7be05a8ddace2de1af76a1033286464328
