@@ -154,6 +154,7 @@ const controlRoutes = require("./routes/control");
 const ResearchGroup = require("./routes/researchGroup");
 const ExtensionActivity = require("./routes/extension");
 const fileRoutes = require("./routes/files");
+const imageRoutes = require("./routes/images");
 const eResourceRoutes = require("./routes/eResources");
 const books = require("./routes/book");
 const conferences = require("./routes/conference");
@@ -172,6 +173,7 @@ app.use("/", ExtensionActivity);
 app.use("/", ResearchGroup);
 
 app.use("/", fileRoutes);
+app.use("/", imageRoutes);
 app.use("/", eResourceRoutes);
 app.use("/", books);
 app.use("/", conferences);
