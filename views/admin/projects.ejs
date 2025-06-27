@@ -315,7 +315,7 @@
     const sidebar = document.getElementById("sidebar");
     const sidebarOverlay = document.getElementById("sidebar-overlay");
     const mobileFab = document.getElementById("mobile-fab");
-
+   
     // Function to open sidebar
     function openSidebar() {
       sidebar.classList.remove("-translate-x-full");
@@ -343,6 +343,28 @@
       sidebarOverlay.addEventListener("click", closeSidebar);
     }
 
+
+    // Add this function after the existing helper functions
+function extractEndYear(yearString) {
+  if (!yearString) return 0;
+  
+  // Handle different formats: "2023-2025", "2024", "2020-2022", etc.
+  const match = yearString.match(/(\d{4})/g);
+  if (match && match.length > 0) {
+    // If there are multiple years, take the last one (end year)
+    return parseInt(match[match.length - 1]);
+  }
+  return 0;
+}
+// Add this function after the extractEndYear function
+function sortProjectsByEndYear(projects) {
+  return projects.sort((a, b) => {
+    const endYearA = extractEndYear(a.year);
+    const endYearB = extractEndYear(b.year);
+    // Sort in descending order (newest end year first)
+    return endYearB - endYearA;
+  });
+}
     // Optional: Close sidebar when clicking on a menu item on mobile
     const sidebarLinks = sidebar.querySelectorAll("a");
     sidebarLinks.forEach((link) => {
@@ -474,81 +496,81 @@
       }
     }
 
-    // Render Research Projects as Cards
-    function renderProjects(projects) {
-      projectsGrid.innerHTML = projects
-        .map(
-          (project) => `
-                <div class="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2 text-gray-800 line-clamp-2">${escapeHtml(
-            project.title
-          )}</h3>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm text-gray-500">${escapeHtml(
-            project.year
-          )}</span>
-                            <span class="text-sm ${project.projectType === "Sponsored Research Project"
-              ? "text-blue-600"
-              : project.projectType === "Consultancy Project"
-                ? "text-green-600"
-                : "text-purple-600"
-            }">${escapeHtml(
-              project.projectType
-            )}</span>
-                        </div>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-1"><strong>Role:</strong> ${escapeHtml(
-              project.role
-            )}</p>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-1"><strong>Funded by:</strong> ${escapeHtml(
-              project.funded
-            )}</p>
-                        <p class="text-gray-600 text-sm mb-2 line-clamp-1"><strong>Collaborator:</strong> ${escapeHtml(
-              project.collaborator
-            )}</p>
-                        <div class="mt-4 flex space-x-2">
-                            <button 
-                                onclick="editProject('${project._id}')"
-                                class="flex-1 bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition duration-300"
-                            >
-                                <i class="fas fa-edit mr-1"></i> Edit
-                            </button>
-                            <button 
-                                onclick="confirmDelete('${project._id}')"
-                                class="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-300"
-                            >
-                                <i class="fas fa-trash-alt mr-1"></i> Delete
-                            </button>
-                        </div>
+    // Replace the existing renderProjects function
+function renderProjects(projects) {
+  const sortedProjects = sortProjectsByEndYear([...projects]); // Create a copy to avoid mutating original
+  
+  projectsGrid.innerHTML = sortedProjects
+    .map(
+      (project) => `
+            <div class="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2 text-gray-800 line-clamp-2">${escapeHtml(
+        project.title
+      )}</h3>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-500">${escapeHtml(
+        project.year
+      )}</span>
+                        <span class="text-sm ${project.projectType === "Sponsored Research Project"
+          ? "text-blue-600"
+          : project.projectType === "Consultancy Project"
+            ? "text-green-600"
+            : "text-purple-600"
+        }">${escapeHtml(
+          project.projectType
+        )}</span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-2 line-clamp-1"><strong>Role:</strong> ${escapeHtml(
+          project.role
+        )}</p>
+                    <p class="text-gray-600 text-sm mb-2 line-clamp-1"><strong>Funded by:</strong> ${escapeHtml(
+          project.funded
+        )}</p>
+                    <p class="text-gray-600 text-sm mb-2 line-clamp-1"><strong>Collaborator:</strong> ${escapeHtml(
+          project.collaborator
+        )}</p>
+                    <div class="mt-4 flex space-x-2">
+                        <button 
+                            onclick="editProject('${project._id}')"
+                            class="flex-1 bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition duration-300"
+                        >
+                            <i class="fas fa-edit mr-1"></i> Edit
+                        </button>
+                        <button 
+                            onclick="confirmDelete('${project._id}')"
+                            class="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-300"
+                        >
+                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                        </button>
                     </div>
                 </div>
-            `
-        )
-        .join("");
-    }
+            </div>
+        `
+    )
+    .join("");
+}
+ // Replace the existing searchAndFilterProjects function
+function searchAndFilterProjects() {
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  const selectedType = typeFilter.value;
 
-    // Search and Filter Research Projects
-    function searchAndFilterProjects() {
-      const searchTerm = searchInput.value.toLowerCase().trim();
-      const selectedType = typeFilter.value;
+  const filteredProjects = projects.filter((proj) => {
+    const matchesSearch =
+      searchTerm === "" ||
+      proj.title.toLowerCase().includes(searchTerm) ||
+      proj.funded.toLowerCase().includes(searchTerm) ||
+      proj.collaborator.toLowerCase().includes(searchTerm) ||
+      proj.role.toLowerCase().includes(searchTerm);
 
-      const filteredProjects = projects.filter((proj) => {
-        const matchesSearch =
-          searchTerm === "" ||
-          proj.title.toLowerCase().includes(searchTerm) ||
-          proj.funded.toLowerCase().includes(searchTerm) ||
-          proj.collaborator.toLowerCase().includes(searchTerm) ||
-          proj.role.toLowerCase().includes(searchTerm);
+    const matchesType =
+      selectedType === "" || proj.projectType === selectedType;
 
-        const matchesType =
-          selectedType === "" || proj.projectType === selectedType;
+    return matchesSearch && matchesType;
+  });
 
-        return matchesSearch && matchesType;
-      });
-
-      renderProjects(filteredProjects);
-    }
-
+  renderProjects(filteredProjects); // renderProjects will handle the sorting
+}
     // Attach search event listeners
     searchButton.addEventListener("click", searchAndFilterProjects);
     searchInput.addEventListener("input", searchAndFilterProjects);
