@@ -6,6 +6,7 @@ const bookSchema = new mongoose.Schema({
   year: Number,
   isbn: String,
   photo: String,
+  link: String,
 });
 
 module.exports = mongoose.models.Book || mongoose.model("Book", bookSchema);

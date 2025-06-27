@@ -274,17 +274,18 @@
 
             <div class="table-wrapper">
               <table class="publication-table books-table" id="books-table">
-                <thead>
+               <thead>
                   <tr>
                     <th>Author</th>
                     <th>Name</th>
                     <th>Year</th>
                     <th>ISBN</th>
+                    <th>Link</th>
                     <th>Photo</th>
                   </tr>
                 </thead>
                 <tbody id="books-body">
-                  <% books.forEach((book, index)=> { %>
+                 <% books.forEach((book, index)=> { %>
                     <tr class="book-row" data-index="<%= index %>">
                       <td>
                         <%= book.author %>
@@ -298,12 +299,22 @@
                       <td>
                         <%= book.isbn %>
                       </td>
+
                       <td>
+                        <% if (book.link && book.link !== '#') { %>
+                          <a href="<%= book.link %>" target="_blank">link</a>
+                        <% } else { %>
+                          N/A
+                        <% } %>
+                      </td>
+
+                       <td>
                         <% if (book.photo) { %>
                           <img src="<%= book.photo %>" alt="Cover of <%= book.title %>"
                             style="width: 50px; height: auto" />
                           <% } else { %> No Image <% } %>
                       </td>
+
                     </tr>
                     <% }) %>
                 </tbody>

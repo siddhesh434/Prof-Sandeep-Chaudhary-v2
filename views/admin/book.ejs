@@ -166,9 +166,15 @@
                             class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                     </div>
 
-                    <div class="flex flex-col col-span-1 md:col-span-2">
+                    <div class="flex flex-col">
                         <label class="mb-2 text-gray-700" for="photo">Photo URL (Optional)</label>
                         <input type="text" id="photo" name="photo"
+                            class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label class="mb-2 text-gray-700" for="link">Book Link (Optional)</label>
+                        <input type="url" id="link" name="link" placeholder="https://example.com/book"
                             class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                     </div>
 
@@ -278,12 +284,12 @@
                 console.error('Error fetching books:', error);
                 // For demo purposes - create sample data if API fails
                 const sampleBooks = [
-                    { _id: '1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', year: 1925, isbn: '9780743273565' },
-                    { _id: '2', title: 'To Kill a Mockingbird', author: 'Harper Lee', year: 1960, isbn: '9780061120084' },
-                    { _id: '3', title: '1984', author: 'George Orwell', year: 1949, isbn: '9780451524935' },
-                    { _id: '4', title: 'Pride and Prejudice', author: 'Jane Austen', year: 1813, isbn: '9780141439518' },
-                    { _id: '5', title: 'The Hobbit', author: 'J.R.R. Tolkien', year: 1937, isbn: '9780547928227' },
-                    { _id: '6', title: 'Harry Potter and the Sorcerer\'s Stone', author: 'J.K. Rowling', year: 1997, isbn: '9780590353427' }
+                    { _id: '1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', year: 1925, isbn: '9780743273565', link: 'https://example.com/gatsby' },
+                    { _id: '2', title: 'To Kill a Mockingbird', author: 'Harper Lee', year: 1960, isbn: '9780061120084', link: 'https://example.com/mockingbird' },
+                    { _id: '3', title: '1984', author: 'George Orwell', year: 1949, isbn: '9780451524935', link: 'https://example.com/1984' },
+                    { _id: '4', title: 'Pride and Prejudice', author: 'Jane Austen', year: 1813, isbn: '9780141439518', link: 'https://example.com/pride' },
+                    { _id: '5', title: 'The Hobbit', author: 'J.R.R. Tolkien', year: 1937, isbn: '9780547928227', link: 'https://example.com/hobbit' },
+                    { _id: '6', title: 'Harry Potter and the Sorcerer\'s Stone', author: 'J.K. Rowling', year: 1997, isbn: '9780590353427', link: 'https://example.com/harry-potter' }
                 ];
                 allBooks = sampleBooks;
                 updateStatistics(sampleBooks);
@@ -309,10 +315,19 @@
                     <div class="p-4">
                         <h3 class="font-bold text-xl mb-2 text-gray-800 truncate">${escapeHtml(book.title)}</h3>
                         <p class="text-gray-600 mb-2">By ${escapeHtml(book.author)}</p>
-                        <div class="flex justify-between items-center">
+                        <div class="flex justify-between items-center mb-2">
                             <span class="text-sm text-gray-500">${book.year}</span>
                             <span class="text-sm text-gray-500">${escapeHtml(book.isbn)}</span>
                         </div>
+                        ${book.link ? `
+                            <div class="mb-3">
+                                <a href="${escapeHtml(book.link)}" target="_blank" rel="noopener noreferrer" 
+                                   class="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm">
+                                    <i class="fas fa-external-link-alt mr-1"></i>
+                                    View Book
+                                </a>
+                            </div>
+                        ` : ''}
                         <div class="mt-4 flex space-x-2">
                             <button 
                                 onclick="editBook('${book._id}')"
@@ -348,13 +363,30 @@
             const title = document.getElementById('title').value.trim();
             const year = document.getElementById('year').value;
             const isbn = document.getElementById('isbn').value.trim();
+            const link = document.getElementById('link').value.trim();
 
             if (year < 1000 || year > new Date().getFullYear()) {
                 alert(`Year must be between 1000 and ${new Date().getFullYear()}`);
                 return false;
             }
+
+            // Validate URL if provided
+            if (link && !isValidURL(link)) {
+                alert('Please enter a valid URL for the book link');
+                return false;
+            }
             
             return true;
+        }
+
+        // URL validation helper
+        function isValidURL(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
         }
 
         // Add Book
@@ -368,7 +400,8 @@
                 title: document.getElementById('title').value.trim(),
                 year: document.getElementById('year').value,
                 isbn: document.getElementById('isbn').value.trim(),
-                photo: document.getElementById('photo').value.trim()
+                photo: document.getElementById('photo').value.trim(),
+                link: document.getElementById('link').value.trim()
             };
 
             try {
@@ -429,6 +462,7 @@
             document.getElementById('year').value = book.year;
             document.getElementById('isbn').value = book.isbn;
             document.getElementById('photo').value = book.photo || '';
+            document.getElementById('link').value = book.link || '';
             document.getElementById('bookId').value = book._id;
 
             addButton.classList.add('hidden');
@@ -454,7 +488,8 @@
                 title: document.getElementById('title').value.trim(),
                 year: document.getElementById('year').value,
                 isbn: document.getElementById('isbn').value.trim(),
-                photo: document.getElementById('photo').value.trim()
+                photo: document.getElementById('photo').value.trim(),
+                link: document.getElementById('link').value.trim()
             };
 
             try {
