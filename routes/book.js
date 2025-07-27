@@ -10,6 +10,7 @@ const Book =
       author: String,
       title: String,
       year: Number,
+      publisher: String,
       isbn: String,
       photo: String,
     })
