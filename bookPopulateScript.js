@@ -15,6 +15,7 @@ const bookSchema = new mongoose.Schema({
   author: String,
   title: String,
   year: Number,
+  publisher: String,
   isbn: String,
   photo: String,
   link: String,
@@ -32,6 +33,7 @@ const bookData = [
   author: "Gambhir, M. L., and Chaudhary, S.",
   title: "Concrete Technology: Theory and Practice",
   year: 2025,
+  publisher: "Mc Graw Hill",
   isbn: "9789364446969",
   photo: "/images/books/book8.jpg",
   link: "https://example.com/book8"
@@ -40,6 +42,7 @@ const bookData = [
     author: "Chaudhary, S., Patel, K. A.",
     title: "Testing & Evaluation of Civil Engineering Materials",
     year: 2023,
+    publisher: "AICTE",
     isbn: "9780128189610",
     photo: "/images/books/book1.jpg",
     link: "https://example.com/book1"
@@ -48,6 +51,7 @@ const bookData = [
     author: "Hau, K. K., Gupta, A. K., Chaudhary, S., Gupta, T. (Editors)",
     title: "Recent Advances in Structural Engineering and Construction Management - Select Proceedings of ICSMC 2021",
     year: 2022,
+    publisher: "Springer Singapore",
     isbn: "9789811940392",
     photo: "/images/books/book2.jpg",
     link: "https://example.com/book2"
@@ -56,6 +60,7 @@ const bookData = [
     author: "Samui, P., Kim, D., Iyer, N., and Chaudhary, S. (Editors)",
     title: "New Materials in Civil Engineering",
     year: 2020,
+    publisher: "Butterworth-Heinemann, Elsevier",
     isbn: "9780128189610",
     photo: "/images/books/book3.jpg",
     link: "https://example.com/book3"
@@ -64,6 +69,7 @@ const bookData = [
     author: "Pancharathi, R.K., Sangoju, B., and Chaudhary, S. (Editors)",
     title: "Lecture Notes in Civil Engineering: Advances in Sustainable Construction Materials - Select Proceedings of ASCM 2019",
     year: 2020,
+    publisher: "Springer Singapore",
     isbn: "9789811533631",
     photo: "/images/books/book4.jpg",
     link: "https://example.com/book4"
