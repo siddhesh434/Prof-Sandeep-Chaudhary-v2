@@ -78,6 +78,7 @@ const bookData = [
     author: "Chaudhary, S., and Tripathi, B. (Editors)",
     title: "Current Challenges in Structural Engineering",
     year: 2013,
+    publisher: "",
     isbn: "97998382880738",
     photo: "/images/books/book5.jpg",
     link: "https://example.com/book5"
@@ -86,6 +87,7 @@ const bookData = [
     author: "Misra, A., and Chaudhary, S. (Editors)",
     title: "Sustainable Concrete Infrastructure Development",
     year: 2009,
+    publisher: "",
     isbn: "9788190872317",
     photo: "/images/books/book6.jpg",
     link: "https://example.com/book6"
@@ -94,6 +96,7 @@ const bookData = [
     author: "Chaudhary, S., Tiwari, S. K., and Chaudhary, M. (Editors)",
     title: "Recent trends in Geotechnical and Structural Engineering",
     year: 2007,
+    publisher: "",
     isbn: "",
     photo: "/images/books/book7.jpg",
     link: "https://example.com/book7"
