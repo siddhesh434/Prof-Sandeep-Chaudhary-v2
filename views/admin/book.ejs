@@ -161,6 +161,12 @@
                     </div>
 
                     <div class="flex flex-col">
+                        <label class="mb-2 text-gray-700" for="publisher">Publisher</label>
+                        <input type="text" id="publisher" name="publisher" required
+                            class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                    </div>
+
+                    <div class="flex flex-col">
                         <label class="mb-2 text-gray-700" for="isbn">ISBN</label>
                         <input type="text" id="isbn" name="isbn" required
                             class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
@@ -399,6 +405,7 @@
                 author: document.getElementById('author').value.trim(),
                 title: document.getElementById('title').value.trim(),
                 year: document.getElementById('year').value,
+                publisher: document.getElementById('publisher').value.trim(),
                 isbn: document.getElementById('isbn').value.trim(),
                 photo: document.getElementById('photo').value.trim(),
                 link: document.getElementById('link').value.trim()
@@ -460,6 +467,7 @@
             document.getElementById('author').value = book.author;
             document.getElementById('title').value = book.title;
             document.getElementById('year').value = book.year;
+            document.getElementById('publisher').value = book.publisher;
             document.getElementById('isbn').value = book.isbn;
             document.getElementById('photo').value = book.photo || '';
             document.getElementById('link').value = book.link || '';
@@ -487,6 +495,7 @@
                 author: document.getElementById('author').value.trim(),
                 title: document.getElementById('title').value.trim(),
                 year: document.getElementById('year').value,
+                publisher: document.getElementById('publisher').value.trim(),
                 isbn: document.getElementById('isbn').value.trim(),
                 photo: document.getElementById('photo').value.trim(),
                 link: document.getElementById('link').value.trim()
