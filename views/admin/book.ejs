@@ -290,12 +290,12 @@
                 console.error('Error fetching books:', error);
                 // For demo purposes - create sample data if API fails
                 const sampleBooks = [
-                    { _id: '1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', year: 1925, isbn: '9780743273565', link: 'https://example.com/gatsby' },
-                    { _id: '2', title: 'To Kill a Mockingbird', author: 'Harper Lee', year: 1960, isbn: '9780061120084', link: 'https://example.com/mockingbird' },
-                    { _id: '3', title: '1984', author: 'George Orwell', year: 1949, isbn: '9780451524935', link: 'https://example.com/1984' },
-                    { _id: '4', title: 'Pride and Prejudice', author: 'Jane Austen', year: 1813, isbn: '9780141439518', link: 'https://example.com/pride' },
-                    { _id: '5', title: 'The Hobbit', author: 'J.R.R. Tolkien', year: 1937, isbn: '9780547928227', link: 'https://example.com/hobbit' },
-                    { _id: '6', title: 'Harry Potter and the Sorcerer\'s Stone', author: 'J.K. Rowling', year: 1997, isbn: '9780590353427', link: 'https://example.com/harry-potter' }
+                    { _id: '1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', year: 1925, publisher: 'Scribner', isbn: '9780743273565', link: 'https://example.com/gatsby' },
+                    { _id: '2', title: 'To Kill a Mockingbird', author: 'Harper Lee', year: 1960, publisher: 'J.B. Lippincott & Co.', isbn: '9780061120084', link: 'https://example.com/mockingbird' },
+                    { _id: '3', title: '1984', author: 'George Orwell', year: 1949, publisher: 'Secker & Warburg', isbn: '9780451524935', link: 'https://example.com/1984' },
+                    { _id: '4', title: 'Pride and Prejudice', author: 'Jane Austen', year: 1813, publisher: 'T. Egerton', isbn: '9780141439518', link: 'https://example.com/pride' },
+                    { _id: '5', title: 'The Hobbit', author: 'J.R.R. Tolkien', year: 1937, publisher: 'George Allen & Unwin', isbn: '9780547928227', link: 'https://example.com/hobbit' },
+                    { _id: '6', title: 'Harry Potter and the Sorcerer\'s Stone', author: 'J.K. Rowling', year: 1997, publisher: 'Bloomsbury', isbn: '9780590353427', link: 'https://example.com/harry-potter' }
                 ];
                 allBooks = sampleBooks;
                 updateStatistics(sampleBooks);
@@ -354,9 +354,17 @@
             `).join('');
         }
 
-        // Escape HTML to prevent XSS
+        // Escape HTML to prevent XSS - FIXED VERSION
         function escapeHtml(unsafe) {
-            return unsafe
+            // Handle null, undefined, or non-string values
+            if (unsafe == null || unsafe === undefined) {
+                return '';
+            }
+            
+            // Convert to string if it's not already a string
+            const str = String(unsafe);
+            
+            return str
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
@@ -466,11 +474,11 @@
 
         // Populate form for edit
         function populateFormForEdit(book) {
-            document.getElementById('author').value = book.author;
-            document.getElementById('title').value = book.title;
-            document.getElementById('year').value = book.year;
-            document.getElementById('publisher').value = book.publisher;
-            document.getElementById('isbn').value = book.isbn;
+            document.getElementById('author').value = book.author || '';
+            document.getElementById('title').value = book.title || '';
+            document.getElementById('year').value = book.year || '';
+            document.getElementById('publisher').value = book.publisher || '';
+            document.getElementById('isbn').value = book.isbn || '';
             document.getElementById('photo').value = book.photo || '';
             document.getElementById('link').value = book.link || '';
             document.getElementById('bookId').value = book._id;
@@ -585,10 +593,10 @@
         searchBooksInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const filteredBooks = allBooks.filter(book =>
-                book.title.toLowerCase().includes(searchTerm) ||
-                book.author.toLowerCase().includes(searchTerm) ||
-                book.publisher.toLowerCase().includes(searchTerm) ||
-                book.isbn.toLowerCase().includes(searchTerm)
+                (book.title || '').toLowerCase().includes(searchTerm) ||
+                (book.author || '').toLowerCase().includes(searchTerm) ||
+                (book.publisher || '').toLowerCase().includes(searchTerm) ||
+                (book.isbn || '').toLowerCase().includes(searchTerm)
             );
             renderBooks(filteredBooks);
         });
@@ -598,9 +606,11 @@
             const sortBy = e.target.value;
             const sortedBooks = [...allBooks].sort((a, b) => {
                 if (sortBy === 'year') {
-                    return a.year - b.year;
+                    return (a.year || 0) - (b.year || 0);
                 } else {
-                    return a[sortBy].localeCompare(b[sortBy]);
+                    const aVal = a[sortBy] || '';
+                    const bVal = b[sortBy] || '';
+                    return aVal.localeCompare(bVal);
                 }
             });
             renderBooks(sortedBooks);
