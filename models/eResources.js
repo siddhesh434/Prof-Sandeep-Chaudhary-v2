@@ -1,6 +1,4 @@
-// Generate resource model schema for reference
-// Include this in the appropriate models directory
-
+// UPDATED MODEL - models/eResources.js
 const mongoose = require('mongoose');
 
 const eResourceSchema = new mongoose.Schema({
@@ -13,13 +11,19 @@ const eResourceSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  resourceType: {
+    type: String,
+    enum: ['file', 'youtube'],
+    default: 'file'
+  },
+  // File-specific fields
   originalFilename: {
     type: String,
-    required: true
+    required: function() { return this.resourceType === 'file'; }
   },
   storedFilename: {
     type: String,
-    required: true
+    required: function() { return this.resourceType === 'file'; }
   },
   fileType: {
     type: String,
@@ -27,8 +31,19 @@ const eResourceSchema = new mongoose.Schema({
   },
   size: {
     type: Number,
-    required: true
+    required: function() { return this.resourceType === 'file'; },
+    default: 0
   },
+  // YouTube-specific fields
+  youtubeUrl: {
+    type: String,
+    required: function() { return this.resourceType === 'youtube'; }
+  },
+  youtubeId: {
+    type: String,
+    required: function() { return this.resourceType === 'youtube'; }
+  },
+  // Common fields
   image: {
     type: String
   },

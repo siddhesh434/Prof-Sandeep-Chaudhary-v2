@@ -118,27 +118,22 @@ router.get("/api/eresources/:id", async (req, res) => {
   }
 });
 
-// Upload new eResource
+
+// UPDATED ROUTES - Update your existing upload route in eResources.js
 router.post("/api/eresources/upload", upload.fields([
   { name: 'file', maxCount: 1 },
   { name: 'image', maxCount: 1 }
 ]), async (req, res) => {
   try {
-    if (!req.files || !req.files.file) {
-      return res.status(400).json({
-        success: false,
-        message: "No file uploaded"
-      });
-    }
-
-    const { fileName, description } = req.body;
-    const file = req.files.file[0];
+    const { fileName, description, resourceType, youtubeUrl, youtubeId } = req.body;
 
     // Basic validation
     if (!fileName) {
-      // Remove uploaded files if fileName is missing
-      fs.unlinkSync(file.path);
-      if (req.files.image) {
+      // Remove uploaded files if they exist
+      if (req.files && req.files.file) {
+        fs.unlinkSync(req.files.file[0].path);
+      }
+      if (req.files && req.files.image) {
         fs.unlinkSync(req.files.image[0].path);
       }
       
@@ -148,20 +143,52 @@ router.post("/api/eresources/upload", upload.fields([
       });
     }
 
-    // Create new eResource record
-    const newResource = new eResource({
-      fileName: fileName,
-      description: description || "",
-      originalFilename: file.originalname,
-      storedFilename: file.filename,
-      fileType: file.mimetype,
-      size: file.size,
-    });
+    let newResource;
 
-    // Add thumbnail path if an image was uploaded
-    if (req.files.image) {
-      const thumbnailPath = `/uploads/thumbnails/${req.files.image[0].filename}`;
-      newResource.image = thumbnailPath;
+    // Handle YouTube video upload
+    if (resourceType === 'youtube') {
+      if (!youtubeUrl || !youtubeId) {
+        return res.status(400).json({
+          success: false,
+          message: "YouTube URL and video ID are required"
+        });
+      }
+
+      newResource = new eResource({
+        fileName: fileName,
+        description: description || "",
+        resourceType: 'youtube',
+        youtubeUrl: youtubeUrl,
+        youtubeId: youtubeId,
+        fileType: 'video/youtube',
+        size: 0
+      });
+    } else {
+      // Handle regular file upload
+      if (!req.files || !req.files.file) {
+        return res.status(400).json({
+          success: false,
+          message: "No file uploaded"
+        });
+      }
+
+      const file = req.files.file[0];
+
+      newResource = new eResource({
+        fileName: fileName,
+        description: description || "",
+        resourceType: 'file',
+        originalFilename: file.originalname,
+        storedFilename: file.filename,
+        fileType: file.mimetype,
+        size: file.size
+      });
+
+      // Add thumbnail path if an image was uploaded
+      if (req.files.image) {
+        const thumbnailPath = `/uploads/thumbnails/${req.files.image[0].filename}`;
+        newResource.image = thumbnailPath;
+      }
     }
 
     // Save to database
@@ -193,7 +220,7 @@ router.post("/api/eresources/upload", upload.fields([
   }
 });
 
-// Download eResource
+// UPDATE THE DOWNLOAD ROUTE to handle YouTube videos
 router.get("/api/eresources/download/:id", async (req, res) => {
   try {
     const resource = await eResource.findById(req.params.id);
@@ -202,6 +229,14 @@ router.get("/api/eresources/download/:id", async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Resource not found"
+      });
+    }
+
+    // YouTube videos can't be downloaded
+    if (resource.resourceType === 'youtube') {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot download YouTube videos. Please watch them online."
       });
     }
 
@@ -238,7 +273,7 @@ router.get("/api/eresources/download/:id", async (req, res) => {
   }
 });
 
-// Delete eResource
+// UPDATE THE DELETE ROUTE to handle YouTube videos
 router.delete("/api/eresources/:id", async (req, res) => {
   try {
     const resource = await eResource.findById(req.params.id);
@@ -250,14 +285,17 @@ router.delete("/api/eresources/:id", async (req, res) => {
       });
     }
 
-    const filePath = path.join(uploadsDir, resource.storedFilename);
-
-    // Delete file from filesystem if it exists
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+    // Only delete physical files for file resources
+    if (resource.resourceType === 'file' && resource.storedFilename) {
+      const filePath = path.join(uploadsDir, resource.storedFilename);
+      
+      // Delete file from filesystem if it exists
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
-    // Delete thumbnail if it exists
+    // Delete thumbnail if it exists (both file and YouTube resources can have thumbnails)
     if (resource.image) {
       const thumbnailPath = path.join(__dirname, "../public", resource.image);
       if (fs.existsSync(thumbnailPath)) {
@@ -281,7 +319,7 @@ router.delete("/api/eresources/:id", async (req, res) => {
   }
 });
 
-// Search eResources
+// UPDATE THE SEARCH ROUTE to include YouTube fields
 router.get("/api/eresources/search", async (req, res) => {
   try {
     const searchTerm = req.query.q;
@@ -296,13 +334,14 @@ router.get("/api/eresources/search", async (req, res) => {
     // Create a case-insensitive regex pattern for searching
     const searchPattern = new RegExp(searchTerm, 'i');
     
-    // Search in multiple fields
+    // Search in multiple fields including YouTube fields
     const resources = await eResource.find({
       $or: [
         { fileName: searchPattern },
         { description: searchPattern },
         { originalFilename: searchPattern },
-        { fileType: searchPattern }
+        { fileType: searchPattern },
+        { youtubeUrl: searchPattern }
       ]
     }).sort({ uploadDate: -1 });
 
@@ -315,67 +354,4 @@ router.get("/api/eresources/search", async (req, res) => {
     });
   }
 });
-
-// Get resources by category
-router.get("/api/eresources/category/:categoryId", async (req, res) => {
-  try {
-    const resources = await eResource.find({ 
-      categories: req.params.categoryId 
-    }).sort({ uploadDate: -1 });
-    
-    res.json(resources);
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error fetching resources by category",
-      error: error.message
-    });
-  }
-});
-
-// Update eResource
-router.put("/api/eresources/:id", async (req, res) => {
-  try {
-    const { fileName, description, categories } = req.body;
-    
-    // Basic validation
-    if (!fileName) {
-      return res.status(400).json({
-        success: false,
-        message: "Resource title is required"
-      });
-    }
-    
-    const updatedResource = await eResource.findByIdAndUpdate(
-      req.params.id,
-      {
-        fileName,
-        description: description || "",
-        categories: categories || [],
-        lastUpdated: Date.now()
-      },
-      { new: true }
-    );
-    
-    if (!updatedResource) {
-      return res.status(404).json({
-        success: false,
-        message: "Resource not found"
-      });
-    }
-    
-    res.json({
-      success: true,
-      message: "Resource updated successfully",
-      resource: updatedResource
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error updating resource",
-      error: error.message
-    });
-  }
-});
-
 module.exports = router;
