@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel Section</title>
+    <style>
+
+        /* Carousel Section */
+       .carousel-section {
+    background-color: var(--secondary-bg);
+    padding: 60px 0;
+    margin: 40px 0; /* Changed from margin-top to margin for top and bottom */
+    margin-top: 0;
+    padding-top: 0;
+}
+
+       .carousel-section h2 {
+    text-align: center;
+    margin-bottom: 60px; /* Increased from 40px */
+    color: var(--text-color);
+    position: relative;
+    font-size: 2.5rem;
+    font-weight: 300;
+}
+
+        .carousel-section h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+      .carousel-container {
+    position: relative;
+    height: 400px;
+    margin: 20px auto; /* Added vertical margin */
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+.carousel-track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    height: 100%;
+    display: flex;
+    gap: 20px; /* Changed from 0 to add space between slides */
+}
+
+        .carousel-slide {
+            position: relative;
+            min-width: 350px;
+            height: 100%;
+            flex-shrink: 0;
+        }
+
+        .carousel-content {
+            height: 100%;
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .carousel-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel-content img {
+            width: 100%;
+            height: 70%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-content:hover img {
+            transform: scale(1.05);
+        }
+
+        .text-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
+            color: white;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .text-overlay h3 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .text-overlay p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        /* Navigation Buttons */
+        .carousel-prev,
+        .carousel-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-prev:hover,
+        .carousel-next:hover {
+            opacity: 1;
+            background-color: var(--primary-color);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-prev {
+            left: 15px;
+        }
+
+        .carousel-next {
+            right: 15px;
+        }
+
+        /* Indicators */
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .indicator.active {
+            background-color: var(--primary-color);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 0;
+            border: none;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 12px;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .modal-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .carousel-section {
+                padding: 40px 0;
+            }
+
+            .carousel-section h2 {
+                font-size: 2rem;
+            }
+
+            .carousel-slide {
+                min-width: 280px;
+            }
+
+            .carousel-container {
+                height: 350px;
+            }
+
+            .carousel-prev,
+            .carousel-next {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-container {
+                height: 280px;
+            }
+
+            .carousel-slide {
+                min-width: 250px;
+            }
+
+            .text-overlay {
+                padding: 15px;
+            }
+
+            .text-overlay h3 {
+                font-size: 1.2rem;
+            }
+
+            .text-overlay p {
+                font-size: 0.8rem;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Carousel Section -->
+    <div class="carousel-section" itemscope itemtype="https://schema.org/ItemList">
+        <div class="container">
+            <h2>Latest Achievements & Recognition</h2>
+            <div class="carousel-container">
+                <div class="carousel-track" role="list" id="carouselTrack">
+                    <!-- Dynamic slides will be inserted here by JavaScript -->
+                </div>
+                
+                <!-- Navigation Buttons -->
+                <button class="carousel-prev" id="prevBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </button>
+                <button class="carousel-next" id="nextBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                </button>
+                
+                <!-- Indicators (dynamically generated) -->
+                <div class="carousel-indicators" id="carouselIndicators"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title"></h3>
+                <span class="close" id="closeModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <img id="modal-image" class="modal-image" src="" alt="" />
+                <p class="modal-description" id="modal-description"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Carousel data - you can replace this with dynamic data from your server
+        // Check if carouselSlides is defined (from server-side), otherwise use default slides
+        let carouselSlides;
+        
+        // Simulate checking for server-side data (in real implementation, this would come from your EJS template)
+        if (typeof window.carouselSlides !== 'undefined' && window.carouselSlides && window.carouselSlides.length > 0) {
+            carouselSlides = window.carouselSlides;
+        } else {
+            // Default fallback slides
+            carouselSlides = [
+                {
+                    title: "Newspaper Recognition",
+                    image: "/images/scoreCarousel/C1.jpg",
+                    description: "Recognized for the development of sustainable construction materials",
+                    fullDescription: "Recognized for the development of sustainable construction materials that are revolutionizing the industry. Our innovative approach has been featured in leading publications worldwide."
+                },
+                {
+                    title: "Sustainable Bricks Project",
+                    image: "/images/scoreCarousel/c2.png",
+                    description: "Providing sustainable housing solutions in 50+ villages across India",
+                    fullDescription: "Providing sustainable housing solutions in 50+ villages across India. Our eco-friendly bricks are made from recycled materials and offer superior durability and thermal properties."
+                },
+                {
+                    title: "Research Publication",
+                    image: "/images/scoreCarousel/c3.jpg",
+                    description: "Published in prestigious journals with over 1000+ citations",
+                    fullDescription: "Published in prestigious journals with over 1000+ citations. Our research on sustainable construction materials has been recognized globally and continues to influence industry standards."
+                },
+                {
+                    title: "Industry Partnerships",
+                    image: "/images/scoreCarousel/c4.jpg",
+                    description: "Collaborating with 25+ construction companies to implement sustainable practices",
+                    fullDescription: "Collaborating with 25+ construction companies to implement sustainable practices. Our partnerships span across multiple countries, bringing innovative solutions to the global construction industry."
+                },
+                {
+                    title: "Annual Sustainability Summit",
+                    image: "/images/scoreCarousel/c5.jpg",
+                    description: "Bringing together experts from around the world to discuss sustainable construction",
+                    fullDescription: "Bringing together experts from around the world to discuss sustainable construction. Our annual summit hosts over 500 industry leaders and showcases the latest innovations in green building technology."
+                }
+            ];
+        }
+
+        class Carousel {
+            constructor() {
+                this.currentSlide = 0;
+                this.slides = carouselSlides;
+                this.track = document.getElementById('carouselTrack');
+                this.indicators = document.getElementById('carouselIndicators');
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.modal = document.getElementById('modal');
+                this.modalTitle = document.getElementById('modal-title');
+                this.modalImage = document.getElementById('modal-image');
+                this.modalDescription = document.getElementById('modal-description');
+                this.closeModal = document.getElementById('closeModal');
+                
+                this.init();
+            }
+
+            init() {
+                this.createSlides();
+                this.createIndicators();
+                this.bindEvents();
+                this.updateCarousel();
+                this.startAutoPlay();
+            }
+
+            createSlides() {
+                this.track.innerHTML = '';
+                this.slides.forEach((slide, index) => {
+                    const slideElement = document.createElement('div');
+                    slideElement.className = 'carousel-slide';
+                    slideElement.setAttribute('role', 'listitem');
+                    slideElement.setAttribute('itemscope', '');
+                    slideElement.setAttribute('itemtype', 'https://schema.org/ListItem');
+                    
+                    slideElement.innerHTML = `
+                        <div class="carousel-content" 
+                             data-title="${slide.title}" 
+                             data-image="${slide.image}"
+                             data-description="${slide.fullDescription || slide.description}">
+                            <img src="${slide.image}" alt="${slide.title}" itemprop="image" />
+                            <div class="text-overlay">
+                                <h3 itemprop="name">${slide.title}</h3>
+                                <p itemprop="description">${slide.description}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    this.track.appendChild(slideElement);
+                });
+            }
+
+            createIndicators() {
+                this.indicators.innerHTML = '';
+                this.slides.forEach((_, index) => {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'indicator';
+                    if (index === 0) indicator.classList.add('active');
+                    indicator.addEventListener('click', () => this.goToSlide(index));
+                    this.indicators.appendChild(indicator);
+                });
+            }
+
+            bindEvents() {
+                this.prevBtn.addEventListener('click', () => this.prevSlide());
+                this.nextBtn.addEventListener('click', () => this.nextSlide());
+                
+                // Modal events
+                this.track.addEventListener('click', (e) => {
+                    const slideContent = e.target.closest('.carousel-content');
+                    if (slideContent) {
+                        this.openModal(slideContent);
+                    }
+                });
+                
+                this.closeModal.addEventListener('click', () => this.closeModalHandler());
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target === this.modal) {
+                        this.closeModalHandler();
+                    }
+                });
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prevSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                    if (e.key === 'Escape') this.closeModalHandler();
+                });
+
+                // Touch/swipe support
+                let startX = 0;
+                let endX = 0;
+                
+                this.track.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+                
+                this.track.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    
+                    if (Math.abs(diff) > 50) { // Minimum swipe distance
+                        if (diff > 0) {
+                            this.nextSlide();
+                        } else {
+                            this.prevSlide();
+                        }
+                    }
+                });
+            }
+
+            updateCarousel() {
+                const slideWidth = 350; // Match CSS min-width
+                const offset = -this.currentSlide * slideWidth;
+                this.track.style.transform = `translateX(${offset}px)`;
+                
+                // Update indicators
+                document.querySelectorAll('.indicator').forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === this.currentSlide);
+                });
+            }
+
+            nextSlide() {
+                this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+                this.updateCarousel();
+                this.resetAutoPlay();
+            }
+
+            prevSlide() {
+                this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+                this.updateCarousel();
+                this.resetAutoPlay();
+            }
+
+            goToSlide(index) {
+                this.currentSlide = index;
+                this.updateCarousel();
+                this.resetAutoPlay();
+            }
+
+            openModal(slideContent) {
+                const title = slideContent.dataset.title;
+                const image = slideContent.dataset.image;
+                const description = slideContent.dataset.description;
+                
+                this.modalTitle.textContent = title;
+                this.modalImage.src = image;
+                this.modalImage.alt = title;
+                this.modalDescription.textContent = description;
+                
+                this.modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+
+            closeModalHandler() {
+                this.modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Restore scrolling
+            }
+
+            startAutoPlay() {
+                this.autoPlayInterval = setInterval(() => {
+                    this.nextSlide();
+                }, 5000); // Auto-advance every 5 seconds
+            }
+
+            resetAutoPlay() {
+                clearInterval(this.autoPlayInterval);
+                this.startAutoPlay();
+            }
+
+            // Method to update slides dynamically (useful if data comes from server)
+            updateSlides(newSlides) {
+                this.slides = newSlides;
+                this.currentSlide = 0;
+                this.createSlides();
+                this.createIndicators();
+                this.updateCarousel();
+            }
+        }
+
+        // Initialize carousel when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new Carousel();
+        });
+
+        // Function to set carousel data from server-side (call this from your EJS template)
+        function setCarouselData(slides) {
+            window.carouselSlides = slides;
+        }
+    </script>
+</body>
+</html>

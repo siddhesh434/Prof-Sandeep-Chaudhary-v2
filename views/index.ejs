@@ -46,13 +46,28 @@
   <meta property="og:image" content="/images/score.png" />
   <link rel="canonical" href="https://your-domain.com" />
 
-  <!-- Moving Bulletin -->
-  <div class="moving-bulletin" role="alert">
-    <div class="bulletin-content">
-      <strong>Latest News :</strong> GOBAiR receives the Best Product Award in
-      Rural Innovators Conclave 2025
-    </div>
+<% if (bulletin && bulletin.enabled) { %>
+<%
+  let gradientColor;
+  if (bulletin.color === 'red') {
+    gradientColor = '#dc2626, #b91c1c';
+  } else if (bulletin.color === 'green') {
+    gradientColor = 'var(--primary-color), var(--primary-color)';
+  } else if (bulletin.color === 'orange') {
+    gradientColor = '#ea580c, #c2410c';
+  } else if (bulletin.color === 'purple') {
+    gradientColor = '#9333ea, #7c3aed';
+  } else {
+    gradientColor = '#3b82f6, #1d4ed8';
+  }
+%>
+<div class="moving-bulletin" role="alert" style="background: linear-gradient(45deg, <%= gradientColor %>)">
+  <div class="bulletin-content" style="animation-duration: <%= bulletin.speed ? bulletin.speed + 's' : '15s' %>;">
+    <strong><%= bulletin.title || 'Latest News :' %></strong> <%= bulletin.message %>
   </div>
+</div>
+<% } %>
+
   <!-- Hero Image Section -->
   <div class="hero-image" role="banner">
     <div class="container">
@@ -289,193 +304,16 @@
       </div>
     </section>
   </div>
+  
+<script>
+   carouselSlides = <%- JSON.stringify(carouselSlides) %>;
+</script>
 
-  <!-- Carousel Section -->
-  <div class="carousel-section" itemscope itemtype="https://schema.org/ItemList">
-    <div class="container">
-      <h2>Latest Achievements & Recognition</h2>
-      <div class="carousel-container">
-        <div class="carousel-track" role="list">
-          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
-            <div class="carousel-content">
-              <img src="/images/scoreCarousel/C1.jpg" alt="SCORE Award 1" itemprop="image" />
-              <div class="text-overlay">
-                <h3 itemprop="name">Newspaper</h3>
-                <p itemprop="description">
-                  Recognized for the development of sustainable construction
-                  materials
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
-            <div class="carousel-content">
-              <img src="/images/scoreCarousel/c2.png" alt="SCORE Project 1" itemprop="image" />
-              <div class="text-overlay">
-                <h3 itemprop="name">Bricks</h3>
-                <p itemprop="description">
-                  Providing sustainable housing solutions in 50+ villages across
-                  India
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
-            <div class="carousel-content">
-              <img src="/images/scoreCarousel/c3.jpg" alt="SCORE Publication 1" itemprop="image" />
-              <div class="text-overlay">
-                <h3 itemprop="name">Research Publication</h3>
-                <p itemprop="description">
-                  Published in prestigious journals with over 1000+ citations
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
-            <div class="carousel-content">
-              <img src="/images/scoreCarousel/c4.jpg" alt="SCORE Collaboration 1" itemprop="image" />
-              <div class="text-overlay">
-                <h3 itemprop="name">Industry Partnerships</h3>
-                <p itemprop="description">
-                  Collaborating with 25+ construction companies to implement
-                  sustainable practices
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-slide" role="listitem" itemscope itemtype="https://schema.org/ListItem">
-            <div class="carousel-content">
-              <img src="/images/scoreCarousel/c5.jpg" alt="SCORE Event 1" itemprop="image" />
-              <div class="text-overlay">
-                <h3 itemprop="name">Annual Sustainability Summit</h3>
-                <p itemprop="description">
-                  Bringing together experts from around the world to discuss
-                  sustainable construction
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <button class="carousel-prev">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"></path>
-          </svg>
-        </button>
-        <button class="carousel-next">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18l6-6-6-6"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
+<%- include('partials/carousel', { carouselSlides: carouselSlides }) %>
 
   <%- include('partials/footer') %>
 
-    <!-- JavaScript for carousel -->
-    <script>
-      function openModal(element) {
-        document.getElementById("modal-title").textContent =
-          element.getAttribute("data-title");
-        document.getElementById("modal-image").src =
-          element.getAttribute("data-image");
-        document.getElementById("modal-description").textContent =
-          element.getAttribute("data-description");
 
-        document.getElementById("modal").style.display = "flex";
-      }
-
-      document.querySelector(".close").addEventListener("click", function () {
-        document.getElementById("modal").style.display = "none";
-      });
-
-      window.onclick = function (event) {
-        if (event.target == document.getElementById("modal")) {
-          document.getElementById("modal").style.display = "none";
-        }
-      };
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const track = document.querySelector(".carousel-track");
-        const slides = Array.from(document.querySelectorAll(".carousel-slide"));
-        const nextButton = document.querySelector(".carousel-next");
-        const prevButton = document.querySelector(".carousel-prev");
-
-        let slideWidth = slides[0].getBoundingClientRect().width;
-        let slideIndex = 0;
-        let autoPlayInterval;
-
-        // Position slides next to one another
-        const setSlidePosition = (slide, index) => {
-          slide.style.left = slideWidth * index + "px";
-        };
-
-        slides.forEach(setSlidePosition);
-
-        const updateSlideWidth = () => {
-          slideWidth = slides[0].getBoundingClientRect().width;
-          slides.forEach(setSlidePosition);
-          moveToSlide(track, slides[slideIndex]);
-        };
-
-        window.addEventListener("resize", updateSlideWidth);
-
-        const moveToSlide = (track, targetSlide) => {
-          const amountToMove = targetSlide.style.left;
-          track.style.transform = "translateX(-" + amountToMove + ")";
-        };
-
-        const updateSlideIndex = (current, target) => {
-          slides[current].classList.remove("current-slide");
-          slides[target].classList.add("current-slide");
-        };
-
-        const nextSlide = () => {
-          slideIndex = slideIndex === slides.length - 1 ? 0 : slideIndex + 1;
-          moveToSlide(track, slides[slideIndex]);
-        };
-
-        const prevSlide = () => {
-          slideIndex = slideIndex === 0 ? slides.length - 1 : slideIndex - 1;
-          moveToSlide(track, slides[slideIndex]);
-        };
-
-        // Button event listeners
-        nextButton.addEventListener("click", nextSlide);
-        prevButton.addEventListener("click", prevSlide);
-
-        // Auto play functionality
-        const startAutoPlay = () => {
-          autoPlayInterval = setInterval(nextSlide, 1000); // Change slide every 1 seconds
-        };
-
-        const stopAutoPlay = () => {
-          clearInterval(autoPlayInterval);
-        };
-
-        // Start auto play on load
-        startAutoPlay();
-
-        // Stop auto play when hovering over carousel
-        const carouselContainer = document.querySelector(".carousel-container");
-        carouselContainer.addEventListener("mouseenter", stopAutoPlay);
-        carouselContainer.addEventListener("mouseleave", startAutoPlay);
-
-        // SDG Tag hover effects
-        const sdgTags = document.querySelectorAll(".sdg-tag");
-        sdgTags.forEach((tag) => {
-          tag.addEventListener("mouseenter", () => {
-            tag.querySelector(".sdg-tooltip").style.opacity = "1";
-          });
-
-          tag.addEventListener("mouseleave", () => {
-            tag.querySelector(".sdg-tooltip").style.opacity = "0";
-          });
-        });
-      });
-    </script>
     <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -496,7 +334,7 @@
     "image": "https://sustainableconstructionlab.com/images/sandeep-chaudhary.jpg",
     "description": "Professor at IIT Indore specializing in sustainable construction, low carbon materials, waste upcycling, and IoT applications."
   }
-</script>
+</>
 
     <!-- Structured Data for Organization -->
     <script type="application/ld+json">

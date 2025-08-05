@@ -21,6 +21,11 @@ router.get("/admin/book.html", (req, res) => {
     if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
     res.render("admin/book", { adminID: req.session.admin }); // Render dashboard
   });
+
+router.get("/admin/latest_news.html", (req, res) => {
+    if (!req.session.admin) return res.redirect("/admin/login"); // Redirect if not logged in
+    res.render("admin/latest_news", { adminID: req.session.admin }); // Render dashboard
+  });
   
   router.post("/books", async (req, res) => {
     try {

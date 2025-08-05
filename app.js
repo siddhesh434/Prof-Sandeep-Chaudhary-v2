@@ -75,6 +75,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// MongoDB Connection
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((error) => console.error("MongoDB connection error:", error));
+
+// Import Content Models (after MongoDB connection)
+const { Bulletin, CarouselSlide } = require('./models/Content');
+
 // SEO Routes
 app.get("/robots.txt", (req, res) => {
   res.type("text/plain");
@@ -160,7 +169,14 @@ const books = require("./routes/book");
 const conferences = require("./routes/conference");
 const chapters = require("./routes/chapter");
 
-// Use routes
+// Import content routes
+const contentRoutes = require('./routes/Content');
+
+// Use content routes BEFORE other routes to avoid conflicts
+// This handles both admin API routes and public content routes
+app.use(contentRoutes);
+
+// Use other routes
 app.use("/admin", adminRoutes);
 app.use("/", publicationRoutes);
 app.use("/", projectRoutes);
@@ -171,7 +187,6 @@ app.use("/", contactRoutes);
 app.use("/", controlRoutes);
 app.use("/", ExtensionActivity);
 app.use("/", ResearchGroup);
-
 app.use("/", fileRoutes);
 app.use("/", imageRoutes);
 app.use("/", eResourceRoutes);
@@ -179,9 +194,51 @@ app.use("/", books);
 app.use("/", conferences);
 app.use("/", chapters);
 
-// Root routes
-app.get("/", (req, res) => res.render("index"));
-app.get("/index.html", (req, res) => res.render("index"));
+// Root routes with dynamic content loading
+app.get("/", async (req, res) => {
+  try {
+    // Fetch bulletin
+    const bulletin = await Bulletin.findOne().sort({ createdAt: -1 });
+    
+    // Fetch active carousel slides
+    const carouselSlides = await CarouselSlide.find({ active: true }).sort({ order: 1 });
+
+    res.render('index', { 
+      bulletin: bulletin,
+      carouselSlides: carouselSlides
+    });
+  } catch (error) {
+    console.error('Error loading home page:', error);
+    // Fallback to defaults
+    res.render('index', { 
+      bulletin: null,
+      carouselSlides: []
+    });
+  }
+});
+
+app.get("/index.html", async (req, res) => {
+  try {
+    // Fetch bulletin
+    const bulletin = await Bulletin.findOne().sort({ createdAt: -1 });
+    
+    // Fetch active carousel slides
+    const carouselSlides = await CarouselSlide.find({ active: true }).sort({ order: 1 });
+    res.render('index', { 
+      bulletin: bulletin,
+      carouselSlides: carouselSlides
+    });
+  } catch (error) {
+    console.error('Error loading home page:', error);
+    // Fallback to defaults
+    res.render('index', { 
+      bulletin: null,
+      carouselSlides: []
+    });
+  }
+});
+
+// Other static routes
 app.get("/admin/formData", (req, res) =>
   res.render("admin/formData", { adminID: req.session.adminID })
 );
@@ -200,12 +257,6 @@ app.get("/existingCollab.html", (req, res) => res.render("existingCollab"));
 app.get("/researchCollab.html", (req, res) => res.render("researchCollab"));
 app.get("/phdOpportunities.html", (req, res) => res.render("phdOpportunities"));
 app.get("/internships.html", (req, res) => res.render("internships"));
-
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((error) => console.error("MongoDB connection error:", error));
 
 // Custom 404 handler - MUST BE AFTER ALL ROUTES
 app.use((req, res, next) => {

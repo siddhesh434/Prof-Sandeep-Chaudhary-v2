@@ -1,483 +1,646 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Research Admin Dashboard - File Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-</head>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-<body class="bg-gray-100">
+  <body class="bg-gray-100">
     <div class="flex h-screen overflow-hidden relative">
-        <!-- Sidebar - hidden on mobile by default -->
-        <aside id="sidebar"
-            class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
-            <div class="p-6 border-b border-blue-800">
-                <h2 class="text-xl font-bold tracking-wide">
-                    Welcome, admin123!
-                </h2>
-                <!-- Close button for mobile -->
-                <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <nav class="mt-4">
-                <ul>
-                    <li class="mb-1 px-2">
-                        <a href="/admin"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-home mr-3"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="/admin/control.html"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-sliders-h mr-3"></i>
-                            <span>Visibility Controls</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="/admin/files.html"
-                            class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
-                            <i class="fas fa-users mr-3"></i>
-                            <span>File Upload</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="/admin/eResources.html"
-                          class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                          <i class="fas fa-file-alt mr-3"></i>
-                          <span>e-Resources</span>
-                        </a>
-                      </li>
-                    <li class="mb-1 px-2">
-                        <a href="/admin/formData"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-ticket-alt mr-3"></i>
-                            <span>User Requests</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="/admin/cvGenerator.html"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-file-pdf mr-3"></i>
-                            <span>CV Generator</span>
-                        </a>
-                    </li>
-                    <br>
-                    <li style="padding-left: 13px; font-size: medium; font-size: 1.1rem;">Account</li>
-                    <li class="mb-1 px-2">
-                        <a href="/admin/logout"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-sign-out-alt mr-3"></i>
-                            <span>Logout</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-
-        </aside>
-
-        <!-- Overlay for mobile sidebar -->
-        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
-
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
-            <div class="p-4 md:p-6">
-                <!-- Header with mobile menu indicator -->
-                <div class="flex justify-between items-center mb-6 md:mb-8">
-                    <div class="flex items-center">
-                        <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
-                            <i class="fas fa-bars text-xl"></i>
-                        </button>
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">
-                            File Management
-                        </h1>
-                    </div>
-                    <div class="flex items-center space-x-2 md:space-x-4">
-                        <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Welcome, Admin</span>
-                        <div
-                            class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
-                            A
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab Navigation -->
-                <div class="mb-6">
-                    <div class="border-b border-gray-200">
-                        <nav class="-mb-px flex space-x-8">
-                            <button id="files-tab" 
-                                class="tab-button border-b-2 border-blue-500 text-blue-600 py-2 px-1 font-medium text-sm whitespace-nowrap">
-                                <i class="fas fa-file mr-2"></i>
-                                Files
-                            </button>
-                            <button id="images-tab" 
-                                class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-2 px-1 font-medium text-sm whitespace-nowrap">
-                                <i class="fas fa-image mr-2"></i>
-                                Images
-                            </button>
-                        </nav>
-                    </div>
-                </div>
-
-                <!-- Files Tab Content -->
-                <div id="files-content" class="tab-content">
-                    <!-- Upload Form Card -->
-                    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden mb-6">
-                        <div class="bg-blue-800 text-white p-4 md:p-5">
-                            <h2 class="text-lg md:text-xl font-semibold flex items-center">
-                                <i class="fas fa-upload mr-2 md:mr-3 text-xl md:text-2xl"></i>
-                                Upload New File
-                            </h2>
-                        </div>
-                        <div class="p-4 md:p-5">
-                            <form id="uploadForm" class="space-y-4">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="fileName" class="block text-sm font-medium text-gray-700 mb-1">File
-                                            Name</label>
-                                        <input type="text" id="fileName" required
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    </div>
-                                    <div>
-                                        <label for="file" class="block text-sm font-medium text-gray-700 mb-1">Select
-                                            File</label>
-                                        <input type="file" id="file" required
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label for="fileDescription"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                                    <textarea id="fileDescription" rows="2"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                                </div>
-                                <button type="submit"
-                                    class="bg-blue-800 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center">
-                                    <i class="fas fa-upload mr-2"></i>
-                                    Upload File
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- File List Card -->
-                    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-                        <div class="bg-blue-800 text-white p-4 md:p-5">
-                            <h2 class="text-lg md:text-xl font-semibold flex items-center">
-                                <i class="fas fa-files mr-2 md:mr-3 text-xl md:text-2xl"></i>
-                                Uploaded Files
-                            </h2>
-                        </div>
-                        <div class="p-4 md:p-5">
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                File Name</th>
-                                            <th
-                                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Description</th>
-                                            <th
-                                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Type</th>
-                                            <th
-                                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Size</th>
-                                            <th
-                                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Upload Date</th>
-                                            <th
-                                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="fileList" class="bg-white divide-y divide-gray-200">
-                                        <!-- Files will be loaded here -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Images Tab Content -->
-                <div id="images-content" class="tab-content hidden">
-                    <!-- Image Upload Form Card -->
-                    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden mb-6">
-                        <div class="bg-blue-600 text-white p-4 md:p-5">
-                            <h2 class="text-lg md:text-xl font-semibold flex items-center">
-                                <i class="fas fa-images mr-2 md:mr-3 text-xl md:text-2xl"></i>
-                                Upload New Image
-                            </h2>
-                        </div>
-                        <div class="p-4 md:p-5">
-                            <form id="imageUploadForm" class="space-y-4">
-                                <div>
-                                    <label for="imageFile" class="block text-sm font-medium text-gray-700 mb-1">Select Image</label>
-                                    <input type="file" id="imageFile" required accept="image/*"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                    <p class="text-xs text-gray-500 mt-1">Supported formats: JPG, PNG, GIF, WEBP</p>
-                                </div>
-                                <button type="submit"
-                                    class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-200 flex items-center">
-                                    <i class="fas fa-upload mr-2"></i>
-                                    Upload Image
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                   <!-- Image List Card -->
-<div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-    <div class="bg-blue-600 text-white p-4 md:p-5">
-        <h2 class="text-lg md:text-xl font-semibold flex items-center">
-            <i class="fas fa-images mr-2 md:mr-3 text-xl md:text-2xl"></i>
-            Uploaded Images
-        </h2>
-    </div>
-    <div class="p-4 md:p-5">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead>
-                    <tr>
-                        <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preview</th>
-                        <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Original Name</th>
-                        <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                        <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
-                        <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Upload Date</th>
-                        <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="imageList" class="bg-white divide-y divide-gray-200">
-                    <!-- Images will be loaded here -->
-                </tbody>
-            </table>
+      <!-- Sidebar - hidden on mobile by default -->
+      <aside
+        id="sidebar"
+        class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block"
+      >
+        <div class="p-6 border-b border-blue-800">
+          <h2 class="text-xl font-bold tracking-wide">Welcome, admin123!</h2>
+          <!-- Close button for mobile -->
+          <button
+            id="close-sidebar"
+            class="absolute top-4 right-4 text-white md:hidden"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
         </div>
-    </div>
-</div>
+        <nav class="mt-4">
+          <ul>
+            <li class="mb-1 px-2">
+              <a
+                href="/admin"
+                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
+              >
+                <i class="fas fa-home mr-3"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li class="mb-1 px-2">
+              <a
+                href="/admin/control.html"
+                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
+              >
+                <i class="fas fa-sliders-h mr-3"></i>
+                <span>Visibility Controls</span>
+              </a>
+            </li>
+            <li class="mb-1 px-2">
+              <a
+                href="/admin/files.html"
+                class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium"
+              >
+                <i class="fas fa-users mr-3"></i>
+                <span>File Upload</span>
+              </a>
+            </li>
+            <li class="mb-1 px-2">
+              <a
+                href="/admin/eResources.html"
+                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
+              >
+                <i class="fas fa-file-alt mr-3"></i>
+                <span>e-Resources</span>
+              </a>
+            </li>
+            <li class="mb-1 px-2">
+              <a
+                href="/admin/latest_news.html"
+                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
+              >
+                <i class="fas fa-edit mr-3"></i>
+                <span>Latest News & Scrolling</span>
+              </a>
+            </li>
+            <li class="mb-1 px-2">
+              <a
+                href="/admin/formData"
+                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
+              >
+                <i class="fas fa-ticket-alt mr-3"></i>
+                <span>User Requests</span>
+              </a>
+            </li>
+            <li class="mb-1 px-2">
+              <a
+                href="/admin/cvGenerator.html"
+                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
+              >
+                <i class="fas fa-file-pdf mr-3"></i>
+                <span>CV Generator</span>
+              </a>
+            </li>
+            <br />
+            <li
+              style="padding-left: 13px; font-size: medium; font-size: 1.1rem"
+            >
+              Account
+            </li>
+            <li class="mb-1 px-2">
+              <a
+                href="/admin/logout"
+                class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200"
+              >
+                <i class="fas fa-sign-out-alt mr-3"></i>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
 
+      <!-- Overlay for mobile sidebar -->
+      <div
+        id="sidebar-overlay"
+        class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"
+      ></div>
 
-                </div>
+      <!-- Main Content -->
+      <main class="flex-1 overflow-y-auto">
+        <div class="p-4 md:p-6">
+          <!-- Header with mobile menu indicator -->
+          <div class="flex justify-between items-center mb-6 md:mb-8">
+            <div class="flex items-center">
+              <button
+                id="mobile-menu-button"
+                class="mr-3 text-gray-700 md:hidden"
+              >
+                <i class="fas fa-bars text-xl"></i>
+              </button>
+              <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+                File Management
+              </h1>
             </div>
-        </main>
+            <div class="flex items-center space-x-2 md:space-x-4">
+              <span class="text-gray-700 text-sm md:text-base hidden sm:inline"
+                >Welcome, Admin</span
+              >
+              <div
+                class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold"
+              >
+                A
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Navigation -->
+          <div class="mb-6">
+            <div class="border-b border-gray-200">
+              <nav class="-mb-px flex space-x-8">
+                <button
+                  id="files-tab"
+                  class="tab-button border-b-2 border-blue-500 text-blue-600 py-2 px-1 font-medium text-sm whitespace-nowrap"
+                >
+                  <i class="fas fa-file mr-2"></i>
+                  Files
+                </button>
+                <button
+                  id="images-tab"
+                  class="tab-button border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-2 px-1 font-medium text-sm whitespace-nowrap"
+                >
+                  <i class="fas fa-image mr-2"></i>
+                  Images
+                </button>
+              </nav>
+            </div>
+          </div>
+
+          <!-- Files Tab Content -->
+          <div id="files-content" class="tab-content">
+            <!-- Upload Form Card -->
+            <div
+              class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden mb-6"
+            >
+              <div class="bg-blue-800 text-white p-4 md:p-5">
+                <h2 class="text-lg md:text-xl font-semibold flex items-center">
+                  <i class="fas fa-upload mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                  Upload New File
+                </h2>
+              </div>
+              <div class="p-4 md:p-5">
+                <form id="uploadForm" class="space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        for="fileName"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >File Name</label
+                      >
+                      <input
+                        type="text"
+                        id="fileName"
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        for="file"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Select File</label
+                      >
+                      <input
+                        type="file"
+                        id="file"
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      for="fileDescription"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Description</label
+                    >
+                    <textarea
+                      id="fileDescription"
+                      rows="2"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    class="bg-blue-800 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center"
+                  >
+                    <i class="fas fa-upload mr-2"></i>
+                    Upload File
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- File List Card -->
+            <div
+              class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden"
+            >
+              <div class="bg-blue-800 text-white p-4 md:p-5">
+                <h2 class="text-lg md:text-xl font-semibold flex items-center">
+                  <i class="fas fa-files mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                  Uploaded Files
+                </h2>
+              </div>
+              <div class="p-4 md:p-5">
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                      <tr>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          File Name
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Description
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Type
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Size
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Upload Date
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      id="fileList"
+                      class="bg-white divide-y divide-gray-200"
+                    >
+                      <!-- Files will be loaded here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Images Tab Content -->
+          <div id="images-content" class="tab-content hidden">
+            <!-- Image Upload Form Card -->
+            <div
+              class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden mb-6"
+            >
+              <div class="bg-blue-600 text-white p-4 md:p-5">
+                <h2 class="text-lg md:text-xl font-semibold flex items-center">
+                  <i class="fas fa-images mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                  Upload New Image
+                </h2>
+              </div>
+              <div class="p-4 md:p-5">
+                <form id="imageUploadForm" class="space-y-4">
+                  <div>
+                    <label
+                      for="imageFile"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Select Image</label
+                    >
+                    <input
+                      type="file"
+                      id="imageFile"
+                      required
+                      accept="image/*"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                    />
+                    <p class="text-xs text-gray-500 mt-1">
+                      Supported formats: JPG, PNG, GIF, WEBP
+                    </p>
+                  </div>
+                  <button
+                    type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-200 flex items-center"
+                  >
+                    <i class="fas fa-upload mr-2"></i>
+                    Upload Image
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Image List Card -->
+            <div
+              class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden"
+            >
+              <div class="bg-blue-600 text-white p-4 md:p-5">
+                <h2 class="text-lg md:text-xl font-semibold flex items-center">
+                  <i class="fas fa-images mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                  Uploaded Images
+                </h2>
+              </div>
+              <div class="p-4 md:p-5">
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                      <tr>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Preview
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Original Name
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Type
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Size
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Upload Date
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      id="imageList"
+                      class="bg-white divide-y divide-gray-200"
+                    >
+                      <!-- Images will be loaded here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
 
     <!-- Floating action button for mobile -->
-    <button id="mobile-fab"
-        class="md:hidden fixed bottom-4 right-4 bg-blue-800 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
-        <i class="fas fa-plus"></i>
+    <button
+      id="mobile-fab"
+      class="md:hidden fixed bottom-4 right-4 bg-blue-800 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30"
+    >
+      <i class="fas fa-plus"></i>
     </button>
 
     <script>
-        // Mobile menu toggle functionality
-        const mobileMenuButton = document.getElementById("mobile-menu-button");
-        const closeSidebarButton = document.getElementById("close-sidebar");
-        const sidebar = document.getElementById("sidebar");
-        const sidebarOverlay = document.getElementById("sidebar-overlay");
-        const mobileFab = document.getElementById("mobile-fab");
+      // Mobile menu toggle functionality
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const closeSidebarButton = document.getElementById("close-sidebar");
+      const sidebar = document.getElementById("sidebar");
+      const sidebarOverlay = document.getElementById("sidebar-overlay");
+      const mobileFab = document.getElementById("mobile-fab");
 
-        // Function to open sidebar
-        function openSidebar() {
-            sidebar.classList.remove("-translate-x-full");
-            sidebarOverlay.classList.remove("hidden");
-            document.body.classList.add("overflow-hidden");
+      // Function to open sidebar
+      function openSidebar() {
+        sidebar.classList.remove("-translate-x-full");
+        sidebarOverlay.classList.remove("hidden");
+        document.body.classList.add("overflow-hidden");
+      }
+
+      // Function to close sidebar
+      function closeSidebar() {
+        sidebar.classList.add("-translate-x-full");
+        sidebarOverlay.classList.add("hidden");
+        document.body.classList.remove("overflow-hidden");
+      }
+
+      // Event listeners
+      if (mobileMenuButton) {
+        mobileMenuButton.addEventListener("click", openSidebar);
+      }
+
+      if (closeSidebarButton) {
+        closeSidebarButton.addEventListener("click", closeSidebar);
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener("click", closeSidebar);
+      }
+
+      // Optional: Close sidebar when clicking on a menu item on mobile
+      const sidebarLinks = sidebar.querySelectorAll("a");
+      sidebarLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          if (window.innerWidth < 768) {
+            closeSidebar();
+          }
+        });
+      });
+
+      // Handle resize events
+      window.addEventListener("resize", () => {
+        if (window.innerWidth >= 768) {
+          sidebar.classList.remove("-translate-x-full");
+          sidebarOverlay.classList.add("hidden");
+          document.body.classList.remove("overflow-hidden");
+        } else {
+          sidebar.classList.add("-translate-x-full");
         }
+      });
 
-        // Function to close sidebar
-        function closeSidebar() {
-            sidebar.classList.add("-translate-x-full");
-            sidebarOverlay.classList.add("hidden");
-            document.body.classList.remove("overflow-hidden");
-        }
+      // Tab functionality
+      const filesTab = document.getElementById("files-tab");
+      const imagesTab = document.getElementById("images-tab");
+      const filesContent = document.getElementById("files-content");
+      const imagesContent = document.getElementById("images-content");
 
-        // Event listeners
-        if (mobileMenuButton) {
-            mobileMenuButton.addEventListener("click", openSidebar);
-        }
+      function switchTab(
+        activeTab,
+        inactiveTab,
+        activeContent,
+        inactiveContent
+      ) {
+        // Update tab appearance
+        activeTab.classList.add("border-blue-500", "text-blue-600");
+        activeTab.classList.remove("border-transparent", "text-gray-500");
 
-        if (closeSidebarButton) {
-            closeSidebarButton.addEventListener("click", closeSidebar);
-        }
+        inactiveTab.classList.remove("border-blue-500", "text-blue-600");
+        inactiveTab.classList.add("border-transparent", "text-gray-500");
 
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener("click", closeSidebar);
-        }
+        // Show/hide content
+        activeContent.classList.remove("hidden");
+        inactiveContent.classList.add("hidden");
+      }
 
-        // Optional: Close sidebar when clicking on a menu item on mobile
-        const sidebarLinks = sidebar.querySelectorAll("a");
-        sidebarLinks.forEach((link) => {
-            link.addEventListener("click", () => {
-                if (window.innerWidth < 768) {
-                    closeSidebar();
-                }
+      filesTab.addEventListener("click", () => {
+        switchTab(filesTab, imagesTab, filesContent, imagesContent);
+      });
+
+      imagesTab.addEventListener("click", () => {
+        switchTab(imagesTab, filesTab, imagesContent, filesContent);
+        loadImages();
+      });
+
+      // Load files on page load
+      document.addEventListener("DOMContentLoaded", loadFiles);
+
+      // Handle file upload
+      document
+        .getElementById("uploadForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const formData = new FormData();
+          formData.append("file", document.getElementById("file").files[0]);
+          formData.append(
+            "fileName",
+            document.getElementById("fileName").value
+          );
+          formData.append(
+            "fileDescription",
+            document.getElementById("fileDescription").value
+          );
+
+          try {
+            const response = await fetch("/api/files/upload", {
+              method: "POST",
+              body: formData,
             });
-        });
 
-        // Handle resize events
-        window.addEventListener("resize", () => {
-            if (window.innerWidth >= 768) {
-                sidebar.classList.remove("-translate-x-full");
-                sidebarOverlay.classList.add("hidden");
-                document.body.classList.remove("overflow-hidden");
+            const result = await response.json();
+
+            if (result.success) {
+              showAlert("success", "File uploaded successfully");
+              loadFiles();
+              e.target.reset();
             } else {
-                sidebar.classList.add("-translate-x-full");
+              showAlert("danger", result.message || "Error uploading file");
             }
+          } catch (error) {
+            showAlert("danger", "Error uploading file");
+            console.error(error);
+          }
         });
 
-        // Tab functionality
-        const filesTab = document.getElementById('files-tab');
-        const imagesTab = document.getElementById('images-tab');
-        const filesContent = document.getElementById('files-content');
-        const imagesContent = document.getElementById('images-content');
+      // Handle image upload
+      document
+        .getElementById("imageUploadForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-        function switchTab(activeTab, inactiveTab, activeContent, inactiveContent) {
-            // Update tab appearance
-            activeTab.classList.add('border-blue-500', 'text-blue-600');
-            activeTab.classList.remove('border-transparent', 'text-gray-500');
-            
-            inactiveTab.classList.remove('border-blue-500', 'text-blue-600');
-            inactiveTab.classList.add('border-transparent', 'text-gray-500');
-            
-            // Show/hide content
-            activeContent.classList.remove('hidden');
-            inactiveContent.classList.add('hidden');
-        }
+          const formData = new FormData();
+          formData.append(
+            "image",
+            document.getElementById("imageFile").files[0]
+          );
 
-        filesTab.addEventListener('click', () => {
-            switchTab(filesTab, imagesTab, filesContent, imagesContent);
-        });
+          try {
+            const response = await fetch("/api/images/upload", {
+              method: "POST",
+              body: formData,
+            });
 
-        imagesTab.addEventListener('click', () => {
-            switchTab(imagesTab, filesTab, imagesContent, filesContent);
-            loadImages();
-        });
+            const result = await response.json();
 
-        // Load files on page load
-        document.addEventListener('DOMContentLoaded', loadFiles);
-
-        // Handle file upload
-        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const formData = new FormData();
-            formData.append('file', document.getElementById('file').files[0]);
-            formData.append('fileName', document.getElementById('fileName').value);
-            formData.append('fileDescription', document.getElementById('fileDescription').value);
-
-            try {
-                const response = await fetch('/api/files/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    showAlert('success', 'File uploaded successfully');
-                    loadFiles();
-                    e.target.reset();
-                } else {
-                    showAlert('danger', result.message || 'Error uploading file');
-                }
-            } catch (error) {
-                showAlert('danger', 'Error uploading file');
-                console.error(error);
+            if (result.success) {
+              showAlert("success", "Image uploaded successfully");
+              loadImages();
+              e.target.reset();
+            } else {
+              showAlert("danger", result.message || "Error uploading image");
             }
+          } catch (error) {
+            showAlert("danger", "Error uploading image");
+            console.error(error);
+          }
         });
 
-        // Handle image upload
-        document.getElementById('imageUploadForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+      // Load files from server
+      async function loadFiles() {
+        try {
+          const response = await fetch("/api/files");
+          const files = await response.json();
 
-            const formData = new FormData();
-            formData.append('image', document.getElementById('imageFile').files[0]);
+          const fileList = document.getElementById("fileList");
+          fileList.innerHTML = "";
 
-            try {
-                const response = await fetch('/api/images/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    showAlert('success', 'Image uploaded successfully');
-                    loadImages();
-                    e.target.reset();
-                } else {
-                    showAlert('danger', result.message || 'Error uploading image');
-                }
-            } catch (error) {
-                showAlert('danger', 'Error uploading image');
-                console.error(error);
-            }
-        });
-
-        // Load files from server
-        async function loadFiles() {
-            try {
-                const response = await fetch('/api/files');
-                const files = await response.json();
-
-                const fileList = document.getElementById('fileList');
-                fileList.innerHTML = '';
-
-                files.forEach(file => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${file.fileName}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${file.description || '-'}</td>
+          files.forEach((file) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${
+                          file.fileName
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                          file.description || "-"
+                        }</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                                 ${file.fileType}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatFileSize(file.size)}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${new Date(file.uploadDate).toLocaleDateString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatFileSize(
+                          file.size
+                        )}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${new Date(
+                          file.uploadDate
+                        ).toLocaleDateString()}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                            <button onclick="downloadFile('${file._id}')" class="text-blue-600 hover:text-blue-900">
+                            <button onclick="downloadFile('${
+                              file._id
+                            }')" class="text-blue-600 hover:text-blue-900">
                                 <i class="fas fa-download"></i>
                             </button>
-                            <button onclick="deleteFile('${file._id}')" class="text-red-600 hover:text-red-900">
+                            <button onclick="deleteFile('${
+                              file._id
+                            }')" class="text-red-600 hover:text-red-900">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
                     `;
-                    fileList.appendChild(row);
-                });
-            } catch (error) {
-                console.error('Error loading files:', error);
-                showAlert('danger', 'Error loading files');
-            }
+            fileList.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Error loading files:", error);
+          showAlert("danger", "Error loading files");
         }
+      }
 
-        // Load images from server
-       // Load images from server
-async function loadImages() {
-    try {
-        const response = await fetch('/api/images');
-        const images = await response.json();
+      // Load images from server
+      // Load images from server
+      async function loadImages() {
+        try {
+          const response = await fetch("/api/images");
+          const images = await response.json();
 
-        const imageList = document.getElementById('imageList');
-        imageList.innerHTML = '';
+          const imageList = document.getElementById("imageList");
+          imageList.innerHTML = "";
 
-        images.forEach(image => {
-            const row = document.createElement('tr');
+          images.forEach((image) => {
+            const row = document.createElement("tr");
             row.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex-shrink-0 h-10 w-10">
-                        <img class="h-10 w-10 rounded-md object-cover" src="${image.url}" alt="${image.originalFilename}">
+                        <img class="h-10 w-10 rounded-md object-cover" src="${
+                          image.url
+                        }" alt="${image.originalFilename}">
                     </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div class="text-sm text-gray-900">${image.originalFilename}</div>
+                    <div class="text-sm text-gray-900">${
+                      image.originalFilename
+                    }</div>
                     <div class="text-xs text-gray-500 mt-1">
                         <input type="text" value="${image.url}" readonly 
                             class="w-full text-xs bg-gray-50 border border-gray-200 rounded px-2 py-1 font-mono"
@@ -486,7 +649,7 @@ async function loadImages() {
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        ${image.fileType.split('/')[1] || image.fileType}
+                        ${image.fileType.split("/")[1] || image.fileType}
                     </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -507,101 +670,108 @@ async function loadImages() {
                 </td>
             `;
             imageList.appendChild(row);
-        });
-    } catch (error) {
-        console.error('Error loading images:', error);
-        showAlert('danger', 'Error loading images');
-    }
-}
+          });
+        } catch (error) {
+          console.error("Error loading images:", error);
+          showAlert("danger", "Error loading images");
+        }
+      }
 
-        // Copy image URL to clipboard
-        function copyImageUrl(url) {
-            navigator.clipboard.writeText(url).then(() => {
-                showAlert('success', 'URL copied to clipboard');
-            }).catch(() => {
-                showAlert('danger', 'Failed to copy URL');
-            });
+      // Copy image URL to clipboard
+      function copyImageUrl(url) {
+        navigator.clipboard
+          .writeText(url)
+          .then(() => {
+            showAlert("success", "URL copied to clipboard");
+          })
+          .catch(() => {
+            showAlert("danger", "Failed to copy URL");
+          });
+      }
+
+      // Delete image
+      async function deleteImage(imageId) {
+        if (!confirm("Are you sure you want to delete this image?")) {
+          return;
         }
 
-        // Delete image
-        async function deleteImage(imageId) {
-            if (!confirm('Are you sure you want to delete this image?')) {
-                return;
-            }
+        try {
+          const response = await fetch(`/api/images/${imageId}`, {
+            method: "DELETE",
+          });
 
-            try {
-                const response = await fetch(`/api/images/${imageId}`, {
-                    method: 'DELETE'
-                });
+          const result = await response.json();
 
-                const result = await response.json();
+          if (result.success) {
+            showAlert("success", "Image deleted successfully");
+            loadImages();
+          } else {
+            showAlert("danger", result.message || "Error deleting image");
+          }
+        } catch (error) {
+          showAlert("danger", "Error deleting image");
+          console.error(error);
+        }
+      }
 
-                if (result.success) {
-                    showAlert('success', 'Image deleted successfully');
-                    loadImages();
-                } else {
-                    showAlert('danger', result.message || 'Error deleting image');
-                }
-            } catch (error) {
-                showAlert('danger', 'Error deleting image');
-                console.error(error);
-            }
+      // Download file
+      async function downloadFile(fileId) {
+        window.location.href = `/api/files/download/${fileId}`;
+      }
+
+      // Delete file
+      async function deleteFile(fileId) {
+        if (!confirm("Are you sure you want to delete this file?")) {
+          return;
         }
 
-        // Download file
-        async function downloadFile(fileId) {
-            window.location.href = `/api/files/download/${fileId}`;
+        try {
+          const response = await fetch(`/api/files/${fileId}`, {
+            method: "DELETE",
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            showAlert("success", "File deleted successfully");
+            loadFiles();
+          } else {
+            showAlert("danger", result.message || "Error deleting file");
+          }
+        } catch (error) {
+          showAlert("danger", "Error deleting file");
+          console.error(error);
         }
+      }
 
-        // Delete file
-        async function deleteFile(fileId) {
-            if (!confirm('Are you sure you want to delete this file?')) {
-                return;
-            }
+      // Format file size
+      function formatFileSize(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+      }
 
-            try {
-                const response = await fetch(`/api/files/${fileId}`, {
-                    method: 'DELETE'
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    showAlert('success', 'File deleted successfully');
-                    loadFiles();
-                } else {
-                    showAlert('danger', result.message || 'Error deleting file');
-                }
-            } catch (error) {
-                showAlert('danger', 'Error deleting file');
-                console.error(error);
-            }
-        }
-
-        // Format file size
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // Show alert message
-        function showAlert(type, message) {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${type === 'success' ? 'bg-green-500' : 'bg-red-500'
-                } text-white`;
-            alertDiv.innerHTML = `
+      // Show alert message
+      function showAlert(type, message) {
+        const alertDiv = document.createElement("div");
+        alertDiv.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+          type === "success" ? "bg-green-500" : "bg-red-500"
+        } text-white`;
+        alertDiv.innerHTML = `
                 <div class="flex items-center">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                    <i class="fas ${
+                      type === "success"
+                        ? "fa-check-circle"
+                        : "fa-exclamation-circle"
+                    } mr-2"></i>
                     <span>${message}</span>
                 </div>
             `;
-            document.body.appendChild(alertDiv);
-            setTimeout(() => alertDiv.remove(), 5000);
-        }
+        document.body.appendChild(alertDiv);
+        setTimeout(() => alertDiv.remove(), 5000);
+      }
     </script>
-</body>
-
+  </body>
 </html>
