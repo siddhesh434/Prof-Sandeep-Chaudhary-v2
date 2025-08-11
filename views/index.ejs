@@ -312,7 +312,44 @@
 <%- include('partials/carousel', { carouselSlides: carouselSlides }) %>
 
   <%- include('partials/footer') %>
+  <!-- JavaScript for carousel -->
+    <script>
+      function openModal(element) {
+        document.getElementById("modal-title").textContent =
+          element.getAttribute("data-title");
+        document.getElementById("modal-image").src =
+          element.getAttribute("data-image");
+        document.getElementById("modal-description").textContent =
+          element.getAttribute("data-description");
 
+        document.getElementById("modal").style.display = "flex";
+      }
+
+      document.querySelector(".close").addEventListener("click", function () {
+        document.getElementById("modal").style.display = "none";
+      });
+
+      window.onclick = function (event) {
+        if (event.target == document.getElementById("modal")) {
+          document.getElementById("modal").style.display = "none";
+        }
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+
+        // SDG Tag hover effects
+        const sdgTags = document.querySelectorAll(".sdg-tag");
+        sdgTags.forEach((tag) => {
+          tag.addEventListener("mouseenter", () => {
+            tag.querySelector(".sdg-tooltip").style.opacity = "1";
+          });
+
+          tag.addEventListener("mouseleave", () => {
+            tag.querySelector(".sdg-tooltip").style.opacity = "0";
+          });
+        });
+      });
+    </script>
 
     <script type="application/ld+json">
   {

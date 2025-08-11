@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carousel Section</title>
     <style>
-
         /* Carousel Section */
        .carousel-section {
     background-color: var(--secondary-bg);
@@ -158,7 +157,7 @@
             z-index: 10;
         }
 
-        .indicator {
+        .carousel-indicator {
             width: 12px;
             height: 12px;
             border-radius: 50%;
@@ -167,31 +166,31 @@
             transition: background-color 0.3s ease;
         }
 
-        .indicator.active {
+        .carousel-indicator.active {
             background-color: var(--primary-color);
         }
 
-        /* Modal */
-        .modal {
+        /* Carousel Modal - Changed class names to avoid conflict */
+        .carousel-modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 1001; /* Higher than hexagon modal */
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.8);
-            animation: fadeIn 0.3s ease;
+            animation: carouselFadeIn 0.3s ease;
         }
 
-        @keyframes fadeIn {
+        @keyframes carouselFadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
 
-        .modal-content {
-            background-color: #fefefe;
+        .carousel-modal-content {
+            background-color: var(--card-bg, white);
             margin: 5% auto;
             padding: 0;
             border: none;
@@ -199,27 +198,27 @@
             max-width: 700px;
             border-radius: 12px;
             overflow: hidden;
-            animation: slideIn 0.3s ease;
+            animation: carouselSlideIn 0.3s ease;
         }
 
-        @keyframes slideIn {
+        @keyframes carouselSlideIn {
             from { transform: translateY(-50px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .modal-header {
+        .carousel-modal-header {
             background-color: var(--primary-color);
             color: white;
             padding: 20px;
             position: relative;
         }
 
-        .modal-title {
+        .carousel-modal-title {
             font-size: 1.8rem;
             margin: 0;
         }
 
-        .close {
+        .carousel-close {
             position: absolute;
             right: 20px;
             top: 50%;
@@ -231,25 +230,26 @@
             transition: opacity 0.3s ease;
         }
 
-        .close:hover {
+        .carousel-close:hover {
             opacity: 0.7;
         }
 
-        .modal-body {
+        .carousel-modal-body {
             padding: 30px;
         }
 
-        .modal-image {
+        .carousel-modal-image {
             width: 100%;
             max-height: 300px;
-            object-fit: cover;
+            object-fit: contain;
             border-radius: 8px;
             margin-bottom: 20px;
         }
 
-        .modal-description {
-            font-size: 1.1rem;
+        .carousel-modal-description {
+            font-size: 1.3rem;
             line-height: 1.6;
+            text-align: center;
             color: var(--text-color);
         }
 
@@ -299,7 +299,7 @@
                 font-size: 0.8rem;
             }
 
-            .modal-content {
+            .carousel-modal-content {
                 margin: 10% auto;
                 width: 95%;
             }
@@ -334,16 +334,16 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modal-title"></h3>
-                <span class="close" id="closeModal">&times;</span>
+    <!-- Carousel Modal - Different from hexagon modal -->
+    <div id="carouselModal" class="carousel-modal">
+        <div class="carousel-modal-content">
+            <div class="carousel-modal-header">
+                <h3 class="carousel-modal-title" id="carouselModalTitle"></h3>
+                <span class="carousel-close" id="closeCarouselModal">&times;</span>
             </div>
-            <div class="modal-body">
-                <img id="modal-image" class="modal-image" src="" alt="" />
-                <p class="modal-description" id="modal-description"></p>
+            <div class="carousel-modal-body">
+                <img id="carouselModalImage" class="carousel-modal-image" src="" alt="" />
+                <p class="carousel-modal-description" id="carouselModalDescription"></p>
             </div>
         </div>
     </div>
@@ -400,11 +400,11 @@
                 this.indicators = document.getElementById('carouselIndicators');
                 this.prevBtn = document.getElementById('prevBtn');
                 this.nextBtn = document.getElementById('nextBtn');
-                this.modal = document.getElementById('modal');
-                this.modalTitle = document.getElementById('modal-title');
-                this.modalImage = document.getElementById('modal-image');
-                this.modalDescription = document.getElementById('modal-description');
-                this.closeModal = document.getElementById('closeModal');
+                this.modal = document.getElementById('carouselModal');
+                this.modalTitle = document.getElementById('carouselModalTitle');
+                this.modalImage = document.getElementById('carouselModalImage');
+                this.modalDescription = document.getElementById('carouselModalDescription');
+                this.closeModal = document.getElementById('closeCarouselModal');
                 
                 this.init();
             }
@@ -447,7 +447,7 @@
                 this.indicators.innerHTML = '';
                 this.slides.forEach((_, index) => {
                     const indicator = document.createElement('div');
-                    indicator.className = 'indicator';
+                    indicator.className = 'carousel-indicator';
                     if (index === 0) indicator.classList.add('active');
                     indicator.addEventListener('click', () => this.goToSlide(index));
                     this.indicators.appendChild(indicator);
@@ -475,9 +475,13 @@
 
                 // Keyboard navigation
                 document.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowLeft') this.prevSlide();
-                    if (e.key === 'ArrowRight') this.nextSlide();
-                    if (e.key === 'Escape') this.closeModalHandler();
+                    // Only handle carousel keys if carousel modal is open
+                    if (this.modal.style.display === 'flex') {
+                        if (e.key === 'Escape') this.closeModalHandler();
+                    } else {
+                        if (e.key === 'ArrowLeft') this.prevSlide();
+                        if (e.key === 'ArrowRight') this.nextSlide();
+                    }
                 });
 
                 // Touch/swipe support
@@ -508,7 +512,7 @@
                 this.track.style.transform = `translateX(${offset}px)`;
                 
                 // Update indicators
-                document.querySelectorAll('.indicator').forEach((indicator, index) => {
+                document.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
                     indicator.classList.toggle('active', index === this.currentSlide);
                 });
             }
@@ -580,6 +584,54 @@
         function setCarouselData(slides) {
             window.carouselSlides = slides;
         }
+
+        // Separate function for hexagon modal to avoid conflicts
+        function openModal(element) {
+            const hexagonModal = document.getElementById('modal'); // Original hexagon modal
+            if (hexagonModal) {
+                const title = element.dataset.title;
+                const image = element.dataset.image;
+                const description = element.dataset.description;
+                
+                document.getElementById('modal-title').textContent = title;
+                document.getElementById('modal-image').src = image;
+                document.getElementById('modal-image').alt = title;
+                document.getElementById('modal-description').textContent = description;
+                
+                hexagonModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Close hexagon modal
+        document.addEventListener('DOMContentLoaded', () => {
+            const hexagonModal = document.getElementById('modal');
+            const hexagonClose = document.querySelector('#modal .close');
+            
+            if (hexagonClose) {
+                hexagonClose.addEventListener('click', () => {
+                    hexagonModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+            
+            if (hexagonModal) {
+                hexagonModal.addEventListener('click', (e) => {
+                    if (e.target === hexagonModal) {
+                        hexagonModal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+            
+            // Handle escape key for hexagon modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && hexagonModal.style.display === 'block') {
+                    hexagonModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
     </script>
 </body>
 </html>
