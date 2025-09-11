@@ -85,12 +85,6 @@ The website is deployed on Microsoft Azure with domain setup via GoDaddy. Deploy
 - Google site verification
 - Semantic HTML for better indexing
 
-## Future Enhancements
-- Integration with academic APIs (Google Scholar, Scopus)
-- Advanced search functionality for publications
-- Citation export features
-- User analytics dashboard
-
 ## Contributors
 - [Adi Jain](https://github.com/adijain123) - Lead Developer
 - [Siddhesh Waje](https://github.com/siddhesh434) - Lead Developer
