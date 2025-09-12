@@ -137,6 +137,10 @@ h3 {
   color: var(--primary-color);
   margin-bottom: 10px;
 }
+
+.pi-info p {
+  text-align: justify;
+}
 .pi_more:hover {
   color: blue;
 }

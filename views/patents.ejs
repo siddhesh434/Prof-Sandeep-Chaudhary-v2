@@ -100,6 +100,18 @@
                       <%= patent.applicationNumber %>
                     </p>
 
+                    <% if (patent.filingDate) { %>
+                      <p><strong>Filing Date:</strong>
+                        <%= patent.filingDate %>
+                      </p>
+                    <% } %>
+
+                    <% if (patent.publicationDate) { %>
+                      <p><strong>Publication Date:</strong>
+                        <%= patent.publicationDate %>
+                      </p>
+                    <% } %>
+
                     <p class="grantNum"><strong>Grant Number: </strong>
                       <%= patent.grantNumber %>
                     </p>
@@ -161,8 +173,10 @@
         <p><strong>Inventors:</strong> <span id="modal-inventors"></span></p>
         <p><strong>Year:</strong> <span id="modal-year"></span></p>
         <p><strong>Application Number:</strong> <span id="modal-app-number"></span></p>
-        <p><strong>Patent Number:</strong> <span id="modal-patent-number"></span></p>
-        <p><strong>Grant Date:</strong> <span id="modal-grant-date"></span></p>
+        <p id="modal-filing-date" style="display: none;"><strong>Filing Date:</strong> <span id="modal-filing-date-value"></span></p>
+        <p id="modal-publication-date" style="display: none;"><strong>Publication Date:</strong> <span id="modal-publication-date-value"></span></p>
+        <p id="modal-grant-number" style="display: none;"><strong>Grant Number:</strong> <span id="modal-grant-number-value"></span></p>
+        <p id="modal-grant-date" style="display: none;"><strong>Grant Date:</strong> <span id="modal-grant-date-value"></span></p>
       </div>
       <div class="modal-description">
         <h3>Description</h3>

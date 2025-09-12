@@ -5,6 +5,8 @@ const patentSchema = new mongoose.Schema({
   authors: String,
   year: Number,
   applicationNumber: String,
+  filingDate: String,
+  publicationDate: String,
   grantNumber: String,
   grantDate: String,
   description: String,

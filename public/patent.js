@@ -93,12 +93,42 @@ function initializeModal() {
         const inventors = inventorsElement ? inventorsElement.textContent.replace("Inventors: ", "") : "";
         const year = patentCard.querySelector(".patent-year").textContent;
         const description = patentCard.querySelector(".desc").textContent;
-        const grantDate = patentCard.querySelector(".grantDate").textContent;
-        const grantNumber = patentCard.querySelector(".grantNum").textContent;
         
         // Application number is the second paragraph in patent-card-body
         const appNumberElement = patentCard.querySelectorAll(".patent-card-body p")[1];
         const appNumber = appNumberElement ? appNumberElement.textContent.replace("Application No.: ", "") : "";
+
+        // Check for filing date
+        let filingDate = "";
+        const filingDateElement = Array.from(patentCard.querySelectorAll(".patent-card-body p")).find(p => 
+          p.textContent.includes("Filing Date:")
+        );
+        if (filingDateElement) {
+          filingDate = filingDateElement.textContent.replace("Filing Date: ", "");
+        }
+        
+        // Check for publication date
+        let publicationDate = "";
+        const publicationDateElement = Array.from(patentCard.querySelectorAll(".patent-card-body p")).find(p => 
+          p.textContent.includes("Publication Date:")
+        );
+        if (publicationDateElement) {
+          publicationDate = publicationDateElement.textContent.replace("Publication Date: ", "");
+        }
+
+        // Check for grant number
+        let grantNumber = "";
+        const grantNumberElement = patentCard.querySelector(".grantNum");
+        if (grantNumberElement) {
+          grantNumber = grantNumberElement.textContent.replace("Grant Number: ", "");
+        }
+
+        // Check for grant date
+        let grantDate = "";
+        const grantDateElement = patentCard.querySelector(".grantDate");
+        if (grantDateElement) {
+          grantDate = grantDateElement.textContent.replace("Grant Date: ", "");
+        }
 
         // Set modal content
         document.getElementById("modal-title").textContent = title;
@@ -106,11 +136,39 @@ function initializeModal() {
         document.getElementById("modal-year").textContent = year;
         document.getElementById("modal-app-number").textContent = appNumber;
 
-        // For patent and grant numbers, we'll leave them as placeholders since they're not in the card
-        document.getElementById("modal-patent-number").textContent = grantNumber;
-        document.getElementById("modal-grant-date").textContent = grantDate;
+        // Handle filing date
+        if (filingDate) {
+          document.getElementById("modal-filing-date-value").textContent = filingDate;
+          document.getElementById("modal-filing-date").style.display = "block";
+        } else {
+          document.getElementById("modal-filing-date").style.display = "none";
+        }
 
-        // Description remains the same as before
+        // Handle publication date
+        if (publicationDate) {
+          document.getElementById("modal-publication-date-value").textContent = publicationDate;
+          document.getElementById("modal-publication-date").style.display = "block";
+        } else {
+          document.getElementById("modal-publication-date").style.display = "none";
+        }
+
+        // Handle grant number
+        if (grantNumber && grantNumber.trim() !== "") {
+          document.getElementById("modal-grant-number-value").textContent = grantNumber;
+          document.getElementById("modal-grant-number").style.display = "block";
+        } else {
+          document.getElementById("modal-grant-number").style.display = "none";
+        }
+
+        // Handle grant date
+        if (grantDate && grantDate.trim() !== "") {
+          document.getElementById("modal-grant-date-value").textContent = grantDate;
+          document.getElementById("modal-grant-date").style.display = "block";
+        } else {
+          document.getElementById("modal-grant-date").style.display = "none";
+        }
+
+        // Description
         document.getElementById("modal-description").textContent = description;
 
         // Show the modal

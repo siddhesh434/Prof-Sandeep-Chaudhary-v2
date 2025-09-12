@@ -190,6 +190,20 @@
             </div>
 
             <div class="flex flex-col">
+              <label class="mb-2 text-gray-700" for="filingDate">Filing Date</label>
+              <input type="text" id="filingDate" name="filingDate"
+                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                placeholder="e.g., Jan. 15, 2020 (Leave empty if not available)" />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="mb-2 text-gray-700" for="publicationDate">Publication Date</label>
+              <input type="text" id="publicationDate" name="publicationDate"
+                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                placeholder="e.g., Jul. 30, 2021 (Leave empty if not available)" />
+            </div>
+
+            <div class="flex flex-col">
               <label class="mb-2 text-gray-700" for="grantNumber">Grant Number</label>
               <input type="text" id="grantNumber" name="grantNumber"
                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
@@ -506,13 +520,19 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <p class="text-gray-600"><strong>Authors:</strong> ${escapeHtml(patent.authors)}</p>
+              <p class="text-gray-600"><strong>Inventors:</strong> ${escapeHtml(patent.authors)}</p>
               <p class="text-gray-600"><strong>Filing Year:</strong> ${escapeHtml(patent.year.toString())}</p>
               <p class="text-gray-600"><strong>Application Number:</strong> ${escapeHtml(patent.applicationNumber)}</p>
+              ${patent.filingDate && patent.filingDate.trim() !== '' ? 
+                `<p class="text-gray-600"><strong>Filing Date:</strong> ${escapeHtml(patent.filingDate)}</p>` : ''
+              }
+              ${patent.publicationDate && patent.publicationDate.trim() !== '' ? 
+                `<p class="text-gray-600"><strong>Publication Date:</strong> ${escapeHtml(patent.publicationDate)}</p>` : ''
+              }
             </div>
             <div>
               <p class="text-gray-600"><strong>Grant Number:</strong> ${isGranted ? escapeHtml(patent.grantNumber) : 'Pending'}</p>
-              <p class="text-gray-600"><strong>Grant Date:</strong> ${patent.grantDate && patent.grantDate.trim() !== '-' ? escapeHtml(patent.grantDate) : 'Pending'}</p>
+              <p class="text-gray-600"><strong>Grant Date:</strong> ${patent.grantDate && patent.grantDate.trim() !== '-' && patent.grantDate.trim() !== '' ? escapeHtml(patent.grantDate) : 'Pending'}</p>
             </div>
           </div>
           <div class="mt-4">
@@ -607,6 +627,8 @@
         authors: document.getElementById("authors").value.trim(),
         year: parseInt(document.getElementById("year").value.trim()),
         applicationNumber: document.getElementById("applicationNumber").value.trim(),
+        filingDate: document.getElementById("filingDate").value.trim(),
+        publicationDate: document.getElementById("publicationDate").value.trim(),
         grantNumber: document.getElementById("grantNumber").value.trim(),
         grantDate: document.getElementById("grantDate").value.trim(),
         description: document.getElementById("description").value.trim(),
@@ -661,6 +683,8 @@
         document.getElementById("authors").value = patent.authors;
         document.getElementById("year").value = patent.year;
         document.getElementById("applicationNumber").value = patent.applicationNumber;
+        document.getElementById("filingDate").value = patent.filingDate || '';
+        document.getElementById("publicationDate").value = patent.publicationDate || '';
         document.getElementById("grantNumber").value = patent.grantNumber || '';
         document.getElementById("grantDate").value = patent.grantDate || '';
         document.getElementById("description").value = patent.description;
@@ -693,6 +717,8 @@
         authors: document.getElementById("authors").value.trim(),
         year: parseInt(document.getElementById("year").value.trim()),
         applicationNumber: document.getElementById("applicationNumber").value.trim(),
+        filingDate: document.getElementById("filingDate").value.trim(),
+        publicationDate: document.getElementById("publicationDate").value.trim(),
         grantNumber: document.getElementById("grantNumber").value.trim(),
         grantDate: document.getElementById("grantDate").value.trim(),
         description: document.getElementById("description").value.trim(),
