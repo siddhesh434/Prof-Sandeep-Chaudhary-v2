@@ -63,7 +63,8 @@
 %>
 <div class="moving-bulletin" role="alert" style="background: linear-gradient(45deg, <%= gradientColor %>)">
   <div class="bulletin-content" style="animation-duration: <%= bulletin.speed ? bulletin.speed + 's' : '15s' %>;">
-    <strong><%= bulletin.title || 'Latest News :' %></strong> <%= bulletin.message %>
+    <span class="bulletin-item"><strong><%= bulletin.title || 'Latest News :' %></strong> <%= bulletin.message %></span>
+    <span class="bulletin-item" aria-hidden="true"><strong><%= bulletin.title || 'Latest News :' %></strong> <%= bulletin.message %></span>
   </div>
 </div>
 <% } %>
@@ -306,7 +307,7 @@
   </div>
   
 <script>
-   carouselSlides = <%- JSON.stringify(carouselSlides) %>;
+   var carouselSlides = <%- JSON.stringify(carouselSlides) %>;
 </script>
 
 <%- include('partials/carousel', { carouselSlides: carouselSlides }) %>
@@ -371,7 +372,7 @@
     "image": "https://sustainableconstructionlab.com/images/sandeep-chaudhary.jpg",
     "description": "Professor at IIT Indore specializing in sustainable construction, low carbon materials, waste upcycling, and IoT applications."
   }
-</>
+</script>
 
     <!-- Structured Data for Organization -->
     <script type="application/ld+json">

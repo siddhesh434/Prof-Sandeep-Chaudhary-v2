@@ -18,20 +18,21 @@ h3 {
 }
 
 .bulletin-content {
-  display: flex;
+  display: inline-flex;
   white-space: nowrap;
-  animation: move-left 25s linear infinite;
-  padding-right: 100%;
+  animation: marquee 25s linear infinite;
+  will-change: transform;
   font-size: 1rem;
 }
 
-@keyframes move-left {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+.bulletin-item {
+  display: inline-block;
+  padding-right: 50vw;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* Hero Image Section */
