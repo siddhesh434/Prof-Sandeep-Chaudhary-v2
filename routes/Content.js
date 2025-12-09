@@ -51,93 +51,106 @@ const requireAuth = (req, res, next) => {
 // BULLETIN MANAGEMENT ROUTES
 // ===========================================
 
-// GET: Retrieve current bulletin settings
-router.get('/admin/api/bulletin', async (req, res) => {
-  console.log('GET bulletin endpoint hit');
+// GET: Retrieve all bulletins (admin)
+router.get('/admin/api/bulletins', async (req, res) => {
   try {
-    let bulletin = await Bulletin.findOne().sort({ createdAt: -1 });
-    
-    if (!bulletin) {
-      bulletin = new Bulletin({
-        title: 'Latest News :',
-        message: 'Welcome to our website!',
-        enabled: true
-      });
-      await bulletin.save();
-    }
-
-    res.json({
-      success: true,
-      bulletin: bulletin
-    });
+    const bulletins = await Bulletin.find().sort({ createdAt: -1 });
+    res.json({ success: true, bulletins });
   } catch (error) {
-    console.error('Error fetching bulletin:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching bulletin settings',
-      error: error.message
-    });
+    console.error('Error fetching bulletins:', error);
+    res.status(500).json({ success: false, message: 'Error fetching bulletins', error: error.message });
   }
 });
 
-// POST: Update bulletin settings
-router.post('/admin/api/bulletin', requireAuth, async (req, res) => {
-  console.log('POST bulletin endpoint hit');
-  console.log('Request body:', req.body);
-  
+// GET: Retrieve latest bulletin (backward compatibility)
+router.get('/admin/api/bulletin', async (req, res) => {
   try {
-    const { enabled, title, message, speed, color, priority } = req.body;
+    const bulletin = await Bulletin.findOne().sort({ createdAt: -1 });
+    res.json({ success: true, bulletin });
+  } catch (error) {
+    console.error('Error fetching bulletin:', error);
+    res.status(500).json({ success: false, message: 'Error fetching bulletin', error: error.message });
+  }
+});
 
-    // Validation
+// POST: Create bulletin
+router.post('/admin/api/bulletins', requireAuth, async (req, res) => {
+  try {
+    const { enabled, title, message, speed, color, priority, linkUrl } = req.body;
     if (!title || !message) {
-      return res.status(400).json({
-        success: false,
-        message: 'Title and message are required'
-      });
+      return res.status(400).json({ success: false, message: 'Title and message are required' });
     }
-
-    if (speed < 5 || speed > 30) {
-      return res.status(400).json({
-        success: false,
-        message: 'Speed must be between 5 and 30 seconds'
-      });
+    if (speed && (speed < 5 || speed > 30)) {
+      return res.status(400).json({ success: false, message: 'Speed must be between 5 and 30 seconds' });
     }
-
-    let bulletin = await Bulletin.findOne().sort({ createdAt: -1 });
-    
-    if (bulletin) {
-      bulletin.enabled = enabled;
-      bulletin.title = title;
-      bulletin.message = message;
-      bulletin.speed = speed;
-      bulletin.color = color;
-      bulletin.priority = priority;
-      bulletin.updatedAt = new Date();
-    } else {
-      bulletin = new Bulletin({
-        enabled,
-        title,
-        message,
-        speed,
-        color,
-        priority
-      });
-    }
-
-    await bulletin.save();
-
-    res.json({
-      success: true,
-      message: 'Bulletin updated successfully',
-      bulletin: bulletin
+    const bulletin = new Bulletin({
+      enabled: enabled !== undefined ? enabled : true,
+      title,
+      message,
+      speed: speed || 15,
+      color: color || 'blue',
+      priority: priority || 'normal',
+      linkUrl: linkUrl || ''
     });
+    await bulletin.save();
+    res.status(201).json({ success: true, bulletin });
+  } catch (error) {
+    console.error('Error creating bulletin:', error);
+    res.status(500).json({ success: false, message: 'Error creating bulletin', error: error.message });
+  }
+});
+
+// PUT: Update bulletin
+router.put('/admin/api/bulletins/:id', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { enabled, title, message, speed, color, priority, linkUrl } = req.body;
+    if (speed && (speed < 5 || speed > 30)) {
+      return res.status(400).json({ success: false, message: 'Speed must be between 5 and 30 seconds' });
+    }
+    const bulletin = await Bulletin.findById(id);
+    if (!bulletin) {
+      return res.status(404).json({ success: false, message: 'Bulletin not found' });
+    }
+    bulletin.enabled = enabled !== undefined ? enabled : bulletin.enabled;
+    bulletin.title = title || bulletin.title;
+    bulletin.message = message || bulletin.message;
+    bulletin.speed = speed || bulletin.speed;
+    bulletin.color = color || bulletin.color;
+    bulletin.priority = priority || bulletin.priority;
+    bulletin.linkUrl = linkUrl !== undefined ? linkUrl : bulletin.linkUrl;
+    bulletin.updatedAt = new Date();
+    await bulletin.save();
+    res.json({ success: true, bulletin });
   } catch (error) {
     console.error('Error updating bulletin:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error updating bulletin',
-      error: error.message
-    });
+    res.status(500).json({ success: false, message: 'Error updating bulletin', error: error.message });
+  }
+});
+
+// DELETE: Remove bulletin
+router.delete('/admin/api/bulletins/:id', requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await Bulletin.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: 'Bulletin not found' });
+    }
+    res.json({ success: true, message: 'Bulletin deleted' });
+  } catch (error) {
+    console.error('Error deleting bulletin:', error);
+    res.status(500).json({ success: false, message: 'Error deleting bulletin', error: error.message });
+  }
+});
+
+// Public: active bulletins
+router.get('/api/bulletins', async (req, res) => {
+  try {
+    const bulletins = await Bulletin.find({ enabled: true }).sort({ createdAt: -1 });
+    res.json({ success: true, bulletins });
+  } catch (error) {
+    console.error('Error fetching bulletins:', error);
+    res.status(500).json({ success: false, message: 'Error fetching bulletins', error: error.message });
   }
 });
 

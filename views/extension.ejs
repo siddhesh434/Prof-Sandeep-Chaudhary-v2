@@ -1,18 +1,4 @@
 <%- include('partials/header') %>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="Extension Activities of Prof. Sandeep Chaudhary - Government Advisory Roles, International Contributions, and National Contributions in Civil Engineering and Sustainable Construction" />
-  <meta name="keywords"
-    content="Prof. Sandeep Chaudhary, Extension Activities, Government Advisory, International Contributions, National Contributions, Civil Engineering, Sustainable Construction, IIT Indore" />
-  <meta name="author" content="Prof. Sandeep Chaudhary" />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="Extension Activities - Prof. Sandeep Chaudhary" />
-  <meta property="og:description"
-    content="Professional contributions and advisory roles of Prof. Sandeep Chaudhary in government, international, and national organizations" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://your-domain.com/extension" />
-  <meta property="og:image" content="/images/iitlogo.jpg" />
-  <link rel="canonical" href="https://your-domain.com/extension" />
   <link rel="stylesheet" href="extension.css">
 
   <!-- Main Content -->
@@ -98,27 +84,6 @@
             item.style.opacity = "1";
             item.style.transform = "translateY(0)";
           }, 100 * index);
-        });
-
-        // Add hover effect to cards
-        const cards = document.querySelectorAll(".content-card");
-        cards.forEach((card) => {
-          const header = card.querySelector(".card-header");
-          const icon = card.querySelector(".header-icon");
-
-          card.addEventListener("mouseenter", function () {
-            header.style.background = "var(--primary-color)";
-            header.style.color = "white";
-            icon.style.background = "white";
-            icon.querySelector("i").style.color = "var(--primary-color)";
-          });
-
-          card.addEventListener("mouseleave", function () {
-            header.style.background = "var(--secondary-bg)";
-            header.style.color = "var(--text-color)";
-            icon.style.background = "var(--primary-color)";
-            icon.querySelector("i").style.color = "white";
-          });
         });
       });
     </script>

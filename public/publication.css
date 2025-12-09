@@ -1,209 +1,10 @@
-:root {
-  /* Default is dark mode */
-  --primary-color: #5ab9a8;
-  --background-color: #20232a;
-  --text-color: #ffffff;
-  --secondary-bg: #292d36;
-  --footer-bg: #191c22;
-  --header-bg: #ffffff;
-  --header-text: #333333;
-  --card-bg: #292d36;
-  --border-color: #444;
-  --table-header-bg: #1a1d23;
-  --table-row-hover: #343a48;
-  --table-border: #444;
-  --pagination-bg: #343a48;
-}
-
 /* Light theme */
-html[data-theme="light"] {
-  --primary-color: #3a9d8d;
-  --background-color: #f5f5f7;
-  --text-color: #333;
-  --secondary-bg: #ffffff;
-  --footer-bg: #e5e5e7;
-  --header-bg: #ffffff;
-  --header-text: #333333;
-  --card-bg: #ffffff;
-  --border-color: #ddd;
-  --table-header-bg: #f0f0f2;
-  --table-row-hover: #f9f9fa;
-  --table-border: #e0e0e0;
-  --pagination-bg: #e8e8ea;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  transition: background-color 0.01s ease, color 0.01s ease;
-}
-
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  line-height: 1.6;
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
 /* Navigation */
-header {
-  background-color: var(--header-bg);
-  padding: 20px 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-}
-.nav-links {
-  display: flex;
-  gap: 20px;
-}
-.nav-links a {
-  text-decoration: none;
-  color: var(--header-text);
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-.nav-links a.active,
-.nav-links a:hover {
-  color: var(--primary-color);
-}
-.nav-icons {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-}
-.menu-icon {
-  display: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-.mobile-menu {
-  display: none;
-  flex-direction: column;
-  position: absolute;
-  top: 60px;
-  left: 0;
-  width: 100%;
-  background: var(--header-bg);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.mobile-menu a {
-  padding: 15px;
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-}
-.close-menu {
-  text-align: right;
-  padding: 10px;
-  font-size: 20px;
-  cursor: pointer;
-}
 @media (max-width: 768px) {
-  .nav-links {
-    display: none;
   }
-  .menu-icon {
-    display: block;
-  }
-  .mobile-menu {
-    display: flex;
-  }
-}
 
 /* Theme toggle switch */
-.theme-switch {
-  position: relative;
-  width: 60px;
-  height: 30px;
-  margin-left: 15px;
-}
-
-.theme-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 30px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 22px;
-  width: 22px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: var(--primary-color);
-}
-
-input:checked + .slider:before {
-  transform: translateX(30px);
-}
-
-.slider .icon {
-  position: absolute;
-  top: 7px;
-  font-size: 14px;
-  transition: opacity 0.3s ease;
-  color: #333;
-}
-
-.slider .sun-icon {
-  left: 8px;
-  opacity: 1;
-}
-
-.slider .moon-icon {
-  right: 8px;
-  opacity: 0;
-  color: #fff;
-}
-
-input:checked + .slider .sun-icon {
-  opacity: 0;
-}
-
-input:checked + .slider .moon-icon {
-  opacity: 1;
-}
-
-/* Main Content */
-.main-wrapper {
-  display: flex;
-  flex-direction: column;
-  padding: 50px 0;
-}
-
+input:checked + input:checked + input:checked + input:checked + /* Main Content */
 .page-title {
   text-align: center;
   margin-bottom: 50px;
@@ -211,7 +12,7 @@ input:checked + .slider .moon-icon {
 
 .page-title h1 {
   font-size: 3rem;
-  color: var(--primary-color);
+  color: var(--text-color);
   margin-bottom: 10px;
 }
 
@@ -560,9 +361,5 @@ input:checked + .slider .moon-icon {
   .table-wrapper{
     overflow: scroll;
   }
-  .main-wrapper{
-    max-width: 89vw !important;
   }
-}
-
 

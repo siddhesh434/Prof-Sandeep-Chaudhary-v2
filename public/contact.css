@@ -11,59 +11,22 @@
     padding: 0 1rem;
 }
 
-.section {
-    margin-bottom: 4rem;
-    padding: 3rem 0;
-    background-color: var(--secondary-bg);
-    border-radius: 12px;
-    box-shadow: var(--soft-shadow);
-    transition: var(--transition);
+/* Target section TAG, not class */
+section {
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+    /* Removed background-color to rely on card or global background */
 }
 
-.section:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-}
-
-.section-title {
-    text-align: center;
-    margin-bottom: 2.5rem;
-    color: var(--primary-color);
-    font-size: 2.75rem;
-    font-weight: 700;
-    position: relative;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.section-title::before,
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--primary-color);
-}
-
-.section-title::before {
-    width: 120px;
-    height: 4px;
-    opacity: 0.3;
-}
-
-.section-title::after {
-    width: 60px;
-    height: 6px;
-}
-
+/* Contact Card - Ensure good contrast */
 .contact-card {
-    background-color: var(--secondary-bg);
+    background-color: var(--card-bg); /* Use card-bg which is usually white/light */
     border-radius: 15px;
     padding: 2.5rem;
-    box-shadow: var(--soft-shadow);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     border-left: 5px solid var(--primary-color);
-    transition: var(--transition);
+    transition: transform 0.3s ease;
+    border: 1px solid var(--border-color); /* Added explicit border */
 }
 
 .contact-card:hover {
@@ -71,16 +34,17 @@
 }
 
 .contact-details h2 {
-    color: var(--primary-color);
+    color: var(--primary-color); /* Ensure primary color (green) */
     margin-bottom: 1.5rem;
     font-size: 1.8rem;
     font-weight: 600;
 }
 
 .contact-location {
-    color: var(--text-color);
+    color: var(--text-color); /* Ensure text color (dark) */
     margin-bottom: 1.5rem;
     line-height: 1.8;
+    background-color: transparent; /* Fix any inherited bg */
 }
 
 .contact-methods {
@@ -97,18 +61,18 @@
 }
 
 .contact-methods i {
-    color: var(--secondary-color);
+    color: var(--primary-color); /* Fix: Use primary color instead of undefined secondary */
     font-size: 1.2rem;
 }
 
 .contact-methods a {
-    color: var(--primary-color);
+    color: var(--text-color); /* Dark text for links */
     text-decoration: none;
-    transition: var(--transition);
+    transition: color 0.3s ease;
 }
 
 .contact-methods a:hover {
-    color: var(--accent-color);
+    color: var(--primary-color); /* Highlight on hover */
     text-decoration: underline;
 }
 

@@ -44,8 +44,12 @@
   <!-- Google Site Verification -->
   <meta name="google-site-verification" content="googlef5c0188d6e6ea5f5" />
 
+  <!-- Global Styles -->
+  <link rel="stylesheet" href="/globals.css" />
+  
   <!-- Preload critical resources -->
   <link rel="preload" href="/header.css" as="style" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Structured Data for Person -->
   <script type="application/ld+json">
@@ -94,21 +98,35 @@
 <body>
   <link rel="stylesheet" href="/header.css" />
   <script>
-    // Run this script immediately, before DOM is fully loaded
+    // Run this script immediately, before DOM is fully loaded, to prevent flash
     (function () {
-      // Apply dark theme by default
-      document.documentElement.setAttribute("data-theme", "dark");
+      const savedTheme = localStorage.getItem("theme") || "light";
+      document.documentElement.setAttribute("data-theme", savedTheme);
 
-      // Pre-set the checkbox state in the HTML
+      // Pre-set the checkbox state logic if possible or just handle styles
+      // This style hides the toggle until we iterate it to match state
       document.write(
         "<style>#theme-toggle{opacity:0}#theme-toggle.ready{opacity:1}</style>"
       );
-
-      // This will run after the DOM is loaded to check the checkbox
-      document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("theme-toggle").checked = true;
-      });
     })();
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const themeToggle = document.getElementById("theme-toggle");
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+
+      // Set toggle state based on current theme
+      themeToggle.checked = currentTheme === "dark";
+      
+      // Make toggle visible
+      themeToggle.classList.add("ready");
+
+      // Listen for toggle changes
+      themeToggle.addEventListener("change", function (e) {
+        const newTheme = e.target.checked ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+      });
+    });
   </script>
 
   <!-- Toggle Button -->
@@ -331,7 +349,7 @@
 
         <div class="nav-icons">
           <label class="theme-switch" aria-label="Toggle dark mode">
-            <input type="checkbox" id="theme-toggle" checked />
+            <input type="checkbox" id="theme-toggle" />
             <span class="slider">
               <i class="fas fa-sun sun-icon icon" aria-hidden="true"></i>
               <i class="fas fa-moon moon-icon icon" aria-hidden="true"></i>
@@ -343,30 +361,5 @@
   </header>
   <div style="height: 70px !important"></div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const themeToggle = document.getElementById("theme-toggle");
 
-      // Set dark theme as default
-      document.documentElement.setAttribute("data-theme", "dark");
-      localStorage.setItem("theme", "dark");
 
-      // Set the toggle position
-      themeToggle.checked = true;
-
-      // Make toggle visible after its state is set
-      setTimeout(() => themeToggle.classList.add("ready"), 50);
-
-      // Listen for toggle changes
-      themeToggle.addEventListener("change", function (e) {
-        if (e.target.checked) {
-          document.documentElement.setAttribute("data-theme", "dark");
-          localStorage.setItem("theme", "dark");
-        } else {
-          document.documentElement.setAttribute("data-theme", "light");
-          localStorage.setItem("theme", "light");
-        }
-      });
-    });
-  </script>
-</body>

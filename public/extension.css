@@ -1,16 +1,5 @@
 
 /* Main Content Styling */
-.main-wrapper {
-  background-color: var(--background-color);
-  padding: 60px 0;
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
 /* Section Title */
 .section-title {
   text-align: center;
@@ -67,11 +56,12 @@
 }
 
 .card-header {
-  background-color: var(--secondary-bg);
-  padding: 20px 25px;
   display: flex;
   align-items: center;
+  padding: 20px;
+  background-color: var(--secondary-bg);
   border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .header-icon {
@@ -84,11 +74,13 @@
   justify-content: center;
   margin-right: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
 .header-icon i {
   font-size: 24px;
   color: white;
+  transition: color 0.3s ease;
 }
 
 .card-header h2 {
@@ -96,10 +88,28 @@
   color: var(--text-color);
   margin: 0;
   font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+/* Hover Effects */
+.content-card:hover .card-header {
+  background-color: var(--primary-color);
+}
+
+.content-card:hover .card-header h2 {
+  color: white;
+}
+
+.content-card:hover .header-icon {
+  background-color: white;
+}
+
+.content-card:hover .header-icon i {
+  color: var(--primary-color);
 }
 
 .card-body {
-  padding: 30px 25px;
+  padding: 30px;
 }
 
 /* Elegant List Styling */
@@ -192,20 +202,8 @@
 }
 
 @media (max-width: 480px) {
-  .main-wrapper {
-    padding: 40px 0;
-  }
-
   .section-title {
     margin-bottom: 30px;
-  }
-
-  .card-header {
-    padding: 15px;
-  }
-
-  .card-body {
-    padding: 20px 15px;
   }
 
   .position-title {

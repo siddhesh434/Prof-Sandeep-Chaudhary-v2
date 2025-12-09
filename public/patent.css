@@ -1,51 +1,7 @@
 /* Root Color Variables */
-:root {
-  /* Default is dark mode */
-  --primary-color: #5ab9a8;
-  --background-color: #20232a;
-  --text-color: #ffffff;
-  --secondary-bg: #292d36;
-  --footer-bg: #191c22;
-  --header-bg: #ffffff;
-  --header-text: #333333;
-  --card-bg: #292d36;
-  --border-color: #444;
-}
-
 /* Light theme */
-html[data-theme="light"] {
-  --primary-color: #33B38D;
-  --background-color: #f5f5f7;
-  --text-color: #333;
-  --secondary-bg: #ffffff;
-  --footer-bg: #e5e5e7;
-  --header-bg: #ffffff;
-  --header-text: #333333;
-  --card-bg: #ffffff;
-  --border-color: #ddd;
-}
-
 /* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
 /* Main Content Wrapper */
-.main-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
 /* Page Title Styles */
 .page-title {
   text-align: center;
@@ -188,15 +144,6 @@ body {
   transform: translateY(-5px);
 }
 
-.patent-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  border-bottom: 2px solid var(--primary-color);
-  padding-bottom: 10px;
-}
-
 .patent-card-header h3 {
   margin: 0;
   color: var(--primary-color);
@@ -215,11 +162,6 @@ body {
   margin: 10px 0;
   color: var(--text-color);
   opacity: 0.9;
-}
-
-.patent-card-footer {
-  margin-top: 15px;
-  text-align: right;
 }
 
 .view-details-btn {
@@ -358,10 +300,6 @@ body {
 
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
-  .main-wrapper {
-    padding: 15px;
-  }
-
   .page-title h1 {
     font-size: 2.4rem;
   }
@@ -442,6 +380,4 @@ body {
   }
 }
 
-html, body {
-  overflow-y: scroll !important; /* forces scrollbar even if not needed */
-}
+html, 

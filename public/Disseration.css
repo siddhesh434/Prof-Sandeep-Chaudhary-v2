@@ -1,50 +1,5 @@
-:root {
-    /* Default is dark mode */
-    --primary-color: #5ab9a8;
-    --background-color: #20232a;
-    --text-color: #ffffff;
-    --secondary-bg: #292d36;
-    --footer-bg: #191c22;
-    --header-bg: #ffffff;
-    --header-text: #333333;
-    --card-bg: #292d36;
-    --border-color: #444;
-    --table-header-bg: #1a1d23;
-    --table-row-hover: #343a48;
-    --table-border: #444;
-    --pagination-bg: #343a48;
-  }
-  
-  /* Light theme */
-  html[data-theme="light"] {
-    --primary-color: #3a9d8d;
-    --background-color: #f5f5f7;
-    --text-color: #333;
-    --secondary-bg: #ffffff;
-    --footer-bg: #e5e5e7;
-    --header-bg: #ffffff;
-    --header-text: #333333;
-    --card-bg: #ffffff;
-    --border-color: #ddd;
-    --table-header-bg: #f0f0f2;
-    --table-row-hover: #f9f9fa;
-    --table-border: #e0e0e0;
-    --pagination-bg: #e8e8ea;
-  }
-  
+/* Light theme */
   /* Research Students Page Specific Styles */
-  .main-wrapper {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    padding: 50px 0;
-  }
-  
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-  
   /* Page Title */
   .page-title {
     text-align: center;
@@ -299,10 +254,6 @@
   }
   
   @media (max-width: 660px) {
-    .main-wrapper {
-      max-width: 89vw !important;
-    }
-  
     .publication-section {
       max-width: 89vw !important;
     }

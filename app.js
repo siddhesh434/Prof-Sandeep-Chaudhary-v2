@@ -82,7 +82,33 @@ mongoose
   .catch((error) => console.error("MongoDB connection error:", error));
 
 // Import Content Models (after MongoDB connection)
-const { Bulletin, CarouselSlide } = require('./models/Content');
+const { Bulletin, CarouselSlide } = require("./models/Content");
+const HomeHighlight = require("./models/HomeHighlight");
+
+const HIGHLIGHT_CATEGORIES = [
+  { key: "paper", label: "Recent Paper" },
+  { key: "project", label: "Recent Project" },
+  { key: "technology", label: "Key Technology" },
+];
+
+function buildHighlightRows(highlights = [], maxRows = 2) {
+  const rows = [];
+  for (let rowNum = 1; rowNum <= maxRows; rowNum += 1) {
+    const rowItems = HIGHLIGHT_CATEGORIES.map((category) => {
+      const item = highlights.find(
+        (h) => h.category === category.key && h.rowNumber === rowNum
+      );
+      return item || null;
+    });
+
+    const rowVisible = rowItems
+      .filter(Boolean)
+      .every((item) => item.rowVisible !== false);
+
+    rows.push(rowVisible ? rowItems : rowItems.map(() => null));
+  }
+  return rows;
+}
 
 // SEO Routes
 app.get("/robots.txt", (req, res) => {
@@ -168,6 +194,8 @@ const eResourceRoutes = require("./routes/eResources");
 const books = require("./routes/book");
 const conferences = require("./routes/conference");
 const chapters = require("./routes/chapter");
+const keyTechnologyRoutes = require("./routes/keyTechnology");
+const homeHighlightRoutes = require("./routes/homeHighlights");
 
 // Import content routes
 const contentRoutes = require('./routes/Content');
@@ -193,47 +221,62 @@ app.use("/", eResourceRoutes);
 app.use("/", books);
 app.use("/", conferences);
 app.use("/", chapters);
+app.use("/", keyTechnologyRoutes);
+app.use("/", homeHighlightRoutes);
 
 // Root routes with dynamic content loading
 app.get("/", async (req, res) => {
   try {
-    // Fetch bulletin
-    const bulletin = await Bulletin.findOne().sort({ createdAt: -1 });
+    const bulletins = await Bulletin.find({ enabled: true }).sort({ createdAt: -1 });
     
     // Fetch active carousel slides
     const carouselSlides = await CarouselSlide.find({ active: true }).sort({ order: 1 });
 
+    const highlights = await HomeHighlight.find({ isVisible: true })
+      .sort({ category: 1, order: 1, createdAt: -1 })
+      .lean();
+
     res.render('index', { 
-      bulletin: bulletin,
-      carouselSlides: carouselSlides
+      bulletins: bulletins,
+      carouselSlides: carouselSlides,
+      homeHighlightRows: buildHighlightRows(highlights),
+      homeHighlightCategories: HIGHLIGHT_CATEGORIES
     });
   } catch (error) {
     console.error('Error loading home page:', error);
     // Fallback to defaults
     res.render('index', { 
-      bulletin: null,
-      carouselSlides: []
+      bulletins: [],
+      carouselSlides: [],
+      homeHighlightRows: buildHighlightRows(),
+      homeHighlightCategories: HIGHLIGHT_CATEGORIES
     });
   }
 });
 
 app.get("/index.html", async (req, res) => {
   try {
-    // Fetch bulletin
-    const bulletin = await Bulletin.findOne().sort({ createdAt: -1 });
+    const bulletins = await Bulletin.find({ enabled: true }).sort({ createdAt: -1 });
     
     // Fetch active carousel slides
     const carouselSlides = await CarouselSlide.find({ active: true }).sort({ order: 1 });
+    const highlights = await HomeHighlight.find({ isVisible: true })
+      .sort({ category: 1, order: 1, createdAt: -1 })
+      .lean();
     res.render('index', { 
-      bulletin: bulletin,
-      carouselSlides: carouselSlides
+      bulletins: bulletins,
+      carouselSlides: carouselSlides,
+      homeHighlightRows: buildHighlightRows(highlights),
+      homeHighlightCategories: HIGHLIGHT_CATEGORIES
     });
   } catch (error) {
     console.error('Error loading home page:', error);
     // Fallback to defaults
     res.render('index', { 
-      bulletin: null,
-      carouselSlides: []
+      bulletins: [],
+      carouselSlides: [],
+      homeHighlightRows: buildHighlightRows(),
+      homeHighlightCategories: HIGHLIGHT_CATEGORIES
     });
   }
 });

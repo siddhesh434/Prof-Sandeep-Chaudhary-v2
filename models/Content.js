@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const bulletinSchema = new mongoose.Schema({
   enabled: {
     type: Boolean,
-    default: true
+    default: true,
+    index: true
   },
   title: {
     type: String,
@@ -15,6 +16,11 @@ const bulletinSchema = new mongoose.Schema({
   message: {
     type: String,
     required: true
+  },
+  linkUrl: {
+    type: String,
+    trim: true,
+    default: ''
   },
   speed: {
     type: Number,

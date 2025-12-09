@@ -143,6 +143,7 @@
     border-radius: 8px;
     flex-wrap: wrap;
     gap: 15px;
+    margin-bottom: 30px;
 }
 
 .pagination-info {
@@ -188,10 +189,6 @@
     }
 }
 
-
-
-
-
 @media (max-width: 768px) {
     .summary-card {
         min-width: 100%;
@@ -222,7 +219,6 @@
         font-size: 0.9rem;
     }
 }
-
 
 /* Enhanced Mobile Responsiveness */
 @media (max-width: 768px) {
@@ -348,69 +344,7 @@
       font-size: 0.8rem;
     }
   }
-  .role-subsection {
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border: 1px solid var(--primary-color);
-    border-radius: 8px;
-  }
-  
-  .table-controls {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-  
-  .entries-selector {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .search-container {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .pagination-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-  }
-  
-  .pagination-controls {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .pagination-button {
-    padding: 0.25rem 0.5rem;
-    border: 1px solid var(--primary-color);
-    background-color: var(--primary-color);
-    cursor: pointer;
-  }
-  
-  .pagination-button:hover {
-    background-color: var(--primary-color);
-  }
-  
-  .project-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .project-table th, 
-  .project-table td {
-    border: 1px solid var(--primary-color);
-    padding: 0.5rem;
-    text-align: left;
-  }
-  
-  .project-table th {
-    background-color: var(--primary-color);
-  }
-  
+
 
     @media (max-width: 500px) {
       .project-section {
@@ -419,7 +353,29 @@
       .table-wrapper{
         overflow: scroll;
       }
-      .main-wrapper{
-        max-width: 89vw !important;
       }
-    }
+
+
+/* Restored Project Styles - Layout Only */
+/* Restored Project Styles - Layout Only */
+.role-subsection {
+    margin-bottom: 50px;
+    padding: 20px;
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+}
+
+.project-table th {
+    background-color: var(--primary-color);
+    color: #fff; /* Ensure text is readable on primary color */
+}
+
+.project-table th, 
+.project-table td {
+    border: 1px solid var(--primary-color);
+}
+
+/* Ensure controls look good inside the bordered box */
+.table-controls {
+    margin-top: 10px;
+}

@@ -46,25 +46,50 @@
   <meta property="og:image" content="/images/score.png" />
   <link rel="canonical" href="https://your-domain.com" />
 
-<% if (bulletin && bulletin.enabled) { %>
+<% const activeBulletins = Array.isArray(bulletins) ? bulletins.filter(b => b.enabled) : []; %>
+<% if (activeBulletins.length) { %>
 <%
+  const firstBulletin = activeBulletins[0];
   let gradientColor;
-  if (bulletin.color === 'red') {
+  if (firstBulletin.color === 'red') {
     gradientColor = '#dc2626, #b91c1c';
-  } else if (bulletin.color === 'green') {
+  } else if (firstBulletin.color === 'green') {
     gradientColor = 'var(--primary-color), var(--primary-color)';
-  } else if (bulletin.color === 'orange') {
+  } else if (firstBulletin.color === 'orange') {
     gradientColor = '#ea580c, #c2410c';
-  } else if (bulletin.color === 'purple') {
+  } else if (firstBulletin.color === 'purple') {
     gradientColor = '#9333ea, #7c3aed';
   } else {
     gradientColor = '#3b82f6, #1d4ed8';
   }
+  const bulletinSpeed = firstBulletin.speed ? firstBulletin.speed + 's' : '15s';
 %>
 <div class="moving-bulletin" role="alert" style="background: linear-gradient(45deg, <%= gradientColor %>)">
-  <div class="bulletin-content" style="animation-duration: <%= bulletin.speed ? bulletin.speed + 's' : '15s' %>;">
-    <span class="bulletin-item"><strong><%= bulletin.title || 'Latest News :' %></strong> <%= bulletin.message %></span>
-    <span class="bulletin-item" aria-hidden="true"><strong><%= bulletin.title || 'Latest News :' %></strong> <%= bulletin.message %></span>
+  <div class="bulletin-content" style="animation-duration: <%= bulletinSpeed %>;">
+    <% activeBulletins.forEach(function(item) { %>
+      <span class="bulletin-item">
+        <% const titleText = item.title || 'Latest News :'; %>
+        <% if (item.linkUrl) { %>
+          <a href="<%= item.linkUrl %>" target="_blank" rel="noopener" class="bulletin-link">
+            <strong><%= titleText %></strong> <%= item.message %>
+          </a>
+        <% } else { %>
+          <strong><%= titleText %></strong> <%= item.message %>
+        <% } %>
+      </span>
+    <% }) %>
+    <% activeBulletins.forEach(function(item) { %>
+      <span class="bulletin-item" aria-hidden="true">
+        <% const titleText = item.title || 'Latest News :'; %>
+        <% if (item.linkUrl) { %>
+          <a href="<%= item.linkUrl %>" target="_blank" rel="noopener" class="bulletin-link">
+            <strong><%= titleText %></strong> <%= item.message %>
+          </a>
+        <% } else { %>
+          <strong><%= titleText %></strong> <%= item.message %>
+        <% } %>
+      </span>
+    <% }) %>
   </div>
 </div>
 <% } %>
@@ -80,7 +105,7 @@
   </div>
   <!-- Main Content -->
   <div class="container main-wrapper">
-    <!-- Two Column Layout for About Section -->
+    
     <div>
       <!-- About SCORE Section -->
       <section class="about-score-section" itemscope itemtype="https://schema.org/Organization">
@@ -99,6 +124,84 @@
         </p>
       </section>
       </div>
+
+      <% const highlightCategories = Array.isArray(homeHighlightCategories) && homeHighlightCategories.length
+        ? homeHighlightCategories
+        : [
+          { key: "paper", label: "Recent Paper" },
+          { key: "project", label: "Recent Project" },
+          { key: "technology", label: "Key Technology" },
+        ];
+        const highlightRows = Array.isArray(homeHighlightRows) && homeHighlightRows.length
+          ? homeHighlightRows
+          : [
+            [null, null, null],
+            [null, null, null],
+          ];
+        const visibleRows = highlightRows.filter(row => row.some(Boolean));
+      %>
+      <% if (visibleRows.length) { %>
+      <section class="home-highlights" aria-label="Featured research highlights">
+        <div class="home-highlights__header">
+          <div>
+            <p class="home-highlights__eyebrow">Our freshest work</p>
+            <h2>Recent Papers, Projects & Technologies</h2>
+          
+          </div>
+        </div>
+        <% visibleRows.forEach(function(row, rowIndex) { %>
+          <div class="home-highlight-row" role="list">
+            <% row.forEach(function(slot, columnIndex) {
+              const categoryMeta = highlightCategories[columnIndex] || {};
+              const categoryLabel = categoryMeta.label || "Highlight";
+            %>
+              <article class="highlight-card <%= slot ? '' : 'highlight-card--empty' %>" role="listitem">
+                <div class="highlight-card__meta">
+                  <span class="highlight-card__tag"><%= categoryLabel %></span>
+                  <% if (slot) { %>
+                    <span class="highlight-card__badge">#<%= rowIndex + 1 %></span>
+                  <% } %>
+                </div>
+            <% if (slot) { %>
+            <% const cardLink = slot.ctaUrl || slot.mediaUrl; %>
+            <% const displayMode = slot.displayMode || 'both'; %>
+            <% const showSummary = displayMode === 'text' || displayMode === 'both'; %>
+            <% const showMedia = displayMode === 'image' || displayMode === 'both'; %>
+            <% if (cardLink) { %>
+              <a href="<%= cardLink %>" target="_blank" rel="noopener" class="highlight-card__title-link">
+                <h3><%= slot.title %></h3>
+              </a>
+            <% } else { %>
+              <h3><%= slot.title %></h3>
+            <% } %>
+            <% if (showSummary) { %>
+              <p class="highlight-card__summary"><%= slot.summary %></p>
+            <% } %>
+            <% if (showMedia && slot.mediaType === 'image' && slot.mediaUrl) { %>
+              <a href="<%= cardLink || slot.mediaUrl %>" target="_blank" rel="noopener" class="highlight-card__media">
+                <img src="<%= slot.mediaUrl %>" alt="<%= slot.title %> media preview" loading="lazy" />
+                <% if (slot.ctaLabel) { %><span class="highlight-card__badge-overlay"><%= slot.ctaLabel %></span><% } %>
+              </a>
+            <% } else if (showMedia && slot.mediaUrl) { %>
+              <div class="highlight-card__file">
+                <span class="highlight-card__file-label">
+                  <%= slot.mediaType === 'pdf' ? 'PDF' : slot.mediaType === 'file' ? 'File' : 'Link' %>
+                </span>
+                <p><%= slot.mediaOriginalName || 'Download resource' %></p>
+              </div>
+            <% } %>
+                <% } else { %>
+                  <p class="highlight-card__placeholder">
+                    We are updating this <%= categoryLabel.toLowerCase() %> slot. Stay tuned for the latest release.
+                  </p>
+                <% } %>
+              </article>
+            <% }) %>
+          </div>
+        <% }) %>
+      </section>
+      <% } %>
+
       <!-- About PI Section -->
       <section class="about-pi-section" itemscope itemtype="https://schema.org/Person">
         <h2>About Professor</h2>
@@ -122,9 +225,8 @@
         </div>
       </section>
 
-      
     </div>
-<br>
+
     <!-- Mission Vision Section -->
     <div class="two-column-layout">
       <!-- Mission Section -->
@@ -288,76 +390,29 @@
       </div>
     </section>
 
-    <!-- Key Technologies -->
-    <section class="section innovations" itemscope itemtype="https://schema.org/Product">
-      <h2>Key Technologies</h2>
-      <div class="innovation-grid">
-        <div class="innovation-item" itemscope itemtype="https://schema.org/Product">
-          <div class="innovation-img">
-            <img src="/images/bi-layered-bricks.jpg" alt="Naturally coloured bi-layered bricks" itemprop="image" />
-          </div>
-          <div class="innovation-content">
-            <h3 itemprop="name">Naturally Coloured Bi-layered Bricks</h3>
-            <p itemprop="description">
-              A cost-effective architectural brick developed by upcycling
-              dimensional stone wastes. This was the first technology transferred
-              to the industry from SCORE.
-            </p>
-            <div class="innovation-features">
-              <span>Cost-effective</span>
-              <span>Upcycled materials</span>
-              <span>Architectural quality</span>
-            </div>
-          </div>
-        </div>
-        <div class="innovation-item">
-          <div class="innovation-img">
-            <img src="/images/gobair-bricks.jpg" alt="GOBAiR-fly ash bricks" />
-          </div>
-          <div class="innovation-content">
-            <h3>GOBAiR-fly Ash Bricks</h3>
-            <p>
-              A special class of light-weight brick developed by using cow dung as
-              a foaming agent. This innovation has received several awards and
-              accolades for its sustainable approach.
-            </p>
-            <div class="innovation-features">
-              <span>Lightweight</span>
-              <span>Sustainable</span>
-              <span>Award-winning</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="more-technologies">
-        <a href="/keyTechnology.html" class="more-tech-link">More Technologies →</a>
-      </div>
-    </section>
   </div>
 
   <!-- Collaboration -->
-    <section class="section innovations" itemscope itemtype="https://schema.org/Product">
-      <h2>Research Collaborations</h2>
-      <div class="innovation-grid">
-      <p>We have an expanding network of research collaborations across the globe.</p>
-      <p>
-        <img src="/images/logo/0.jpg" height="40px" width="auto" alt="India" />
-        <img src="/images/logo/1.jpg" height="40px" width="auto" alt="UK" />
-        <img src="/images/logo/2.jpg" height="40px" width="auto" alt="Russia" />
-        <img src="/images/logo/3.jpg" height="40px" width="auto" alt="China" />
-        <img src="/images/logo/4.jpg" height="40px" width="auto" alt="Hong Kong" />
-        <img src="/images/logo/5.jpg" height="40px" width="auto" alt="South Korea" />
-        <img src="/images/logo/6.jpg" height="40px" width="auto" alt="Thailand" />
-        <img src="/images/logo/7.jpg" height="40px" width="auto" alt="Tunisia" />
-        <img src="/images/logo/8.jpg" height="40px" width="auto" alt="France" />
-        <img src="/images/logo/9.jpg" height="40px" width="auto" alt="Serbia" />
-        <img src="/images/logo/10.jpg" height="40px" width="auto" alt="ACF" />
-      </p>
-      </div>
-      <div class="more-technologies">
-        <a href="/Collaboration.html" class="more-tech-link">Collaborating Institutes →</a>
-      </div>
-    </section>
+  <section class="collaboration-section" itemscope itemtype="https://schema.org/Organization">
+    <h2>Research Collaborations</h2>
+    <p class="collaboration-intro">We have an expanding network of research collaborations across the globe.</p>
+    <div class="collaboration-logos">
+      <img src="/images/logo/0.jpg" alt="India" />
+      <img src="/images/logo/1.jpg" alt="UK" />
+      <img src="/images/logo/2.jpg" alt="Russia" />
+      <img src="/images/logo/3.jpg" alt="China" />
+      <img src="/images/logo/4.jpg" alt="Hong Kong" />
+      <img src="/images/logo/5.jpg" alt="South Korea" />
+      <img src="/images/logo/6.jpg" alt="Thailand" />
+      <img src="/images/logo/7.jpg" alt="Tunisia" />
+      <img src="/images/logo/8.jpg" alt="France" />
+      <img src="/images/logo/9.jpg" alt="Serbia" />
+      <img src="/images/logo/10.jpg" alt="ACF" />
+    </div>
+    <div class="collaboration-link">
+      <a href="/Collaboration.html" class="more-tech-link">Collaborating Institutes →</a>
+    </div>
+  </section>
   </div>
 
 

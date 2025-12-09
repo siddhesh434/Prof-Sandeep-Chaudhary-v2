@@ -1,97 +1,96 @@
-  /* Collaboration Section */
-  .collaboration-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 80px 0;
-    gap: 40px;
-}
-
-.collaboration-header {
-    text-align: center;
-    max-width: 800px;
-    margin-bottom: 40px;
+/* Collaboration Section */
+.collaboration-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 0;
+  gap: 40px;
 }
 
 .collaboration-header h1 {
-    font-size: 3rem;
-    color: var(--text-color);
-    margin-bottom: 20px;
-    font-weight: 700;
+  font-size: 3rem;
+  color: var(--text-color);
+  margin-bottom: 20px;
+  font-weight: 700;
 }
 
 .collaboration-header p {
-    color: var(--text-color);
-    opacity: 0.7;
-    font-size: 1.1rem;
-    line-height: 1.8;
+  color: var(--text-color);
+  opacity: 0.7;
+  font-size: 1.1rem;
+  line-height: 1.8;
 }
 
 .partners-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  width: 100%;
 }
 
 .partner-card {
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    padding: 30px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--border-color);
 }
 
 .partner-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  border-color: var(--primary-color);
 }
 
 .partner-logo {
-    max-width: 120px;
-    max-height: 100px;
-    margin-bottom: 20px;
-    transition: filter 0.3s ease;
-    background-color: aliceblue;
-    padding: 5px;
+  max-width: 120px;
+  max-height: 100px;
+  margin-bottom: 20px;
+  transition: filter 0.3s ease;
+  background-color: white; /* Clean background for logos */
+  padding: 10px;
+  border-radius: 8px;
+  object-fit: contain;
 }
 
 .partner-card:hover .partner-logo {
-    filter: grayscale(0%) brightness(1);
+  filter: grayscale(0%) brightness(1);
 }
 
 .partner-card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
-    color: var(--text-color);
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: var(--primary-color); /* Use primary color for titles */
 }
 
 .partner-card p {
-    color: var(--text-color);
-    opacity: 0.7;
-    font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.7;
+  font-size: 0.9rem;
 }
 
 .collaboration-cta {
-    margin-top: 50px;
-    text-align: center;
+  margin-top: 50px;
+  text-align: center;
 }
 
 .cta-button {
-    display: inline-block;
-    background-color: var(--primary-color);
-    color: white;
-    padding: 15px 30px;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 15px 30px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .cta-button:hover {
-    background-color: var(--hover-color);
-    transform: translateY(-3px);
+  filter: brightness(0.9); /* Simple hover effect without needing extra variable */
+  transform: translateY(-3px);
 }
 
 /* Responsive Adjustments */

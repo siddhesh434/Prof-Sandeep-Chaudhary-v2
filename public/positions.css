@@ -1,16 +1,4 @@
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  .main-wrapper {
-    display: flex;
-    flex-direction: column;
-    padding: 60px 0;
-  }
-
-  .section-title {
+.section-title {
     
     font-family: "Montserrat", sans-serif;
     font-size: 36px;
@@ -38,7 +26,6 @@
     gap: 40px;
     margin-bottom: 40px;
   }
-
 
   .section-card {
     background-color: var(--card-bg);

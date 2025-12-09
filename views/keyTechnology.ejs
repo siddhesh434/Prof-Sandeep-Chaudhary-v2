@@ -1,18 +1,4 @@
 <%- include('partials/header') %>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="Key Technologies by SCORE Research Group - Innovative solutions in sustainable construction, low carbon materials, waste upcycling, and IoT applications" />
-  <meta name="keywords"
-    content="SCORE Research Group, Key Technologies, Sustainable Construction, Low Carbon Solutions, Waste Upcycling, IoT Devices, Building Products, Rural Development, Structural Simulations" />
-  <meta name="author" content="SCORE Research Group" />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="Key Technologies - SCORE Research Group" />
-  <meta property="og:description"
-    content="Cutting-edge technologies in sustainable construction, materials science, and rural development by SCORE Research Group" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="http://www.SustainableConstructionLab.com/keyTechnology.html" />
-  <meta property="og:image" content="/images/keyTech/t001.jpg" />
-  <link rel="canonical" href="http://www.SustainableConstructionLab.com/keyTechnology.html" />
   <link rel="stylesheet" href="keyTech.css" />
 
   <!-- Static structured data for key products -->
@@ -111,8 +97,8 @@
 
   <%- include('partials/footer') %>
     <script>
-      // Technology items data with tags
-      const technologies = [
+      // Default technology items data with tags (used as fallback if API has no data)
+      const defaultTechnologies = [
         {
           title: "SMART Mould",
           description:
@@ -255,6 +241,29 @@
         },
       ];
 
+      let technologies = [];
+
+      async function loadTechnologies() {
+        try {
+          const response = await fetch("/api/key-technologies");
+          if (!response.ok) throw new Error("Failed to load technologies");
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0) {
+            technologies = data.map((t) => ({
+              title: t.title,
+              description: t.description,
+              imageUrl: t.imageUrl,
+              tags: Array.isArray(t.tags) ? t.tags : [],
+            }));
+          } else {
+            technologies = defaultTechnologies;
+          }
+        } catch (err) {
+          console.error("Error loading technologies from API, using defaults:", err);
+          technologies = defaultTechnologies;
+        }
+      }
+
       // Function to filter and display technology cards
       function filterTechCards() {
         const container = document.getElementById("tech-container");
@@ -337,7 +346,10 @@
       }
 
       // Initialize the page
-      document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Load technologies (API first, then fallback)
+        await loadTechnologies();
+
         // Initial load of all cards
         filterTechCards();
 
@@ -393,17 +405,7 @@
           updateItemListSchema();
         });
 
-        // Theme toggle functionality (if needed)
-        const themeSwitch = document.querySelector(".theme-switch input");
-        if (themeSwitch) {
-          themeSwitch.addEventListener("change", function (e) {
-            if (e.target.checked) {
-              document.documentElement.setAttribute("data-theme", "light");
-            } else {
-              document.documentElement.setAttribute("data-theme", "dark");
-            }
-          });
-        }
+        // Theme toggle functionality handled by header.ejs
       });
 
       // Function to update the ItemList structured data

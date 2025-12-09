@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Highlights Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .card {
+      border-radius: 1rem;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+      background: #fff;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .table-wrapper {
+      max-height: 480px;
+      overflow: auto;
+    }
+
+    .status-pill {
+      border-radius: 999px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+  <div class="flex h-screen overflow-hidden relative">
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
+      <div class="p-6 border-b border-blue-800">
+        <h2 class="text-xl font-bold tracking-wide">
+          Welcome, <%= adminID %>!
+        </h2>
+        <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+      <nav class="mt-4">
+        <ul>
+          <li class="mb-1 px-2">
+            <a href="/admin" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fa-solid fa-house fa-fw mr-3"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/control.html"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fa-solid fa-sliders fa-fw mr-3"></i>
+              <span>Visibility Controls</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/files.html"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fa-solid fa-users fa-fw mr-3"></i>
+              <span>File Upload</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/eResources.html"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fa-solid fa-file-lines fa-fw mr-3"></i>
+              <span>e-Resources</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/keyTechnology.html"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fa-solid fa-microchip fa-fw mr-3"></i>
+              <span>Key Technologies</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/homeHighlights.html"
+              class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
+              <i class="fa-solid fa-table-cells-large fa-fw mr-3"></i>
+              <span>Home Highlights</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/latest_news.html"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fa-solid fa-pen-to-square fa-fw mr-3"></i>
+              <span>Latest News & Scrolling</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/formData"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fa-solid fa-ticket fa-fw mr-3"></i>
+              <span>User Requests</span>
+            </a>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/cvGenerator.html"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fa-solid fa-file-pdf fa-fw mr-3"></i>
+              <span>CV Generator</span>
+            </a>
+          </li>
+          <br>
+          <li style="padding-left: 13px; font-size: medium; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-user-shield fa-fw"></i>
+            <span>Account</span>
+          </li>
+          <li class="mb-1 px-2">
+            <a href="/admin/logout"
+              class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
+              <i class="fa-solid fa-right-from-bracket fa-fw mr-3"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+    <!-- Main content -->
+    <main class="flex-1 overflow-y-auto bg-gradient-to-br from-blue-50 to-gray-50">
+      <div class="max-w-6xl mx-auto py-10 px-4 lg:px-0">
+        <header class="flex flex-col gap-2 mb-8">
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center">
+              <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
+                <i class="fas fa-bars text-xl"></i>
+              </button>
+              <div>
+                <p class="uppercase tracking-[0.3em] text-xs text-blue-600 font-semibold">Homepage</p>
+                <h1 class="text-3xl font-bold text-gray-900">Home Highlights</h1>
+                <p class="text-gray-500 text-sm">Manage the recent paper, project and technology cards shown beneath the About
+                  section.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-600">Signed in as</span>
+              <div class="pill bg-blue-100 text-blue-700"><%= adminID %></div>
+              <a href="/admin"
+                class="pill bg-gray-900 text-white hover:bg-gray-700 transition inline-flex items-center gap-2">
+                <i class="fas fa-arrow-left text-xs"></i> Back to dashboard
+              </a>
+            </div>
+          </div>
+          <div id="statusMessage" class="hidden px-4 py-3 rounded-lg text-sm font-medium"></div>
+        </header>
+
+        <section class="card p-6 mb-10">
+      <form id="highlightForm" class="space-y-6" enctype="multipart/form-data">
+        <input type="hidden" id="editingId" value="">
+        <input type="hidden" name="clearMedia" id="clearMediaInput" value="false" />
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-gray-700" for="category">Highlight slot</label>
+            <select id="category" name="category" required
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+              <option value="paper">Recent Paper</option>
+              <option value="project">Recent Project</option>
+              <option value="technology">Key Technology</option>
+            </select>
+          </div>
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-gray-700" for="rowNumber">Row position (max 2 rows)</label>
+            <select id="rowNumber" name="rowNumber"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+              <option value="1">Row 1</option>
+              <option value="2">Row 2</option>
+            </select>
+            <div class="flex items-center gap-2 pt-1">
+              <input type="checkbox" id="rowVisible" name="rowVisible" class="w-5 h-5 text-blue-600" checked />
+              <label for="rowVisible" class="text-sm text-gray-700">Show this row on homepage</label>
+            </div>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-gray-700" for="title">Title</label>
+            <input type="text" id="title" name="title" required maxlength="120"
+              class="w-full border rounded-lg px-3 py-2" placeholder="Enter the headline" />
+          </div>
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-gray-700" for="ctaLabel">Link title (optional)</label>
+            <input type="text" id="ctaLabel" name="ctaLabel" maxlength="60" class="w-full border rounded-lg px-3 py-2"
+              placeholder="Shown on hover only" />
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-gray-700" for="displayMode">Content display</label>
+            <select id="displayMode" name="displayMode"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+              <option value="text">Paragraph only</option>
+              <option value="image">Image only</option>
+              <option value="both">Paragraph + image (legacy)</option>
+            </select>
+            <p class="text-xs text-gray-500">Pick one to avoid showing both at the same time.</p>
+          </div>
+        </div>
+        <div class="space-y-2" id="summaryField">
+          <label class="text-sm font-semibold text-gray-700" for="summary">Summary</label>
+          <textarea id="summary" name="summary" required rows="3" maxlength="400"
+            class="w-full border rounded-lg px-3 py-2"
+            placeholder="Briefly describe the highlight shown on the homepage"></textarea>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-gray-700" for="ctaUrl">Card link (image & title click)</label>
+            <input type="url" id="ctaUrl" name="ctaUrl" class="w-full border rounded-lg px-3 py-2"
+              placeholder="https://example.com" />
+          </div>
+          <div class="flex items-center gap-4">
+            <input type="checkbox" id="isVisible" name="isVisible" class="w-5 h-5 text-blue-600" checked />
+            <label for="isVisible" class="text-sm font-semibold text-gray-700">Visible on homepage</label>
+          </div>
+        </div>
+
+        <div class="border-t pt-6" id="mediaBlock">
+          <input type="hidden" id="mediaOption" name="mediaOption" value="upload" />
+          <div id="mediaSummary" class="text-sm text-gray-500 flex items-center gap-2 mb-2">
+            <i class="fas fa-info-circle text-blue-500"></i>
+            Use a portrait image (4:5) for best fit.
+          </div>
+          <div id="uploadField" class="space-y-2 mt-4">
+            <label class="text-sm text-gray-600" for="mediaFile">Upload image</label>
+            <input type="file" id="mediaFile" name="mediaFile" accept="image/*"
+              class="w-full border rounded-lg px-3 py-2" />
+          </div>
+
+          <button type="button" id="clearMediaBtn"
+            class="mt-4 inline-flex items-center gap-2 text-sm text-red-600 font-semibold hidden">
+            <i class="fas fa-ban"></i> Remove existing attachment
+          </button>
+        </div>
+
+        <div class="flex flex-wrap gap-4">
+          <button type="submit"
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+            <i class="fas fa-save mr-2"></i>
+            <span id="submitLabel">Create highlight</span>
+          </button>
+          <button type="button" id="resetFormBtn"
+            class="px-6 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition">
+            Reset form
+          </button>
+        </div>
+      </form>
+    </section>
+
+        <section class="card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-xl font-semibold text-gray-900">Current highlights</h2>
+          <p class="text-sm text-gray-500">Showing the entries exactly as they appear on the homepage.</p>
+        </div>
+        <div class="text-sm text-gray-500" id="highlightCount">0 entries</div>
+      </div>
+      <div class="table-wrapper">
+        <table class="min-w-full text-sm">
+          <thead class="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
+            <tr>
+              <th class="px-4 py-3 text-left">Row</th>
+              <th class="px-4 py-3 text-left">Category</th>
+              <th class="px-4 py-3 text-left">Title</th>
+              <th class="px-4 py-3 text-left">Media</th>
+              <th class="px-4 py-3 text-left">Card Visible</th>
+              <th class="px-4 py-3 text-left">Row Visible</th>
+              <th class="px-4 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="highlightTableBody" class="divide-y divide-gray-100 bg-white">
+            <tr>
+              <td class="px-4 py-4 text-center text-gray-400" colspan="7">Loading highlights...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar mobile toggle
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const closeSidebarButton = document.getElementById("close-sidebar");
+    const sidebar = document.getElementById("sidebar");
+    const sidebarOverlay = document.getElementById("sidebar-overlay");
+
+    function openSidebar() {
+      sidebar.classList.remove("-translate-x-full");
+      sidebarOverlay.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+    }
+
+    function closeSidebar() {
+      sidebar.classList.add("-translate-x-full");
+      sidebarOverlay.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    if (mobileMenuButton) mobileMenuButton.addEventListener("click", openSidebar);
+    if (closeSidebarButton) closeSidebarButton.addEventListener("click", closeSidebar);
+    if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeSidebar);
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768) {
+        sidebar.classList.remove("-translate-x-full");
+        sidebarOverlay.classList.add("hidden");
+        document.body.classList.remove("overflow-hidden");
+      } else {
+        sidebar.classList.add("-translate-x-full");
+      }
+    });
+
+    const state = {
+      editingId: null,
+      highlights: [],
+      currentMediaSummary: null,
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchHighlights();
+      setupForm();
+    });
+
+    function setStatus(message, isError = false) {
+      const el = document.getElementById("statusMessage");
+      el.textContent = message;
+      el.classList.remove("hidden");
+      el.className = `block px-4 py-3 rounded-lg text-sm font-medium ${isError ? "bg-red-50 text-red-700 border border-red-200" : "bg-green-50 text-green-700 border border-green-200"}`;
+      setTimeout(() => {
+        el.classList.add("hidden");
+      }, 4000);
+    }
+
+    function applyDisplayMode(mode) {
+      const summaryField = document.getElementById("summaryField");
+      const mediaBlock = document.getElementById("mediaBlock");
+      const summaryInput = document.getElementById("summary");
+      const showText = mode !== "image";
+      const showMedia = mode !== "text";
+      summaryField.classList.toggle("hidden", !showText);
+      mediaBlock.classList.toggle("hidden", !showMedia);
+      summaryInput.required = showText;
+    }
+
+    function setupForm() {
+      const form = document.getElementById("highlightForm");
+      const uploadField = document.getElementById("uploadField");
+      const clearBtn = document.getElementById("clearMediaBtn");
+      const clearMediaInput = document.getElementById("clearMediaInput");
+      const resetButton = document.getElementById("resetFormBtn");
+      const displayMode = document.getElementById("displayMode");
+
+      displayMode.addEventListener("change", () => {
+        applyDisplayMode(displayMode.value);
+      });
+
+      clearBtn.addEventListener("click", () => {
+        state.currentMediaSummary = null;
+        clearMediaInput.value = "true";
+        document.getElementById("mediaSummary").innerHTML = '<span class="text-red-500 font-semibold">Attachment will be removed after saving.</span>';
+        clearBtn.classList.add("hidden");
+      });
+
+      resetButton.addEventListener("click", resetForm);
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+
+        if (!state.editingId) {
+          await submitForm("/api/home-highlights", "POST", formData);
+        } else {
+          await submitForm(`/api/home-highlights/${state.editingId}`, "PUT", formData);
+        }
+      });
+
+      applyDisplayMode(displayMode.value);
+    }
+
+    async function submitForm(url, method, formData) {
+      try {
+        document.getElementById("submitLabel").textContent = method === "POST" ? "Saving..." : "Updating...";
+        const response = await fetch(url, {
+          method,
+          body: formData,
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.message || "Unable to save highlight");
+        }
+        setStatus(method === "POST" ? "Highlight created successfully." : "Highlight updated successfully.");
+        resetForm();
+        fetchHighlights();
+      } catch (error) {
+        console.error(error);
+        setStatus(error.message, true);
+      } finally {
+        document.getElementById("submitLabel").textContent = state.editingId ? "Update highlight" : "Create highlight";
+      }
+    }
+
+    async function fetchHighlights() {
+      try {
+        const res = await fetch("/api/home-highlights");
+        const data = await res.json();
+        state.highlights = Array.isArray(data) ? data : [];
+        renderTable();
+      } catch (error) {
+        setStatus("Failed to load highlights", true);
+      }
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById("highlightTableBody");
+      const countEl = document.getElementById("highlightCount");
+      tbody.innerHTML = "";
+
+      if (!state.highlights.length) {
+        tbody.innerHTML = '<tr><td class="px-4 py-6 text-center text-gray-400" colspan="7">No highlights created yet.</td></tr>';
+        countEl.textContent = "0 entries";
+        return;
+      }
+
+      state.highlights.forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="px-4 py-3 font-semibold text-gray-700">#${item.rowNumber || 1}</td>
+          <td class="px-4 py-3 font-semibold text-gray-700 capitalize">${item.category}</td>
+          <td class="px-4 py-3 text-gray-700">
+            <div class="font-semibold">${item.title || "-"}</div>
+            <p class="text-xs text-gray-500 line-clamp-2">${item.summary || ""}</p>
+          </td>
+          <td class="px-4 py-3">
+            ${item.mediaType && item.mediaType !== "none"
+            ? `<span class="status-pill bg-blue-50 text-blue-700"><i class="fas fa-paperclip"></i>${item.mediaType}</span>`
+            : `<span class="text-xs text-gray-400">None</span>`
+          }
+          </td>
+          <td class="px-4 py-3">
+            ${item.isVisible
+            ? '<span class="status-pill bg-green-50 text-green-700"><i class="fas fa-circle"></i>Visible</span>'
+            : '<span class="status-pill bg-gray-100 text-gray-500"><i class="fas fa-circle"></i>Hidden</span>'}
+          </td>
+          <td class="px-4 py-3">
+            ${(item.rowVisible ?? true)
+            ? '<span class="status-pill bg-green-50 text-green-700"><i class="fas fa-layer-group"></i>Shown</span>'
+            : '<span class="status-pill bg-gray-100 text-gray-500"><i class="fas fa-layer-group"></i>Hidden</span>'}
+          </td>
+          <td class="px-4 py-3 text-right space-x-2">
+            <button class="text-blue-600 hover:text-blue-800 font-semibold" onclick="editHighlight('${item._id}')">Edit</button>
+            <button class="text-red-600 hover:text-red-800 font-semibold" onclick="deleteHighlight('${item._id}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      countEl.textContent = `${state.highlights.length} ${state.highlights.length === 1 ? "entry" : "entries"}`;
+    }
+
+    function editHighlight(id) {
+      const highlight = state.highlights.find((item) => item._id === id);
+      if (!highlight) return;
+      state.editingId = id;
+      document.getElementById("editingId").value = id;
+      document.getElementById("category").value = highlight.category;
+      document.getElementById("title").value = highlight.title || "";
+      document.getElementById("ctaLabel").value = highlight.ctaLabel || "";
+      document.getElementById("summary").value = highlight.summary || "";
+      document.getElementById("ctaUrl").value = highlight.ctaUrl || "";
+      document.getElementById("isVisible").checked = Boolean(highlight.isVisible);
+      document.getElementById("rowNumber").value = highlight.rowNumber || "1";
+      document.getElementById("rowVisible").checked = highlight.rowVisible !== false;
+      document.getElementById("displayMode").value = highlight.displayMode || "both";
+      applyDisplayMode(document.getElementById("displayMode").value);
+
+      const uploadField = document.getElementById("uploadField");
+      const clearBtn = document.getElementById("clearMediaBtn");
+      document.getElementById("mediaFile").value = "";
+      document.getElementById("clearMediaInput").value = "false";
+
+      if (highlight.mediaType && highlight.mediaType !== "none") {
+        state.currentMediaSummary = `${highlight.mediaType.toUpperCase()} • ${highlight.mediaOriginalName || highlight.mediaUrl}`;
+        document.getElementById("mediaSummary").textContent = `Attached: ${state.currentMediaSummary}`;
+        clearBtn.classList.remove("hidden");
+      } else {
+        document.getElementById("mediaSummary").innerHTML = '<span class="text-gray-500">No attachment currently linked.</span>';
+        clearBtn.classList.add("hidden");
+      }
+
+      uploadField.classList.remove("hidden");
+      document.getElementById("submitLabel").textContent = "Update highlight";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteHighlight(id) {
+      if (!confirm("Delete this highlight? It will disappear from the homepage immediately.")) return;
+      try {
+        const response = await fetch(`/api/home-highlights/${id}`, { method: "DELETE" });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.message || "Failed to delete highlight");
+        setStatus("Highlight deleted.");
+        if (state.editingId === id) {
+          resetForm();
+        }
+        fetchHighlights();
+      } catch (error) {
+        setStatus(error.message, true);
+      }
+    }
+
+    function resetForm() {
+      document.getElementById("highlightForm").reset();
+      document.getElementById("editingId").value = "";
+      document.getElementById("submitLabel").textContent = "Create highlight";
+      document.getElementById("mediaSummary").innerHTML = '<span class="text-gray-500">Use a portrait image (4:5) for best fit.</span>';
+      document.getElementById("uploadField").classList.remove("hidden");
+      document.getElementById("clearMediaBtn").classList.add("hidden");
+      document.getElementById("clearMediaInput").value = "false";
+      document.getElementById("mediaFile").value = "";
+      document.getElementById("rowNumber").value = "1";
+      document.getElementById("rowVisible").checked = true;
+      document.getElementById("displayMode").value = "text";
+      applyDisplayMode("text");
+      state.editingId = null;
+    }
+  </script>
+</body>
+
+</html>
+

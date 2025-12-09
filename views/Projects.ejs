@@ -1,25 +1,9 @@
 <%- include('partials/header') %>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="Research projects by Prof. Sandeep Chaudhary's Sustainable Construction Lab at IIT Indore. Explore our sponsored research, consultancy projects, and collaborations in sustainable construction, low carbon materials, and waste upcycling." />
-  <meta name="keywords"
-    content="Sandeep Chaudhary projects, Sustainable Construction Lab research, IIT Indore projects, sustainable construction research, low carbon materials projects, waste upcycling research, construction technology projects, sponsored research projects" />
-  <meta property="og:title" content="Research Projects | Prof. Sandeep Chaudhary - Sustainable Construction Lab" />
-  <meta property="og:description"
-    content="Explore research projects by Prof. Sandeep Chaudhary's Sustainable Construction Lab at IIT Indore. Discover our sponsored research, consultancy projects, and collaborations in sustainable construction, low carbon materials, and waste upcycling." />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://sustainableconstructionlab.com/Projects.html" />
-  <meta property="og:image" content="/images/iitlogo.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Research Projects | Prof. Sandeep Chaudhary - Sustainable Construction Lab" />
-  <meta name="twitter:description"
-    content="Explore research projects by Prof. Sandeep Chaudhary's Sustainable Construction Lab at IIT Indore. Discover our sponsored research, consultancy projects, and collaborations in sustainable construction, low carbon materials, and waste upcycling." />
-  <meta name="twitter:image" content="/images/iitlogo.jpg" />
-  <link rel="canonical" href="https://sustainableconstructionlab.com/Projects.html" />
+
   <link rel="stylesheet" href="projects.css" />
 
-  <%- include('partials/header') %>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
   <!-- ... other meta tags remain the same ... -->
 
   <script>
@@ -555,9 +539,6 @@
       </div> -->
     </div>
   </div>
-  <%- include('partials/footer') %>
-
-  <script src="projects.js"></script>
   <script>
     // Pagination and Search Functionality
     document.addEventListener("DOMContentLoaded", function () {
@@ -575,8 +556,15 @@
           `pagination-controls-${role}`
         );
 
+        if (!tbody || !paginationControls) return;
+
         let currentPage = 1;
         let rowsPerPage = 5;
+        // Check for tbody again (redundant but safe)
+        if (!tbody) return; 
+        
+        // Note: querySelectorAll returns a NodeList. Array.from is good.
+        // But if tbody is null, it crashes. We added check above.
         let filteredRows = Array.from(tbody.querySelectorAll("tr"));
 
         function updatePagination() {
@@ -591,6 +579,11 @@
             const pageButton = document.createElement("button");
             pageButton.textContent = i;
             pageButton.classList.add("pagination-button");
+            // Highlight active page
+            if (i === currentPage) {
+                 pageButton.style.backgroundColor = 'var(--primary-color)';
+                 pageButton.style.color = 'white';
+            }
             pageButton.addEventListener("click", () => {
               currentPage = i;
               displayRows();
@@ -605,7 +598,7 @@
             filteredRows.length
           );
 
-          showingStart.textContent = startIndex;
+          showingStart.textContent = filteredRows.length > 0 ? startIndex : 0;
           showingEnd.textContent = endIndex;
           totalEntries.textContent = filteredRows.length;
         }
@@ -658,4 +651,5 @@
     });
 
   </script>
+<%- include('partials/footer') %>
 

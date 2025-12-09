@@ -1,0 +1,234 @@
+/* ========================================
+   Global Variables & Root Styles
+   ======================================== */
+:root {
+  /* Colors - Default Light Mode */
+  --primary-color: #1a375c;
+  --background-color: lightblue; /* AliceBlue - Light Bluish */
+  --text-color: #333;
+  --secondary-bg: #f2f9fc; /* Slightly darker light blue */
+  --footer-bg: #dbeafe; /* Light Blue Grey */
+  --header-bg: #ffffff;
+  --header-text: #333333;
+  --card-bg: #ffffff;
+  --border-color: #bfdbfe; /* Blue tint border */
+  
+  /* Table Colors */
+  --table-header-bg: #e0f2fe; /* Light Blue */
+  --table-row-hover: #f0f9ff;
+  --table-border: #bfdbfe;
+  --pagination-bg: #dbeafe;
+
+  /* Spacing */
+  --spacing-xs: clamp(0.5rem, 1vw, 0.75rem);
+  --spacing-sm: clamp(1rem, 2vw, 1.5rem);
+  --spacing-md: clamp(1.5rem, 3vw, 2.5rem);
+  --spacing-lg: clamp(2rem, 4vw, 3.5rem);
+  --spacing-xl: clamp(3rem, 6vw, 5rem);
+  --container-padding: clamp(1.25rem, 4%, 2.5rem);
+  --section-spacing: clamp(2.5rem, 5vw, 4.5rem);
+  
+  /* Border Radius */
+  --border-radius: clamp(0.5rem, 0.5vw, 0.875rem);
+  --border-radius-lg: clamp(0.875rem, 2vw, 1.25rem);
+}
+
+/* Dark Theme */
+html[data-theme="dark"] {
+  --primary-color: #5ab9a8;
+  --background-color: #20232a;
+  --text-color: #ffffff;
+  --secondary-bg: #292d36;
+  --footer-bg: #191c22;
+  --header-bg: #ffffff;
+  --header-text: #333333;
+  --card-bg: #292d36;
+  --border-color: #444;
+  
+  /* Table Colors */
+  --table-header-bg: #1a1d23;
+  --table-row-hover: #343a48;
+  --table-border: #444;
+  --pagination-bg: #343a48;
+}
+
+/* ========================================
+   Global Resets & Base Styles
+   ======================================== */
+html, body {
+  overflow-y: scroll !important; /* forces scrollbar even if not needed */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.01s ease, color 0.01s ease;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========================================
+   Common Layout Classes
+   ======================================== */
+.container {
+  max-width: 98%;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 2.5%, 1.75rem);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 50px 0;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Common Section Styling */
+.section {
+  flex: 1;
+  min-width: 300px;
+  margin-bottom: 80px;
+  background-color: var(--card-bg);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  color: var(--text-color);
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+.highlight {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+
+/* List Styles in Sections */
+.section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.section ul li {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.section ul li:before {
+  content: "•";
+  color: var(--primary-color);
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-right: 0.5em;
+}
+
+/* ========================================
+   Theme Toggle Switch
+   ======================================== */
+.theme-switch {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  margin-left: 15px;
+  z-index: 10001; /* Ensure it stays on top */
+  cursor: pointer;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+.slider .icon {
+  position: absolute;
+  top: 7px;
+  font-size: 14px;
+  transition: opacity 0.3s ease;
+  color: #333;
+}
+
+.slider .sun-icon {
+  left: 8px;
+  opacity: 1;
+}
+
+.slider .moon-icon {
+  right: 8px;
+  opacity: 0;
+  color: #333;
+}
+
+input:checked + .slider .sun-icon {
+  opacity: 0;
+}
+
+input:checked + .slider .moon-icon {
+  opacity: 1;
+}
+

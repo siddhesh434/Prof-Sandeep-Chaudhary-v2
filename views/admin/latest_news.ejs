@@ -281,6 +281,7 @@
 
                 <!-- Bulletin Form -->
                 <form id="bulletin-form" class="space-y-6">
+                  <input type="hidden" id="bulletinId" value="">
                   <div class="grid md:grid-cols-2 gap-6">
                     <div>
                       <label for="bulletinTitle" class="block text-sm font-medium text-gray-700 mb-2">
@@ -314,6 +315,14 @@
                   </div>
 
                   <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label for="bulletinLink" class="block text-sm font-medium text-gray-700 mb-2">
+                        Optional Link
+                      </label>
+                      <input type="url" id="bulletinLink" name="linkUrl"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="https://example.com/article" />
+                    </div>
                     <div>
                       <label for="bulletinSpeed" class="block text-sm font-medium text-gray-700 mb-2">
                         Animation Speed (seconds)
@@ -349,9 +358,24 @@
 
                   <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
                     <i class="fas fa-save mr-2"></i>
-                    Update Bulletin
+                    Save Bulletin
+                  </button>
+                  <button type="button" id="resetBulletinBtn" class="w-full mt-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors">
+                    Reset Form
                   </button>
                 </form>
+
+                <div class="mt-8">
+                  <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                      <i class="fas fa-list"></i> Bulletins
+                    </h3>
+                    <span class="text-sm text-gray-500" id="bulletinCount">0 items</span>
+                  </div>
+                  <div id="bulletinList" class="space-y-3">
+                    <div class="text-gray-500 text-sm">No bulletins yet.</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -486,6 +510,8 @@
 // Global variables
 let slides = [];
 let editingSlideId = null;
+let bulletins = [];
+let editingBulletinId = null;
 
 document.addEventListener('DOMContentLoaded', function () {
   initializeApp();
@@ -579,6 +605,7 @@ function setupBulletinForm() {
   const speedInput = document.getElementById('bulletinSpeed');
   const colorSelect = document.getElementById('bulletinColor');
   const preview = document.getElementById('bulletin-preview');
+  const resetBtn = document.getElementById('resetBulletinBtn');
 
   function updateBulletinPreview() {
     const title = titleInput.value || 'Latest News :';
@@ -599,16 +626,16 @@ function setupBulletinForm() {
     preview.querySelector('.bulletin-content-preview').style.animationDuration = `${speed}s`;
   }
 
-  // Update preview when inputs change
   [titleInput, messageInput, speedInput, colorSelect].forEach(input => {
     input.addEventListener('input', updateBulletinPreview);
   });
 
-  // Form submission
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     await saveBulletinSettings();
   });
+
+  resetBtn.addEventListener('click', () => resetBulletinForm());
 
   updateBulletinPreview();
 }
@@ -753,11 +780,14 @@ function setupCarouselManagement() {
 // Load initial data
 async function loadInitialData() {
   try {
-    // Load bulletin settings
-    const bulletinResponse = await fetch('/admin/api/bulletin');
+    const bulletinResponse = await fetch('/admin/api/bulletins');
     if (bulletinResponse.ok) {
       const bulletinData = await bulletinResponse.json();
-      populateBulletinForm(bulletinData);
+      bulletins = bulletinData.bulletins || [];
+      renderBulletinList();
+      if (bulletins.length) {
+        populateBulletinForm(bulletins[0]);
+      }
     }
 
     // Load carousel slides
@@ -773,53 +803,138 @@ async function loadInitialData() {
   }
 }
 
-function populateBulletinForm(data) {
-  if (data.bulletin) {
-    document.getElementById('bulletinEnabled').checked = data.bulletin.enabled || false;
-    document.getElementById('bulletinTitle').value = data.bulletin.title || 'Latest News :';
-    document.getElementById('bulletinMessage').value = data.bulletin.message || '';
-    document.getElementById('bulletinSpeed').value = data.bulletin.speed || 15;
-    document.getElementById('bulletinColor').value = data.bulletin.color || 'blue';
-    document.getElementById('bulletinPriority').value = data.bulletin.priority || 'normal';
-    
-    // Trigger the preview update by dispatching an input event
-    const titleInput = document.getElementById('bulletinTitle');
-    if (titleInput) {
-      titleInput.dispatchEvent(new Event('input'));
-    }
+function populateBulletinForm(bulletin) {
+  if (!bulletin) return;
+  editingBulletinId = bulletin._id || null;
+  document.getElementById('bulletinId').value = editingBulletinId || '';
+  document.getElementById('bulletinEnabled').checked = Boolean(bulletin.enabled);
+  document.getElementById('bulletinTitle').value = bulletin.title || 'Latest News :';
+  document.getElementById('bulletinMessage').value = bulletin.message || '';
+  document.getElementById('bulletinLink').value = bulletin.linkUrl || '';
+  document.getElementById('bulletinSpeed').value = bulletin.speed || 15;
+  document.getElementById('bulletinColor').value = bulletin.color || 'blue';
+  document.getElementById('bulletinPriority').value = bulletin.priority || 'normal';
+  document.getElementById('bulletin-form').querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save mr-2"></i> Update Bulletin';
+  const titleInput = document.getElementById('bulletinTitle');
+  if (titleInput) {
+    titleInput.dispatchEvent(new Event('input'));
   }
+}
+
+function resetBulletinForm() {
+  editingBulletinId = null;
+  document.getElementById('bulletinId').value = '';
+  document.getElementById('bulletinEnabled').checked = true;
+  document.getElementById('bulletinTitle').value = 'Latest News :';
+  document.getElementById('bulletinMessage').value = '';
+  document.getElementById('bulletinLink').value = '';
+  document.getElementById('bulletinSpeed').value = 15;
+  document.getElementById('bulletinColor').value = 'blue';
+  document.getElementById('bulletinPriority').value = 'normal';
+  document.getElementById('bulletin-form').querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save mr-2"></i> Save Bulletin';
+  const titleInput = document.getElementById('bulletinTitle');
+  if (titleInput) titleInput.dispatchEvent(new Event('input'));
 }
 
 // Save bulletin settings
 async function saveBulletinSettings() {
   try {
     const formData = new FormData(document.getElementById('bulletin-form'));
-    const bulletinData = {
+    const bulletinPayload = {
       enabled: document.getElementById('bulletinEnabled').checked,
       title: formData.get('title'),
       message: formData.get('message'),
       speed: parseInt(formData.get('speed')),
       color: formData.get('color'),
-      priority: formData.get('priority')
+      priority: formData.get('priority'),
+      linkUrl: formData.get('linkUrl')
     };
 
-    const response = await fetch('/admin/api/bulletin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(bulletinData)
+    const method = editingBulletinId ? 'PUT' : 'POST';
+    const url = editingBulletinId ? `/admin/api/bulletins/${editingBulletinId}` : '/admin/api/bulletins';
+
+    const response = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bulletinPayload)
     });
 
-    if (response.ok) {
-      showStatus('Bulletin settings saved successfully!', 'success');
-    } else {
+    if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to save bulletin settings');
+      throw new Error(errorData.message || 'Failed to save bulletin');
     }
+
+    showStatus(editingBulletinId ? 'Bulletin updated successfully!' : 'Bulletin created successfully!', 'success');
+    await reloadBulletins();
+    resetBulletinForm();
   } catch (error) {
     console.error('Error saving bulletin:', error);
-    showStatus(`Error saving bulletin settings: ${error.message}`, 'error');
+    showStatus(`Error saving bulletin: ${error.message}`, 'error');
+  }
+}
+
+async function reloadBulletins() {
+  const res = await fetch('/admin/api/bulletins');
+  if (res.ok) {
+    const data = await res.json();
+    bulletins = data.bulletins || [];
+    renderBulletinList();
+  }
+}
+
+function renderBulletinList() {
+  const container = document.getElementById('bulletinList');
+  const countEl = document.getElementById('bulletinCount');
+  if (!container) return;
+  if (!bulletins.length) {
+    container.innerHTML = '<div class="text-gray-500 text-sm">No bulletins yet.</div>';
+    if (countEl) countEl.textContent = '0 items';
+    return;
+  }
+  container.innerHTML = bulletins.map((b) => `
+    <div class="border border-gray-200 rounded-lg p-4 flex justify-between items-start bg-gray-50">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-semibold text-gray-800">${b.title || 'Latest News :'}</span>
+          <span class="text-xs px-2 py-1 rounded-full ${b.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+            ${b.enabled ? 'Visible' : 'Hidden'}
+          </span>
+          <span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 capitalize">${b.priority || 'normal'}</span>
+        </div>
+        <p class="text-gray-700 mt-1">${b.message || ''}</p>
+        ${b.linkUrl ? `<a href="${b.linkUrl}" target="_blank" class="text-blue-600 text-sm underline break-words">Link</a>` : ''}
+        <p class="text-xs text-gray-500 mt-1">Speed: ${b.speed || 15}s • Color: ${b.color || 'blue'}</p>
+      </div>
+      <div class="space-x-2">
+        <button class="text-blue-600 hover:underline text-sm" onclick="editBulletin('${b._id}')">Edit</button>
+        <button class="text-red-600 hover:underline text-sm" onclick="deleteBulletin('${b._id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+  if (countEl) countEl.textContent = `${bulletins.length} item${bulletins.length === 1 ? '' : 's'}`;
+}
+
+function editBulletin(id) {
+  const bulletin = bulletins.find((b) => b._id === id);
+  if (!bulletin) return;
+  populateBulletinForm(bulletin);
+  document.querySelector('#bulletin-form').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function deleteBulletin(id) {
+  if (!confirm('Delete this bulletin?')) return;
+  try {
+    const res = await fetch(`/admin/api/bulletins/${id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'Failed to delete bulletin');
+    }
+    showStatus('Bulletin deleted', 'success');
+    await reloadBulletins();
+    if (editingBulletinId === id) resetBulletinForm();
+  } catch (error) {
+    console.error(error);
+    showStatus(error.message, 'error');
   }
 }
 

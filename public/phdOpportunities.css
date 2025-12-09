@@ -84,11 +84,6 @@
     color: var(--text-color);
   }
 
-  .contact-info p {
-    margin-bottom: 15px;
-    line-height: 1.6;
-  }
-
   .funding-note {
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.05);
