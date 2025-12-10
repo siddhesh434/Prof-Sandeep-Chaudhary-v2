@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facilities Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body class="bg-gray-100">
+  <div class="flex h-screen overflow-hidden relative">    <!-- New Collapsible Sidebar -->
+    <%- include('../partials/admin-sidebar', { adminID: 'admin123', currentPage: '/admin/facilities.html' }) %>
+
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+      <div class="p-4 md:p-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6 md:mb-8">
+          <div class="flex items-center">
+            <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800">Facilities Management</h1>
+          </div>
+          <div class="flex items-center space-x-2 md:space-x-4">
+            <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Profile</span>
+            <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
+              S
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="mb-6">
+          <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+              <button onclick="switchCategory('general')" id="tab-general"
+                class="category-tab border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-600">
+                Lab Images
+              </button>
+              <button onclick="switchCategory('materials')" id="tab-materials"
+                class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                Materials Lab
+              </button>
+              <button onclick="switchCategory('bricks')" id="tab-bricks"
+                class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                Bricks Lab
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Add Facility Button -->
+        <div class="mb-6">
+          <button onclick="openAddModal()" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors">
+            <i class="fas fa-plus mr-2"></i>
+            Add Facility
+          </button>
+        </div>
+
+        <!-- Facilities Grid -->
+        <div id="facilities-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Facilities will be loaded here -->
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="hidden text-center py-12">
+          <div class="inline-block w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+          <p class="mt-4 text-gray-600">Loading facilities...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-12">
+          <i class="fas fa-flask text-6xl text-gray-300 mb-4"></i>
+          <p class="text-gray-500 text-lg">No facilities in this category yet.</p>
+          <button onclick="openAddModal()" class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700">
+            <i class="fas fa-plus mr-2"></i>
+            Add First Facility
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div id="facility-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 id="modal-title" class="text-2xl font-bold text-gray-800">Add Facility</h2>
+          <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+
+        <form id="facility-form" enctype="multipart/form-data">
+          <input type="hidden" id="facility-id" name="id">
+
+          <div class="mb-4">
+            <label class="block text-gray-700 font-medium mb-2">Name</label>
+            <input type="text" id="facility-name" name="name"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-gray-700 font-medium mb-2">Description</label>
+            <textarea id="facility-description" name="description" rows="4"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-gray-700 font-medium mb-2">Category *</label>
+            <select id="facility-category" name="category" required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="general">Lab Images</option>
+              <option value="materials">Materials Lab</option>
+              <option value="bricks">Bricks Lab</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-gray-700 font-medium mb-2">Image</label>
+            <input type="file" id="facility-image" name="image" accept="image/*"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <p class="text-sm text-gray-500 mt-1">Max size: 5MB. Formats: JPG, PNG, GIF, WebP</p>
+            <div id="current-image" class="mt-2 hidden">
+              <p class="text-sm text-gray-600 mb-1">Current image:</p>
+              <img id="current-image-preview" src="" alt="Current" class="w-32 h-32 object-cover rounded">
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-gray-700 font-medium mb-2">Order</label>
+            <input type="number" id="facility-order" name="order" min="0" value="0"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <p class="text-sm text-gray-500 mt-1">Lower numbers appear first</p>
+          </div>
+
+          <div class="mb-6">
+            <label class="flex items-center">
+              <input type="checkbox" id="facility-visible" name="isVisible" checked
+                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+              <span class="ml-2 text-gray-700">Visible on public page</span>
+            </label>
+          </div>
+
+          <div class="flex justify-end space-x-3">
+            <button type="button" onclick="closeModal()"
+              class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">
+              Cancel
+            </button>
+            <button type="submit" id="submit-btn"
+              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+              Save Facility
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentCategory = 'general';
+    let facilities = [];
+    let editingFacilityId = null;
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const closeSidebarButton = document.getElementById("close-sidebar");
+    const sidebar = document.getElementById("sidebar");
+    const sidebarOverlay = document.getElementById("sidebar-overlay");
+
+    function openSidebar() {
+      sidebar.classList.remove("-translate-x-full");
+      sidebarOverlay.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+    }
+
+    function closeSidebar() {
+      sidebar.classList.add("-translate-x-full");
+      sidebarOverlay.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    if (mobileMenuButton) {
+      mobileMenuButton.addEventListener("click", openSidebar);
+    }
+
+    if (closeSidebarButton) {
+      closeSidebarButton.addEventListener("click", closeSidebar);
+    }
+
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener("click", closeSidebar);
+    }
+
+    // Load facilities
+    async function loadFacilities() {
+      const container = document.getElementById('facilities-container');
+      const loading = document.getElementById('loading');
+      const emptyState = document.getElementById('empty-state');
+
+      container.innerHTML = '';
+      loading.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+
+      try {
+        const response = await fetch(`/api/facilities?category=${currentCategory}`);
+        facilities = await response.json();
+
+        loading.classList.add('hidden');
+
+        if (facilities.length === 0) {
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        facilities.forEach(facility => {
+          const card = createFacilityCard(facility);
+          container.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error loading facilities:', error);
+        loading.classList.add('hidden');
+        container.innerHTML = '<p class="text-red-500 col-span-full text-center">Error loading facilities</p>';
+      }
+    }
+
+    // Create facility card
+    function createFacilityCard(facility) {
+      const card = document.createElement('div');
+      card.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow';
+      
+      card.innerHTML = `
+        <div class="relative">
+          ${facility.image ? `
+            <img src="${facility.image}" alt="${facility.name}" class="w-full h-48 object-cover">
+          ` : `
+            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+              <i class="fas fa-image text-gray-400 text-4xl"></i>
+            </div>
+          `}
+          ${!facility.isVisible ? '<div class="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded text-xs">Hidden</div>' : ''}
+        </div>
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">${facility.name}</h3>
+          <p class="text-gray-600 text-sm mb-4 line-clamp-3">${facility.description || 'No description'}</p>
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-gray-500">Order: ${facility.order}</span>
+            <div class="flex space-x-2">
+              <button onclick="editFacility('${facility._id}')" class="text-blue-600 hover:text-blue-800">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button onclick="deleteFacility('${facility._id}', '${facility.name}')" class="text-red-600 hover:text-red-800">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      return card;
+    }
+
+    // Switch category
+    function switchCategory(category) {
+      currentCategory = category;
+
+      // Update tab styles
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.remove('border-blue-500', 'text-blue-600');
+        tab.classList.add('border-transparent', 'text-gray-500');
+      });
+
+      const activeTab = document.getElementById(`tab-${category}`);
+      activeTab.classList.remove('border-transparent', 'text-gray-500');
+      activeTab.classList.add('border-blue-500', 'text-blue-600');
+
+      loadFacilities();
+    }
+
+    // Open add modal
+    function openAddModal() {
+      editingFacilityId = null;
+      document.getElementById('modal-title').textContent = 'Add Facility';
+      document.getElementById('facility-form').reset();
+      document.getElementById('facility-id').value = '';
+      document.getElementById('facility-category').value = currentCategory;
+      document.getElementById('current-image').classList.add('hidden');
+      document.getElementById('facility-modal').classList.remove('hidden');
+    }
+
+    // Edit facility
+    async function editFacility(id) {
+      const facility = facilities.find(f => f._id === id);
+      if (!facility) return;
+
+      editingFacilityId = id;
+      document.getElementById('modal-title').textContent = 'Edit Facility';
+      document.getElementById('facility-id').value = id;
+      document.getElementById('facility-name').value = facility.name;
+      document.getElementById('facility-description').value = facility.description || '';
+      document.getElementById('facility-category').value = facility.category;
+      document.getElementById('facility-order').value = facility.order;
+      document.getElementById('facility-visible').checked = facility.isVisible;
+
+      if (facility.image) {
+        document.getElementById('current-image').classList.remove('hidden');
+        document.getElementById('current-image-preview').src = facility.image;
+      }
+
+      document.getElementById('facility-modal').classList.remove('hidden');
+    }
+
+    // Delete facility
+    async function deleteFacility(id, name) {
+      if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+
+      try {
+        const response = await fetch(`/api/facilities/${id}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          loadFacilities();
+        } else {
+          alert('Error deleting facility');
+        }
+      } catch (error) {
+        console.error('Error deleting facility:', error);
+        alert('Error deleting facility');
+      }
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('facility-modal').classList.add('hidden');
+      editingFacilityId = null;
+    }
+
+    // Handle form submission
+    document.getElementById('facility-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('name', document.getElementById('facility-name').value);
+      formData.append('description', document.getElementById('facility-description').value);
+      formData.append('category', document.getElementById('facility-category').value);
+      formData.append('order', document.getElementById('facility-order').value);
+      formData.append('isVisible', document.getElementById('facility-visible').checked);
+
+      const imageFile = document.getElementById('facility-image').files[0];
+      if (imageFile) {
+        formData.append('image', imageFile);
+      }
+
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving...';
+
+      try {
+        const url = editingFacilityId ? `/api/facilities/${editingFacilityId}` : '/api/facilities';
+        const method = editingFacilityId ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+          method: method,
+          body: formData
+        });
+
+        if (response.ok) {
+          closeModal();
+          loadFacilities();
+        } else {
+          const error = await response.json();
+          alert('Error saving facility: ' + (error.details || error.error));
+        }
+      } catch (error) {
+        console.error('Error saving facility:', error);
+        alert('Error saving facility');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Save Facility';
+      }
+    });
+
+    // Initial load
+    loadFacilities();
+  </script>
+</body>
+</html>

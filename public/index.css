@@ -61,7 +61,7 @@ h3 {
 }
 
 .bulletin-link:hover {
-  color: rgb(16, 16, 155);
+  color: rgb(255, 64, 64);
 }
 
 @keyframes marquee {

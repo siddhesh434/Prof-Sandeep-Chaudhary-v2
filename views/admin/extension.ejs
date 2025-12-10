@@ -22,83 +22,8 @@
 </head>
 
 <body class="bg-gray-100">
-    <div class="flex h-screen overflow-hidden relative">
-        <!-- Sidebar - hidden on mobile by default -->
-        <aside id="sidebar"
-            class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
-            <div class="p-6 border-b border-blue-800">
-                <h2 class="text-xl font-bold tracking-wide">Welcome, admin123!</h2>
-                <!-- Close button for mobile -->
-                <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <nav class="mt-4">
-                <ul>
-                    <li class="mb-1 px-2">
-                        <a href="/admin"
-                            class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
-                            <i class="fas fa-home mr-3"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="mb-1 px-2">
-                        <a href="/admin/control.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                          <i class="fas fa-sliders-h mr-3"></i>
-                          <span>Visibility Controls</span>
-                        </a>
-                      </li>
-                      <li class="mb-1 px-2">
-                        <a href="/admin/files.html"
-                          class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                          <i class="fas fa-users mr-3"></i>
-                          <span>File Upload</span>
-                        </a>
-                      </li>
-                      <li class="mb-1 px-2">
-                        <a href="/admin/eResources.html"
-                          class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                          <i class="fas fa-file-alt mr-3"></i>
-                          <span>e-Resources</span>
-                        </a>
-                      </li>
-                      <li class="mb-1 px-2">
-                        <a href="/admin/keyTechnology.html"
-                          class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                          <i class="fas fa-microchip mr-3"></i>
-                          <span>Key Technologies</span>
-                        </a>
-                      </li>
-                      <li class="mb-1 px-2">
-            <a href="/admin/latest_news.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-              <i class="fas fa-edit mr-3"></i>
-              <span>Latest News & Scrolling</span>
-            </a>
-          </li>
-                      <li class="mb-1 px-2">
-                        <a href="/admin/formData" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                          <i class="fas fa-ticket-alt mr-3"></i>
-                          <span>User Requests</span>
-                        </a>
-                      </li>
-                      <li class="mb-1 px-2">
-                        <a href="/admin/cvGenerator.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                          <i class="fas fa-file-pdf mr-3"></i>
-                          <span>CV Generator</span>
-                        </a>
-                      </li>
-                      <br>
-                    <li style="padding-left: 13px; font-size: medium; font-size: 1.1rem;">Account</li>
-                    <li class="mb-1 px-2">
-                        <a href="/admin/logout"
-                            class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                            <i class="fas fa-sign-out-alt mr-3"></i>
-                            <span>Logout</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+    <div class="flex h-screen overflow-hidden relative">    <!-- New Collapsible Sidebar -->
+    <%- include('../partials/admin-sidebar', { adminID: 'admin123', currentPage: '/admin/extension.html' }) %>
 
         <!-- Overlay for mobile sidebar -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>

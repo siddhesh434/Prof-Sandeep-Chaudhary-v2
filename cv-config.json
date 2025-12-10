@@ -1,0 +1,12 @@
+{
+  "selectedComponents": [
+    "publications",
+    "books",
+    "chapters",
+    "conferences",
+    "patents",
+    "projects",
+    "dissertations"
+  ],
+  "additionalInfo": ""
+}

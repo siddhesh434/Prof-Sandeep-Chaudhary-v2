@@ -1,19 +1,26 @@
 const express = require("express");
 const router = express.Router();
-const { exec } = require("child_process");
 const path = require("path");
 const fs = require("fs");
+const { generateCV } = require("../cvGeneratorModule");
 
 // Route to generate CV
-router.post("/generate-cv", (req, res) => {
-  // Execute the CV generator script
-  exec("node cvGenerator.js", (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing CV generator: ${error}`);
-      return res.status(500).send("Error generating CV");
-    }
+router.post("/generate-cv", async (req, res) => {
+  const { selectedComponents = [], additionalInfo = "" } = req.body;
 
-    const cvPath = path.join(__dirname, "../cv.pdf");
+  // Create configuration object
+  const config = {
+    selectedComponents,
+    additionalInfo,
+  };
+
+  try {
+    console.log("Generating CV with config:", config);
+    
+    // Generate CV using the module
+    const cvPath = await generateCV(config);
+    
+    console.log("CV generated at:", cvPath);
 
     // Check if the file exists
     if (fs.existsSync(cvPath)) {
@@ -21,13 +28,20 @@ router.post("/generate-cv", (req, res) => {
       res.download(cvPath, "Sandeep_Chaudhary_CV.pdf", (err) => {
         if (err) {
           console.error(`Error sending file: ${err}`);
-          res.status(500).send("Error downloading CV");
+          if (!res.headersSent) {
+            res.status(500).send("Error downloading CV");
+          }
         }
       });
     } else {
       res.status(404).send("CV file not found");
     }
-  });
+  } catch (error) {
+    console.error("Error in CV generation route:", error);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Error generating CV", details: error.message });
+    }
+  }
 });
 
 // Serve the main HTML page

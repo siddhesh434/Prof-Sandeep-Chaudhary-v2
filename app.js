@@ -197,6 +197,7 @@ const chapters = require("./routes/chapter");
 const keyTechnologyRoutes = require("./routes/keyTechnology");
 const homeHighlightRoutes = require("./routes/homeHighlights");
 const technologyTransferRoutes = require("./routes/technologyTransfers");
+const facilitiesRoutes = require("./routes/facilities");
 
 // Import content routes
 const contentRoutes = require('./routes/Content');
@@ -225,6 +226,7 @@ app.use("/", chapters);
 app.use("/", keyTechnologyRoutes);
 app.use("/", homeHighlightRoutes);
 app.use("/", technologyTransferRoutes);
+app.use("/", facilitiesRoutes);
 
 // Root routes with dynamic content loading
 app.get("/", async (req, res) => {
@@ -283,11 +285,9 @@ app.get("/index.html", async (req, res) => {
   }
 });
 
-// Other static routes
 app.get("/admin/formData", (req, res) =>
   res.render("admin/formData", { adminID: req.session.adminID })
 );
-app.get("/facilities.html", (req, res) => res.render("facilities"));
 app.get("/aboutPI.html", (req, res) => res.render("aboutPI"));
 app.get("/teaching.html", (req, res) => res.render("teaching"));
 app.get("/Collaboration.html", (req, res) => res.render("Collaboration"));

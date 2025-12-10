@@ -10,84 +10,8 @@
 </head>
 
 <body class="bg-gray-100">
-    <div class="flex h-screen overflow-hidden relative">
-        <!-- Sidebar - hidden on mobile by default -->
-        <aside id="sidebar"
-          class="w-64 bg-blue-900 text-white shadow-lg transition-all duration-300 ease-in-out z-40 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 md:relative md:block">
-          <div class="p-6 border-b border-blue-800">
-            <h2 class="text-xl font-bold tracking-wide">
-              Welcome, admin123!
-            </h2>
-            <!-- Close button for mobile -->
-            <button id="close-sidebar" class="absolute top-4 right-4 text-white md:hidden">
-              <i class="fas fa-times text-xl"></i>
-            </button>
-          </div>
-          <nav class="mt-4">
-            <ul>
-              <li class="mb-1 px-2">
-                <a href="/admin" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                  <i class="fas fa-home mr-3"></i>
-                  <span>Dashboard</span>
-                </a>
-              </li>
-              <li class="mb-1 px-2">
-                <a href="/admin/control.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                  <i class="fas fa-sliders-h mr-3"></i>
-                  <span>Visibility Controls</span>
-                </a>
-              </li>
-              <li class="mb-1 px-2">
-                <a href="/admin/files.html"
-                  class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                  <i class="fas fa-users mr-3"></i>
-                  <span>File Upload</span>
-                </a>
-              </li>
-              <li class="mb-1 px-2">
-                <a href="/admin/eResources.html"
-                  class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                  <i class="fas fa-file-alt mr-3"></i>
-                  <span>e-Resources</span>
-                </a>
-              </li>
-              <li class="mb-1 px-2">
-                <a href="/admin/keyTechnology.html"
-                  class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                  <i class="fas fa-microchip mr-3"></i>
-                  <span>Key Technologies</span>
-                </a>
-              </li>
-              <li class="mb-1 px-2">
-            <a href="/admin/latest_news.html" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-              <i class="fas fa-edit mr-3"></i>
-              <span>Latest News & Scrolling</span>
-            </a>
-          </li>
-              <li class="mb-1 px-2">
-                <a href="/admin/formData" class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                  <i class="fas fa-ticket-alt mr-3"></i>
-                  <span>User Requests</span>
-                </a>
-              </li>
-              <li class="mb-1 px-2">
-                <a href="/admin/cvGenerator.html" class="flex items-center py-3 px-4 bg-blue-700 text-white rounded-md font-medium">
-                  <i class="fas fa-file-pdf mr-3"></i>
-                  <span>CV Generator</span>
-                </a>
-              </li>
-              <br>
-              <li style="padding-left: 13px; font-size: medium; font-size: 1.1rem;">Account</li>
-              <li class="mb-1 px-2">
-                <a href="/admin/logout"
-                  class="flex items-center py-3 px-4 text-blue-100 hover:bg-blue-800 rounded-md transition-all duration-200">
-                  <i class="fas fa-sign-out-alt mr-3"></i>
-                  <span>Logout</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+    <div class="flex h-screen overflow-hidden relative">    <!-- New Collapsible Sidebar -->
+    <%- include('../partials/admin-sidebar', { adminID: 'admin123', currentPage: '/admin/cvGenerator.html' }) %>
 
     <!-- Overlay for mobile sidebar -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
@@ -142,46 +66,81 @@
             </div>
           </div>
           
-          <!-- CV Components Card -->
+          <!-- Additional Information Card -->
           <div
             class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg">
             <div class="bg-blue-800 text-white p-4 md:p-5">
               <h2 class="text-lg md:text-xl font-semibold flex items-center">
-                <i class="fas fa-list-check mr-2 md:mr-3 text-xl md:text-2xl"></i>
-                CV Components
+                <i class="fas fa-info-circle mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                Additional Information
               </h2>
             </div>
             <div class="p-4 md:p-5">
-              <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
-                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+              <p class="text-gray-600 mb-3 text-sm">
+                Add any additional information to include in the CV (appears after Personal Information section)
+              </p>
+              <textarea 
+                id="additionalInfo" 
+                rows="6" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+                placeholder="Enter additional information such as research interests, awards, memberships, etc."></textarea>
+              <div class="mt-2 text-right">
+                <span id="charCount" class="text-sm text-gray-500">0 characters</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CV Components Card -->
+          <div
+            class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg">
+            <div class="bg-blue-800 text-white p-4 md:p-5 flex justify-between items-center">
+              <h2 class="text-lg md:text-xl font-semibold flex items-center">
+                <i class="fas fa-list-check mr-2 md:mr-3 text-xl md:text-2xl"></i>
+                CV Components
+              </h2>
+              <div class="flex gap-2">
+                <button id="selectAll" class="text-sm px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded-md transition-colors">
+                  Select All
+                </button>
+                <button id="selectNone" class="text-sm px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded-md transition-colors">
+                  Select None
+                </button>
+              </div>
+            </div>
+            <div class="p-4 md:p-5">
+              <p class="text-gray-600 mb-4 text-sm">
+                Select the components you want to include in the CV
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="publications" checked>
                   <span class="text-gray-700">Publications</span>
-                </li>
-                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
-                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                </label>
+                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="books" checked>
                   <span class="text-gray-700">Books</span>
-                </li>
-                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
-                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                </label>
+                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="chapters" checked>
                   <span class="text-gray-700">Book Chapters</span>
-                </li>
-                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
-                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                </label>
+                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="conferences" checked>
                   <span class="text-gray-700">Conference Proceedings</span>
-                </li>
-                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
-                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                </label>
+                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="patents" checked>
                   <span class="text-gray-700">Patents</span>
-                </li>
-                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
-                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                </label>
+                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="projects" checked>
                   <span class="text-gray-700">Research Projects</span>
-                </li>
-                <li class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200">
-                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                </label>
+                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="dissertations" checked>
                   <span class="text-gray-700">Supervised Dissertations</span>
-                </li>
-              </ul>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -241,18 +200,65 @@
       });
     });
 
+    // Character counter for additional info
+    const additionalInfoTextarea = document.getElementById('additionalInfo');
+    const charCount = document.getElementById('charCount');
+    
+    if (additionalInfoTextarea && charCount) {
+      additionalInfoTextarea.addEventListener('input', function() {
+        charCount.textContent = this.value.length + ' characters';
+      });
+    }
+
+    // Select All / Select None functionality
+    document.getElementById('selectAll').addEventListener('click', function() {
+      document.querySelectorAll('.cv-component').forEach(checkbox => {
+        checkbox.checked = true;
+      });
+    });
+
+    document.getElementById('selectNone').addEventListener('click', function() {
+      document.querySelectorAll('.cv-component').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+    });
+
     // CV Download functionality
     document.getElementById('downloadCV').addEventListener('click', function() {
         const loadingIndicator = document.getElementById('loading');
         const statusDiv = document.getElementById('status');
         
+        // Collect selected components
+        const selectedComponents = [];
+        document.querySelectorAll('.cv-component:checked').forEach(checkbox => {
+          selectedComponents.push(checkbox.value);
+        });
+
+        // Get additional info
+        const additionalInfo = document.getElementById('additionalInfo').value.trim();
+
+        // Validate at least one component is selected
+        if (selectedComponents.length === 0) {
+          statusDiv.textContent = 'Please select at least one component to include in the CV';
+          statusDiv.classList.remove('hidden', 'bg-green-100', 'text-green-800');
+          statusDiv.classList.add('bg-red-100', 'text-red-800', 'p-4', 'rounded-md');
+          return;
+        }
+        
         // Show loading indicator
         loadingIndicator.classList.remove('hidden');
         statusDiv.classList.add('hidden');
         
-        // Call the API endpoint to generate CV
+        // Call the API endpoint to generate CV with configuration
         fetch('/generate-cv', {
-            method: 'POST'
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              selectedComponents: selectedComponents,
+              additionalInfo: additionalInfo
+            })
         })
         .then(response => {
             if (!response.ok) {
@@ -276,7 +282,7 @@
             
             // Show success message
             statusDiv.textContent = 'CV generated successfully! Downloading...';
-            statusDiv.classList.remove('hidden');
+            statusDiv.classList.remove('hidden', 'bg-red-100', 'text-red-800');
             statusDiv.classList.add('bg-green-100', 'text-green-800', 'p-4', 'rounded-md');
         })
         .catch(error => {
@@ -285,7 +291,7 @@
             
             // Show error message
             statusDiv.textContent = 'Error: ' + error.message;
-            statusDiv.classList.remove('hidden');
+            statusDiv.classList.remove('hidden', 'bg-green-100', 'text-green-800');
             statusDiv.classList.add('bg-red-100', 'text-red-800', 'p-4', 'rounded-md');
             console.error('Error:', error);
         });

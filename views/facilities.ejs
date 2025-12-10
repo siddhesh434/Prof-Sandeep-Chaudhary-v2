@@ -8,140 +8,213 @@
           class="profile-image" />
         <div class="profile-info">
           <h1>Prof. Sandeep Chaudhary</h1>
-          <p>Department of Civil Engineering, lab facilities</p>
+          <p>Department of Civil Engineering, Lab Facilities</p>
         </div>
       </div>
     </div>
   </header>
 
   <main class="container facilities-section">
-    <div class="facilities-grid">
-      <div class="facility-card">
-
-        <img src="/images/facility/Brick machine.jpeg" />
-   
-        <h3>Brick Manufacturing Unit</h3>
-        <p>
-          
-        </p>
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/Concrete mixer.jpeg" />
-        <h3>Concrete mixing and casting facilities</h3>
-        <p>
-          
-        </p>
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/CTM Machine.jpeg" />
-        <h3>Compression Testing Machine</h3>
-        <p>
-          Servo-controlled 5000 kN capacity. Smaller test capacities of 3000 kN, 1000 kN, 500 kN and 20 kN are also available.
-        </p>
-
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/Fatigue.jpeg" />
-        <h3>Fatigue testing machine</h3>
-        <p>
-          Dynamic loading facility for fatigue testing in normal and high temperature environments.
-        </p>
-
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/Flow table machine.jpeg" />
-       
-        <h3>Mortar preparation and testing facilities</h3>
-        <p>
-          Mortar mixer of different capacities, flow tests, shrinkage, and other testing facilities.
-        </p>
-
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/Freeze thaw chamber.jpeg" />
-        
-        <h3>Freeze thaw chamber</h3>
-        <p>
-          
-        </p>
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/Laminar flow hood.jpeg" />
-        
-        <h3>Bio-construction preparation and testing facilities</h3>
-        <p>
-        Laminar flow hood, Autoclave, Incubator, Optical Microscope, etc.  
-        </p>
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/Muffle furnace.jpeg" />
-        
-        <h3>Muffle furnace</h3>
-        <p>
-        Up to 1600°C capacity to support clinker manufacturing and elevated temperature.  
-        </p>
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/Permeablity.jpeg" />
-        
-        <h3>Permeability test apparatus</h3>
-        <p>
-        Different permeability test apparatuses for testing the water-based durability. 
-        </p>
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/Rheometer.jpeg" />
-        
-        <h3>Modular Compact Rheometer</h3>
-        <p>
-        Ball and cup, parallel plate arrangement for testing different rheological properties
-        to support flowable and 3D printing applications.
-        </p>
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/Thermal conductivity.jpeg" />
-        
-        <h3>Thermal conductivity</h3>
-        <p>
-          
-        </p>
-      </div>
-
-      <div class="facility-card">
-        <img src="/images/facility/UTM Machine.jpeg" />
-        
-        <h3>Universal Testing Machine</h3>
-        <p>
-          
-        </p>
-      </div>
-
+    <!-- Category Navigation -->
+    <div class="category-nav">
+      <button class="category-btn active" onclick="showCategory('all')">All Facilities</button>
+      <button class="category-btn" onclick="showCategory('general')">Lab Images</button>
+      <button class="category-btn" onclick="showCategory('materials')">Materials Lab</button>
+      <button class="category-btn" onclick="showCategory('bricks')">Bricks Lab</button>
     </div>
+
+    <!-- Lab Images Section -->
+    <% if (facilities.general && facilities.general.length > 0) { %>
+    <div class="category-section" data-category="general">
+      <h2 class="category-title">Lab Images</h2>
+      <div class="facilities-grid">
+        <% facilities.general.forEach(facility => { %>
+        <div class="facility-card <%= !facility.name ? 'no-name' : '' %> <%= !facility.description ? 'no-description' : '' %>">
+          <% if (facility.image) { %>
+            <img src="<%= facility.image %>" alt="<%= facility.name || 'Facility' %>" />
+          <% } else { %>
+            <div class="no-image">
+              <i class="fas fa-image"></i>
+            </div>
+          <% } %>
+          <% if (facility.name) { %>
+            <h3><%= facility.name %></h3>
+          <% } %>
+          <% if (facility.description) { %>
+            <p><%= facility.description %></p>
+          <% } %>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Materials Lab Section -->
+    <% if (facilities.materials && facilities.materials.length > 0) { %>
+    <div class="category-section" data-category="materials">
+      <h2 class="category-title">Materials Lab</h2>
+      <div class="facilities-grid">
+        <% facilities.materials.forEach(facility => { %>
+        <div class="facility-card <%= !facility.name ? 'no-name' : '' %> <%= !facility.description ? 'no-description' : '' %>">
+          <% if (facility.image) { %>
+            <img src="<%= facility.image %>" alt="<%= facility.name || 'Facility' %>" />
+          <% } else { %>
+            <div class="no-image">
+              <i class="fas fa-image"></i>
+            </div>
+          <% } %>
+          <% if (facility.name) { %>
+            <h3><%= facility.name %></h3>
+          <% } %>
+          <% if (facility.description) { %>
+            <p><%= facility.description %></p>
+          <% } %>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Bricks Lab Section -->
+    <% if (facilities.bricks && facilities.bricks.length > 0) { %>
+    <div class="category-section" data-category="bricks">
+      <h2 class="category-title">Bricks Lab</h2>
+      <div class="facilities-grid">
+        <% facilities.bricks.forEach(facility => { %>
+        <div class="facility-card <%= !facility.name ? 'no-name' : '' %> <%= !facility.description ? 'no-description' : '' %>">
+          <% if (facility.image) { %>
+            <img src="<%= facility.image %>" alt="<%= facility.name || 'Facility' %>" />
+          <% } else { %>
+            <div class="no-image">
+              <i class="fas fa-image"></i>
+            </div>
+          <% } %>
+          <% if (facility.name) { %>
+            <h3><%= facility.name %></h3>
+          <% } %>
+          <% if (facility.description) { %>
+            <p><%= facility.description %></p>
+          <% } %>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Empty State -->
+    <% if ((!facilities.general || facilities.general.length === 0) && 
+           (!facilities.materials || facilities.materials.length === 0) && 
+           (!facilities.bricks || facilities.bricks.length === 0)) { %>
+    <div class="empty-state">
+      <i class="fas fa-flask"></i>
+      <p>No facilities available at the moment.</p>
+    </div>
+    <% } %>
   </main>
 
+  <style>
+    .category-nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .category-btn {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid var(--primary-color);
+      background-color: transparent;
+      color: var(--primary-color);
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .category-btn:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .category-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .category-section {
+      margin-bottom: 3rem;
+    }
+
+    .category-title {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--primary-color);
+    }
+
+    .no-image {
+      width: 100%;
+      height: 250px;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #ccc;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      color: #ccc;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+      font-size: 1.2rem;
+      color: #666;
+    }
+
+    /* Dark mode overrides for inline styles */
+    html[data-theme="dark"] .no-image {
+      background-color: #1e293b;
+      color: #475569;
+    }
+
+    html[data-theme="dark"] .empty-state i {
+      color: #475569;
+    }
+
+    html[data-theme="dark"] .empty-state p {
+      color: #94a3b8;
+    }
+  </style>
+
   <script>
-    function changeImage(mainImgId, newSrc) {
-      document.getElementById(mainImgId).src = newSrc;
+    function showCategory(category) {
+      const sections = document.querySelectorAll('.category-section');
+      const buttons = document.querySelectorAll('.category-btn');
 
-      // Update active thumbnail state
-      const card = document.getElementById(mainImgId).closest('.facility-card');
-      const thumbs = card.querySelectorAll('.gallery-thumb');
+      // Update button states
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+        if ((category === 'all' && btn.textContent === 'All Facilities') ||
+            (category !== 'all' && btn.onclick.toString().includes(`'${category}'`))) {
+          btn.classList.add('active');
+        }
+      });
 
-      thumbs.forEach(thumb => {
-        if (thumb.src === newSrc) {
-          thumb.classList.add('active');
+      // Show/hide sections
+      sections.forEach(section => {
+        if (category === 'all') {
+          section.style.display = 'block';
         } else {
-          thumb.classList.remove('active');
+          section.style.display = section.dataset.category === category ? 'block' : 'none';
         }
       });
     }

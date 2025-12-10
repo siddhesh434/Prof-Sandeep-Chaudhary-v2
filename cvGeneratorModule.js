@@ -1,80 +1,10 @@
-// cv-generator.js - Script to generate CV PDF from MongoDB data
+// cv-generator-module.js - CV generation as a module
 const mongoose = require("mongoose");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
-const dotenv = require("dotenv");
-dotenv.config();
 
-// Read configuration from file
-let config = {
-  selectedComponents: ['publications', 'books', 'chapters', 'conferences', 'patents', 'projects', 'dissertations'],
-  additionalInfo: ''
-};
-
-const configPath = path.join(__dirname, 'cv-config.json');
-if (fs.existsSync(configPath)) {
-  try {
-    const configData = fs.readFileSync(configPath, 'utf8');
-    config = JSON.parse(configData);
-  } catch (error) {
-    console.log('Error reading config file, using defaults:', error);
-  }
-}
-
-// Helper function to check if component should be included
-function shouldInclude(componentName) {
-  return config.selectedComponents.includes(componentName);
-}
-
-// Helper function to format publication in APA style
-function formatPublicationAPA(pub) {
-  let apa = '';
-  
-  // Author(s)
-  if (pub.author) {
-    apa += pub.author;
-  }
-  
-  // Year
-  if (pub.year) {
-    apa += ` (${pub.year}). `;
-  } else {
-    apa += '. ';
-  }
-  
-  // Title
-  if (pub.title) {
-    apa += pub.title + '. ';
-  }
-  
-  // Journal (italicized in display)
-  if (pub.journal) {
-    apa += pub.journal;
-  }
-  
-  // Volume/Pages
-  if (pub.volumePages) {
-    apa += ', ' + pub.volumePages;
-  }
-  
-  apa += '.';
-  
-  return apa;
-}
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("Connected to MongoDB"))
-.catch(err => {
-  console.error("MongoDB connection error:", err);
-  process.exit(1);
-});
-
-// Define Book schema
+// Define schemas
 const bookSchema = new mongoose.Schema({
   author: String,
   title: String,
@@ -83,7 +13,6 @@ const bookSchema = new mongoose.Schema({
   photo: String,
 });
 
-// Define Chapter schema
 const chapterSchema = new mongoose.Schema({
   author: String,
   chapterName: String,
@@ -93,17 +22,15 @@ const chapterSchema = new mongoose.Schema({
   Page: String,
 });
 
-// Define Conference Proceedings schema
 const conferenceSchema = new mongoose.Schema({
   author: String,
   title: String,
   conference: String,
   date: String,
   place: String,
-  year: Number, // Extracted from date for grouping purposes
+  year: Number,
 });
 
-// Define Dissertation schema
 const dissertationSchema = new mongoose.Schema({
   name: String,
   title: String,
@@ -112,7 +39,6 @@ const dissertationSchema = new mongoose.Schema({
   degree: String,
 });
 
-// Define Patent schema
 const patentSchema = new mongoose.Schema({
   title: String,
   authors: String,
@@ -123,7 +49,6 @@ const patentSchema = new mongoose.Schema({
   description: String,
 });
 
-// Define Project schema
 const projectSchema = new mongoose.Schema({
   title: String,
   year: String,
@@ -133,7 +58,6 @@ const projectSchema = new mongoose.Schema({
   role: String
 });
 
-// Define Publication schema
 const publicationSchema = new mongoose.Schema({
   author: String,
   title: String,
@@ -145,17 +69,55 @@ const publicationSchema = new mongoose.Schema({
   impactFactor: Number,
 });
 
-// Create models
-const Book = mongoose.model("Book", bookSchema);
-const Chapter = mongoose.model("Chapter", chapterSchema);
-const Conference = mongoose.model("Conference", conferenceSchema);
-const Dissertation = mongoose.model("Dissertation", dissertationSchema);
-const Patent = mongoose.model("Patent", patentSchema);
-const Project = mongoose.model("Project", projectSchema);
-const Publication = mongoose.model("Publication", publicationSchema);
+// Create models - check if they already exist first
+const Book = mongoose.models.Book || mongoose.model("Book", bookSchema);
+const Chapter = mongoose.models.Chapter || mongoose.model("Chapter", chapterSchema);
+const Conference = mongoose.models.Conference || mongoose.model("Conference", conferenceSchema);
+const Dissertation = mongoose.models.Dissertation || mongoose.model("Dissertation", dissertationSchema);
+const Patent = mongoose.models.Patent || mongoose.model("Patent", patentSchema);
+const Project = mongoose.models.Project || mongoose.model("Project", projectSchema);
+const Publication = mongoose.models.Publication || mongoose.model("Publication", publicationSchema);
 
-// Function to generate the PDF CV
-async function generateCV() {
+// Helper function to check if component should be included
+function shouldInclude(componentName, selectedComponents) {
+  return selectedComponents.includes(componentName);
+}
+
+// Helper function to format publication in APA style
+function formatPublicationAPA(pub) {
+  let apa = '';
+  
+  if (pub.author) {
+    apa += pub.author;
+  }
+  
+  if (pub.year) {
+    apa += ` (${pub.year}). `;
+  } else {
+    apa += '. ';
+  }
+  
+  if (pub.title) {
+    apa += pub.title + '. ';
+  }
+  
+  if (pub.journal) {
+    apa += pub.journal;
+  }
+  
+  if (pub.volumePages) {
+    apa += ', ' + pub.volumePages;
+  }
+  
+  apa += '.';
+  
+  return apa;
+}
+
+// Main CV generation function
+async function generateCV(config = {}) {
+  const { selectedComponents = ['publications', 'books', 'chapters', 'conferences', 'patents', 'projects', 'dissertations'], additionalInfo = '' } = config;
+
   try {
     // Fetch data from MongoDB
     const books = await Book.find().sort({ year: -1 });
@@ -173,8 +135,9 @@ async function generateCV() {
     });
     
     // Pipe PDF to write stream
-    const outputPath = "./cv.pdf";
-    doc.pipe(fs.createWriteStream(outputPath));
+    const outputPath = path.join(__dirname, "cv.pdf");
+    const writeStream = fs.createWriteStream(outputPath);
+    doc.pipe(writeStream);
     
     // Add CV header
     doc.fontSize(24).font('Helvetica-Bold').text("Curriculum Vitae", { align: "center" });
@@ -184,7 +147,7 @@ async function generateCV() {
     doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
     doc.moveDown();
     
-    // Add personal info section (placeholder - you can customize this)
+    // Add personal info section
     doc.fontSize(16).font('Helvetica-Bold').text("Personal Information");
     doc.moveDown(0.5);
     doc.fontSize(12).font('Helvetica').text("Name: Prof. Sandeep Chaudhary");
@@ -194,56 +157,43 @@ async function generateCV() {
     doc.moveDown();
     
     // Add additional information section if provided
-    if (config.additionalInfo && config.additionalInfo.trim() !== '') {
+    if (additionalInfo && additionalInfo.trim() !== '') {
       doc.fontSize(16).font('Helvetica-Bold').text("Additional Information");
       doc.moveDown(0.5);
-      doc.fontSize(12).font('Helvetica').text(config.additionalInfo, {
+      doc.fontSize(12).font('Helvetica').text(additionalInfo, {
         align: 'left',
         lineGap: 2
       });
       doc.moveDown();
     }
     
-    // Add publications section if data exists and selected
-    if (shouldInclude('publications') && publications.length > 0) {
+    // Add publications section if selected
+    if (shouldInclude('publications', selectedComponents) && publications.length > 0) {
       doc.fontSize(16).font('Helvetica-Bold').text("Journal Publications");
       doc.moveDown();
       
       publications.forEach((pub, index) => {
-        // Format in APA style
         const apaText = formatPublicationAPA(pub);
         
         doc.fontSize(12).font('Helvetica');
-        
-        // Add numbering
         const numberText = `${index + 1}. `;
-        doc.text(numberText, {
-          continued: true
-        });
-        
-        // Add APA formatted citation
+        doc.text(numberText, { continued: true });
         doc.text(apaText);
         
-        // Add impact factor if available
         if (pub.impactFactor) {
-          doc.fontSize(11).font('Helvetica').text(`   Impact Factor: ${pub.impactFactor}`, {
-            indent: 20
-          });
+          doc.fontSize(11).font('Helvetica').text(`   Impact Factor: ${pub.impactFactor}`, { indent: 20 });
         }
         
-        // Add link if available
         if (pub.publicationLink) {
-          doc.fontSize(11).font('Helvetica').text(`   DOI/Link: ${pub.publicationLink}`, {
-            indent: 20
-          });
+          doc.fontSize(11).font('Helvetica').text(`   DOI/Link: ${pub.publicationLink}`, { indent: 20 });
         }
         
         doc.moveDown();
       });
     }
     
-    // Add books section if data exists and selected
-    if (shouldInclude('books') && books.length > 0) {
+    // Add books section if selected
+    if (shouldInclude('books', selectedComponents) && books.length > 0) {
       doc.fontSize(16).font('Helvetica-Bold').text("Books");
       doc.moveDown();
       
@@ -256,7 +206,6 @@ async function generateCV() {
         doc.text(`Year: ${book.year}`);
         doc.text(`ISBN: ${book.isbn}`);
         
-        // Add image if available and path is valid
         if (book.photo && fs.existsSync(book.photo.startsWith('/') ? `.${book.photo}` : book.photo)) {
           try {
             const imgPath = book.photo.startsWith('/') ? `.${book.photo}` : book.photo;
@@ -270,8 +219,8 @@ async function generateCV() {
       });
     }
     
-    // Add book chapters section if data exists and selected
-    if (shouldInclude('chapters') && chapters.length > 0) {
+    // Add book chapters section if selected
+    if (shouldInclude('chapters', selectedComponents) && chapters.length > 0) {
       doc.fontSize(16).font('Helvetica-Bold').text("Book Chapters");
       doc.moveDown();
       
@@ -290,8 +239,8 @@ async function generateCV() {
       });
     }
     
-    // Add conference proceedings section if data exists and selected
-    if (shouldInclude('conferences') && conferences.length > 0) {
+    // Add conference proceedings section if selected
+    if (shouldInclude('conferences', selectedComponents) && conferences.length > 0) {
       doc.fontSize(16).font('Helvetica-Bold').text("Conference Proceedings");
       doc.moveDown();
       
@@ -310,8 +259,8 @@ async function generateCV() {
       });
     }
     
-    // Add patents section if data exists and selected
-    if (shouldInclude('patents') && patents.length > 0) {
+    // Add patents section if selected
+    if (shouldInclude('patents', selectedComponents) && patents.length > 0) {
       doc.fontSize(16).font('Helvetica-Bold').text("Patents");
       doc.moveDown();
       
@@ -331,8 +280,8 @@ async function generateCV() {
       });
     }
     
-    // Add projects section if data exists and selected
-    if (shouldInclude('projects') && projects.length > 0) {
+    // Add projects section if selected
+    if (shouldInclude('projects', selectedComponents) && projects.length > 0) {
       doc.fontSize(16).font('Helvetica-Bold').text("Research Projects");
       doc.moveDown();
       
@@ -351,8 +300,8 @@ async function generateCV() {
       });
     }
     
-    // Add dissertations section if data exists and selected
-    if (shouldInclude('dissertations') && dissertations.length > 0) {
+    // Add dissertations section if selected
+    if (shouldInclude('dissertations', selectedComponents) && dissertations.length > 0) {
       doc.fontSize(16).font('Helvetica-Bold').text("Supervised Dissertations");
       doc.moveDown();
       
@@ -373,14 +322,18 @@ async function generateCV() {
     // Finalize PDF
     doc.end();
     
-    console.log(`CV generated successfully at ${outputPath}`);
+    // Return a promise that resolves when the PDF is written
+    return new Promise((resolve, reject) => {
+      writeStream.on('finish', () => {
+        console.log(`CV generated successfully at ${outputPath}`);
+        resolve(outputPath);
+      });
+      writeStream.on('error', reject);
+    });
   } catch (error) {
     console.error("Error generating CV:", error);
-  } finally {
-    // Close MongoDB connection
-    mongoose.connection.close();
+    throw error;
   }
 }
 
-// Run the function
-generateCV();
+module.exports = { generateCV };
