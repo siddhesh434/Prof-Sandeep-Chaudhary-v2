@@ -5,6 +5,12 @@
    ======================================== */
 /* Global variables provided by globals.css */
 
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* ========================================
    Responsive Typography
    ======================================== */
@@ -742,6 +748,51 @@ h3 {
   .home-highlight-row {
     grid-template-columns: 1fr;
   }
+
+  /* Mobile Responsive Mission & Vision */
+  .two-column-layout {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .mission h3,
+  .vision h3 {
+    font-size: 1.2rem;
+  }
+
+  .mission p,
+  .vision p {
+    font-size: 0.95rem; /* Slight reduction for mobile */
+    line-height: 1.6;
+  }
+  
+  /* Fix Modal Width for Mobile */
+  .modal-content {
+    width: 95%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+  
+  .modal-content h2 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+  }
+  
+  .modal-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .modal-content img {
+    max-height: 200px;
+  }
+  
+  .close {
+    top: 5px;
+    right: 5px;
+    font-size: 24px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -996,6 +1047,8 @@ h3 {
   border-radius: 10px;
   text-align: center;
   width: 50%;
+  max-height: 90vh;
+  overflow-y: auto;
   color: white;
   position: relative;
 }
@@ -1010,9 +1063,18 @@ h3 {
   position: absolute;
   top: 10px;
   right: 15px;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
   color: white;
+  z-index: 1001;
+  background: rgba(0, 0, 0, 0.5);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 /* ========================================

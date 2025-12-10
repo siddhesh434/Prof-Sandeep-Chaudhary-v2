@@ -57,6 +57,8 @@ html[data-theme="dark"] {
    ======================================== */
 html, body {
   overflow-y: scroll !important; /* forces scrollbar even if not needed */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  width: 100%;
 }
 
 * {
@@ -92,7 +94,8 @@ body {
 .main-wrapper {
   display: flex;
   flex-direction: column;
-  padding: 50px 0;
+  padding-top: 50px;
+  padding-bottom: 50px;
   flex: 1;
   width: 100%;
   box-sizing: border-box;

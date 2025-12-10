@@ -482,3 +482,21 @@ font-size: 0.9rem;
   .admin-login:hover {
     background-color: #4338ca;
   }
+
+/* Footer Mobile Adjustments */
+@media (max-width: 768px) {
+  .footer-column h3 {
+    font-size: 1.1rem;
+  }
+
+  .footer-links a,
+  .contact-info p,
+  .contact-info a,
+  .copyright p {
+    font-size: 0.9rem;
+  }
+  
+  .footer-content {
+      gap: 30px; /* Reducing gap slightly for mobile */
+  }
+}
