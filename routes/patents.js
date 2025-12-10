@@ -77,9 +77,15 @@ router.delete("/patents/:id", async (req, res) => {
 // Patents page route
 router.get("/patents.html", async (req, res) => {
   try {
+    const Patent = require("../models/Patent");
+    const TechnologyTransfer = require("../models/TechnologyTransfer");
+    const Visibility = require("../models/Visibility");
+    
     const patents = await Patent.find();
+    const technologyTransfers = await TechnologyTransfer.find();
     const settings = (await Visibility.findOne()) || {};
-    res.render("patents", { settings, patents });
+    
+    res.render("patents", { settings, patents, technologyTransfers });
   } catch (error) {
     console.error("Error fetching patents:", error);
     res.status(500).send("Error loading patents");

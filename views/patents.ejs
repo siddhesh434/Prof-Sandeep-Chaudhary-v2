@@ -33,7 +33,7 @@
             <div class="summary-card">
               <div class="summary-icon"><i class="fas fa-exchange-alt"></i></div>
               <div class="summary-content">
-                <div class="summary-number">1</div>
+                <div class="summary-number"><%= technologyTransfers.length %></div>
                 <div class="summary-title">Technology Transfer</div>
               </div>
             </div>
@@ -117,33 +117,27 @@
             </div>
           </div>
           <br>
-          <br>
-          <h2>Technology Transfer</h2>
+          <h2>Technology Transfers</h2>
           <!-- Technology Transfer Section -->
           <div class="technology-transfer-section">
-            <div class="section-title">
-
-            </div>
-            <div class="technology-transfer-content">
-              <h3>Compressed Coloured Bi-layered Bricks</h3>
-              <p>
-                Developed a novel compressed coloured bi-layer brick by upcycling dimensional stone processing waste as
-                natural pigments. The innovation offers three key advantages:
-              </p>
-              <ul>
-                <li>Environment-friendly waste disposal solution for Rajasthan</li>
-                <li>Economical alternative to conventional painted masonry walls</li>
-                <li>Aesthetically pleasing with natural coloring</li>
-              </ul>
-              <div class="transfer-details">
-                <p>
-                  <strong>Transferred to:</strong> M/s Abhishek Bricks, Indore, M.P., India
-                </p>
-                <p>
-                  <strong>Transfer Period:</strong> April 1, 2022 - March 31, 2025
-                </p>
+            <% if (technologyTransfers && technologyTransfers.length > 0) { %>
+              <% technologyTransfers.forEach((transfer, index) => { %>
+                <div class="technology-transfer-content" style="margin-bottom: 30px; padding: 20px; border: 1px solid var(--border-color); border-radius: 8px;">
+                  <h3 style="margin: 0 0 15px 0;"><%= transfer.title %></h3>
+                  
+                  <p style="white-space: pre-line; margin-bottom: 15px;"><%= transfer.description %></p>
+                  
+                  <div class="transfer-details" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+                    <p><strong>Transferred to:</strong> <%= transfer.transferredTo %></p>
+                    <p><strong>Transfer Period:</strong> <%= transfer.transferPeriod %></p>
+                  </div>
+                </div>
+              <% }); %>
+            <% } else { %>
+              <div class="technology-transfer-content">
+                <p style="text-align: center; color: #666; padding: 40px;">No technology transfers available at the moment.</p>
               </div>
-            </div>
+            <% } %>
           </div>
     </div>
   </div>

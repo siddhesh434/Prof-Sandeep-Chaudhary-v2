@@ -126,6 +126,25 @@
           </div>
         </div>
 
+        <!-- Tab Navigation -->
+        <div class="mb-6">
+          <div class="bg-white rounded-lg shadow-md p-2">
+            <nav class="flex space-x-2">
+              <button id="patentsTab" onclick="switchTab('patents')" 
+                class="tab-btn flex-1 px-4 py-2 rounded-md font-medium transition-colors bg-brand-primary text-white">
+                <i class="fas fa-file-signature mr-2"></i>Patents
+              </button>
+              <button id="transfersTab" onclick="switchTab('transfers')" 
+                class="tab-btn flex-1 px-4 py-2 rounded-md font-medium transition-colors bg-brand-primary text-white">
+                <i class="fas fa-exchange-alt mr-2"></i>Technology Transfers
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <!-- PATENTS SECTION -->
+        <div id="patentsSection">
+
         <!-- Stats Card -->
         <div class="mb-6">
           <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
@@ -325,6 +344,114 @@
             </div>
           </div>
         </div>
+        </div>
+        <!-- END PATENTS SECTION -->
+
+        <!-- TECHNOLOGY TRANSFERS SECTION -->
+        <div id="transfersSection" style="display: none;">
+          <!-- Stats Card for Transfers -->
+          <div class="mb-6">
+            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex items-center">
+                  <div class="rounded-full bg-brand-primary bg-opacity-20 p-3 mr-4">
+                    <i class="fas fa-exchange-alt text-brand-primary text-xl"></i>
+                  </div>
+                  <div>
+                    <h2 class="text-gray-500 text-sm">Total Transfers</h2>
+                    <p class="text-2xl font-bold text-gray-800" id="totalTransfersCount">0</p>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <div class="rounded-full bg-green-100 p-3 mr-4">
+                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <h2 class="text-gray-500 text-sm">Active Transfers</h2>
+                    <p class="text-2xl font-bold text-gray-800" id="activeTransfersCount">0</p>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <div class="rounded-full bg-blue-100 p-3 mr-4">
+                    <i class="fas fa-tasks text-blue-600 text-xl"></i>
+                  </div>
+                  <div>
+                    <h2 class="text-gray-500 text-sm">Completed Transfers</h2>
+                    <p class="text-2xl font-bold text-gray-800" id="completedTransfersCount">0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transfer Form -->
+          <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+              <i class="fas fa-edit mr-2 text-brand-primary"></i>
+              Add/Edit Technology Transfer
+            </h2>
+            <form id="transferForm" class="grid grid-cols-1 gap-4">
+              <input type="hidden" id="transferId" />
+
+              <div class="flex flex-col">
+                <label class="mb-2 text-gray-700" for="transfer_title">Technology Title *</label>
+                <input type="text" id="transfer_title" name="title" required
+                  class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  placeholder="e.g., Compressed Coloured Bi-layered Bricks" />
+              </div>
+
+              <div class="flex flex-col">
+                <label class="mb-2 text-gray-700" for="transfer_description">Description *</label>
+                <textarea id="transfer_description" name="description" rows="6" required
+                  class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  placeholder="Describe the technology and its advantages..."></textarea>
+                <small class="text-gray-500 mt-1">Tip: Use bullet points for advantages (one per line starting with •)</small>
+              </div>
+
+              <div class="flex flex-col">
+                <label class="mb-2 text-gray-700" for="transfer_transferredTo">Transferred To *</label>
+                <input type="text" id="transfer_transferredTo" name="transferredTo" required
+                  class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  placeholder="e.g., M/s Abhishek Bricks, Indore, M.P., India" />
+              </div>
+
+              <div class="flex flex-col">
+                <label class="mb-2 text-gray-700" for="transfer_transferPeriod">Transfer Period *</label>
+                <input type="text" id="transfer_transferPeriod" name="transferPeriod" required
+                  class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                  placeholder="e.g., April 1, 2022 - March 31, 2025" />
+              </div>
+
+              <div class="flex space-x-4">
+                <button type="submit" id="addTransferButton"
+                  class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-green-700 transition duration-300 flex items-center justify-center">
+                  <i class="fas fa-plus mr-2"></i> Add Transfer
+                </button>
+                <button type="button" id="updateTransferButton"
+                  class="flex-1 bg-brand-secondary text-white p-3 rounded hover:bg-blue-600 transition duration-300 hidden flex items-center justify-center">
+                  <i class="fas fa-save mr-2"></i> Update Transfer
+                </button>
+                <button type="button" id="cancelEditTransferButton"
+                  class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden flex items-center justify-center">
+                  <i class="fas fa-times mr-2"></i> Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Transfers Grid -->
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-gray-800 flex items-center">
+              <i class="fas fa-exchange-alt mr-2 text-brand-primary"></i>
+              Technology Transfer Entries
+            </h2>
+          </div>
+          <div id="transfersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
+            <!-- Transfers will be dynamically added here -->
+          </div>
+        </div>
+        <!-- END TECHNOLOGY TRANSFERS SECTION -->
+
       </div>
     </main>
   </div>
@@ -334,6 +461,211 @@
     class="md:hidden fixed bottom-4 right-4 bg-brand-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
     <i class="fas fa-plus"></i>
   </button>
+
+  <style>
+    .tab-btn:hover {
+      opacity: 0.9;
+    }
+  </style>
+
+  <script>
+    // Tab Switching Function
+    function switchTab(tab) {
+      const patentsTab = document.getElementById('patentsTab');
+      const transfersTab = document.getElementById('transfersTab');
+      const patentsSection = document.getElementById('patentsSection');
+      const transfersSection = document.getElementById('transfersSection');
+      
+      if (tab === 'patents') {
+        patentsSection.style.display = 'block';
+        transfersSection.style.display = 'none';
+        patentsTab.classList.add('bg-brand-primary', 'text-white');
+        patentsTab.classList.remove('bg-gray-200', 'text-gray-700');
+        transfersTab.classList.remove('bg-brand-primary', 'text-white');
+        transfersTab.classList.add('bg-gray-200', 'text-gray-700');
+      } else {
+        patentsSection.style.display = 'none';
+        transfersSection.style.display = 'block';
+        transfersTab.classList.add('bg-brand-primary', 'text-white');
+        transfersTab.classList.remove('bg-gray-200', 'text-gray-700');
+        patentsTab.classList.remove('bg-brand-primary', 'text-white');
+        patentsTab.classList.add('bg-gray-200', 'text-gray-700');
+        
+        // Fetch transfers when tab is opened for the first time
+        if (!window.transfersLoaded) {
+          fetchTransfers();
+          window.transfersLoaded = true;
+        }
+      }
+    }
+
+    // Technology Transfers JavaScript
+    let transfers = [];
+    const transferForm = document.getElementById('transferForm');
+    const transfersGrid = document.getElementById('transfersGrid');
+    const addTransferButton = document.getElementById('addTransferButton');
+    const updateTransferButton = document.getElementById('updateTransferButton');
+    const cancelEditTransferButton = document.getElementById('cancelEditTransferButton');
+
+    // Fetch Technology Transfers
+    async function fetchTransfers() {
+      try {
+        const response = await fetch("/technology-transfers");
+        transfers = await response.json();
+        renderTransfers(transfers);
+        updateTransferCounts(transfers);
+      } catch (error) {
+        console.error("Error fetching transfers:", error);
+        transfers = [];
+        renderTransfers(transfers);
+        updateTransferCounts(transfers);
+      }
+    }
+
+    // Update Transfer Counts
+    function updateTransferCounts(allTransfers) {
+      document.getElementById('totalTransfersCount').textContent = allTransfers.length;
+      document.getElementById('activeTransfersCount').textContent = allTransfers.length;
+      document.getElementById('completedTransfersCount').textContent = 0;
+    }
+
+    // Render Transfers
+    function renderTransfers(transfers) {
+      transfersGrid.innerHTML = transfers
+        .map((transfer) => {
+          return `
+            <div class="bg-white shadow-md rounded-lg overflow-hidden transform transition duration-300 hover:scale-105">
+              <div class="p-4">
+                <h3 class="font-bold text-lg mb-3 text-gray-800">${escapeHtml(transfer.title)}</h3>
+                <p class="text-gray-600 text-sm mb-3 line-clamp-3">${escapeHtml(transfer.description)}</p>
+                <p class="text-gray-600 text-sm mb-2"><strong>Transferred to:</strong> ${escapeHtml(transfer.transferredTo)}</p>
+                <p class="text-gray-600 text-sm mb-3"><strong>Period:</strong> ${escapeHtml(transfer.transferPeriod)}</p>
+                <div class="mt-4 flex space-x-2">
+                  <button onclick="editTransfer('${transfer._id}')"
+                    class="flex-1 bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600 transition duration-300">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                  </button>
+                  <button onclick="deleteTransfer('${transfer._id}')"
+                    class="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-300">
+                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    // Add Transfer
+    transferForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const transferData = {
+        title: document.getElementById("transfer_title").value.trim(),
+        description: document.getElementById("transfer_description").value.trim(),
+        transferredTo: document.getElementById("transfer_transferredTo").value.trim(),
+        transferPeriod: document.getElementById("transfer_transferPeriod").value.trim(),
+      };
+
+      try {
+        const response = await fetch("/technology-transfers", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(transferData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to add transfer");
+        }
+
+        await fetchTransfers();
+        transferForm.reset();
+      } catch (error) {
+        console.error("Error adding transfer:", error);
+        alert("Failed to add technology transfer");
+      }
+    });
+
+    // Edit Transfer
+    async function editTransfer(id) {
+      const transfer = transfers.find((t) => t._id === id);
+      if (!transfer) return;
+
+      document.getElementById("transfer_title").value = transfer.title;
+      document.getElementById("transfer_description").value = transfer.description;
+      document.getElementById("transfer_transferredTo").value = transfer.transferredTo;
+      document.getElementById("transfer_transferPeriod").value = transfer.transferPeriod;
+      document.getElementById("transferId").value = transfer._id;
+
+      addTransferButton.classList.add("hidden");
+      updateTransferButton.classList.remove("hidden");
+      cancelEditTransferButton.classList.remove("hidden");
+      
+      // Scroll to form
+      transferForm.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Update Transfer
+    updateTransferButton.addEventListener("click", async () => {
+      const id = document.getElementById("transferId").value;
+      const transferData = {
+        title: document.getElementById("transfer_title").value.trim(),
+        description: document.getElementById("transfer_description").value.trim(),
+        transferredTo: document.getElementById("transfer_transferredTo").value.trim(),
+        transferPeriod: document.getElementById("transfer_transferPeriod").value.trim(),
+      };
+
+      try {
+        const response = await fetch(`/technology-transfers/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(transferData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to update transfer");
+        }
+
+        await fetchTransfers();
+        transferForm.reset();
+        addTransferButton.classList.remove("hidden");
+        updateTransferButton.classList.add("hidden");
+        cancelEditTransferButton.classList.add("hidden");
+      } catch (error) {
+        console.error("Error updating transfer:", error);
+        alert("Failed to update technology transfer");
+      }
+    });
+
+    // Cancel Edit Transfer
+    cancelEditTransferButton.addEventListener("click", () => {
+      transferForm.reset();
+      addTransferButton.classList.remove("hidden");
+      updateTransferButton.classList.add("hidden");
+      cancelEditTransferButton.classList.add("hidden");
+    });
+
+    // Delete Transfer
+    async function deleteTransfer(id) {
+      if (!confirm("Are you sure you want to delete this technology transfer?")) return;
+
+      try {
+        const response = await fetch(`/technology-transfers/${id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to delete transfer");
+        }
+
+        await fetchTransfers();
+      } catch (error) {
+        console.error("Error deleting transfer:", error);
+        alert("Failed to delete technology transfer");
+      }
+    }
+  </script>
 
   <script>
 

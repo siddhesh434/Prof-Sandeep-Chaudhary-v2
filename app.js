@@ -196,6 +196,7 @@ const conferences = require("./routes/conference");
 const chapters = require("./routes/chapter");
 const keyTechnologyRoutes = require("./routes/keyTechnology");
 const homeHighlightRoutes = require("./routes/homeHighlights");
+const technologyTransferRoutes = require("./routes/technologyTransfers");
 
 // Import content routes
 const contentRoutes = require('./routes/Content');
@@ -223,6 +224,7 @@ app.use("/", conferences);
 app.use("/", chapters);
 app.use("/", keyTechnologyRoutes);
 app.use("/", homeHighlightRoutes);
+app.use("/", technologyTransferRoutes);
 
 // Root routes with dynamic content loading
 app.get("/", async (req, res) => {
