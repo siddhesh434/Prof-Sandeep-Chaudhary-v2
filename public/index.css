@@ -74,8 +74,8 @@ h3 {
    ======================================== */
 .hero-image {
   width: 100%;
-  height: clamp(300px, 45vh, 400px);
-  min-height: 250px;
+  height: clamp(200px, 45vh, 300px);
+  min-height: 150px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
