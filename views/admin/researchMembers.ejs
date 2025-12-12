@@ -136,6 +136,8 @@
                 />
               </div>
 
+              </form>
+
               <div class="flex flex-col">
                 <label class="mb-2 text-gray-700" for="year"> Year</label>
                 <input
@@ -148,6 +150,19 @@
               </div>
 
               <div class="flex flex-col">
+                <label class="mb-2 text-gray-700" for="status">Status</label>
+                <select
+                  id="status"
+                  name="status"
+                  required
+                  class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                >
+                  <option value="Current">Current Member</option>
+                  <option value="Alumni">Alumni</option>
+                </select>
+              </div>
+
+              <div class="flex flex-col">
                 <label class="mb-2 text-gray-700" for="type">Member Type</label>
                 <select
                   id="type"
@@ -155,21 +170,12 @@
                   required
                   class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
                 >
-                  <option value="">All Types</option>
+                  <option value="">Select Category</option>
+                  <option value="Postdoctoral Researcher / Visiting Fellow">Postdoctoral Researcher / Visiting Fellow</option>
                   <option value="Research Scholar">Research Scholar</option>
-                  <option value="Research Alumni">Research Alumni</option>
-                  <option value="Research Under-Graduate">
-                    Research Under-Graduate
-                  </option>
-                  <option value="Research Under-Graduates Alumni">
-                    Research Under-Graduates Alumni
-                  </option>
-                  <option value="Research Interns Alumni">
-                    Research Interns Alumni
-                  </option>
-                  <option value="Research Post-Graduates Alumni">
-                    Research Post-Graduates Alumni
-                  </option>
+                  <option value="Postgraduate">Postgraduate</option>
+                  <option value="Undergraduate">Undergraduate</option>
+                   <option value="Intern">Intern</option>
                 </select>
               </div>
 
@@ -227,20 +233,19 @@
               class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
             >
               <option value="">All Types</option>
+              <option value="Postdoctoral Researcher / Visiting Fellow">Postdoctoral Researcher / Visiting Fellow</option>
               <option value="Research Scholar">Research Scholar</option>
-              <option value="Research Alumni">Research Alumni</option>
-              <option value="Research Under-Graduate">
-                Research Under-Graduate
-              </option>
-              <option value="Research Under-Graduates Alumni">
-                Research Under-Graduates Alumni
-              </option>
-              <option value="Research Interns Alumni">
-                Research Interns Alumni
-              </option>
-              <option value="Research Post-Graduates Alumni">
-                Research Post-Graduates Alumni
-              </option>
+              <option value="Postgraduate">Postgraduate</option>
+              <option value="Undergraduate">Undergraduate</option>
+              <option value="Intern">Intern</option>
+            </select>
+            <select
+              id="statusFilter"
+              class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            >
+              <option value="">All Statuses</option>
+              <option value="Current">Current</option>
+              <option value="Alumni">Alumni</option>
             </select>
             <button
               id="searchButton"
@@ -440,10 +445,17 @@
                 <div class="flex justify-between items-center mb-3">
                     <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
                         <i class="fas fa-calendar-alt mr-1"></i>${escapeHtml(
-                          member.year
+                          member.year || ""
                         )}
                     </span>
-                    <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">
+                     <span class="text-xs font-semibold px-2 py-1 rounded ${
+                        member.status === 'Alumni' ? 'bg-gray-200 text-gray-700' : 'bg-green-100 text-green-800'
+                      }">
+                        ${escapeHtml(member.status || 'Current')}
+                      </span>
+                </div>
+                <div class="mb-3">
+                     <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">
                         ${escapeHtml(member.type)}
                     </span>
                 </div>
@@ -489,11 +501,14 @@
             mem.name.toLowerCase().includes(searchTerm) ||
             mem.position.toLowerCase().includes(searchTerm) ||
             mem.scholarTopic.toLowerCase().includes(searchTerm) ||
-            mem.year.toLowerCase().includes(searchTerm); // Now searching in year as well
+            (mem.year || "").toLowerCase().includes(searchTerm); 
 
           const matchesType = selectedType === "" || mem.type === selectedType;
+          
+          const selectedStatus = document.getElementById("statusFilter").value;
+          const matchesStatus = selectedStatus === "" || (mem.status || "Current") === selectedStatus;
 
-          return matchesSearch && matchesType;
+          return matchesSearch && matchesType && matchesStatus;
         });
 
         renderMembers(filteredMembers);
@@ -527,6 +542,7 @@
       searchButton.addEventListener("click", searchAndFilterMembers);
       searchInput.addEventListener("input", searchAndFilterMembers);
       typeFilter.addEventListener("change", searchAndFilterMembers);
+      document.getElementById("statusFilter").addEventListener("change", searchAndFilterMembers);
 
       // Escape HTML to prevent XSS
       function escapeHtml(unsafe) {
@@ -547,6 +563,7 @@
           .value.trim();
         const year = document.getElementById("year").value.trim();
         const type = document.getElementById("type").value;
+        const status = document.getElementById("status").value;
 
         if (!name || !type) {
           showNotification("Please fill in all required fields", "error");
@@ -569,6 +586,7 @@
           scholarTopic: document.getElementById("scholarTopic").value.trim(),
           year: document.getElementById("year").value.trim(),
           type: document.getElementById("type").value,
+          status: document.getElementById("status").value,
           photoUrl: document.getElementById("photoUrl").value.trim(),
         };
 
@@ -651,8 +669,9 @@
           document.getElementById("scholarLink").value =
             member.scholarLink || "";
           document.getElementById("scholarTopic").value = member.scholarTopic;
-          document.getElementById("year").value = member.year;
+          document.getElementById("year").value = member.year || "";
           document.getElementById("type").value = member.type;
+          document.getElementById("status").value = member.status || "Current";
           document.getElementById("photoUrl").value = member.photoUrl || "";
           document.getElementById("memberId").value = member._id;
 
@@ -688,6 +707,7 @@
           scholarTopic: document.getElementById("scholarTopic").value.trim(),
           year: document.getElementById("year").value,
           type: document.getElementById("type").value,
+          status: document.getElementById("status").value,
           photoUrl: document.getElementById("photoUrl").value.trim(),
         };
 

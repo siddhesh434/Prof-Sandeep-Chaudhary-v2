@@ -54,13 +54,41 @@
             <li>
               <a href="/admin/latest_news.html"
                 class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('latest_news') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
-                Latest News
+                 Manage Bulletin/ Scrolling Section
               </a>
             </li>
             <li>
               <a href="/admin/homeHighlights.html"
                 class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('homeHighlights') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
                 Home Highlights
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- About PI Section -->
+      <li class="menu-item-group">
+        <div class="nav-section group" data-section="about-pi">
+          <div class="section-header flex items-center justify-between py-2.5 px-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800 hover:text-white text-sm"
+            onclick="toggleSection('about-pi')">
+            <div class="flex items-center text-slate-300 group-hover:text-white">
+              <i class="fas fa-user-tie w-6 h-6 flex items-center justify-center mr-3 text-slate-400 group-hover:text-blue-400 transition-colors"></i>
+              <span class="font-medium">About PI</span>
+            </div>
+            <i class="fas fa-chevron-down toggle-icon text-xs text-slate-500 transition-transform duration-200"></i>
+          </div>
+          <ul class="section-items ml-9 mt-1 space-y-1 hidden border-l border-slate-700 pl-3">
+            <li>
+              <a href="/admin/dissertations.html"
+                class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('dissertations.html') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
+                Dissertations Supervised
+              </a>
+            </li>
+            <li>
+              <a href="/admin/extension.html"
+                class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('extension.html') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
+                Extension Activities
               </a>
             </li>
           </ul>
@@ -109,47 +137,30 @@
       
 
       <!-- Projects Section -->
-      <li class="menu-item-group">
-        <div class="nav-section group" data-section="projects">
-            <div class="section-header flex items-center justify-between py-2.5 px-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800 hover:text-white text-sm"
-            onclick="toggleSection('projects')">
-            <div class="flex items-center text-slate-300 group-hover:text-white">
-                <i class="fas fa-flask w-6 h-6 flex items-center justify-center mr-3 text-slate-400 group-hover:text-blue-400 transition-colors"></i>
-                <span class="font-medium">Projects</span>
-            </div>
-            <i class="fas fa-chevron-down toggle-icon text-xs text-slate-500 transition-transform duration-200"></i>
-            </div>
-            <ul class="section-items ml-9 mt-1 space-y-1 hidden border-l border-slate-700 pl-3">
-            <li>
-                <a href="/admin/projects.html"
-                class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('projects.html') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
-                Research Projects
-                </a>
-            </li>
-            </ul>
-        </div>
+      <!-- Projects -->
+      <li class="menu-item">
+        <a href="/admin/projects.html" 
+          class="flex items-center py-2.5 px-3 rounded-lg font-medium text-sm transition-all duration-200 group <%= currentPage.includes('projects') ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white' %>">
+          <i class="fas fa-flask w-6 h-6 flex items-center justify-center mr-3 <%= currentPage.includes('projects') ? 'text-white' : 'text-slate-400 group-hover:text-blue-400' %> transition-colors"></i>
+          <span>Projects</span>
+        </a>
       </li>
 
       <!-- Patents -->
-      <li class="menu-item-group">
-        <div class="nav-section group" data-section="patents">
-            <div class="section-header flex items-center justify-between py-2.5 px-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800 hover:text-white text-sm"
-            onclick="toggleSection('patents')">
-            <div class="flex items-center text-slate-300 group-hover:text-white">
-                <i class="fas fa-lightbulb w-6 h-6 flex items-center justify-center mr-3 text-slate-400 group-hover:text-blue-400 transition-colors"></i>
-                <span class="font-medium">Patents</span>
-            </div>
-            <i class="fas fa-chevron-down toggle-icon text-xs text-slate-500 transition-transform duration-200"></i>
-            </div>
-            <ul class="section-items ml-9 mt-1 space-y-1 hidden border-l border-slate-700 pl-3">
-            <li>
-                <a href="/admin/patents.html"
-                class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('patents.html') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
-                Patents List
-                </a>
-            </li>
-            </ul>
-        </div>
+      <li class="menu-item">
+        <a href="/admin/patents.html"
+          class="flex items-center py-2.5 px-3 rounded-lg font-medium text-sm transition-all duration-200 group <%= currentPage.includes('patents') ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white' %>">
+          <i class="fas fa-lightbulb w-6 h-6 flex items-center justify-center mr-3 <%= currentPage.includes('patents') ? 'text-white' : 'text-slate-400 group-hover:text-blue-400' %> transition-colors"></i>
+          <span>Patents</span>
+        </a>
+      </li>
+       <!-- Technology Transfer -->
+      <li class="menu-item">
+        <a href="/admin/keyTechnology.html"
+          class="flex items-center py-2.5 px-3 rounded-lg font-medium text-sm transition-all duration-200 group <%= currentPage.includes('keyTechnology') ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white' %>">
+          <i class="fas fa-microchip w-6 h-6 flex items-center justify-center mr-3 <%= currentPage.includes('keyTechnology') ? 'text-white' : 'text-slate-400 group-hover:text-blue-400' %> transition-colors"></i>
+          <span>Key Technologies</span>
+        </a>
       </li>
 
       <!-- Research Group -->
@@ -159,7 +170,7 @@
             onclick="toggleSection('research-group')">
             <div class="flex items-center text-slate-300 group-hover:text-white">
                 <i class="fas fa-users w-6 h-6 flex items-center justify-center mr-3 text-slate-400 group-hover:text-blue-400 transition-colors"></i>
-                <span class="font-medium">Team</span>
+                <span class="font-medium">Research Group</span>
             </div>
             <i class="fas fa-chevron-down toggle-icon text-xs text-slate-500 transition-transform duration-200"></i>
             </div>
@@ -170,67 +181,6 @@
                 Team Members
                 </a>
             </li>
-            </ul>
-        </div>
-      </li>
-
-      <!-- Supervised Work -->
-      <li class="menu-item-group">
-        <div class="nav-section group" data-section="supervised">
-            <div class="section-header flex items-center justify-between py-2.5 px-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800 hover:text-white text-sm"
-            onclick="toggleSection('supervised')">
-            <div class="flex items-center text-slate-300 group-hover:text-white">
-                <i class="fas fa-user-graduate w-6 h-6 flex items-center justify-center mr-3 text-slate-400 group-hover:text-blue-400 transition-colors"></i>
-                <span class="font-medium">Supervision</span>
-            </div>
-            <i class="fas fa-chevron-down toggle-icon text-xs text-slate-500 transition-transform duration-200"></i>
-            </div>
-            <ul class="section-items ml-9 mt-1 space-y-1 hidden border-l border-slate-700 pl-3">
-            <li>
-                <a href="/admin/dissertations.html"
-                class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('dissertations.html') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
-                Dissertations
-                </a>
-            </li>
-            </ul>
-        </div>
-      </li>
-      
-
-      <!-- Key Technologies -->
-      <li class="menu-item-group">
-        <div class="nav-section group" data-section="key-tech">
-            <div class="section-header flex items-center justify-between py-2.5 px-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800 hover:text-white text-sm"
-            onclick="toggleSection('key-tech')">
-            <div class="flex items-center text-slate-300 group-hover:text-white">
-                <i class="fas fa-microchip w-6 h-6 flex items-center justify-center mr-3 text-slate-400 group-hover:text-blue-400 transition-colors"></i>
-                <span class="font-medium">Technologies</span>
-            </div>
-            <i class="fas fa-chevron-down toggle-icon text-xs text-slate-500 transition-transform duration-200"></i>
-            </div>
-            <ul class="section-items ml-9 mt-1 space-y-1 hidden border-l border-slate-700 pl-3">
-            <li>
-                <a href="/admin/keyTechnology.html"
-                class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('keyTechnology.html') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
-                Key Technologies
-                </a>
-            </li>
-            </ul>
-        </div>
-      </li>
-
-      <!-- Facilities -->
-      <li class="menu-item-group">
-        <div class="nav-section group" data-section="facilities">
-            <div class="section-header flex items-center justify-between py-2.5 px-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800 hover:text-white text-sm"
-            onclick="toggleSection('facilities')">
-            <div class="flex items-center text-slate-300 group-hover:text-white">
-                <i class="fas fa-building w-6 h-6 flex items-center justify-center mr-3 text-slate-400 group-hover:text-blue-400 transition-colors"></i>
-                <span class="font-medium">Facilities</span>
-            </div>
-            <i class="fas fa-chevron-down toggle-icon text-xs text-slate-500 transition-transform duration-200"></i>
-            </div>
-            <ul class="section-items ml-9 mt-1 space-y-1 hidden border-l border-slate-700 pl-3">
             <li>
                 <a href="/admin/facilities.html"
                 class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('facilities.html') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
@@ -241,48 +191,18 @@
         </div>
       </li>
 
-      <!-- Extension -->
-      <li class="menu-item-group">
-        <div class="nav-section group" data-section="extension">
-            <div class="section-header flex items-center justify-between py-2.5 px-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800 hover:text-white text-sm"
-            onclick="toggleSection('extension')">
-            <div class="flex items-center text-slate-300 group-hover:text-white">
-                <i class="fas fa-hands-helping w-6 h-6 flex items-center justify-center mr-3 text-slate-400 group-hover:text-blue-400 transition-colors"></i>
-                <span class="font-medium">Extension</span>
-            </div>
-            <i class="fas fa-chevron-down toggle-icon text-xs text-slate-500 transition-transform duration-200"></i>
-            </div>
-            <ul class="section-items ml-9 mt-1 space-y-1 hidden border-l border-slate-700 pl-3">
-            <li>
-                <a href="/admin/extension.html"
-                class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('extension.html') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
-                Extension Activities
-                </a>
-            </li>
-            </ul>
-        </div>
-      </li>
+
+
+
+
 
       <!-- E-Resources -->
-      <li class="menu-item-group">
-        <div class="nav-section group" data-section="eresources">
-            <div class="section-header flex items-center justify-between py-2.5 px-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-slate-800 hover:text-white text-sm"
-            onclick="toggleSection('eresources')">
-            <div class="flex items-center text-slate-300 group-hover:text-white">
-                <i class="fas fa-folder-open w-6 h-6 flex items-center justify-center mr-3 text-slate-400 group-hover:text-blue-400 transition-colors"></i>
-                <span class="font-medium">Resources</span>
-            </div>
-            <i class="fas fa-chevron-down toggle-icon text-xs text-slate-500 transition-transform duration-200"></i>
-            </div>
-            <ul class="section-items ml-9 mt-1 space-y-1 hidden border-l border-slate-700 pl-3">
-            <li>
-                <a href="/admin/eResources.html"
-                class="block py-2 px-3 text-xs rounded-md transition-all duration-200 <%= currentPage.includes('eResources.html') ? 'text-blue-400 font-medium' : 'text-slate-400 hover:text-white hover:translate-x-1' %>">
-                E-Resources
-                </a>
-            </li>
-            </ul>
-        </div>
+      <li class="menu-item">
+        <a href="/admin/eResources.html" 
+          class="flex items-center py-2.5 px-3 rounded-lg font-medium text-sm transition-all duration-200 group <%= currentPage.includes('eResources.html') ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' : 'hover:bg-slate-800 hover:text-white' %>">
+          <i class="fas fa-folder-open w-6 h-6 flex items-center justify-center mr-3 <%= currentPage.includes('eResources.html') ? 'text-white' : 'text-slate-400 group-hover:text-blue-400' %> transition-colors"></i>
+          <span>E-Resources</span>
+        </a>
       </li>
 
       <!-- Settings -->

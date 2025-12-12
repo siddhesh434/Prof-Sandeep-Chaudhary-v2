@@ -8,6 +8,11 @@ const researchGroupSchema = new mongoose.Schema({
   year: String,
   type: String,
   photoUrl: String,
+  status: {
+    type: String,
+    enum: ["Current", "Alumni"],
+    default: "Current",
+  },
 });
 
 module.exports =

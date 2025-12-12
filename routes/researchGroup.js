@@ -41,7 +41,7 @@ router.get("/members/:id", isAdmin, async (req, res) => {
 // Create a new research member
 router.post("/members", isAdmin, async (req, res) => {
   try {
-    const { name, position, scholarLink, scholarTopic, year, type, photoUrl } = req.body;
+    const { name, position, scholarLink, scholarTopic, year, type, photoUrl, status } = req.body;
     
     // Basic validation
     if (!name || !type) {
@@ -55,7 +55,8 @@ router.post("/members", isAdmin, async (req, res) => {
       scholarTopic,
       year: year,
       type,
-      photoUrl
+      photoUrl,
+      status
     });
     
     await newMember.save();
@@ -69,7 +70,7 @@ router.post("/members", isAdmin, async (req, res) => {
 // Update a research member
 router.put("/members/:id", isAdmin, async (req, res) => {
   try {
-    const { name, position, scholarLink, scholarTopic, year, type, photoUrl } = req.body;
+    const { name, position, scholarLink, scholarTopic, year, type, photoUrl, status } = req.body;
     
     // Basic validation
     if (!name || !type) {
@@ -85,7 +86,8 @@ router.put("/members/:id", isAdmin, async (req, res) => {
         scholarTopic,
         year: year,
         type,
-        photoUrl
+        photoUrl,
+        status
       },
       { new: true }
     );
@@ -123,29 +125,19 @@ router.get("/researchGroups", async (req, res) => {
     const members = await ResearchMember.find();
     
     // Group members by type
-    const groupedMembers = {};
-    
-    // Process each member and organize by type
-    members.forEach(member => {
-      const type = member.type || "Other";
-      
-      // Create array for this type if it doesn't exist
-      if (!groupedMembers[type]) {
-        groupedMembers[type] = [];
-      }
-      
-      // Add member to the appropriate type array
-      groupedMembers[type].push({
+    // Return the raw list for frontend processing
+    const result = members.map(member => ({
         name: member.name,
         position: member.position,
         scholarLink: member.scholarLink,
         scholarTopic: member.scholarTopic,
         year: member.year,
-        photoUrl: member.photoUrl || "/images/placeholder.jpg" // Provide default if missing
-      });
-    });
+        type: member.type,
+        status: member.status || 'Current', // Default to current if undefined
+        photoUrl: member.photoUrl || "/images/placeholder.jpg"
+    }));
     
-    res.json(groupedMembers);
+    res.json(result);
   } catch (error) {
     console.error("Error fetching research group members:", error);
     res.status(500).json({ error: "Error fetching research group members" });

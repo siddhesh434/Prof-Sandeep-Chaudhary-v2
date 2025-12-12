@@ -66,10 +66,16 @@
             </div>
 
             <div class="flex flex-col">
-              <label class="mb-2 text-gray-700" for="imageUrl">Image URL</label>
-              <input type="text" id="imageUrl" name="imageUrl" required
-                placeholder="/images/keyTech/your-image.jpg"
+              <label class="mb-2 text-gray-700" for="image">Image Upload</label>
+              <input type="file" id="image" name="image" accept="image/*"
                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <p class="text-xs text-gray-500 mt-1">Accepted formats: JPG, PNG, GIF, WEBP. Max size: 5MB.</p>
+              <!-- Hidden input to store existing image URL during edits -->
+              <input type="hidden" id="existingImageUrl" name="imageUrl">
+              <div id="imagePreviewContainer" class="hidden mt-2">
+                <p class="text-xs text-gray-600 mb-1">Current Image:</p>
+                <img id="imagePreview" src="" alt="Preview" class="h-20 object-contain border rounded">
+              </div>
             </div>
 
             <div class="flex flex-col md:col-span-2">
@@ -299,15 +305,32 @@
       const id = document.getElementById("techId").value;
       const title = document.getElementById("title").value.trim();
       const description = document.getElementById("description").value.trim();
-      const imageUrl = document.getElementById("imageUrl").value.trim();
       const tags = document.getElementById("tags").value.trim();
+      const imageInput = document.getElementById("image");
+      const existingImageUrl = document.getElementById("existingImageUrl").value;
 
-      if (!title || !description || !imageUrl) {
-        alert("Title, description and image URL are required.");
+      if (!title || !description) {
+        alert("Title and description are required.");
+        return;
+      }
+      
+      // Check if image is provided (either new file or existing url)
+      if (!id && imageInput.files.length === 0) {
+        alert("Please upload an image for the new technology.");
         return;
       }
 
-      const payload = { title, description, imageUrl, tags };
+      // Using FormData for file upload
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("tags", tags);
+      
+      if (imageInput.files.length > 0) {
+        formData.append("image", imageInput.files[0]);
+      } else {
+        formData.append("imageUrl", existingImageUrl);
+      }
 
       try {
         const url = id ? `/api/key-technologies/${id}` : "/api/key-technologies";
@@ -315,8 +338,7 @@
 
         const res = await fetch(url, {
           method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          body: formData, // No Content-Type header when sending FormData
         });
 
         if (!res.ok) {
@@ -327,6 +349,10 @@
         await fetchTechnologies();
         techForm.reset();
         document.getElementById("techId").value = "";
+        document.getElementById("existingImageUrl").value = "";
+        document.getElementById("imagePreviewContainer").classList.add("hidden");
+        document.getElementById("imagePreview").src = "";
+        
         addButton.classList.remove("hidden");
         updateButton.classList.add("hidden");
         cancelEditButton.classList.add("hidden");
@@ -339,6 +365,10 @@
     cancelEditButton.addEventListener("click", () => {
       techForm.reset();
       document.getElementById("techId").value = "";
+      document.getElementById("existingImageUrl").value = "";
+      document.getElementById("imagePreviewContainer").classList.add("hidden");
+      document.getElementById("imagePreview").src = "";
+      
       addButton.classList.remove("hidden");
       updateButton.classList.add("hidden");
       cancelEditButton.classList.add("hidden");
@@ -351,8 +381,16 @@
       document.getElementById("techId").value = tech._id;
       document.getElementById("title").value = tech.title || "";
       document.getElementById("description").value = tech.description || "";
-      document.getElementById("imageUrl").value = tech.imageUrl || "";
       document.getElementById("tags").value = (tech.tags || []).join(", ");
+      
+      // Handle image preview
+      document.getElementById("existingImageUrl").value = tech.imageUrl || "";
+      if (tech.imageUrl) {
+        document.getElementById("imagePreview").src = tech.imageUrl;
+        document.getElementById("imagePreviewContainer").classList.remove("hidden");
+      } else {
+        document.getElementById("imagePreviewContainer").classList.add("hidden");
+      }
 
       addButton.classList.add("hidden");
       updateButton.classList.remove("hidden");

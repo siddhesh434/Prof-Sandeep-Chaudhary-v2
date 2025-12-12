@@ -21,7 +21,7 @@
   </div>
 
   <div class="research-section">
-    <h1>Research Team</h1>
+
 
     <!-- This div will be populated by JavaScript -->
     <div id="research-container">
@@ -39,138 +39,150 @@
 // Function to fetch and display research group data
 async function loadResearchGroups() {
   try {
-    // Fetch data from our API endpoint
     const response = await fetch("/researchGroups");
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     const data = await response.json();
 
-    // Container for all research sections
     const container = document.getElementById("research-container");
-
-    // Clear existing content if any
     container.innerHTML = "";
 
-    // Display types with a nicer format for section headings
-    const typeDisplayNames = {
-      "Research Scholar": "Research Scholars",
-      "Research Alumni": "Research Alumni",
-      "Research Under-Graduates": "Research Undergraduates",
-      "Research Under-Graduates Alumni": "Research Undergraduate Alumni",
-      "Research Interns Alumni": "Research Intern Alumni",
-      "Research Post-Graduates Alumni": "Research Postgraduate Alumni",
-    };
-
-    // Define the order of sections
-    const orderedTypes = [
+    // Categories in order
+    const orderedCategories = [
+      "Postdoctoral Researcher / Visiting Fellow",
       "Research Scholar",
-      "Research Alumni",
-      "Research Post-Graduates Alumni",
-      "Research Under-Graduates",
-      "Research Under-Graduates Alumni", 
-      "Research Interns Alumni",
+      "Postgraduate",
+      "Undergraduate",
+      "Intern"
     ];
 
-    // Iterate through each type in the specified order
-    orderedTypes.forEach((type) => {
-      // Skip if this type doesn't exist in the data or has no members
-      if (!data[type] || data[type].length === 0) return;
+    // Functions to filter data
+    const filterMembers = (status, type) => {
+      return data.filter(m => 
+        (m.status === status || (!m.status && status === 'Current')) && 
+        m.type === type
+      );
+    };
 
-      // Create section elements
-      const section = document.createElement("div");
-      section.className = "research-section";
+    // 1. Research Team (Current)
+    const researchTeamSection = createMainSection("Research Team");
+    let hasResearchTeam = false;
 
-      // Create heading
-      const heading = document.createElement("h2");
-      heading.className = "section-heading";
-      heading.textContent = typeDisplayNames[type] || type;
-      section.appendChild(heading);
-
-      // Create member cards container
-      const cardsContainer = document.createElement("div");
-      cardsContainer.className = "member-cards";
-
-      // Generate card for each member
-      data[type].forEach((member) => {
-        const card = createMemberCard(member, type);
-        cardsContainer.appendChild(card);
-      });
-
-      // Add cards to section and section to container
-      section.appendChild(cardsContainer);
-      container.appendChild(section);
+    orderedCategories.forEach(category => {
+      const members = filterMembers("Current", category);
+      if (members.length > 0) {
+        hasResearchTeam = true;
+        const subSection = createSubSection(category, members);
+        researchTeamSection.appendChild(subSection);
+      }
     });
+
+    if (hasResearchTeam) {
+      container.appendChild(researchTeamSection);
+    } else {
+        const emptyMsg = document.createElement("p");
+        emptyMsg.textContent = "No current research team members to display.";
+        emptyMsg.className = "text-center text-gray-500 italic mt-4";
+        researchTeamSection.appendChild(emptyMsg);
+        container.appendChild(researchTeamSection);
+    }
+
+    // 2. Our Alumni
+    const alumniSection = createMainSection("Our Alumni");
+    let hasAlumni = false;
+
+    orderedCategories.forEach(category => {
+      const members = filterMembers("Alumni", category);
+      if (members.length > 0) {
+        hasAlumni = true;
+        const subSection = createSubSection(category, members);
+        alumniSection.appendChild(subSection);
+      }
+    });
+
+    if (hasAlumni) {
+      container.appendChild(alumniSection);
+    }
+
   } catch (error) {
     console.error("Error loading research groups:", error);
     document.getElementById("research-container").innerHTML = `
-          <div class="error-message">
-            <p>Failed to load research group data. Please try again later.</p>
-          </div>
-        `;
+      <div class="error-message"><p>Failed to load data. Please try again later.</p></div>`;
   }
 }
 
-// Function to create a member card based on member type
-function createMemberCard(member, type) {
+function createMainSection(title) {
+  const section = document.createElement("div");
+  section.className = "main-group-section mb-10"; // Add spacing
+  
+  const heading = document.createElement("h1"); // Main header H1
+  heading.className = "main-section-title text-3xl font-bold text-center mb-8 text-brand-primary";
+  heading.textContent = title;
+  
+  // Custom styling for the header if needed (inline or class)
+  heading.style.color = 'var(--primary-color, #0056b3)';
+  heading.style.marginBottom = '1.5rem';
+  heading.style.marginTop = '0';
+  heading.style.borderBottom = '2px solid #eee';
+  heading.style.paddingBottom = '0.5rem';
+
+  section.appendChild(heading);
+  return section;
+}
+
+function createSubSection(title, members) {
+  const container = document.createElement("div");
+  container.className = "sub-section mb-8";
+
+  const heading = document.createElement("h2");
+  heading.className = "sub-section-title text-xl font-semibold mb-4 pl-4 border-l-4 border-brand-secondary";
+  heading.textContent = title;
+  heading.style.fontSize = '1.5rem';
+  heading.style.marginBottom = '1rem';
+  heading.style.color = '#444';
+
+  container.appendChild(heading);
+
+  const cardsContainer = document.createElement("div");
+  cardsContainer.className = "member-cards";
+  
+  members.forEach(member => {
+    cardsContainer.appendChild(createMemberCard(member));
+  });
+
+  container.appendChild(cardsContainer);
+  return container;
+}
+
+function createMemberCard(member) {
   const card = document.createElement("div");
   card.className = "member-card";
 
-  // Create card header
   const header = document.createElement("div");
   header.className = "member-header";
-
+  
   const name = document.createElement("h4");
   name.textContent = member.name;
   header.appendChild(name);
   card.appendChild(header);
 
-  // Create card content
   const content = document.createElement("div");
   content.className = "member-content";
 
-  // Add image
   const img = document.createElement("img");
-  img.src = member.photoUrl; // Default placeholder
+  img.src = member.photoUrl;
   img.alt = member.name;
   img.className = "member-image";
   content.appendChild(img);
 
-  // Create details section
   const details = document.createElement("div");
   details.className = "member-details";
 
-  // For different types, show different fields
-  if (type.includes("Alumni")) {
-    // For alumni, show different details
-    details.innerHTML = `
-          <p><span class="label">Position:</span> ${member.position}</p>
-          ${
-            member.scholarLink
-              ? `<p><a href="${member.scholarLink}" target="_blank">Research Profile</a></p>`
-              : ""
-          }
-          <p><span class="label">Scholar Topic:</span> ${
-            member.scholarTopic
-          }</p>
-          <p><span class="label">Year:</span> ${member.year}</p>
-        `;
-  } else {
-    // For current scholars
-    details.innerHTML = `
-          <p><span class="label">Position:</span> ${member.position}</p>
-          ${
-            member.scholarLink
-              ? `<p><a href="${member.scholarLink}" target="_blank">Scholar Link</a></p>`
-              : ""
-          }
-          <p><span class="label">Scholar Topic:</span> ${
-            member.scholarTopic
-          }</p>
-          <p><span class="label">Year:</span> ${member.year}</p>
-        `;
-  }
+  details.innerHTML = `
+    <p><span class="label">Position:</span> ${member.position || '-'}</p>
+    ${member.scholarLink ? `<p><a href="${member.scholarLink}" target="_blank">Scholar Profile</a></p>` : ""}
+    <p><span class="label">Topic:</span> ${member.scholarTopic || '-'}</p>
+    <p><span class="label">Year:</span> ${member.year || '-'}</p>
+  `;
 
   content.appendChild(details);
   card.appendChild(content);
