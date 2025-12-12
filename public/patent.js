@@ -1,26 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Theme toggle functionality
-  const themeToggle = document.getElementById("theme-toggle");
-
-  // Check for saved theme preference or use default (dark)
-  const savedTheme = localStorage.getItem("theme") || "dark";
-  document.documentElement.setAttribute("data-theme", savedTheme);
-
-  // Set the toggle position based on the current theme
-  if (themeToggle) {
-    themeToggle.checked = savedTheme === "dark";
-
-    // Listen for toggle changes
-    themeToggle.addEventListener("change", function (e) {
-      if (e.target.checked) {
-        document.documentElement.setAttribute("data-theme", "dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.setAttribute("data-theme", "light");
-        localStorage.setItem("theme", "light");
-      }
-    });
-  }
+  // Theme toggle functionality is handled by header.ejs
 
   // Patents section functionality
   initializePatentsSection();

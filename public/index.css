@@ -422,14 +422,14 @@ h3 {
    About PI Section
    ======================================== */
 .about-pi-section {
-  padding: var(--spacing-lg);
+  padding: 1.5rem;
   background-color: var(--secondary-bg);
   border-radius: var(--border-radius);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .about-pi-section h2 {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 0.75rem;
   color: var(--text-color, #333);
 }
 
@@ -438,8 +438,8 @@ h3 {
   flex-direction: row;
   align-items: center;
   text-align: left;
-  gap: clamp(1.5rem, 4vw, 3rem);
-  margin-top: var(--spacing-sm);
+  gap: 2rem;
+  margin-top: 0.5rem;
 }
 
 .pi-img {
@@ -447,8 +447,8 @@ h3 {
 }
 
 .pi-img img {
-  width: clamp(250px, 30vw, 350px);
-  height: clamp(250px, 30vw, 350px);
+  width: 360px;
+  height: 360px;
   max-width: 100%;
   border-radius: 2%;
   object-fit: contain;
@@ -462,17 +462,17 @@ h3 {
 
 .pi-info h3 {
   color: var(--primary-color);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 0.5rem;
   text-align: left;
   font-size: clamp(1.25rem, 3vw, 1.75rem);
 }
 
 .pi-info p {
-  text-align: justify;
-  line-height: 1.8;
+  text-align:justify;
+  line-height: 1.5;
   font-size: clamp(0.9375rem, 2vw, 1.0625rem);
   color: var(--text-color, #555);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 0.5rem;
 }
 
 .pi_more {

@@ -71,42 +71,13 @@
     </div>
 </main>
 
-<button class="theme-toggle" style="display: none;" id="themeToggle" aria-label="Toggle theme">
-    <i class="fas fa-moon"></i>
-</button>
+
 
 <%- include('partials/footer') %>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const htmlElement = document.documentElement;
-        const themeIcon = themeToggle.querySelector('i');
-
-        // Check if user has a saved preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            htmlElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-        }
-
-        themeToggle.addEventListener('click', function () {
-            const currentTheme = htmlElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-
-            htmlElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        });
-
-        function updateThemeIcon(theme) {
-            if (theme === 'light') {
-                themeIcon.className = 'fas fa-moon';
-            } else {
-                themeIcon.className = 'fas fa-sun';
-            }
-        }
+        // Theme toggle functionality is handled by header.ejs
 
         // Variables for pagination
         let currentPage = 1;
