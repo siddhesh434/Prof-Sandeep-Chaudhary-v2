@@ -90,6 +90,7 @@ h3 {
   top: 0;
   left: 0;
   width: 100%;
+  height: auto;
   background-image: url("/images/Index_top.webp");
   background-size: cover;
   background-position: center;
@@ -98,7 +99,7 @@ h3 {
 
 /* Light mode overlay adjustment */
 :root:not(.dark-mode) .hero-image::before {
-  opacity: 1.0;
+  opacity: 0.9;
   filter: brightness(0.7) contrast(1.2);
 }
 
