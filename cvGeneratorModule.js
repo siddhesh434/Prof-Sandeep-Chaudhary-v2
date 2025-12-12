@@ -4,122 +4,47 @@ const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
 
-// Define schemas
-const bookSchema = new mongoose.Schema({
-  author: String,
-  title: String,
-  year: Number,
-  isbn: String,
-  photo: String,
-});
+// Define schemas (using existing definitions)
+const ExtensionActivity = require("./models/ExtensionActivity"); 
+const Book = mongoose.models.Book || mongoose.model("Book", new mongoose.Schema({ author: String, title: String, year: Number, isbn: String, photo: String }));
+const Chapter = mongoose.models.Chapter || mongoose.model("Chapter", new mongoose.Schema({ author: String, chapterName: String, bookName: String, year: Number, ISBN: String, Page: String }));
+const Conference = mongoose.models.Conference || mongoose.model("Conference", new mongoose.Schema({ author: String, title: String, conference: String, date: String, place: String, year: Number }));
+const Dissertation = mongoose.models.Dissertation || mongoose.model("Dissertation", new mongoose.Schema({ name: String, title: String, year: String, coSupervisors: String, degree: String }));
+const Patent = mongoose.models.Patent || mongoose.model("Patent", new mongoose.Schema({ title: String, authors: String, year: Number, applicationNumber: String, grantNumber: String, grantDate: String, description: String }));
+const Project = mongoose.models.Project || mongoose.model("Project", new mongoose.Schema({ title: String, year: String, funded: String, collaborator: String, projectType: String, role: String }));
+const Publication = mongoose.models.Publication || mongoose.model("Publication", new mongoose.Schema({ author: String, title: String, journal: String, year: Number, volumePages: String, publicationLink: String, publicationDate: String, impactFactor: Number }));
 
-const chapterSchema = new mongoose.Schema({
-  author: String,
-  chapterName: String,
-  bookName: String,
-  year: Number,
-  ISBN: String,
-  Page: String,
-});
+// Helper: Filter Items by ID
+const filterItems = (items, selectedIds) => {
+    if (!selectedIds || !Array.isArray(selectedIds)) return items; // Fallback
+    // If array is present (even empty), filter strictly
+    return items.filter(item => selectedIds.includes(item._id.toString()));
+};
 
-const conferenceSchema = new mongoose.Schema({
-  author: String,
-  title: String,
-  conference: String,
-  date: String,
-  place: String,
-  year: Number,
-});
-
-const dissertationSchema = new mongoose.Schema({
-  name: String,
-  title: String,
-  year: String,
-  coSupervisors: String,
-  degree: String,
-});
-
-const patentSchema = new mongoose.Schema({
-  title: String,
-  authors: String,
-  year: Number,
-  applicationNumber: String,
-  grantNumber: String,
-  grantDate: String,
-  description: String,
-});
-
-const projectSchema = new mongoose.Schema({
-  title: String,
-  year: String,
-  funded: String,
-  collaborator: String,
-  projectType: String,
-  role: String
-});
-
-const publicationSchema = new mongoose.Schema({
-  author: String,
-  title: String,
-  journal: String,
-  year: Number,
-  volumePages: String,
-  publicationLink: String,
-  publicationDate: String,
-  impactFactor: Number,
-});
-
-// Create models - check if they already exist first
-const Book = mongoose.models.Book || mongoose.model("Book", bookSchema);
-const Chapter = mongoose.models.Chapter || mongoose.model("Chapter", chapterSchema);
-const Conference = mongoose.models.Conference || mongoose.model("Conference", conferenceSchema);
-const Dissertation = mongoose.models.Dissertation || mongoose.model("Dissertation", dissertationSchema);
-const Patent = mongoose.models.Patent || mongoose.model("Patent", patentSchema);
-const Project = mongoose.models.Project || mongoose.model("Project", projectSchema);
-const Publication = mongoose.models.Publication || mongoose.model("Publication", publicationSchema);
-
-// Helper function to check if component should be included
-function shouldInclude(componentName, selectedComponents) {
-  return selectedComponents.includes(componentName);
+// Helper: Add Section Header
+function addSectionHeader(doc, number, title) {
+  doc.moveDown(0.6);
+  doc.font('Times-Bold').fontSize(14).text(`${number}. ${title}`);
+  doc.moveDown(0.3);
 }
 
-// Helper function to format publication in APA style
-function formatPublicationAPA(pub) {
-  let apa = '';
-  
-  if (pub.author) {
-    apa += pub.author;
-  }
-  
-  if (pub.year) {
-    apa += ` (${pub.year}). `;
-  } else {
-    apa += '. ';
-  }
-  
-  if (pub.title) {
-    apa += pub.title + '. ';
-  }
-  
-  if (pub.journal) {
-    apa += pub.journal;
-  }
-  
-  if (pub.volumePages) {
-    apa += ', ' + pub.volumePages;
-  }
-  
-  apa += '.';
-  
-  return apa;
+// Helper: Add Body Text (handles multiline input)
+function addBodyText(doc, text) {
+  if (!text) return;
+  const lines = text.split('\n');
+  lines.forEach(line => {
+      if(line.trim()) {
+          doc.font('Times-Roman').fontSize(12).text(line.trim(), { align: 'justify' });
+      }
+  });
+  doc.moveDown(0.3);
 }
 
 // Main CV generation function
 async function generateCV(config = {}) {
-  const { selectedComponents = ['publications', 'books', 'chapters', 'conferences', 'patents', 'projects', 'dissertations'], additionalInfo = '' } = config;
-
   try {
-    // Fetch data from MongoDB
+    // 1. Fetch ALL Data first (we need to filter in memory or query with $in)
+    // For simplicity with existing code structure, we fetch all and filter JS side (datasets are likely small < 1000)
     const books = await Book.find().sort({ year: -1 });
     const chapters = await Chapter.find().sort({ year: -1 });
     const conferences = await Conference.find().sort({ year: -1 });
@@ -127,202 +52,217 @@ async function generateCV(config = {}) {
     const patents = await Patent.find().sort({ year: -1 });
     const projects = await Project.find().sort({ year: -1 });
     const publications = await Publication.find().sort({ year: -1 });
+    const extensionActivities = await ExtensionActivity.find().sort({ startDate: -1 });
+
+    // 2. Filter Data based on Config
+    const filteredProjects = filterItems(projects, config.selectedProjects);
+    const filteredPatents = filterItems(patents, config.selectedPatents);
+    const filteredBooks = filterItems(books, config.selectedBooks);
+    const filteredJournals = filterItems(publications, config.selectedJournals);
+    const filteredChapters = filterItems(chapters, config.selectedChapters);
+    const filteredConferences = filterItems(conferences, config.selectedConferences);
+    const filteredDissertations = filterItems(dissertations, config.selectedDissertations);
     
-    // Create a PDF document
+    // Filter Extension Activities manually since they are grouped
+    const organizedConferences = filterItems(extensionActivities.filter(a => a.role === 'Conference organised'), config.selectedOrganizedConferences);
+    const workshops = filterItems(extensionActivities.filter(a => a.role === 'Workshop organised'), config.selectedWorkshops);
+    const outreach = filterItems(extensionActivities.filter(a => ['Government Advisory Roles', 'International Contributions', 'National Contributions'].includes(a.role)), config.selectedOutreach);
+
+    // 3. Create PDF
     const doc = new PDFDocument({
       margins: { top: 50, bottom: 50, left: 50, right: 50 },
       size: "A4",
+      bufferPages: true
     });
     
-    // Pipe PDF to write stream
     const outputPath = path.join(__dirname, "cv.pdf");
     const writeStream = fs.createWriteStream(outputPath);
     doc.pipe(writeStream);
-    
-    // Add CV header
-    doc.fontSize(24).font('Helvetica-Bold').text("Curriculum Vitae", { align: "center" });
-    doc.moveDown();
-    
-    // Add a line
-    doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke();
-    doc.moveDown();
-    
-    // Add personal info section
-    doc.fontSize(16).font('Helvetica-Bold').text("Personal Information");
+
+    // --- Header ---
+    doc.font('Times-Bold').fontSize(22).text("Curriculum Vitae", { align: "center" });
     doc.moveDown(0.5);
-    doc.fontSize(12).font('Helvetica').text("Name: Prof. Sandeep Chaudhary");
-    doc.text("Email: schaudhary@iiti.ac.in");
-    doc.text("Mobile: 9549654195, 9414475375");
-    doc.text("Phone: +91-731-660-3256");
+    doc.lineWidth(1).moveTo(50, doc.y).lineTo(545, doc.y).stroke();
+    doc.moveDown(0.8);
+
+    // 1. Personal Information
+    addSectionHeader(doc, "1", "Personal Information");
+    const pi = config.personalInfo || {};
+    doc.font('Times-Bold').fontSize(12).text(pi.name || "Prof. Sandeep Chaudhary");
+    
+    doc.font('Times-Roman').fontSize(12);
+    if(pi.designation) doc.text(pi.designation);
+    if(pi.address) doc.text(pi.address);
+    
+    let contact = [];
+    if(pi.email) contact.push(`Email: ${pi.email}`);
+    if(pi.mobile) contact.push(`Mobile: ${pi.mobile}`);
+    if(contact.length > 0) doc.text(contact.join(" | "));
     doc.moveDown();
+
+    // 2. Academic and Research Qualifications
+    addSectionHeader(doc, "2", "Academic and Research Qualifications");
+    addBodyText(doc, config.qualifications);
+
+    // 3. Work Experience
+    addSectionHeader(doc, "3", "Work Experience");
+    addBodyText(doc, config.experience);
+
+    // 4. Specialization
+    addSectionHeader(doc, "4", "Specialization");
+    addBodyText(doc, config.specialization);
+
+    // 5. Research Credentials (Derived from FILTERED counts)
+    addSectionHeader(doc, "5", "Research Credentials");
+    const credentials = [
+      `Sponsored Research Projects: ${filteredProjects.length}`,
+      `Patents: ${filteredPatents.length}`,
+      `Journal Publications: ${filteredJournals.length}`,
+      `Books: ${filteredBooks.length}`,
+      `Book Chapters: ${filteredChapters.length}`,
+      `Conference Proceedings: ${filteredConferences.length}`,
+      `Ph.D. Dissertations Supervised: ${filteredDissertations.filter(d => d.degree && d.degree.includes('Ph.D')).length}`,
+      `M.Tech. Dissertations Supervised: ${filteredDissertations.filter(d => d.degree && d.degree.includes('M.Tech')).length}`
+    ];
     
-    // Add additional information section if provided
-    if (additionalInfo && additionalInfo.trim() !== '') {
-      doc.fontSize(16).font('Helvetica-Bold').text("Additional Information");
-      doc.moveDown(0.5);
-      doc.fontSize(12).font('Helvetica').text(additionalInfo, {
-        align: 'left',
-        lineGap: 2
-      });
-      doc.moveDown();
+    let yPos = doc.y;
+    doc.font('Times-Roman').fontSize(12);
+    credentials.forEach((cred, i) => {
+      if (i % 2 === 0) {
+        doc.text(`• ${cred}`, 50, yPos);
+      } else {
+        doc.text(`• ${cred}`, 300, yPos);
+        yPos += 18;
+      }
+    });
+    doc.y = yPos + 10;
+    doc.x = 50; // Reset to left margin
+
+    // 6. Courses Taught
+    addSectionHeader(doc, "6", "Courses Taught");
+    addBodyText(doc, config.coursesTaught);
+
+    // 7. Awards
+    addSectionHeader(doc, "7", "Awards / Achievements / Recognitions / Fellowships");
+    addBodyText(doc, config.awards);
+
+    // 8. Sponsored Research Projects
+    addSectionHeader(doc, "8", "Sponsored Research Projects");
+    filteredProjects.forEach((p, i) => {
+        doc.font('Times-Roman').fontSize(12).text(`${i+1}. "${p.title}"`, { continued: true });
+        doc.font('Times-Italic').text(` (${p.year})`);
+        doc.font('Times-Roman').text(`   Funded by: ${p.funded} | Role: ${p.role}`);
+        doc.moveDown(0.2);
+    });
+
+    // 9. Patents
+    addSectionHeader(doc, "9", "Patents");
+    filteredPatents.forEach((p, i) => {
+        doc.font('Times-Roman').fontSize(12).text(`${i+1}. ${p.title}`);
+        doc.text(`   ${p.authors} (${p.year}). App No: ${p.applicationNumber}, Status: ${p.grantNumber ? `Granted (${p.grantNumber})` : 'Published/Filed'}`);
+        doc.moveDown(0.2);
+    });
+
+    // 10. List of Publications
+    addSectionHeader(doc, "10", "List of Publications");
+    
+    if(filteredBooks.length > 0) {
+        doc.font('Times-Bold').fontSize(13).text("Books");
+        filteredBooks.forEach((b, i) => {
+            doc.font('Times-Roman').fontSize(12).text(`${i+1}. ${b.author} (${b.year}). `).font('Times-Italic').text(`${b.title}. `).font('Times-Roman').text(`ISBN: ${b.isbn}`);
+            doc.moveDown(0.2);
+        });
+        doc.moveDown(0.5);
     }
-    
-    // Add publications section if selected
-    if (shouldInclude('publications', selectedComponents) && publications.length > 0) {
-      doc.fontSize(16).font('Helvetica-Bold').text("Journal Publications");
-      doc.moveDown();
-      
-      publications.forEach((pub, index) => {
-        const apaText = formatPublicationAPA(pub);
-        
-        doc.fontSize(12).font('Helvetica');
-        const numberText = `${index + 1}. `;
-        doc.text(numberText, { continued: true });
-        doc.text(apaText);
-        
-        if (pub.impactFactor) {
-          doc.fontSize(11).font('Helvetica').text(`   Impact Factor: ${pub.impactFactor}`, { indent: 20 });
-        }
-        
-        if (pub.publicationLink) {
-          doc.fontSize(11).font('Helvetica').text(`   DOI/Link: ${pub.publicationLink}`, { indent: 20 });
-        }
-        
-        doc.moveDown();
-      });
+
+    if(filteredJournals.length > 0) {
+        doc.font('Times-Bold').fontSize(13).text("Journal Articles");
+        filteredJournals.forEach((p, i) => {
+            doc.font('Times-Roman').fontSize(12).text(`${i+1}. ${p.author} (${p.year}). "${p.title}". `).font('Times-Italic').text(`${p.journal}`).font('Times-Roman').text(`, ${p.volumePages}.`);
+            if (p.impactFactor) doc.text(`   [Impact Factor: ${p.impactFactor}]`);
+            doc.moveDown(0.2);
+        });
+        doc.moveDown(0.5);
     }
-    
-    // Add books section if selected
-    if (shouldInclude('books', selectedComponents) && books.length > 0) {
-      doc.fontSize(16).font('Helvetica-Bold').text("Books");
-      doc.moveDown();
-      
-      books.forEach((book, index) => {
-        doc.fontSize(12).font('Helvetica-Bold');
-        doc.text(`${index + 1}. ${book.title}`);
-        
-        doc.fontSize(12).font('Helvetica');
-        doc.text(`Author(s): ${book.author}`);
-        doc.text(`Year: ${book.year}`);
-        doc.text(`ISBN: ${book.isbn}`);
-        
-        if (book.photo && fs.existsSync(book.photo.startsWith('/') ? `.${book.photo}` : book.photo)) {
-          try {
-            const imgPath = book.photo.startsWith('/') ? `.${book.photo}` : book.photo;
-            doc.image(imgPath, { width: 100 });
-          } catch (error) {
-            console.log(`Error adding image for book: ${book.title}`, error);
-          }
-        }
-        
-        doc.moveDown();
-      });
+
+    if(filteredChapters.length > 0) {
+        doc.font('Times-Bold').fontSize(13).text("Book Chapters");
+        filteredChapters.forEach((c, i) => {
+            doc.font('Times-Roman').fontSize(12).text(`${i+1}. ${c.author} (${c.year}). "${c.chapterName}". In `).font('Times-Italic').text(`${c.bookName}`).font('Times-Roman').text(`, pp. ${c.Page}. ISBN: ${c.ISBN}`);
+            doc.moveDown(0.2);
+        });
+        doc.moveDown(0.5);
     }
-    
-    // Add book chapters section if selected
-    if (shouldInclude('chapters', selectedComponents) && chapters.length > 0) {
-      doc.fontSize(16).font('Helvetica-Bold').text("Book Chapters");
-      doc.moveDown();
-      
-      chapters.forEach((chapter, index) => {
-        doc.fontSize(12).font('Helvetica-Bold');
-        doc.text(`${index + 1}. ${chapter.chapterName}`);
-        
-        doc.fontSize(12).font('Helvetica');
-        doc.text(`Author(s): ${chapter.author}`);
-        doc.text(`Book: ${chapter.bookName}`);
-        doc.text(`Year: ${chapter.year}`);
-        doc.text(`ISBN: ${chapter.ISBN}`);
-        doc.text(`Page: ${chapter.Page}`);
-        
-        doc.moveDown();
-      });
+
+    if(filteredConferences.length > 0) {
+        doc.font('Times-Bold').fontSize(13).text("Conference Proceedings");
+        filteredConferences.forEach((c, i) => {
+             doc.font('Times-Roman').fontSize(12).text(`${i+1}. ${c.author} (${c.year}). "${c.title}". `).font('Times-Italic').text(`${c.conference}`).font('Times-Roman').text(`, ${c.place}.`);
+             doc.moveDown(0.2);
+        });
+        doc.moveDown(0.5);
     }
-    
-    // Add conference proceedings section if selected
-    if (shouldInclude('conferences', selectedComponents) && conferences.length > 0) {
-      doc.fontSize(16).font('Helvetica-Bold').text("Conference Proceedings");
-      doc.moveDown();
-      
-      conferences.forEach((conf, index) => {
-        doc.fontSize(12).font('Helvetica-Bold');
-        doc.text(`${index + 1}. ${conf.title}`);
-        
-        doc.fontSize(12).font('Helvetica');
-        doc.text(`Author(s): ${conf.author}`);
-        doc.text(`Conference: ${conf.conference}`);
-        doc.text(`Date: ${conf.date}`);
-        doc.text(`Place: ${conf.place}`);
-        doc.text(`Year: ${conf.year}`);
-        
-        doc.moveDown();
-      });
+
+    // 11. Translational Contributions
+    addSectionHeader(doc, "11", "Translational Contributions");
+    addBodyText(doc, config.translational);
+
+    // 12. Professional Affiliations
+    addSectionHeader(doc, "12", "Professional Affiliations");
+    addBodyText(doc, config.affiliations);
+
+    // 13. Administrative Positions
+    addSectionHeader(doc, "13", "Administrative Positions Held");
+    addBodyText(doc, config.adminPositions);
+
+    // 14. Facilities Established
+    addSectionHeader(doc, "14", "Facilities and Centres Established");
+    addBodyText(doc, config.facilities);
+
+    // 15. Conferences Organised
+    addSectionHeader(doc, "15", "Conferences Organised");
+    if(organizedConferences.length > 0) {
+        organizedConferences.forEach((c, i) => {
+             doc.font('Times-Roman').fontSize(12).text(`${i+1}. ${c.title}, ${c.location} (${c.startDate ? new Date(c.startDate).getFullYear() : 'N/A'}) - ${c.description}`);
+             doc.moveDown(0.2);
+        });
+    } else {
+        doc.font('Times-Roman').text("N/A");
     }
-    
-    // Add patents section if selected
-    if (shouldInclude('patents', selectedComponents) && patents.length > 0) {
-      doc.fontSize(16).font('Helvetica-Bold').text("Patents");
-      doc.moveDown();
-      
-      patents.forEach((patent, index) => {
-        doc.fontSize(12).font('Helvetica-Bold');
-        doc.text(`${index + 1}. ${patent.title}`);
-        
-        doc.fontSize(12).font('Helvetica');
-        doc.text(`Author(s): ${patent.authors}`);
-        doc.text(`Year: ${patent.year}`);
-        doc.text(`Application Number: ${patent.applicationNumber}`);
-        doc.text(`Grant Number: ${patent.grantNumber}`);
-        doc.text(`Grant Date: ${patent.grantDate}`);
-        doc.text(`Description: ${patent.description}`);
-        
-        doc.moveDown();
-      });
+    doc.moveDown();
+
+    // 16. Workshops
+    addSectionHeader(doc, "16", "Continuing Education Programs");
+    if(workshops.length > 0) {
+        workshops.forEach((w, i) => {
+             doc.font('Times-Roman').fontSize(12).text(`${i+1}. ${w.title}, ${w.location} - ${w.description}`);
+             doc.moveDown(0.2);
+        });
+    } else {
+         doc.font('Times-Roman').text("N/A");
     }
-    
-    // Add projects section if selected
-    if (shouldInclude('projects', selectedComponents) && projects.length > 0) {
-      doc.fontSize(16).font('Helvetica-Bold').text("Research Projects");
-      doc.moveDown();
-      
-      projects.forEach((project, index) => {
-        doc.fontSize(12).font('Helvetica-Bold');
-        doc.text(`${index + 1}. ${project.title}`);
-        
-        doc.fontSize(12).font('Helvetica');
-        doc.text(`Year: ${project.year}`);
-        doc.text(`Funded By: ${project.funded}`);
-        doc.text(`Collaborator(s): ${project.collaborator}`);
-        doc.text(`Project Type: ${project.projectType}`);
-        doc.text(`Role: ${project.role}`);
-        
-        doc.moveDown();
-      });
+    doc.moveDown();
+
+    // 17. International Collaborations
+    addSectionHeader(doc, "17", "International Collaborations");
+    addBodyText(doc, config.collaborations);
+
+    // 18. Major Outreach
+    addSectionHeader(doc, "18", "Major Outreach");
+    if(outreach.length > 0) {
+        outreach.forEach((o, i) => {
+             // User requested "activity along with role". Assuming title is activity.
+             doc.font('Times-Roman').fontSize(12).text(`${i+1}. ${o.title} `, { continued: true })
+                .font('Times-Italic').text(`(${o.role})`, { continued: true })
+                .font('Times-Roman').text(` - ${o.description}`);
+             doc.moveDown(0.2);
+        });
+    } else {
+         doc.font('Times-Roman').text("N/A");
     }
-    
-    // Add dissertations section if selected
-    if (shouldInclude('dissertations', selectedComponents) && dissertations.length > 0) {
-      doc.fontSize(16).font('Helvetica-Bold').text("Supervised Dissertations");
-      doc.moveDown();
-      
-      dissertations.forEach((dissertation, index) => {
-        doc.fontSize(12).font('Helvetica-Bold');
-        doc.text(`${index + 1}. ${dissertation.title}`);
-        
-        doc.fontSize(12).font('Helvetica');
-        doc.text(`Name: ${dissertation.name}`);
-        doc.text(`Year: ${dissertation.year}`);
-        doc.text(`Co-Supervisors: ${dissertation.coSupervisors}`);
-        doc.text(`Degree: ${dissertation.degree}`);
-        
-        doc.moveDown();
-      });
-    }
-    
-    // Finalize PDF
+
     doc.end();
     
-    // Return a promise that resolves when the PDF is written
     return new Promise((resolve, reject) => {
       writeStream.on('finish', () => {
         console.log(`CV generated successfully at ${outputPath}`);

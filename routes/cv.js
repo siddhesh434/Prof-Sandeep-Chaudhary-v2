@@ -4,33 +4,121 @@ const path = require("path");
 const fs = require("fs");
 const { generateCV } = require("../cvGeneratorModule");
 
+// Import Models
+const CVConfig = require("../models/CVConfig");
+const Project = require("../models/Project");
+const Patent = require("../models/Patent");
+const Publication = require("../models/Publication");
+const Book = require("../models/Book");
+const Chapter = require("../models/Chapter");
+const Conference = require("../models/Conference");
+const Dissertation = require("../models/Dissertation");
+const ExtensionActivity = require("../models/ExtensionActivity");
+
+// Helper: Get or Create Config
+async function getCVConfig() {
+    let config = await CVConfig.findOne();
+    if (!config) {
+        config = new CVConfig();
+        await config.save();
+    }
+    return config;
+}
+
+// Route to get current CV Config
+router.get("/api/cv-config", async (req, res) => {
+    try {
+        const config = await getCVConfig();
+        res.json(config);
+    } catch (error) {
+        console.error("Error fetching CV Config:", error);
+        res.status(500).json({ error: "Failed to fetch config" });
+    }
+});
+
+// Route to save CV Config
+router.post("/api/cv-config", async (req, res) => {
+    try {
+        const updateData = req.body;
+        let config = await CVConfig.findOne();
+        
+        if (!config) {
+            config = new CVConfig(updateData);
+        } else {
+            // Update fields
+            Object.assign(config, updateData);
+        }
+        
+        config.updatedAt = Date.now();
+        await config.save();
+        res.json({ message: "Configuration saved successfully", config });
+    } catch (error) {
+        console.error("Error saving CV Config:", error);
+        res.status(500).json({ error: "Failed to save config" });
+    }
+});
+
+// Route to get ALL data for selection UI
+router.get("/api/all-cv-data", async (req, res) => {
+    try {
+        const [
+            projects, 
+            patents, 
+            publications, 
+            books, 
+            chapters, 
+            conferences, 
+            dissertations,
+            extensionActivities
+        ] = await Promise.all([
+            Project.find().sort({ year: -1 }),
+            Patent.find().sort({ year: -1 }),
+            Publication.find().sort({ year: -1 }),
+            Book.find().sort({ year: -1 }),
+            Chapter.find().sort({ year: -1 }),
+            Conference.find().sort({ year: -1 }),
+            Dissertation.find().sort({ year: -1 }),
+            ExtensionActivity.find().sort({ startDate: -1 })
+        ]);
+
+        res.json({
+            projects,
+            patents,
+            publications,
+            books,
+            chapters,
+            conferences,
+            dissertations,
+            extensionActivities
+        });
+    } catch (error) {
+        console.error("Error fetching all CV data:", error);
+        res.status(500).json({ error: "Failed to fetch data" });
+    }
+});
+
 // Route to generate CV
 router.post("/generate-cv", async (req, res) => {
-  const { selectedComponents = [], additionalInfo = "" } = req.body;
-
-  // Create configuration object
-  const config = {
-    selectedComponents,
-    additionalInfo,
-  };
+  // The body contains the FULL configuration (text fields + selected IDs)
+  // We might want to auto-save this config too? 
+  // For now, let's assume the user clicked "Save" or we just use the body data to generate PDF one-time.
+  // Actually, keeping them separate is safer: Save button saves, Generate just generates.
+  // BUT the generate function needs the IDs to filter data.
+  
+  const config = req.body;
 
   try {
-    console.log("Generating CV with config:", config);
+    console.log("Generating CV...");
     
     // Generate CV using the module
     const cvPath = await generateCV(config);
     
-    console.log("CV generated at:", cvPath);
-
     // Check if the file exists
     if (fs.existsSync(cvPath)) {
-      // Send the file
       res.download(cvPath, "Sandeep_Chaudhary_CV.pdf", (err) => {
         if (err) {
-          console.error(`Error sending file: ${err}`);
-          if (!res.headersSent) {
-            res.status(500).send("Error downloading CV");
-          }
+            console.error(`Error sending file: ${err}`);
+             if (!res.headersSent) res.status(500).send("Error downloading CV");
         }
       });
     } else {

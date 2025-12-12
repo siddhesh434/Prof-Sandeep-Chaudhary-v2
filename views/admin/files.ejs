@@ -165,6 +165,11 @@
                         <th
                           class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
+                          URL
+                        </th>
+                        <th
+                          class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Type
                         </th>
                         <th
@@ -489,6 +494,17 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
                           file.description || "-"
                         }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <div class="flex items-center space-x-2">
+                                <input type="text" value="/uploads/${file.storedFilename}" readonly 
+                                    class="w-32 text-xs bg-gray-50 border border-gray-200 rounded px-2 py-1 font-mono"
+                                    onclick="this.select()">
+                                <button onclick="copyImageUrl('/uploads/${file.storedFilename}')" 
+                                    class="text-blue-600 hover:text-blue-900" title="Copy URL">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                                 ${file.fileType}

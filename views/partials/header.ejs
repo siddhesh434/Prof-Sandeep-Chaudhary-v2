@@ -100,7 +100,7 @@
   <script>
     // Run this script immediately, before DOM is fully loaded, to prevent flash
     (function () {
-      const savedTheme = localStorage.getItem("theme") || "light";
+      const savedTheme = sessionStorage.getItem("theme") || "light";
       document.documentElement.setAttribute("data-theme", savedTheme);
 
       // Pre-set the checkbox state logic if possible or just handle styles
@@ -124,7 +124,7 @@
       themeToggle.addEventListener("change", function (e) {
         const newTheme = e.target.checked ? "dark" : "light";
         document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
+        sessionStorage.setItem("theme", newTheme);
       });
     });
   </script>

@@ -83,6 +83,8 @@
                                 <option value="Government Advisory Roles">Government Advisory Roles</option>
                                 <option value="International Contributions">International Contributions</option>
                                 <option value="National Contributions">National Contributions</option>
+                                <option value="Conference organised">Conference organised</option>
+                                <option value="Workshop organised">Workshop organised</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
@@ -143,6 +145,8 @@
                         <option value="Government Advisory Roles">Government Advisory Roles</option>
                         <option value="International Contributions">International Contributions</option>
                         <option value="National Contributions">National Contributions</option>
+                        <option value="Conference organised">Conference organised</option>
+                        <option value="Workshop organised">Workshop organised</option>
                         <option value="Other">Other</option>
                     </select>
                     <button id="searchButton"
@@ -525,7 +529,7 @@
                 document.getElementById('serialNumber').value = activity.serialNumber || '';
                 
                 // Handle role selection including "Other"
-                const standardRoles = ['Government Advisory Roles', 'International Contributions', 'National Contributions'];
+                const standardRoles = ['Government Advisory Roles', 'International Contributions', 'National Contributions', 'Conference organised', 'Workshop organised'];
                 if (standardRoles.includes(activity.role)) {
                     document.getElementById('role').value = activity.role;
                     otherRoleContainer.classList.add('hidden');

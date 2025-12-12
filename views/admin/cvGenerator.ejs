@@ -66,255 +66,439 @@
             </div>
           </div>
           
-          <!-- Additional Information Card -->
-          <div
-            class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg">
-            <div class="bg-blue-800 text-white p-4 md:p-5">
-              <h2 class="text-lg md:text-xl font-semibold flex items-center">
-                <i class="fas fa-info-circle mr-2 md:mr-3 text-xl md:text-2xl"></i>
-                Additional Information
-              </h2>
-            </div>
-            <div class="p-4 md:p-5">
-              <p class="text-gray-600 mb-3 text-sm">
-                Add any additional information to include in the CV (appears after Personal Information section)
-              </p>
-              <textarea 
-                id="additionalInfo" 
-                rows="6" 
-                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
-                placeholder="Enter additional information such as research interests, awards, memberships, etc."></textarea>
-              <div class="mt-2 text-right">
-                <span id="charCount" class="text-sm text-gray-500">0 characters</span>
-              </div>
-            </div>
+          <!-- Actions Bar -->
+          <div class="flex justify-end mb-6 space-x-4 sticky top-0 z-20 bg-gray-100 py-4">
+              <button id="saveConfigBtn" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 shadow-md flex items-center">
+                  <i class="fas fa-save mr-2"></i> Save Configuration
+              </button>
           </div>
 
-          <!-- CV Components Card -->
-          <div
-            class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg">
-            <div class="bg-blue-800 text-white p-4 md:p-5 flex justify-between items-center">
-              <h2 class="text-lg md:text-xl font-semibold flex items-center">
-                <i class="fas fa-list-check mr-2 md:mr-3 text-xl md:text-2xl"></i>
-                CV Components
-              </h2>
-              <div class="flex gap-2">
-                <button id="selectAll" class="text-sm px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded-md transition-colors">
-                  Select All
-                </button>
-                <button id="selectNone" class="text-sm px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded-md transition-colors">
-                  Select None
-                </button>
-              </div>
+          <!-- Loading & Status -->
+          <div id="loading" class="hidden text-center py-4">
+              <div class="w-10 h-10 border-4 border-blue-200 border-t-blue-800 rounded-full animate-spin mx-auto mb-2"></div>
+              <p class="text-gray-600">Processing...</p>
+          </div>
+          <div id="status" class="hidden mb-6 p-4 rounded-md text-center"></div>
+
+          <!-- Form Container -->
+          <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
+            
+            <!-- Navigation Tabs -->
+            <div class="flex flex-wrap border-b bg-gray-50">
+                <button class="px-6 py-3 font-medium text-gray-600 hover:bg-gray-100 focus:outline-none border-b-2 border-transparent hover:border-blue-500 active-tab transition-colors" onclick="switchTab('personal')">Personal & Fixed</button>
+                <button class="px-6 py-3 font-medium text-gray-600 hover:bg-gray-100 focus:outline-none border-b-2 border-transparent hover:border-blue-500 transition-colors" onclick="switchTab('text')">Editable Details</button>
+                <button class="px-6 py-3 font-medium text-gray-600 hover:bg-gray-100 focus:outline-none border-b-2 border-transparent hover:border-blue-500 transition-colors" onclick="switchTab('research')">Research Data</button>
+                <button class="px-6 py-3 font-medium text-gray-600 hover:bg-gray-100 focus:outline-none border-b-2 border-transparent hover:border-blue-500 transition-colors" onclick="switchTab('extension')">Extension & Outreach</button>
             </div>
-            <div class="p-4 md:p-5">
-              <p class="text-gray-600 mb-4 text-sm">
-                Select the components you want to include in the CV
-              </p>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
-                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="publications" checked>
-                  <span class="text-gray-700">Publications</span>
-                </label>
-                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
-                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="books" checked>
-                  <span class="text-gray-700">Books</span>
-                </label>
-                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
-                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="chapters" checked>
-                  <span class="text-gray-700">Book Chapters</span>
-                </label>
-                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
-                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="conferences" checked>
-                  <span class="text-gray-700">Conference Proceedings</span>
-                </label>
-                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
-                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="patents" checked>
-                  <span class="text-gray-700">Patents</span>
-                </label>
-                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
-                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="projects" checked>
-                  <span class="text-gray-700">Research Projects</span>
-                </label>
-                <label class="flex items-center p-3 bg-gray-50 rounded-md border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
-                  <input type="checkbox" class="cv-component w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500 mr-3" value="dissertations" checked>
-                  <span class="text-gray-700">Supervised Dissertations</span>
-                </label>
-              </div>
+
+            <div class="p-6">
+                <!-- Tab: Personal & Fixed -->
+                <div id="tab-personal" class="tab-content block space-y-6">
+                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">1. Personal Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="pi_name" class="w-full border p-2 rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Designation</label><input type="text" id="pi_designation" class="w-full border p-2 rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Email</label><input type="text" id="pi_email" class="w-full border p-2 rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Mobile</label><input type="text" id="pi_mobile" class="w-full border p-2 rounded"></div>
+                        <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700">Address</label><input type="text" id="pi_address" class="w-full border p-2 rounded"></div>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4 mt-8">Fixed Sections (Plain Text)</h3>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">2. Academic & Research Qualifications</label>
+                        <p class="text-xs text-gray-500 mb-2">Format: Degree - Institute (Year) - Details</p>
+                        <textarea id="txt_qualifications" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">3. Work Experience</label>
+                        <textarea id="txt_experience" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">13. Administrative Positions Held</label>
+                        <textarea id="txt_adminPositions" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
+                    </div>
+                </div>
+
+                <!-- Tab: Editable Details -->
+                <div id="tab-text" class="tab-content hidden space-y-6">
+                     <div class="grid grid-cols-1 gap-6">
+                        <div><label class="block font-medium mb-1">4. Specialization</label><textarea id="specialization" rows="3" class="w-full border p-2 rounded"></textarea></div>
+                        <div><label class="block font-medium mb-1">6. Courses Taught</label><textarea id="coursesTaught" rows="3" class="w-full border p-2 rounded"></textarea></div>
+                        <div><label class="block font-medium mb-1">7. Awards/ Achievements</label><textarea id="awards" rows="3" class="w-full border p-2 rounded"></textarea></div>
+                        <div><label class="block font-medium mb-1">11. Translational Contributions</label><textarea id="translational" rows="3" class="w-full border p-2 rounded"></textarea></div>
+                        <div><label class="block font-medium mb-1">12. Professional Affiliations</label><textarea id="affiliations" rows="3" class="w-full border p-2 rounded"></textarea></div>
+                        <div><label class="block font-medium mb-1">14. Facilities Established</label><textarea id="facilities" rows="3" class="w-full border p-2 rounded"></textarea></div>
+                        <div><label class="block font-medium mb-1">17. International Collaborations</label><textarea id="collaborations" rows="3" class="w-full border p-2 rounded"></textarea></div>
+                     </div>
+                </div>
+
+                <!-- Tab: Research Data Selector -->
+                <div id="tab-research" class="tab-content hidden space-y-8">
+                     <!-- 8. Projects -->
+                     <div class="selector-group">
+                         <div class="flex justify-between items-center mb-2">
+                             <h4 class="font-bold">8. Research Projects</h4>
+                             <div class="flex items-center gap-2">
+                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-projects', this.checked)" class="mr-1">Select All</label>
+                                <input type="text" onkeyup="filterList('list-projects', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
+                             </div>
+                         </div>
+                         <div id="list-projects" class="border rounded h-48 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                     </div>
+
+                     <!-- 9. Patents -->
+                     <div class="selector-group">
+                         <div class="flex justify-between items-center mb-2">
+                             <h4 class="font-bold">9. Patents</h4>
+                             <div class="flex items-center gap-2">
+                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-patents', this.checked)" class="mr-1">Select All</label>
+                                <input type="text" onkeyup="filterList('list-patents', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
+                             </div>
+                         </div>
+                         <div id="list-patents" class="border rounded h-48 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                     </div>
+
+                     <!-- 10. Publications (Grouped) -->
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div>
+                             <div class="flex justify-between items-center mb-2">
+                                 <h4 class="font-bold">Books</h4>
+                                 <div class="flex items-center gap-2">
+                                    <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-books', this.checked)" class="mr-1">All</label>
+                                    <input type="text" onkeyup="filterList('list-books', this.value)" placeholder="Search..." class="border p-1 text-xs w-32 rounded">
+                                 </div>
+                             </div>
+                             <div id="list-books" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                         </div>
+                         <div>
+                             <div class="flex justify-between items-center mb-2">
+                                 <h4 class="font-bold">Journal Articles</h4>
+                                 <div class="flex items-center gap-2">
+                                    <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-journals', this.checked)" class="mr-1">All</label>
+                                    <input type="text" onkeyup="filterList('list-journals', this.value)" placeholder="Search..." class="border p-1 text-xs w-32 rounded">
+                                 </div>
+                             </div>
+                             <div id="list-journals" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                         </div>
+                         <div>
+                             <div class="flex justify-between items-center mb-2">
+                                 <h4 class="font-bold">Book Chapters</h4>
+                                 <div class="flex items-center gap-2">
+                                    <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-chapters', this.checked)" class="mr-1">All</label>
+                                    <input type="text" onkeyup="filterList('list-chapters', this.value)" placeholder="Search..." class="border p-1 text-xs w-32 rounded">
+                                 </div>
+                             </div>
+                             <div id="list-chapters" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                         </div>
+                         <div>
+                             <div class="flex justify-between items-center mb-2">
+                                 <h4 class="font-bold">Conference Proceedings</h4>
+                                 <div class="flex items-center gap-2">
+                                    <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-conferences', this.checked)" class="mr-1">All</label>
+                                    <input type="text" onkeyup="filterList('list-conferences', this.value)" placeholder="Search..." class="border p-1 text-xs w-32 rounded">
+                                 </div>
+                             </div>
+                             <div id="list-conferences" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                         </div>
+                     </div>
+                     
+
+                </div>
+
+                <!-- Tab: Extension & Outreach -->
+                <div id="tab-extension" class="tab-content hidden space-y-6">
+                    <p class="text-sm text-gray-600 mb-4 bg-blue-50 p-2 rounded">Select items to display in the respective sections. Items are filtered by their Role category.</p>
+
+                    <!-- 15. Conferences Organised -->
+                    <div class="selector-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold">15. Conferences Organised</h4>
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-ext-conf', this.checked)" class="mr-1">Select All</label>
+                                <input type="text" onkeyup="filterList('list-ext-conf', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
+                            </div>
+                        </div>
+                        <div id="list-ext-conf" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                    </div>
+
+                    <!-- 16. Workshops -->
+                    <div class="selector-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold">16. Workshops (Continuing Education)</h4>
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-ext-work', this.checked)" class="mr-1">Select All</label>
+                                <input type="text" onkeyup="filterList('list-ext-work', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
+                            </div>
+                        </div>
+                        <div id="list-ext-work" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                    </div>
+
+                    <!-- 18. Outreach -->
+                    <div class="selector-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold">18. Major Outreach (Govt/Intl/Natl Contributions)</h4>
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-ext-outreach', this.checked)" class="mr-1">Select All</label>
+                                <input type="text" onkeyup="filterList('list-ext-outreach', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
+                            </div>
+                        </div>
+                        <div id="list-ext-outreach" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                    </div>
+                </div>
+
             </div>
           </div>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- Floating action button for mobile -->
-  <button id="mobile-fab"
-    class="md:hidden fixed bottom-4 right-4 bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30">
-    <i class="fas fa-download"></i>
-  </button>
 
   <script>
-    // Mobile menu toggle functionality
-    const mobileMenuButton = document.getElementById("mobile-menu-button");
-    const closeSidebarButton = document.getElementById("close-sidebar");
-    const sidebar = document.getElementById("sidebar");
-    const sidebarOverlay = document.getElementById("sidebar-overlay");
-    const mobileFab = document.getElementById("mobile-fab");
-
-    // Function to open sidebar
-    function openSidebar() {
-      sidebar.classList.remove("-translate-x-full");
-      sidebarOverlay.classList.remove("hidden");
-      document.body.classList.add("overflow-hidden");
-    }
-
-    // Function to close sidebar
-    function closeSidebar() {
-      sidebar.classList.add("-translate-x-full");
-      sidebarOverlay.classList.add("hidden");
-      document.body.classList.remove("overflow-hidden");
-    }
-
-    // Event listeners
-    if (mobileMenuButton) {
-      mobileMenuButton.addEventListener("click", openSidebar);
-    }
-
-    if (closeSidebarButton) {
-      closeSidebarButton.addEventListener("click", closeSidebar);
-    }
-
-    if (sidebarOverlay) {
-      sidebarOverlay.addEventListener("click", closeSidebar);
-    }
-
-    // Optional: Close sidebar when clicking on a menu item on mobile
-    const sidebarLinks = sidebar.querySelectorAll("a");
-    sidebarLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        if (window.innerWidth < 768) {
-          // Only on mobile
-          closeSidebar();
-        }
-      });
-    });
-
-    // Character counter for additional info
-    const additionalInfoTextarea = document.getElementById('additionalInfo');
-    const charCount = document.getElementById('charCount');
-    
-    if (additionalInfoTextarea && charCount) {
-      additionalInfoTextarea.addEventListener('input', function() {
-        charCount.textContent = this.value.length + ' characters';
-      });
-    }
-
-    // Select All / Select None functionality
-    document.getElementById('selectAll').addEventListener('click', function() {
-      document.querySelectorAll('.cv-component').forEach(checkbox => {
-        checkbox.checked = true;
-      });
-    });
-
-    document.getElementById('selectNone').addEventListener('click', function() {
-      document.querySelectorAll('.cv-component').forEach(checkbox => {
-        checkbox.checked = false;
-      });
-    });
-
-    // CV Download functionality
-    document.getElementById('downloadCV').addEventListener('click', function() {
-        const loadingIndicator = document.getElementById('loading');
-        const statusDiv = document.getElementById('status');
+    // --- UI Logic ---
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById('tab-' + tabId).classList.remove('hidden');
         
-        // Collect selected components
-        const selectedComponents = [];
-        document.querySelectorAll('.cv-component:checked').forEach(checkbox => {
-          selectedComponents.push(checkbox.value);
+        document.querySelectorAll('button[onclick^="switchTab"]').forEach(btn => {
+            btn.classList.remove('active-tab', 'border-blue-500', 'text-blue-600');
+            btn.classList.add('border-transparent');
         });
-
-        // Get additional info
-        const additionalInfo = document.getElementById('additionalInfo').value.trim();
-
-        // Validate at least one component is selected
-        if (selectedComponents.length === 0) {
-          statusDiv.textContent = 'Please select at least one component to include in the CV';
-          statusDiv.classList.remove('hidden', 'bg-green-100', 'text-green-800');
-          statusDiv.classList.add('bg-red-100', 'text-red-800', 'p-4', 'rounded-md');
-          return;
-        }
         
-        // Show loading indicator
-        loadingIndicator.classList.remove('hidden');
-        statusDiv.classList.add('hidden');
-        
-        // Call the API endpoint to generate CV with configuration
-        fetch('/generate-cv', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              selectedComponents: selectedComponents,
-              additionalInfo: additionalInfo
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to generate CV');
+        const activeBtn = document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
+        activeBtn.classList.add('active-tab', 'border-blue-500', 'text-blue-600');
+        activeBtn.classList.remove('border-transparent');
+    }
+
+    function toggleAll(listId, checked) {
+        const list = document.getElementById(listId);
+        // Only toggle visible items if search filter is active?
+        // For simple Select All, usually selects all available checkboxes
+        const checkboxes = list.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            // Respect search filter: only toggle if parent label is displaying (not 'none')
+            if(cb.parentElement.style.display !== 'none') {
+                 cb.checked = checked;
             }
-            return response.blob();
-        })
-        .then(blob => {
-            // Hide loading indicator
-            loadingIndicator.classList.add('hidden');
-            
-            // Create download link
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'Sandeep_Chaudhary_CV.pdf';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-            // Show success message
-            statusDiv.textContent = 'CV generated successfully! Downloading...';
-            statusDiv.classList.remove('hidden', 'bg-red-100', 'text-red-800');
-            statusDiv.classList.add('bg-green-100', 'text-green-800', 'p-4', 'rounded-md');
-        })
-        .catch(error => {
-            // Hide loading indicator
-            loadingIndicator.classList.add('hidden');
-            
-            // Show error message
-            statusDiv.textContent = 'Error: ' + error.message;
-            statusDiv.classList.remove('hidden', 'bg-green-100', 'text-green-800');
-            statusDiv.classList.add('bg-red-100', 'text-red-800', 'p-4', 'rounded-md');
-            console.error('Error:', error);
         });
-    });
-
-    // Mobile fab functionality (for quick download)
-    if (mobileFab) {
-      mobileFab.addEventListener("click", () => {
-        document.getElementById('downloadCV').click();
-      });
     }
 
-    // Handle resize events - ensure sidebar is visible on desktop
-    window.addEventListener("resize", () => {
-      if (window.innerWidth >= 768) {
-        // md breakpoint
-        sidebar.classList.remove("-translate-x-full");
-        sidebarOverlay.classList.add("hidden");
-        document.body.classList.remove("overflow-hidden");
-      } else {
-        sidebar.classList.add("-translate-x-full");
-      }
-    });
+    function filterList(listId, query) {
+        query = query.toLowerCase();
+        const items = document.getElementById(listId).querySelectorAll('.select-item');
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(query) ? 'flex' : 'none';
+        });
+    }
+
+    function renderList(containerId, items, labelKey, idKey = '_id', preSelectedIds = []) {
+        const container = document.getElementById(containerId);
+        if (!items || items.length === 0) {
+            container.innerHTML = '<p class="text-xs text-gray-500 p-2">No items found.</p>';
+            return;
+        }
+
+        container.innerHTML = items.map(item => {
+            const isChecked = preSelectedIds.includes(item[idKey]) ? 'checked' : '';
+            // Simplify label for display
+             let label = item[labelKey];
+             if(containerId.includes('project')) label = `${item.title} (${item.year})`;
+             if(containerId.includes('patent')) label = item.title;
+             if(containerId.includes('pub') || containerId.includes('book') || containerId.includes('journal')) label = `${item.title} (${item.year})`;
+             if(containerId.includes('ext-outreach')) label = `[${item.role}] ${item.title} - ${item.description || ''}`;
+
+            return `
+                <label class="select-item flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer text-sm border-b border-gray-100 last:border-0">
+                    <input type="checkbox" value="${item[idKey]}" class="mr-3 h-4 w-4 text-blue-600 rounded" ${isChecked}>
+                    <span class="truncate pr-2" title="${label}">${label}</span>
+                </label>
+            `;
+        }).join('');
+    }
+    
+    // --- Data Logic ---
+    let allData = {};
+    let currentConfig = {};
+
+    async function init() {
+        showStatus('Loading data...', 'info');
+        try {
+            // Fetch Config
+            const configResp = await fetch('/api/cv-config');
+            currentConfig = await configResp.json();
+            
+            // Popuate Text Fields
+            populateTextFields();
+
+            // Fetch All Data for Lists
+            const dataResp = await fetch('/api/all-cv-data');
+            allData = await dataResp.json();
+            
+            // Render Lists
+            renderAllLists();
+            
+            showStatus('', 'none');
+        } catch (error) {
+            console.error(error);
+            showStatus('Failed to load data.', 'error');
+        }
+    }
+
+    function populateTextFields() {
+        // Personal
+        if(currentConfig.personalInfo) {
+            document.getElementById('pi_name').value = currentConfig.personalInfo.name || '';
+            document.getElementById('pi_designation').value = currentConfig.personalInfo.designation || '';
+            document.getElementById('pi_email').value = currentConfig.personalInfo.email || '';
+            document.getElementById('pi_mobile').value = currentConfig.personalInfo.mobile || '';
+            document.getElementById('pi_address').value = currentConfig.personalInfo.address || '';
+        }
+        
+        // Fixed Text
+        document.getElementById('txt_qualifications').value = currentConfig.qualifications || '';
+        document.getElementById('txt_experience').value = currentConfig.experience || '';
+        document.getElementById('txt_adminPositions').value = currentConfig.adminPositions || '';
+
+        // Editable Details
+        document.getElementById('specialization').value = currentConfig.specialization || '';
+        document.getElementById('coursesTaught').value = currentConfig.coursesTaught || '';
+        document.getElementById('awards').value = currentConfig.awards || '';
+        document.getElementById('translational').value = currentConfig.translational || '';
+        document.getElementById('affiliations').value = currentConfig.affiliations || '';
+        document.getElementById('facilities').value = currentConfig.facilities || '';
+        document.getElementById('collaborations').value = currentConfig.collaborations || '';
+    }
+
+    function renderAllLists() {
+        renderList('list-projects', allData.projects, 'title', '_id', currentConfig.selectedProjects);
+        renderList('list-patents', allData.patents, 'title', '_id', currentConfig.selectedPatents);
+        renderList('list-books', allData.books, 'title', '_id', currentConfig.selectedBooks);
+        renderList('list-journals', allData.publications.filter(p => !p.journal || p.journal !== 'Conference'), 'title', '_id', currentConfig.selectedJournals); 
+        renderList('list-chapters', allData.chapters, 'chapterName', '_id', currentConfig.selectedChapters); 
+        renderList('list-conferences', allData.conferences, 'title', '_id', currentConfig.selectedConferences); 
+
+
+        // Filter Extension Activities
+        const confOrg = allData.extensionActivities.filter(a => a.role === 'Conference organised');
+        const workshops = allData.extensionActivities.filter(a => a.role === 'Workshop organised');
+        const outreach = allData.extensionActivities.filter(a => ['Government Advisory Roles', 'International Contributions', 'National Contributions'].includes(a.role));
+
+        renderList('list-ext-conf', confOrg, 'title', '_id', currentConfig.selectedOrganizedConferences);
+        renderList('list-ext-work', workshops, 'title', '_id', currentConfig.selectedWorkshops);
+        renderList('list-ext-outreach', outreach, 'title', '_id', currentConfig.selectedOutreach);
+    }
+
+    function collectFormData() {
+        // Helper to get checked IDs
+        const getIds = (listId) => {
+            return Array.from(document.getElementById(listId).querySelectorAll('input:checked')).map(cb => cb.value);
+        };
+
+        return {
+            personalInfo: {
+                name: document.getElementById('pi_name').value.trim(),
+                designation: document.getElementById('pi_designation').value.trim(),
+                email: document.getElementById('pi_email').value.trim(),
+                mobile: document.getElementById('pi_mobile').value.trim(),
+                address: document.getElementById('pi_address').value.trim()
+            },
+            qualifications: document.getElementById('txt_qualifications').value,
+            experience: document.getElementById('txt_experience').value,
+            adminPositions: document.getElementById('txt_adminPositions').value,
+            
+            specialization: document.getElementById('specialization').value.trim(),
+            coursesTaught: document.getElementById('coursesTaught').value.trim(),
+            awards: document.getElementById('awards').value.trim(),
+            translational: document.getElementById('translational').value.trim(),
+            affiliations: document.getElementById('affiliations').value.trim(),
+            facilities: document.getElementById('facilities').value.trim(),
+            collaborations: document.getElementById('collaborations').value.trim(),
+
+            selectedProjects: getIds('list-projects'),
+            selectedPatents: getIds('list-patents'),
+            selectedBooks: getIds('list-books'),
+            selectedJournals: getIds('list-journals'),
+            selectedChapters: getIds('list-chapters'),
+            selectedConferences: getIds('list-conferences'),
+
+            selectedOrganizedConferences: getIds('list-ext-conf'),
+            selectedWorkshops: getIds('list-ext-work'),
+            selectedOutreach: getIds('list-ext-outreach')
+        };
+    }
+
+    async function saveConfig() {
+        const data = collectFormData();
+        showStatus('Saving...', 'info');
+        try {
+            const response = await fetch('/api/cv-config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if(response.ok) {
+                showStatus('Configuration saved successfully!', 'success');
+                // Update local config reference
+                currentConfig = data;
+            } else {
+                showStatus('Failed to save.', 'error');
+            }
+        } catch(e) {
+            console.error(e);
+            showStatus('Error saving configuration.', 'error');
+        }
+    }
+
+    async function generateCV() {
+        const data = collectFormData();
+        showStatus('Generating CV...', 'info');
+        document.getElementById('loading').classList.remove('hidden');
+
+        try {
+            // We send the FULL data payload, which acts as a save + generate
+            const response = await fetch('/generate-cv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if(response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'Sandeep_Chaudhary_CV.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                showStatus('CV Generated!', 'success');
+            } else {
+                showStatus('Failed to generate CV.', 'error');
+            }
+        } catch(e) {
+            console.error(e);
+            showStatus('Error generating CV.', 'error');
+        } finally {
+            document.getElementById('loading').classList.add('hidden');
+        }
+    }
+
+    function showStatus(msg, type) {
+        const el = document.getElementById('status');
+        if(type === 'none') {
+            el.classList.add('hidden');
+            return;
+        }
+        el.textContent = msg;
+        el.className = 'mb-6 p-4 rounded-md text-center ' + (type === 'error' ? 'bg-red-100 text-red-800' : (type === 'success' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'));
+        el.classList.remove('hidden');
+        
+        if(type === 'success') setTimeout(() => el.classList.add('hidden'), 3000);
+    }
+
+    // Event Listeners
+    document.getElementById('saveConfigBtn').addEventListener('click', saveConfig);
+    document.getElementById('downloadCV').addEventListener('click', generateCV);
+
+    // Init
+    init();
   </script>
 </body>
 
