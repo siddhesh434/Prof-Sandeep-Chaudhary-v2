@@ -13,6 +13,7 @@ const Book = require("../models/Book");
 const Chapter = require("../models/Chapter");
 const Conference = require("../models/Conference");
 const Dissertation = require("../models/Dissertation");
+const TechnologyTransfer = require("../models/TechnologyTransfer");
 const ExtensionActivity = require("../models/ExtensionActivity");
 
 // Helper: Get or Create Config
@@ -69,7 +70,8 @@ router.get("/api/all-cv-data", async (req, res) => {
             chapters, 
             conferences, 
             dissertations,
-            extensionActivities
+            extensionActivities,
+            technologyTransfers
         ] = await Promise.all([
             Project.find().sort({ year: -1 }),
             Patent.find().sort({ year: -1 }),
@@ -78,8 +80,53 @@ router.get("/api/all-cv-data", async (req, res) => {
             Chapter.find().sort({ year: -1 }),
             Conference.find().sort({ year: -1 }),
             Dissertation.find().sort({ year: -1 }),
-            ExtensionActivity.find().sort({ startDate: -1 })
+            ExtensionActivity.find().sort({ startDate: -1 }),
+            TechnologyTransfer.find().sort({ year: -1 })
         ]);
+
+        // Calculate Statistics
+        const roleGroups = [
+             { label: "As Principal Investigator", matches: ["Principal Investigator", "PI"] },
+             { label: "As Scientific Director", matches: ["Scientific Director"] },
+             { label: "As Scientist Mentor", matches: ["Scientist Mentor", "Mentor"] },
+             { label: "As Co-Principal Investigator", matches: ["Co-Principal Investigator", "Co-PI", "Co-PI/Co-Guide"] },
+             { label: "As Guide", matches: ["Guide"] }
+        ];
+        const normalizeRole = r => r ? r.trim() : "";
+        const isOngoing = (y) => y && (y.toLowerCase().includes('cont') || y.toLowerCase().includes('ongoing') || y.toLowerCase().includes('present'));
+
+        const patentsGranted = patents.filter(p => p.grantNumber).length;
+        const patentsOther = patents.length - patentsGranted;
+        
+        const phds = dissertations.filter(d => d.degree && d.degree.includes('Ph.D'));
+        const phdOngoing = phds.filter(d => isOngoing(d.year)).length;
+        const phdCompleted = phds.length - phdOngoing;
+        
+        const mtechs = dissertations.filter(d => d.degree && (d.degree.includes('M.Tech') || d.degree.includes('M.Sc')));
+        const mtechOngoing = mtechs.filter(d => isOngoing(d.year)).length;
+        const mtechCompleted = mtechs.length - mtechOngoing;
+
+        const projectCounts = roleGroups.map(group => {
+            return projects.filter(p => {
+                const r = normalizeRole(p.role);
+                return group.matches.some(m => r.toLowerCase() === m.toLowerCase()); 
+            }).length;
+        });
+        const projectCountStr = projectCounts.map(c => c.toString().padStart(2, '0')).join('/');
+
+        const calculatedStats = {
+             techTransfer: `${technologyTransfers.length.toString().padStart(2, '0')}/02`, 
+             patents: `${patentsGranted.toString().padStart(2, '0')}/${patentsOther.toString().padStart(2, '0')}/01/01`,
+             journals: publications.filter(p => !p.journal || p.journal !== 'Conference').length.toString(),
+             conferences: conferences.length.toString(),
+             books: books.length.toString().padStart(2, '0'),
+             technicalReports: "01",
+             chapters: chapters.length.toString().padStart(2, '0'),
+             phdSupervision: `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}`,
+             mtechSupervision: `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}`,
+             sponsoredProjects: projects.length.toString(),
+             projectRoles: `(${projectCountStr})`
+        };
 
         res.json({
             projects,
@@ -89,7 +136,9 @@ router.get("/api/all-cv-data", async (req, res) => {
             chapters,
             conferences,
             dissertations,
-            extensionActivities
+            extensionActivities,
+            technologyTransfers,
+            calculatedStats
         });
     } catch (error) {
         console.error("Error fetching all CV data:", error);

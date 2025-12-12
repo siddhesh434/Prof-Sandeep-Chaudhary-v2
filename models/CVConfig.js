@@ -7,7 +7,8 @@ const CVConfigSchema = new mongoose.Schema({
     designation: { type: String, default: "Professor, Department of Civil Engineering" },
     address: { type: String, default: "Indian Institute of Technology Indore, Simrol, Indore-453552, India" },
     email: { type: String, default: "schaudhary@iiti.ac.in" },
-    mobile: { type: String, default: "+91-9549654195" }
+    mobile: { type: String, default: "+91-9549654195" },
+    phone: { type: String, default: "" }
   },
   
   // 2. Qualifications (stored as newline separated text for simplicity in editing)
@@ -33,6 +34,7 @@ const CVConfigSchema = new mongoose.Schema({
   
   // 11. Translational Contributions
   translational: { type: String, default: "" },
+  translationalCustom: [{ title: String, description: String }],
   
   // 12. Professional Affiliations
   affiliations: { type: String, default: "" },
@@ -46,8 +48,29 @@ const CVConfigSchema = new mongoose.Schema({
   // 14. Facilities Established
   facilities: { type: String, default: "" },
   
+  // 15. Workshops, conferences
+  workshopsConferences: { type: String, default: "" },
+
+  // 16. Continuing Education Programs
+  continuingEducation: { type: String, default: "" },
+
   // 17. International Collaborations
   collaborations: { type: String, default: "" },
+
+  // Research Credentials Overrides
+  researchCredentials: {
+      techTransfer: { type: String, default: "" },
+      patents: { type: String, default: "" },
+      journals: { type: String, default: "" },
+      conferences: { type: String, default: "" },
+      books: { type: String, default: "" },
+      technicalReports: { type: String, default: "" },
+      chapters: { type: String, default: "" },
+      phdSupervision: { type: String, default: "" },
+      mtechSupervision: { type: String, default: "" },
+      sponsoredProjects: { type: String, default: "" },
+      projectRoles: { type: String, default: "" }
+  },
 
   // Selected IDs for Dynamic Sections
   // We store array of strings (ObjectIds)
@@ -58,8 +81,6 @@ const CVConfigSchema = new mongoose.Schema({
   selectedChapters: [String],
   selectedConferences: [String], // Proceedings
   selectedDissertations: [String],
-  selectedOrganizedConferences: [String], // Extension Activity
-  selectedWorkshops: [String], // Extension Activity
   selectedOutreach: [String], // Extension Activity
 
   updatedAt: { type: Date, default: Date.now }

@@ -83,86 +83,154 @@
           <!-- Form Container -->
           <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
             
-            <!-- Navigation Tabs -->
-            <div class="flex flex-wrap border-b bg-gray-50">
-                <button class="px-6 py-3 font-medium text-gray-600 hover:bg-gray-100 focus:outline-none border-b-2 border-transparent hover:border-blue-500 active-tab transition-colors" onclick="switchTab('personal')">Personal & Fixed</button>
-                <button class="px-6 py-3 font-medium text-gray-600 hover:bg-gray-100 focus:outline-none border-b-2 border-transparent hover:border-blue-500 transition-colors" onclick="switchTab('text')">Editable Details</button>
-                <button class="px-6 py-3 font-medium text-gray-600 hover:bg-gray-100 focus:outline-none border-b-2 border-transparent hover:border-blue-500 transition-colors" onclick="switchTab('research')">Research Data</button>
-                <button class="px-6 py-3 font-medium text-gray-600 hover:bg-gray-100 focus:outline-none border-b-2 border-transparent hover:border-blue-500 transition-colors" onclick="switchTab('extension')">Extension & Outreach</button>
-            </div>
-
-            <div class="p-6">
-                <!-- Tab: Personal & Fixed -->
-                <div id="tab-personal" class="tab-content block space-y-6">
+            <!-- No Tabs, Single Linear Flow -->
+            <div class="p-6 space-y-10">
+                
+                <!-- 1. Personal Information -->
+                <div>
                     <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">1. Personal Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div><label class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="pi_name" class="w-full border p-2 rounded"></div>
-                        <div><label class="block text-sm font-medium text-gray-700">Designation</label><input type="text" id="pi_designation" class="w-full border p-2 rounded"></div>
+                        <div><label class="block text-sm font-medium text-gray-700">Designation</label><textarea id="pi_designation" class="w-full border p-2 rounded" rows="2"></textarea></div>
                         <div><label class="block text-sm font-medium text-gray-700">Email</label><input type="text" id="pi_email" class="w-full border p-2 rounded"></div>
                         <div><label class="block text-sm font-medium text-gray-700">Mobile</label><input type="text" id="pi_mobile" class="w-full border p-2 rounded"></div>
-                        <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700">Address</label><input type="text" id="pi_address" class="w-full border p-2 rounded"></div>
-                    </div>
-
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4 mt-8">Fixed Sections (Plain Text)</h3>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">2. Academic & Research Qualifications</label>
-                        <p class="text-xs text-gray-500 mb-2">Format: Degree - Institute (Year) - Details</p>
-                        <textarea id="txt_qualifications" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">3. Work Experience</label>
-                        <textarea id="txt_experience" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">13. Administrative Positions Held</label>
-                        <textarea id="txt_adminPositions" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
+                        <div><label class="block text-sm font-medium text-gray-700">Office Number</label><input type="text" id="pi_phone" class="w-full border p-2 rounded"></div>
+                        <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700">Address</label><textarea id="pi_address" class="w-full border p-2 rounded" rows="3"></textarea></div>
                     </div>
                 </div>
 
-                <!-- Tab: Editable Details -->
-                <div id="tab-text" class="tab-content hidden space-y-6">
-                     <div class="grid grid-cols-1 gap-6">
-                        <div><label class="block font-medium mb-1">4. Specialization</label><textarea id="specialization" rows="3" class="w-full border p-2 rounded"></textarea></div>
-                        <div><label class="block font-medium mb-1">6. Courses Taught</label><textarea id="coursesTaught" rows="3" class="w-full border p-2 rounded"></textarea></div>
-                        <div><label class="block font-medium mb-1">7. Awards/ Achievements</label><textarea id="awards" rows="3" class="w-full border p-2 rounded"></textarea></div>
-                        <div><label class="block font-medium mb-1">11. Translational Contributions</label><textarea id="translational" rows="3" class="w-full border p-2 rounded"></textarea></div>
-                        <div><label class="block font-medium mb-1">12. Professional Affiliations</label><textarea id="affiliations" rows="3" class="w-full border p-2 rounded"></textarea></div>
-                        <div><label class="block font-medium mb-1">14. Facilities Established</label><textarea id="facilities" rows="3" class="w-full border p-2 rounded"></textarea></div>
-                        <div><label class="block font-medium mb-1">17. International Collaborations</label><textarea id="collaborations" rows="3" class="w-full border p-2 rounded"></textarea></div>
-                     </div>
+                <!-- 2. Qualifications -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">2. Academic & Research Qualifications</label>
+                    <p class="text-xs text-gray-500 mb-2">Format: Degree - Institute (Year) - Details</p>
+                    <textarea id="txt_qualifications" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
                 </div>
 
-                <!-- Tab: Research Data Selector -->
-                <div id="tab-research" class="tab-content hidden space-y-8">
-                     <!-- 8. Projects -->
-                     <div class="selector-group">
-                         <div class="flex justify-between items-center mb-2">
-                             <h4 class="font-bold">8. Research Projects</h4>
-                             <div class="flex items-center gap-2">
-                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-projects', this.checked)" class="mr-1">Select All</label>
-                                <input type="text" onkeyup="filterList('list-projects', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
-                             </div>
-                         </div>
-                         <div id="list-projects" class="border rounded h-48 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
-                     </div>
+                <!-- 3. Work Experience -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">3. Work Experience</label>
+                    <textarea id="txt_experience" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
+                </div>
 
-                     <!-- 9. Patents -->
-                     <div class="selector-group">
-                         <div class="flex justify-between items-center mb-2">
-                             <h4 class="font-bold">9. Patents</h4>
-                             <div class="flex items-center gap-2">
-                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-patents', this.checked)" class="mr-1">Select All</label>
-                                <input type="text" onkeyup="filterList('list-patents', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
-                             </div>
-                         </div>
-                         <div id="list-patents" class="border rounded h-48 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
-                     </div>
+                <!-- 4. Specialization -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">4. Specialization</label>
+                    <textarea id="specialization" rows="3" class="w-full border p-2 rounded"></textarea>
+                </div>
 
-                     <!-- 10. Publications (Grouped) -->
+                <!-- 5. Research Credentials -->
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">5. Research Credentials (Summary)</h3>
+                    <div class="flex justify-between items-end mb-2">
+                        <p class="text-sm text-gray-500">Auto-calculated counts. Edit manually if needed.</p>
+                        <button type="button" onclick="populateCredentialsFromDB()" class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded hover:bg-blue-100">Reset to DB Values</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded border">
+                        <div><label class="block text-xs font-medium text-gray-600">Tech Transfer/Translational</label><input type="text" id="rc_techTransfer" class="w-full border p-1 rounded text-sm" placeholder="e.g. 01/02"></div>
+                        <div><label class="block text-xs font-medium text-gray-600">Patents (Granted/Pub/Filed/Process)</label><input type="text" id="rc_patents" class="w-full border p-1 rounded text-sm" placeholder="e.g. 02/02/01/01"></div>
+                        <div><label class="block text-xs font-medium text-gray-600">SCIE/Scopus Journals</label><input type="text" id="rc_journals" class="w-full border p-1 rounded text-sm" placeholder="e.g. 119"></div>
+                        <div><label class="block text-xs font-medium text-gray-600">Conference Proceedings</label><input type="text" id="rc_conferences" class="w-full border p-1 rounded text-sm" placeholder="e.g. 76"></div>
+                        <div><label class="block text-xs font-medium text-gray-600">Books Authored/Edited</label><input type="text" id="rc_books" class="w-full border p-1 rounded text-sm" placeholder="e.g. 08"></div>
+                        <div><label class="block text-xs font-medium text-gray-600">Technical Reports</label><input type="text" id="rc_technicalReports" class="w-full border p-1 rounded text-sm" placeholder="e.g. 01"></div>
+                        <div><label class="block text-xs font-medium text-gray-600">Book/Video Chapters</label><input type="text" id="rc_chapters" class="w-full border p-1 rounded text-sm" placeholder="e.g. 05"></div>
+                        <div><label class="block text-xs font-medium text-gray-600">Ph.D. Supervision (Comp/Ongoing)</label><input type="text" id="rc_phdSupervision" class="w-full border p-1 rounded text-sm" placeholder="e.g. 15/08"></div>
+                        <div><label class="block text-xs font-medium text-gray-600">MTech/MSc Thesis (Awarded/Ongoing)</label><input type="text" id="rc_mtechSupervision" class="w-full border p-1 rounded text-sm" placeholder="e.g. 39/06"></div>
+                        <div><label class="block text-xs font-medium text-gray-600">Sponsored Projects (Total)</label><input type="text" id="rc_sponsoredProjects" class="w-full border p-1 rounded text-sm" placeholder="e.g. 27"></div>
+                        <div class="md:col-span-2"><label class="block text-xs font-medium text-gray-600">Project Roles Breakdown (PI/SD/Mentor/Co-PI/Guide)</label><input type="text" id="rc_projectRoles" class="w-full border p-1 rounded text-sm" placeholder="e.g. (13/01/05/02/06)"></div>
+                    </div>
+                </div>
+
+                <!-- 6. Courses Taught -->
+                <div>
+                     <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">6. Courses Taught</label>
+                     <textarea id="coursesTaught" rows="3" class="w-full border p-2 rounded"></textarea>
+                </div>
+
+                <!-- 7. Awards -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">7. Awards/ Achievements</label>
+                    <textarea id="awards" rows="3" class="w-full border p-2 rounded"></textarea>
+                </div>
+
+                <!-- 8. Projects (Grouped) -->
+                <div class="space-y-4">
+                    <h4 class="text-lg font-bold text-gray-800">8. List of sponsored research projects</h4>
+                    
+                    <!-- PI -->
+                    <div class="ml-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h5 class="font-semibold text-gray-700">As Principal Investigator</h5>
+                            <div class="flex items-center gap-2">
+                               <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-projects-pi', this.checked)" class="mr-1">Select All</label>
+                            </div>
+                        </div>
+                        <div id="list-projects-pi" class="border rounded h-32 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                    </div>
+
+                    <!-- Co-PI -->
+                    <div class="ml-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h5 class="font-semibold text-gray-700">As Co-Principal Investigator</h5>
+                            <div class="flex items-center gap-2">
+                               <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-projects-copi', this.checked)" class="mr-1">Select All</label>
+                            </div>
+                        </div>
+                        <div id="list-projects-copi" class="border rounded h-32 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                    </div>
+
+                    <!-- Scientific Director -->
+                    <div class="ml-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h5 class="font-semibold text-gray-700">As Scientific Director</h5>
+                            <div class="flex items-center gap-2">
+                               <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-projects-sd', this.checked)" class="mr-1">Select All</label>
+                            </div>
+                        </div>
+                        <div id="list-projects-sd" class="border rounded h-32 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                    </div>
+
+                    <!-- Mentor -->
+                    <div class="ml-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h5 class="font-semibold text-gray-700">As Scientist Mentor</h5>
+                            <div class="flex items-center gap-2">
+                               <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-projects-mentor', this.checked)" class="mr-1">Select All</label>
+                            </div>
+                        </div>
+                        <div id="list-projects-mentor" class="border rounded h-32 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                    </div>
+
+                    <!-- Guide -->
+                     <div class="ml-4">
+                        <div class="flex justify-between items-center mb-1">
+                            <h5 class="font-semibold text-gray-700">As a Guide</h5>
+                            <div class="flex items-center gap-2">
+                               <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-projects-guide', this.checked)" class="mr-1">Select All</label>
+                            </div>
+                        </div>
+                        <div id="list-projects-guide" class="border rounded h-32 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- 9. Patents -->
+                <div class="selector-group">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-lg font-bold text-gray-800">9. Patents</h4>
+                        <div class="flex items-center gap-2">
+                           <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-patents', this.checked)" class="mr-1">Select All</label>
+                           <input type="text" onkeyup="filterList('list-patents', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
+                        </div>
+                    </div>
+                    <div id="list-patents" class="border rounded h-48 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                </div>
+
+                <!-- 10. List of publications -->
+                <div>
+                     <h4 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">10. List of publications</h4>
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                          <div>
                              <div class="flex justify-between items-center mb-2">
-                                 <h4 class="font-bold">Books</h4>
+                                 <h4 class="font-semibold">Books Published <span id="count-books" class="text-gray-500 font-normal">(0)</span></h4>
                                  <div class="flex items-center gap-2">
                                     <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-books', this.checked)" class="mr-1">All</label>
                                     <input type="text" onkeyup="filterList('list-books', this.value)" placeholder="Search..." class="border p-1 text-xs w-32 rounded">
@@ -172,7 +240,7 @@
                          </div>
                          <div>
                              <div class="flex justify-between items-center mb-2">
-                                 <h4 class="font-bold">Journal Articles</h4>
+                                 <h4 class="font-semibold">SCI/ SCI-E Journal Publications <span id="count-journals" class="text-gray-500 font-normal">(0)</span></h4>
                                  <div class="flex items-center gap-2">
                                     <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-journals', this.checked)" class="mr-1">All</label>
                                     <input type="text" onkeyup="filterList('list-journals', this.value)" placeholder="Search..." class="border p-1 text-xs w-32 rounded">
@@ -182,17 +250,7 @@
                          </div>
                          <div>
                              <div class="flex justify-between items-center mb-2">
-                                 <h4 class="font-bold">Book Chapters</h4>
-                                 <div class="flex items-center gap-2">
-                                    <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-chapters', this.checked)" class="mr-1">All</label>
-                                    <input type="text" onkeyup="filterList('list-chapters', this.value)" placeholder="Search..." class="border p-1 text-xs w-32 rounded">
-                                 </div>
-                             </div>
-                             <div id="list-chapters" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
-                         </div>
-                         <div>
-                             <div class="flex justify-between items-center mb-2">
-                                 <h4 class="font-bold">Conference Proceedings</h4>
+                                 <h4 class="font-semibold">Conference publications <span id="count-conferences" class="text-gray-500 font-normal">(0)</span></h4>
                                  <div class="flex items-center gap-2">
                                     <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-conferences', this.checked)" class="mr-1">All</label>
                                     <input type="text" onkeyup="filterList('list-conferences', this.value)" placeholder="Search..." class="border p-1 text-xs w-32 rounded">
@@ -200,49 +258,118 @@
                              </div>
                              <div id="list-conferences" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
                          </div>
+                         <div>
+                             <div class="flex justify-between items-center mb-2">
+                                 <h4 class="font-semibold">Chapters/Video Chapters Published <span id="count-chapters" class="text-gray-500 font-normal">(0)</span></h4>
+                                 <div class="flex items-center gap-2">
+                                    <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-chapters', this.checked)" class="mr-1">All</label>
+                                    <input type="text" onkeyup="filterList('list-chapters', this.value)" placeholder="Search..." class="border p-1 text-xs w-32 rounded">
+                                 </div>
+                             </div>
+                             <div id="list-chapters" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                         </div>
                      </div>
-                     
-
                 </div>
 
-                <!-- Tab: Extension & Outreach -->
-                <div id="tab-extension" class="tab-content hidden space-y-6">
-                    <p class="text-sm text-gray-600 mb-4 bg-blue-50 p-2 rounded">Select items to display in the respective sections. Items are filtered by their Role category.</p>
-
-                    <!-- 15. Conferences Organised -->
-                    <div class="selector-group">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-bold">15. Conferences Organised</h4>
-                            <div class="flex items-center gap-2">
-                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-ext-conf', this.checked)" class="mr-1">Select All</label>
-                                <input type="text" onkeyup="filterList('list-ext-conf', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
-                            </div>
-                        </div>
-                        <div id="list-ext-conf" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                <!-- 11. Translational Contributions -->
+                <div>
+                     <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">11. Translational Contributions</h3>
+                     
+                     <!-- Custom Items -->
+                     <div class="mb-6 bg-gray-50 p-4 rounded border">
+                        <label class="block font-medium mb-1">Custom Contributions</label>
+                        <p class="text-xs text-gray-500 mb-2">Add contributions with Title and Description.</p>
+                        <div id="container-trans-custom" class="space-y-4 mb-2"></div>
+                        <button type="button" onclick="addTranslationalItem()" class="text-sm bg-green-50 text-green-600 px-3 py-1 rounded border border-green-200 hover:bg-green-100">+ Add Contribution</button>
                     </div>
 
-                    <!-- 16. Workshops -->
+                    <!-- DB Items Selector -->
                     <div class="selector-group">
                         <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-bold">16. Workshops (Continuing Education)</h4>
+                            <h4 class="font-semibold text-gray-700">Select Detailed Items from Tech Transfer Database</h4>
                             <div class="flex items-center gap-2">
-                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-ext-work', this.checked)" class="mr-1">Select All</label>
-                                <input type="text" onkeyup="filterList('list-ext-work', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
+                               <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-tech-transfers', this.checked)" class="mr-1">Select All</label>
+                               <input type="text" onkeyup="filterList('list-tech-transfers', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
                             </div>
                         </div>
-                        <div id="list-ext-work" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                        <div id="list-tech-transfers" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- 12. Professional Affiliations -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">12. Professional Affiliations</label>
+                    <textarea id="affiliations" rows="3" class="w-full border p-2 rounded"></textarea>
+                </div>
+
+                <!-- 13. Admin Positions -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">13. Administrative Positions Held</label>
+                    <textarea id="txt_adminPositions" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
+                </div>
+
+                <!-- 14. Facilities -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">14. Facilities and Centres established</label>
+                    <textarea id="facilities" rows="3" class="w-full border p-2 rounded"></textarea>
+                </div>
+
+                <!-- 15. Workshops, Conferences -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">15. Workshops, conferences</label>
+                    <textarea id="workshopsConferences" rows="3" class="w-full border p-2 rounded" placeholder="Enter details here..."></textarea>
+                </div>
+
+                <!-- 16. Continuing Education -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">16. Continuing Education Programs</label>
+                    <textarea id="continuingEducation" rows="3" class="w-full border p-2 rounded" placeholder="Enter details here..."></textarea>
+                </div>
+
+                <!-- 17. Collaborations -->
+                <div>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">17. International Collaborations</label>
+                    <textarea id="collaborations" rows="3" class="w-full border p-2 rounded"></textarea>
+                </div>
+
+                <!-- 18. Outreach -->
+                <div class="selector-group space-y-4">
+                    <h4 class="text-lg font-bold text-gray-800 border-b pb-2">18. Major Outreach (Govt/Intl/Natl Contributions)</h4>
+                    
+                    <!-- Govt -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                             <h5 class="font-semibold text-gray-700">Government Advisory Roles</h5>
+                             <div class="flex items-center gap-2">
+                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-outreach-govt', this.checked)" class="mr-1">All</label>
+                                <input type="text" onkeyup="filterList('list-outreach-govt', this.value)" placeholder="Search..." class="border p-1 rounded text-xs w-32">
+                             </div>
+                        </div>
+                        <div id="list-outreach-govt" class="border rounded h-32 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
                     </div>
 
-                    <!-- 18. Outreach -->
-                    <div class="selector-group">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-bold">18. Major Outreach (Govt/Intl/Natl Contributions)</h4>
-                            <div class="flex items-center gap-2">
-                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-ext-outreach', this.checked)" class="mr-1">Select All</label>
-                                <input type="text" onkeyup="filterList('list-ext-outreach', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
-                            </div>
+                    <!-- Intl -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                             <h5 class="font-semibold text-gray-700">International Contributions</h5>
+                             <div class="flex items-center gap-2">
+                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-outreach-intl', this.checked)" class="mr-1">All</label>
+                                <input type="text" onkeyup="filterList('list-outreach-intl', this.value)" placeholder="Search..." class="border p-1 rounded text-xs w-32">
+                             </div>
                         </div>
-                        <div id="list-ext-outreach" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                        <div id="list-outreach-intl" class="border rounded h-32 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
+                    </div>
+
+                    <!-- Natl -->
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                             <h5 class="font-semibold text-gray-700">National Contributions</h5>
+                             <div class="flex items-center gap-2">
+                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-outreach-natl', this.checked)" class="mr-1">All</label>
+                                <input type="text" onkeyup="filterList('list-outreach-natl', this.value)" placeholder="Search..." class="border p-1 rounded text-xs w-32">
+                             </div>
+                        </div>
+                        <div id="list-outreach-natl" class="border rounded h-32 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
                     </div>
                 </div>
 
@@ -251,19 +378,8 @@
 
   <script>
     // --- UI Logic ---
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        document.getElementById('tab-' + tabId).classList.remove('hidden');
-        
-        document.querySelectorAll('button[onclick^="switchTab"]').forEach(btn => {
-            btn.classList.remove('active-tab', 'border-blue-500', 'text-blue-600');
-            btn.classList.add('border-transparent');
-        });
-        
-        const activeBtn = document.querySelector(`button[onclick="switchTab('${tabId}')"]`);
-        activeBtn.classList.add('active-tab', 'border-blue-500', 'text-blue-600');
-        activeBtn.classList.remove('border-transparent');
-    }
+    // --- UI Logic ---
+    // switchTab removed as we now have a single linear view.
 
     function toggleAll(listId, checked) {
         const list = document.getElementById(listId);
@@ -295,13 +411,14 @@
         }
 
         container.innerHTML = items.map(item => {
-            const isChecked = preSelectedIds.includes(item[idKey]) ? 'checked' : '';
+            const isChecked = preSelectedIds && preSelectedIds.includes(item[idKey]) ? 'checked' : '';
             // Simplify label for display
              let label = item[labelKey];
              if(containerId.includes('project')) label = `${item.title} (${item.year})`;
              if(containerId.includes('patent')) label = item.title;
+             if(containerId.includes('tech-transfers')) label = item.title;
              if(containerId.includes('pub') || containerId.includes('book') || containerId.includes('journal')) label = `${item.title} (${item.year})`;
-             if(containerId.includes('ext-outreach')) label = `[${item.role}] ${item.title} - ${item.description || ''}`;
+             if(containerId.includes('outreach')) label = `${item.title} - ${item.description || ''}`;
 
             return `
                 <label class="select-item flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer text-sm border-b border-gray-100 last:border-0">
@@ -347,8 +464,25 @@
             document.getElementById('pi_designation').value = currentConfig.personalInfo.designation || '';
             document.getElementById('pi_email').value = currentConfig.personalInfo.email || '';
             document.getElementById('pi_mobile').value = currentConfig.personalInfo.mobile || '';
+            document.getElementById('pi_phone').value = currentConfig.personalInfo.phone || '';
             document.getElementById('pi_address').value = currentConfig.personalInfo.address || '';
         }
+
+        // Research Credentials (saved or default to calculated if config is empty)
+        const rc = currentConfig.researchCredentials || {};
+        const stats = allData.calculatedStats || {};
+        
+        document.getElementById('rc_techTransfer').value = rc.techTransfer || stats.techTransfer || '00/00';
+        document.getElementById('rc_patents').value = rc.patents || stats.patents || '00/00/00/00';
+        document.getElementById('rc_journals').value = rc.journals || stats.journals || '0';
+        document.getElementById('rc_conferences').value = rc.conferences || stats.conferences || '0';
+        document.getElementById('rc_books').value = rc.books || stats.books || '00';
+        document.getElementById('rc_technicalReports').value = rc.technicalReports || stats.technicalReports || '01'; // Default
+        document.getElementById('rc_chapters').value = rc.chapters || stats.chapters || '00';
+        document.getElementById('rc_phdSupervision').value = rc.phdSupervision || stats.phdSupervision || '00/00';
+        document.getElementById('rc_mtechSupervision').value = rc.mtechSupervision || stats.mtechSupervision || '00/00';
+        document.getElementById('rc_sponsoredProjects').value = rc.sponsoredProjects || stats.sponsoredProjects || '0';
+        document.getElementById('rc_projectRoles').value = rc.projectRoles || stats.projectRoles || '(00)';
         
         // Fixed Text
         document.getElementById('txt_qualifications').value = currentConfig.qualifications || '';
@@ -359,29 +493,98 @@
         document.getElementById('specialization').value = currentConfig.specialization || '';
         document.getElementById('coursesTaught').value = currentConfig.coursesTaught || '';
         document.getElementById('awards').value = currentConfig.awards || '';
-        document.getElementById('translational').value = currentConfig.translational || '';
+        // document.getElementById('translational').value = currentConfig.translational || ''; // Removed single text
+        
+        // Populate Custom Translational Items
+        document.getElementById('container-trans-custom').innerHTML = ''; // Clear first
+        if(currentConfig.translationalCustom && currentConfig.translationalCustom.length > 0) {
+            currentConfig.translationalCustom.forEach(item => addTranslationalItem(item.title, item.description));
+        } else {
+             // Maybe add one empty? Or none.
+        }
+
         document.getElementById('affiliations').value = currentConfig.affiliations || '';
         document.getElementById('facilities').value = currentConfig.facilities || '';
+        document.getElementById('workshopsConferences').value = currentConfig.workshopsConferences || '';
+        document.getElementById('continuingEducation').value = currentConfig.continuingEducation || '';
         document.getElementById('collaborations').value = currentConfig.collaborations || '';
     }
 
+    function addTranslationalItem(title = '', desc = '') {
+        const container = document.getElementById('container-trans-custom');
+        const id = Date.now();
+        const div = document.createElement('div');
+        div.className = "p-3 border rounded bg-gray-50 flex flex-col gap-2 relative trans-item";
+        div.innerHTML = `
+            <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-xs font-bold">✕ Remove</button>
+            <div>
+                <label class="block text-xs font-bold text-gray-700">Title / Header</label>
+                <input type="text" class="trans-title w-full border p-1 rounded text-sm" value="${title}" placeholder="e.g. Naturally Colored Bi-layer Bricks (2021-2022)">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-700">Description (Paragraph)</label>
+                <textarea class="trans-desc w-full border p-1 rounded text-sm" rows="3" placeholder="Description of the technology...">${desc}</textarea>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    function populateCredentialsFromDB() {
+        const stats = allData.calculatedStats || {};
+        document.getElementById('rc_techTransfer').value = stats.techTransfer || '00/00';
+        document.getElementById('rc_patents').value = stats.patents || '00/00/00/00';
+        document.getElementById('rc_journals').value = stats.journals || '0';
+        document.getElementById('rc_conferences').value = stats.conferences || '0';
+        document.getElementById('rc_books').value = stats.books || '00';
+        document.getElementById('rc_technicalReports').value = stats.technicalReports || '01';
+        document.getElementById('rc_chapters').value = stats.chapters || '00';
+        document.getElementById('rc_phdSupervision').value = stats.phdSupervision || '00/00';
+        document.getElementById('rc_mtechSupervision').value = stats.mtechSupervision || '00/00';
+        document.getElementById('rc_sponsoredProjects').value = stats.sponsoredProjects || '0';
+        document.getElementById('rc_projectRoles').value = stats.projectRoles || '(00)';
+    }
+
     function renderAllLists() {
-        renderList('list-projects', allData.projects, 'title', '_id', currentConfig.selectedProjects);
+        // Project Grouping Logic
+        // Project Grouping Logic
+        const pPI = [], pCoPI = [], pSD = [], pMentor = [], pGuide = [];
+        allData.projects.forEach(p => {
+             const r = p.role ? p.role.trim().toLowerCase() : '';
+             if(['principal investigator', 'pi', 'as principal investigator'].includes(r)) pPI.push(p);
+             else if(['co-principal investigator', 'co-pi', 'co-pi/co-guide', 'as co-principal investigator'].includes(r)) pCoPI.push(p);
+             else if(['scientific director', 'as scientific director'].includes(r)) pSD.push(p);
+             else if(['scientist mentor', 'mentor', 'as scientist mentor'].includes(r)) pMentor.push(p);
+             else pGuide.push(p); // Catch-all "Other" => "As a Guide" as requested
+        });
+
+        renderList('list-projects-pi', pPI, 'title', '_id', currentConfig.selectedProjects);
+        renderList('list-projects-copi', pCoPI, 'title', '_id', currentConfig.selectedProjects);
+        renderList('list-projects-sd', pSD, 'title', '_id', currentConfig.selectedProjects);
+        renderList('list-projects-mentor', pMentor, 'title', '_id', currentConfig.selectedProjects);
+        renderList('list-projects-guide', pGuide, 'title', '_id', currentConfig.selectedProjects);
+
         renderList('list-patents', allData.patents, 'title', '_id', currentConfig.selectedPatents);
+        renderList('list-tech-transfers', allData.technologyTransfers, 'title', '_id', currentConfig.selectedTechTransfers);
         renderList('list-books', allData.books, 'title', '_id', currentConfig.selectedBooks);
         renderList('list-journals', allData.publications.filter(p => !p.journal || p.journal !== 'Conference'), 'title', '_id', currentConfig.selectedJournals); 
         renderList('list-chapters', allData.chapters, 'chapterName', '_id', currentConfig.selectedChapters); 
         renderList('list-conferences', allData.conferences, 'title', '_id', currentConfig.selectedConferences); 
 
-
         // Filter Extension Activities
-        const confOrg = allData.extensionActivities.filter(a => a.role === 'Conference organised');
-        const workshops = allData.extensionActivities.filter(a => a.role === 'Workshop organised');
-        const outreach = allData.extensionActivities.filter(a => ['Government Advisory Roles', 'International Contributions', 'National Contributions'].includes(a.role));
+        // Only Outreach remains as list.
+        const outreachGovt = allData.extensionActivities.filter(a => a.role === 'Government Advisory Roles');
+        const outreachIntl = allData.extensionActivities.filter(a => a.role === 'International Contributions');
+        const outreachNatl = allData.extensionActivities.filter(a => a.role === 'National Contributions');
 
-        renderList('list-ext-conf', confOrg, 'title', '_id', currentConfig.selectedOrganizedConferences);
-        renderList('list-ext-work', workshops, 'title', '_id', currentConfig.selectedWorkshops);
-        renderList('list-ext-outreach', outreach, 'title', '_id', currentConfig.selectedOutreach);
+        renderList('list-outreach-govt', outreachGovt, 'title', '_id', currentConfig.selectedOutreach);
+        renderList('list-outreach-intl', outreachIntl, 'title', '_id', currentConfig.selectedOutreach);
+        renderList('list-outreach-natl', outreachNatl, 'title', '_id', currentConfig.selectedOutreach);
+
+        // Update Counts
+        if(document.getElementById('count-books')) document.getElementById('count-books').innerText = `(${allData.books.length})`;
+        if(document.getElementById('count-journals')) document.getElementById('count-journals').innerText = `(${allData.publications.length})`;
+        if(document.getElementById('count-chapters')) document.getElementById('count-chapters').innerText = `(${allData.chapters.length})`;
+        if(document.getElementById('count-conferences')) document.getElementById('count-conferences').innerText = `(${allData.conferences.length})`;
     }
 
     function collectFormData() {
@@ -396,6 +599,7 @@
                 designation: document.getElementById('pi_designation').value.trim(),
                 email: document.getElementById('pi_email').value.trim(),
                 mobile: document.getElementById('pi_mobile').value.trim(),
+                phone: document.getElementById('pi_phone').value.trim(),
                 address: document.getElementById('pi_address').value.trim()
             },
             qualifications: document.getElementById('txt_qualifications').value,
@@ -405,22 +609,61 @@
             specialization: document.getElementById('specialization').value.trim(),
             coursesTaught: document.getElementById('coursesTaught').value.trim(),
             awards: document.getElementById('awards').value.trim(),
-            translational: document.getElementById('translational').value.trim(),
+            // translational: document.getElementById('translational').value.trim(), // Removed
             affiliations: document.getElementById('affiliations').value.trim(),
             facilities: document.getElementById('facilities').value.trim(),
+            workshopsConferences: document.getElementById('workshopsConferences').value,
+            continuingEducation: document.getElementById('continuingEducation').value,
             collaborations: document.getElementById('collaborations').value.trim(),
+            
+            translationalCustom: getTranslationalItems(),
 
-            selectedProjects: getIds('list-projects'),
+            researchCredentials: {
+                techTransfer: document.getElementById('rc_techTransfer').value.trim(),
+                patents: document.getElementById('rc_patents').value.trim(),
+                journals: document.getElementById('rc_journals').value.trim(),
+                conferences: document.getElementById('rc_conferences').value.trim(),
+                books: document.getElementById('rc_books').value.trim(),
+                technicalReports: document.getElementById('rc_technicalReports').value.trim(),
+                chapters: document.getElementById('rc_chapters').value.trim(),
+                phdSupervision: document.getElementById('rc_phdSupervision').value.trim(),
+                mtechSupervision: document.getElementById('rc_mtechSupervision').value.trim(),
+                sponsoredProjects: document.getElementById('rc_sponsoredProjects').value.trim(),
+                projectRoles: document.getElementById('rc_projectRoles').value.trim()
+            },
+
+            selectedProjects: [
+                ...getIds('list-projects-pi'),
+                ...getIds('list-projects-copi'),
+                ...getIds('list-projects-sd'),
+                ...getIds('list-projects-mentor'),
+                ...getIds('list-projects-guide')
+            ],
             selectedPatents: getIds('list-patents'),
+            selectedTechTransfers: getIds('list-tech-transfers'),
             selectedBooks: getIds('list-books'),
             selectedJournals: getIds('list-journals'),
             selectedChapters: getIds('list-chapters'),
             selectedConferences: getIds('list-conferences'),
 
-            selectedOrganizedConferences: getIds('list-ext-conf'),
-            selectedWorkshops: getIds('list-ext-work'),
-            selectedOutreach: getIds('list-ext-outreach')
+            selectedOutreach: [
+                ...getIds('list-outreach-govt'),
+                ...getIds('list-outreach-intl'),
+                ...getIds('list-outreach-natl')
+            ]
         };
+    }
+
+    function getTranslationalItems() {
+        const items = [];
+        document.querySelectorAll('.trans-item').forEach(div => {
+             const title = div.querySelector('.trans-title').value.trim();
+             const desc = div.querySelector('.trans-desc').value.trim();
+             if(title || desc) {
+                 items.push({ title, description: desc });
+             }
+        });
+        return items;
     }
 
     async function saveConfig() {
