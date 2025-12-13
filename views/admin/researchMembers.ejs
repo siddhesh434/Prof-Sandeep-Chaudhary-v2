@@ -136,7 +136,7 @@
                 />
               </div>
 
-              </form>
+
 
               <div class="flex flex-col">
                 <label class="mb-2 text-gray-700" for="year"> Year</label>
@@ -180,16 +180,36 @@
               </div>
 
               <div class="flex flex-col md:col-span-2">
-                <label class="mb-2 text-gray-700" for="photoUrl"
-                  >Photo URL</label
+                <label class="mb-2 text-gray-700" for="photo"
+                  >Member Photo</label
                 >
-                <input
-                  type="url"
-                  id="photoUrl"
-                  name="photoUrl"
-                  class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                  placeholder="https://example.com/photo.jpg"
-                />
+                <div class="flex items-center space-x-4">
+                  <div class="flex-grow">
+                    <input
+                      type="file"
+                      id="photo"
+                      name="photo"
+                      accept="image/*"
+                      class="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                    />
+                    <p class="text-xs text-gray-500 mt-1">
+                      Upload an image (JPG, PNG, GIF). Max size 5MB.
+                    </p>
+                  </div>
+                  <div
+                    id="photoPreviewContainer"
+                    class="w-16 h-16 bg-gray-200 rounded-full overflow-hidden flex-shrink-0 border border-gray-300 hidden"
+                  >
+                    <img
+                      id="photoPreview"
+                      src=""
+                      alt="Preview"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <!-- Hidden input to store existing photo URL during edit -->
+                <input type="hidden" id="existingPhotoUrl" name="photoUrl" />
               </div>
 
               <div class="col-span-1 md:col-span-2 flex space-x-4">
@@ -323,9 +343,35 @@
       const sidebar = document.getElementById("sidebar");
       const sidebarOverlay = document.getElementById("sidebar-overlay");
       const mobileFab = document.getElementById("mobile-fab");
-
+      const photoInput = document.getElementById("photo");
+      const photoPreviewContainer = document.getElementById("photoPreviewContainer");
+      const photoPreview = document.getElementById("photoPreview");
+      const existingPhotoUrlInput = document.getElementById("existingPhotoUrl");
+      
       let currentDeletingMemberId = null;
       let members = []; // Store research members for filtering
+
+      // Image Preview Logic
+      photoInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            photoPreview.src = e.target.result;
+            photoPreviewContainer.classList.remove("hidden");
+          };
+          reader.readAsDataURL(file);
+        } else {
+            // If no file selected, check if we have an existing photo to show
+             if (existingPhotoUrlInput.value) {
+                photoPreview.src = existingPhotoUrlInput.value;
+                photoPreviewContainer.classList.remove("hidden");
+            } else {
+                photoPreview.src = "";
+                photoPreviewContainer.classList.add("hidden");
+            }
+        }
+      });
 
       // Mobile menu toggle functionality
       function openSidebar() {
@@ -579,22 +625,24 @@
 
         if (!validateForm()) return;
 
-        const memberData = {
-          name: document.getElementById("name").value.trim(),
-          position: document.getElementById("position").value.trim(),
-          scholarLink: document.getElementById("scholarLink").value.trim(),
-          scholarTopic: document.getElementById("scholarTopic").value.trim(),
-          year: document.getElementById("year").value.trim(),
-          type: document.getElementById("type").value,
-          status: document.getElementById("status").value,
-          photoUrl: document.getElementById("photoUrl").value.trim(),
-        };
+        const formData = new FormData();
+        formData.append("name", document.getElementById("name").value.trim());
+        formData.append("position", document.getElementById("position").value.trim());
+        formData.append("scholarLink", document.getElementById("scholarLink").value.trim());
+        formData.append("scholarTopic", document.getElementById("scholarTopic").value.trim());
+        formData.append("year", document.getElementById("year").value.trim());
+        formData.append("type", document.getElementById("type").value);
+        formData.append("status", document.getElementById("status").value);
+        
+        const photoFile = document.getElementById("photo").files[0];
+        if (photoFile) {
+          formData.append("photo", photoFile);
+        }
 
         try {
           const response = await fetch("/members", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(memberData),
+            body: formData, // No Content-Type header needed, browser sets it with boundary
           });
 
           if (!response.ok) {
@@ -606,6 +654,8 @@
 
           await fetchMembers();
           form.reset();
+          photoPreviewContainer.classList.add("hidden");
+          existingPhotoUrlInput.value = "";
 
           // Show success notification
           showNotification("Member added successfully!", "success");
@@ -666,14 +716,24 @@
 
           document.getElementById("name").value = member.name;
           document.getElementById("position").value = member.position;
-          document.getElementById("scholarLink").value =
-            member.scholarLink || "";
+          document.getElementById("scholarLink").value = member.scholarLink || "";
           document.getElementById("scholarTopic").value = member.scholarTopic;
           document.getElementById("year").value = member.year || "";
           document.getElementById("type").value = member.type;
           document.getElementById("status").value = member.status || "Current";
-          document.getElementById("photoUrl").value = member.photoUrl || "";
           document.getElementById("memberId").value = member._id;
+          
+          // Handle Photo Preview
+          existingPhotoUrlInput.value = member.photoUrl || "";
+          if (member.photoUrl) {
+            photoPreview.src = member.photoUrl;
+            photoPreviewContainer.classList.remove("hidden");
+          } else {
+            photoPreviewContainer.classList.add("hidden");
+          }
+          
+          // Clear file input
+          document.getElementById("photo").value = "";
 
           addButton.classList.add("hidden");
           updateButton.classList.remove("hidden");
@@ -690,6 +750,9 @@
       // Cancel Edit
       cancelEditButton.addEventListener("click", () => {
         form.reset();
+        photoPreviewContainer.classList.add("hidden");
+        existingPhotoUrlInput.value = "";
+        
         addButton.classList.remove("hidden");
         updateButton.classList.add("hidden");
         cancelEditButton.classList.add("hidden");
@@ -700,22 +763,26 @@
         if (!validateForm()) return;
 
         const id = document.getElementById("memberId").value;
-        const memberData = {
-          name: document.getElementById("name").value.trim(),
-          position: document.getElementById("position").value.trim(),
-          scholarLink: document.getElementById("scholarLink").value.trim(),
-          scholarTopic: document.getElementById("scholarTopic").value.trim(),
-          year: document.getElementById("year").value,
-          type: document.getElementById("type").value,
-          status: document.getElementById("status").value,
-          photoUrl: document.getElementById("photoUrl").value.trim(),
-        };
+        const formData = new FormData();
+        
+        formData.append("name", document.getElementById("name").value.trim());
+        formData.append("position", document.getElementById("position").value.trim());
+        formData.append("scholarLink", document.getElementById("scholarLink").value.trim());
+        formData.append("scholarTopic", document.getElementById("scholarTopic").value.trim());
+        formData.append("year", document.getElementById("year").value);
+        formData.append("type", document.getElementById("type").value);
+        formData.append("status", document.getElementById("status").value);
+        formData.append("photoUrl", document.getElementById("existingPhotoUrl").value); // Keep existing URL fallback
+        
+        const photoFile = document.getElementById("photo").files[0];
+        if (photoFile) {
+          formData.append("photo", photoFile);
+        }
 
         try {
           const response = await fetch(`/members/${id}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(memberData),
+            body: formData,
           });
 
           if (!response.ok) {
@@ -727,6 +794,9 @@
 
           await fetchMembers();
           form.reset();
+          photoPreviewContainer.classList.add("hidden");
+          existingPhotoUrlInput.value = "";
+          
           addButton.classList.remove("hidden");
           updateButton.classList.add("hidden");
           cancelEditButton.classList.add("hidden");
