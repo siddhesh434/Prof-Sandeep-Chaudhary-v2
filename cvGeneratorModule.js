@@ -72,6 +72,32 @@ function checkPageBreak(doc, neededHeight = 60) {
     }
 }
 
+// Helper: Bold specific substring "Chaudhary, S." while maintaining continued flow
+function printWithBoldAuthor(doc, textStr, x, y, width) {
+    const target = "Chaudhary, S.";
+    // Split by target. Note: if textStr doesn't contain it, parts=[textStr]
+    // If textStr starts with it, parts=["", remainder]
+    const parts = textStr.split(target);
+    const opts = { width: width, align: 'justify', continued: true };
+    
+    // We need to ensuring we start writing at x,y
+    let isFirst = true;
+
+    parts.forEach((part, i) => {
+        if (isFirst) {
+            doc.text(part, x, y, opts);
+            isFirst = false;
+        } else {
+            doc.text(part, opts);
+        }
+
+        // If not the last part, we encountered a split, so print the target in bold
+        if (i < parts.length - 1) {
+            doc.font('Times-Bold').text(target, opts).font('Times-Roman');
+        }
+    });
+}
+
 // Main CV generation function
 async function generateCV(config = {}) {
   try {
@@ -96,10 +122,16 @@ async function generateCV(config = {}) {
     const filteredDissertations = filterItems(dissertations, config.selectedDissertations);
     const filteredTechTransfers = filterItems(technologyTransfers, config.selectedTechTransfers);
     
-    // Filter Extension Activities manually since they are grouped
-    const organizedConferences = filterItems(extensionActivities.filter(a => a.role === 'Conference organised'), config.selectedOrganizedConferences);
-    const workshops = filterItems(extensionActivities.filter(a => a.role === 'Workshop organised'), config.selectedWorkshops);
-    const outreach = filterItems(extensionActivities.filter(a => ['Government Advisory Roles', 'International Contributions', 'National Contributions'].includes(a.role)), config.selectedOutreach);
+    // Filter Extension Activities manually 
+    // Section 15: Conference organised
+    // Filter Extension Activities manually 
+    // Section 15: Conference organised (Trust user selection from frontend)
+    const organizedConferences = filterItems(extensionActivities, config.selectedOrganizedConferences);
+    // Section 16: Workshop organised (Trust user selection from frontend)
+    const organizedWorkshops = filterItems(extensionActivities, config.selectedWorkshops);
+
+    // Filter Outreach for Section 18 (Trust user selection)
+    const outreach = filterItems(extensionActivities, config.selectedOutreach);
 
     // Filter Definitions for Role Groups (Used for counts and display)
     const roleGroups = [
@@ -274,13 +306,14 @@ async function generateCV(config = {}) {
                 
                 const startY = doc.y;
                 doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-                doc.text(`"${title}" funded by ${p.funded}. (${p.year}). Role: ${p.role}`, 75, startY, { width: 470, align: 'justify' });
-                // Note: The sample image has much more detail (Dates, Amount, Collaborating Institutes).
-                // Our schema has: title, year, funded, collaborator, projectType, role.
-                // We will try my best to format with available data.
-                if (p.collaborator && p.collaborator !== 'N/A') {
-                     doc.text(`    Collaborator: ${p.collaborator}`, 75, doc.y, { width: 470 });
+                
+                let projText = `"${title}" funded by ${p.funded}. (${p.year}). Role: ${p.role}`;
+                if (p.collaborator && p.collaborator !== 'N/A' && p.collaborator.trim() !== '') {
+                     projText += `. Collaborator: ${p.collaborator}`;
                 }
+                projText += ".";
+
+                doc.text(projText, 75, startY, { width: 470, align: 'justify' });
                 doc.moveDown(0.3);
             });
             doc.moveDown(0.3);
@@ -337,9 +370,10 @@ async function generateCV(config = {}) {
             const startY = doc.y;
             doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
             
-            // Bold "Chaudhary, S." removed as per request
+            
+            // Bold "Chaudhary, S." 
             const authorText = b.author || "";
-            doc.text(authorText, 75, startY, { width: 470, continued: true, align: 'justify' }); // Start content block
+            printWithBoldAuthor(doc, authorText, 75, startY, 470); // Starts content block
 
             // Format: (Year). Title. Publisher. (ISBN: ...)
             // Note: Title is kept Roman to match user image.
@@ -359,9 +393,10 @@ async function generateCV(config = {}) {
             const startY = doc.y;
             doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
             
+            
             // Format: 01. Author (Year). "Title". Journal, Vol, Pages.
-            doc.text(`${p.author} (${p.year}). "${p.title}". `, 75, startY, { width: 470, continued: true, align: 'justify' })
-               .font('Times-Italic').text(`${p.journal}`, { continued: true })
+            printWithBoldAuthor(doc, `${p.author} (${p.year}). "${p.title}". `, 75, startY, 470);
+            doc.font('Times-Italic').text(`${p.journal}`, { continued: true })
                .font('Times-Roman').text(`, ${p.volumePages}.`);
             doc.moveDown(0.4);
         });
@@ -376,8 +411,10 @@ async function generateCV(config = {}) {
             const num = (i + 1).toString().padStart(2, '0');
             const startY = doc.y;
             doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-            doc.text(`${c.author} (${c.year}). "${c.title}". `, 75, startY, { width: 470, continued: true, align: 'justify' })
-               .font('Times-Italic').text(`${c.conference}`, { continued: true })
+            // Bold Author support
+            printWithBoldAuthor(doc, `${c.author} (${c.year}). "${c.title}". `, 75, startY, 470);
+            
+            doc.font('Times-Italic').text(`${c.conference}`, { continued: true })
                .font('Times-Roman').text(`, ${c.place}, ${c.date}.`);
             doc.moveDown(0.4);
         });
@@ -392,8 +429,8 @@ async function generateCV(config = {}) {
              const num = (i + 1).toString().padStart(2, '0');
              const startY = doc.y;
              doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-             doc.text(`${c.author} (${c.year}). "${c.chapterName}". In `, 75, startY, { width: 470, continued: true, align: 'justify' })
-                .font('Times-Italic').text(`${c.bookName}`, { continued: true })
+             printWithBoldAuthor(doc, `${c.author} (${c.year}). "${c.chapterName}". In `, 75, startY, 470);
+             doc.font('Times-Italic').text(`${c.bookName}`, { continued: true })
                 .font('Times-Roman').text(`, ${c.Page}. (ISBN: ${c.ISBN})`);
              doc.moveDown(0.4);
           });
@@ -407,27 +444,8 @@ async function generateCV(config = {}) {
         // Header matches image
         addSectionHeader(doc, "Translational Contributions");
         
-        // List from DB (TechnologyTransfer)
-        if(filteredTechTransfers.length > 0) {
-             filteredTechTransfers.forEach((t) => {
-                  const periodStr = t.transferPeriod ? ` (${t.transferPeriod})` : "";
-                  
-                  checkPageBreak(doc);
-                  doc.x = 50;
-                  doc.font('Times-Italic').fontSize(11).text(`${t.title}${periodStr}`, { continued: !!t.transferredTo });
-                  
-                  if(t.transferredTo) {
-                      doc.font('Times-BoldItalic').text(" Technology Transferred"); 
-                  }
-                  
-                  let desc = t.description || "";
-                  if(t.transferredTo) {
-                       desc += ` Transferred to: ${t.transferredTo}.`;
-                  }
-                   doc.font('Times-Roman').fontSize(11).text(desc, 65, doc.y, { width: 480, align: 'justify', lineGap: 2 });
-                   doc.moveDown(0.3);
-             });
-        }
+        // List from DB (TechnologyTransfer) - DISABLED as per user request (only Custom items shown)
+        // if(filteredTechTransfers.length > 0) { ... }
         
         // List from Custom Items (config.translationalCustom)
         if(customTrans.length > 0) {
@@ -468,13 +486,112 @@ async function generateCV(config = {}) {
 
     // 15. Workshops, conferences
     // 15. Workshops, conferences
-    addSectionHeader(doc, "Workshops, conferences");
+    addSectionHeader(doc, "Conferences Organised");
+
+    if (organizedConferences.length > 0) {
+        organizedConferences.forEach((item, i) => {
+            checkPageBreak(doc);
+            const num = (i + 1).toString().padStart(2, '0');
+            const startY = doc.y;
+
+            // Format Dates: "Month DD-DD, YYYY" or just "Month DD, YYYY"
+            const formatDate = (d) => {
+                if(!d) return "";
+                return new Date(d).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+            };
+
+            let dateStr = "";
+            if (item.startDate) {
+                const start = new Date(item.startDate);
+                const end = item.endDate ? new Date(item.endDate) : null;
+                const month = start.toLocaleString('default', { month: 'long' });
+                const year = start.getFullYear();
+                
+                if (end && start.getTime() !== end.getTime()) {
+                     // Try to be smart about ranges like "March 21-22, 2025"
+                     if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+                         dateStr = `(${month} ${start.getDate()}-${end.getDate()}, ${year})`;
+                     } else {
+                         dateStr = `(${formatDate(start)} - ${formatDate(end)})`;
+                     }
+                } else {
+                    dateStr = `(${formatDate(start)})`;
+                }
+            }
+
+            // Construct Content String
+            // Pattern: [Description] "[Title]", [Location] [Date]. 
+            // We strip quoting from DB if present to avoid double quoting
+            const cleanTitle = item.title ? item.title.replace(/^"/, '').replace(/"$/, '') : "";
+            
+            // Build the text segments
+            let text = "";
+            if (cleanTitle) text += `${cleanTitle}`;
+            if (item.description) text += ` of ${item.description}`;
+            if (item.location) text += `, ${item.location}`;
+            if (dateStr) text += ` ${dateStr}`;
+            text += "."; // Period at end
+
+            doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+            doc.text(text, 75, startY, { width: 470, align: 'justify' });
+            doc.moveDown(0.4);
+        });
+        doc.moveDown(0.3);
+    }
+
+    // Append any manual additional text
     addBodyText(doc, config.workshopsConferences);
     // doc.moveDown();
 
-    // 16. Continuing Education Programs
-    // 16. Continuing Education Programs
-    addSectionHeader(doc, "Continuing Education Programs");
+    // 16. Workshops Organised
+    addSectionHeader(doc, "Workshops Organised");
+
+    if (organizedWorkshops.length > 0) {
+         organizedWorkshops.forEach((item, i) => {
+            checkPageBreak(doc);
+            const num = (i + 1).toString().padStart(2, '0');
+            const startY = doc.y;
+
+            // Date Logic (Reused)
+            const formatDate = (d) => {
+                if(!d) return "";
+                return new Date(d).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+            };
+
+            let dateStr = "";
+            if (item.startDate) {
+                const start = new Date(item.startDate);
+                const end = item.endDate ? new Date(item.endDate) : null;
+                const month = start.toLocaleString('default', { month: 'long' });
+                const year = start.getFullYear();
+                
+                if (end && start.getTime() !== end.getTime()) {
+                     if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+                         dateStr = `(${month} ${start.getDate()}-${end.getDate()}, ${year})`;
+                     } else {
+                         dateStr = `(${formatDate(start)} - ${formatDate(end)})`;
+                     }
+                } else {
+                    dateStr = `(${formatDate(start)})`;
+                }
+            }
+
+            const cleanTitle = item.title ? item.title.replace(/^"/, '').replace(/"$/, '') : "";
+            
+            let text = "";
+            if (cleanTitle) text += `${cleanTitle}`;
+            if (item.description) text += ` of ${item.description}`;
+            if (item.location) text += `, ${item.location}`;
+            if (dateStr) text += ` ${dateStr}`;
+            text += ".";
+
+            doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+            doc.text(text, 75, startY, { width: 470, align: 'justify' });
+            doc.moveDown(0.4);
+        });
+        doc.moveDown(0.3);
+    }
+    
     addBodyText(doc, config.continuingEducation);
 
     // 17. International Collaborations
@@ -485,13 +602,33 @@ async function generateCV(config = {}) {
     // 18. Major Outreach
     // 18. Major Outreach
     // 18. Major Outreach
-    addSectionHeader(doc, "Major Outreach (Govt/Intl/Natl Contributions)");
+    addSectionHeader(doc, "Major Outreach (Intl/Natl Contributions)");
     
-    const outreachGroups = [
-        { title: "Government Advisory Roles", items: outreach.filter(o => o.role === 'Government Advisory Roles') },
-        { title: "International Contributions", items: outreach.filter(o => o.role === 'International Contributions') },
-        { title: "National Contributions", items: outreach.filter(o => o.role === 'National Contributions') }
-    ];
+    const outreachGroups = [];
+    // Group by Role dynamically with Merge Logic
+    if(outreach.length > 0) {
+        // Collect matches
+        const groups = {};
+        outreach.forEach(item => {
+             let r = item.role || "Other Contributions";
+             // Map Government to National
+             if(r.toLowerCase().includes('government')) r = "National Contributions";
+             // Map National to National (normalize)
+             else if(r.toLowerCase().includes('national') && !r.toLowerCase().includes('international')) r = "National Contributions";
+             // Map International to International (normalize) or Generic Contributions
+             else if(r.toLowerCase().includes('international') || r.toLowerCase().includes('contributions')) r = "International Contributions";
+
+             if(!groups[r]) groups[r] = [];
+             groups[r].push(item);
+        });
+        
+        // Sort keys to maybe keep Gov -> Intl -> Natl? 
+        // Or just alphabetical? Or user defined?
+        // Let's rely on alphanumeric sort for stability
+        Object.keys(groups).sort().forEach(role => {
+            outreachGroups.push({ title: role, items: groups[role] });
+        });
+    }
 
     outreachGroups.forEach(group => {
          if(group.items.length > 0) {

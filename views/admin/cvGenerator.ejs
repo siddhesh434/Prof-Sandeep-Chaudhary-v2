@@ -283,17 +283,7 @@
                         <button type="button" onclick="addTranslationalItem()" class="text-sm bg-green-50 text-green-600 px-3 py-1 rounded border border-green-200 hover:bg-green-100">+ Add Contribution</button>
                     </div>
 
-                    <!-- DB Items Selector -->
-                    <div class="selector-group">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-semibold text-gray-700">Select Detailed Items from Tech Transfer Database</h4>
-                            <div class="flex items-center gap-2">
-                               <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-tech-transfers', this.checked)" class="mr-1">Select All</label>
-                               <input type="text" onkeyup="filterList('list-tech-transfers', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
-                            </div>
-                        </div>
-                        <div id="list-tech-transfers" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
-                    </div>
+
                 </div>
 
                 <!-- 12. Professional Affiliations -->
@@ -316,14 +306,35 @@
 
                 <!-- 15. Workshops, Conferences -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">15. Workshops, conferences</label>
-                    <textarea id="workshopsConferences" rows="3" class="w-full border p-2 rounded" placeholder="Enter details here..."></textarea>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">15. Conferences Organised</label>
+                    
+                    <!-- Organized Conferences Selector -->
+                    <div class="selector-group mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-semibold text-gray-700">Conferences Organised</h4>
+                            <div class="flex items-center gap-2">
+                               <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-organized-conferences', this.checked)" class="mr-1">Select All</label>
+                               <input type="text" onkeyup="filterList('list-organized-conferences', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
+                            </div>
+                        </div>
+                        <div id="list-organized-conferences" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                    </div>
                 </div>
 
                 <!-- 16. Continuing Education -->
+                <!-- 16. Continuing Education -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">16. Continuing Education Programs</label>
-                    <textarea id="continuingEducation" rows="3" class="w-full border p-2 rounded" placeholder="Enter details here..."></textarea>
+                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">16. Workshops Organised</label>
+                    <div class="selector-group mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-semibold text-gray-700">Workshops Organised</h4>
+                            <div class="flex items-center gap-2">
+                               <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-cont-education', this.checked)" class="mr-1">Select All</label>
+                               <input type="text" onkeyup="filterList('list-cont-education', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
+                            </div>
+                        </div>
+                        <div id="list-cont-education" class="border rounded h-40 overflow-y-auto p-2 bg-gray-50 space-y-1">Loading...</div>
+                    </div>
                 </div>
 
                 <!-- 17. Collaborations -->
@@ -334,19 +345,8 @@
 
                 <!-- 18. Outreach -->
                 <div class="selector-group space-y-4">
-                    <h4 class="text-lg font-bold text-gray-800 border-b pb-2">18. Major Outreach (Govt/Intl/Natl Contributions)</h4>
-                    
-                    <!-- Govt -->
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                             <h5 class="font-semibold text-gray-700">Government Advisory Roles</h5>
-                             <div class="flex items-center gap-2">
-                                <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-outreach-govt', this.checked)" class="mr-1">All</label>
-                                <input type="text" onkeyup="filterList('list-outreach-govt', this.value)" placeholder="Search..." class="border p-1 rounded text-xs w-32">
-                             </div>
-                        </div>
-                        <div id="list-outreach-govt" class="border rounded h-32 overflow-y-auto p-2 bg-gray-50 space-y-1"></div>
-                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 border-b pb-2">18. Major Outreach (Intl/Natl Contributions)</h4>
+
 
                     <!-- Intl -->
                     <div>
@@ -418,12 +418,20 @@
              if(containerId.includes('patent')) label = item.title;
              if(containerId.includes('tech-transfers')) label = item.title;
              if(containerId.includes('pub') || containerId.includes('book') || containerId.includes('journal')) label = `${item.title} (${item.year})`;
-             if(containerId.includes('outreach')) label = `${item.title} - ${item.description || ''}`;
+                if(containerId.includes('organized-conferences') || containerId.includes('cont-education')) {
+                  const formatDate = (d) => d ? new Date(d).getFullYear() : '';
+                  label = `${item.title} of ${item.description || ''}`;
+                  if(item.location) label += `, ${item.location}`;
+                  if(item.startDate) label += ` (${formatDate(item.startDate)})`;
+             }
+             if(containerId.includes('outreach')) {
+                  label = `[${item.role}] ${item.title} - ${item.description || ''}`;
+             }
 
             return `
                 <label class="select-item flex items-center p-2 hover:bg-gray-100 rounded cursor-pointer text-sm border-b border-gray-100 last:border-0">
                     <input type="checkbox" value="${item[idKey]}" class="mr-3 h-4 w-4 text-blue-600 rounded" ${isChecked}>
-                    <span class="truncate pr-2" title="${label}">${label}</span>
+                    <span class="pr-2 line-clamp-2" title="${label}">${label}</span>
                 </label>
             `;
         }).join('');
@@ -505,8 +513,7 @@
 
         document.getElementById('affiliations').value = currentConfig.affiliations || '';
         document.getElementById('facilities').value = currentConfig.facilities || '';
-        document.getElementById('workshopsConferences').value = currentConfig.workshopsConferences || '';
-        document.getElementById('continuingEducation').value = currentConfig.continuingEducation || '';
+
         document.getElementById('collaborations').value = currentConfig.collaborations || '';
     }
 
@@ -564,7 +571,6 @@
         renderList('list-projects-guide', pGuide, 'title', '_id', currentConfig.selectedProjects);
 
         renderList('list-patents', allData.patents, 'title', '_id', currentConfig.selectedPatents);
-        renderList('list-tech-transfers', allData.technologyTransfers, 'title', '_id', currentConfig.selectedTechTransfers);
         renderList('list-books', allData.books, 'title', '_id', currentConfig.selectedBooks);
         renderList('list-journals', allData.publications.filter(p => !p.journal || p.journal !== 'Conference'), 'title', '_id', currentConfig.selectedJournals); 
         renderList('list-chapters', allData.chapters, 'chapterName', '_id', currentConfig.selectedChapters); 
@@ -572,13 +578,22 @@
 
         // Filter Extension Activities
         // Only Outreach remains as list.
-        const outreachGovt = allData.extensionActivities.filter(a => a.role === 'Government Advisory Roles');
-        const outreachIntl = allData.extensionActivities.filter(a => a.role === 'International Contributions');
-        const outreachNatl = allData.extensionActivities.filter(a => a.role === 'National Contributions');
+        // Relaxed filters to handle renames/variations (e.g. "Conferences" vs "Conference organised")
+        // Mapping: Govt -> National. 
+        // International -> Includes 'International' OR 'Contributions' (that isn't National/Govt) - to catch renamed "Contributions"
+        const outreachIntl = allData.extensionActivities.filter(a => a.role && (a.role.toLowerCase().includes('international') || (a.role.toLowerCase().includes('contributions') && !a.role.toLowerCase().includes('national') && !a.role.toLowerCase().includes('government'))));
+        const outreachNatl = allData.extensionActivities.filter(a => a.role && (a.role.toLowerCase().includes('national') || a.role.toLowerCase().includes('government')) && !a.role.toLowerCase().includes('international'));
 
-        renderList('list-outreach-govt', outreachGovt, 'title', '_id', currentConfig.selectedOutreach);
         renderList('list-outreach-intl', outreachIntl, 'title', '_id', currentConfig.selectedOutreach);
         renderList('list-outreach-natl', outreachNatl, 'title', '_id', currentConfig.selectedOutreach);
+
+        // Conferences/Workshops Organised
+        const organizedConfs = allData.extensionActivities.filter(a => a.role && a.role.toLowerCase().includes('conference')); 
+        renderList('list-organized-conferences', organizedConfs, 'title', '_id', currentConfig.selectedOrganizedConferences);
+
+        const workshops = allData.extensionActivities.filter(a => a.role && a.role.toLowerCase().includes('workshop'));
+        renderList('list-cont-education', workshops, 'title', '_id', currentConfig.selectedWorkshops);
+
 
         // Update Counts
         if(document.getElementById('count-books')) document.getElementById('count-books').innerText = `(${allData.books.length})`;
@@ -612,8 +627,6 @@
             // translational: document.getElementById('translational').value.trim(), // Removed
             affiliations: document.getElementById('affiliations').value.trim(),
             facilities: document.getElementById('facilities').value.trim(),
-            workshopsConferences: document.getElementById('workshopsConferences').value,
-            continuingEducation: document.getElementById('continuingEducation').value,
             collaborations: document.getElementById('collaborations').value.trim(),
             
             translationalCustom: getTranslationalItems(),
@@ -640,17 +653,17 @@
                 ...getIds('list-projects-guide')
             ],
             selectedPatents: getIds('list-patents'),
-            selectedTechTransfers: getIds('list-tech-transfers'),
             selectedBooks: getIds('list-books'),
             selectedJournals: getIds('list-journals'),
             selectedChapters: getIds('list-chapters'),
             selectedConferences: getIds('list-conferences'),
 
             selectedOutreach: [
-                ...getIds('list-outreach-govt'),
                 ...getIds('list-outreach-intl'),
                 ...getIds('list-outreach-natl')
-            ]
+            ],
+            selectedOrganizedConferences: getIds('list-organized-conferences'),
+            selectedWorkshops: getIds('list-cont-education')
         };
     }
 

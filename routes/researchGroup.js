@@ -54,7 +54,7 @@ router.get("/admin/researchMembers.html", isAdmin, (req, res) => {
 // Get all research members
 router.get("/members", isAdmin, async (req, res) => {
   try {
-    const members = await ResearchMember.find().sort({ createdAt: -1 });
+    const members = await ResearchMember.find().sort({ year: -1 });
     res.json(members);
   } catch (error) {
     console.error("Error fetching research members:", error);
@@ -214,7 +214,7 @@ router.delete("/members/:id", isAdmin, async (req, res) => {
 // Public route for the research group page - grouped by type
 router.get("/researchGroups", async (req, res) => {
   try {
-    const members = await ResearchMember.find().sort({ createdAt: -1 });
+    const members = await ResearchMember.find().sort({ year: -1 });
 
     // Group members by type
     // Return the raw list for frontend processing

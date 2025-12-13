@@ -82,6 +82,8 @@ const CVConfigSchema = new mongoose.Schema({
   selectedConferences: [String], // Proceedings
   selectedDissertations: [String],
   selectedOutreach: [String], // Extension Activity
+  selectedOrganizedConferences: [String],
+  selectedWorkshops: [String], // For Continuing Education
 
   updatedAt: { type: Date, default: Date.now }
 });
