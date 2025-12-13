@@ -8,8 +8,7 @@ const ExtensionActivitySchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    required: true,
-    enum: ['Government Advisory Roles', 'International Contributions', 'National Contributions', 'Conference organised', 'Workshop organised']
+    required: true
   },
   title: {
     type: String,

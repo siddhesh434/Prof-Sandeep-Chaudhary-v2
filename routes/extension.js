@@ -89,6 +89,32 @@ router.post('/api/activities', async (req, res) => {
 });
 
 // PUT update an extension activity
+router.put('/api/activities/rename-role', async (req, res) => {
+  try {
+    const { oldRole, newRole } = req.body;
+    
+    // Validate required fields
+    if (!oldRole || !newRole) {
+      return res.status(400).json({ message: 'Old role and new role are required' });
+    }
+    
+    // Perform bulk update
+    const result = await ExtensionActivity.updateMany(
+      { role: oldRole },
+      { $set: { role: newRole } }
+    );
+    
+    res.json({ 
+      message: 'Roles updated successfully', 
+      modifiedCount: result.modifiedCount 
+    });
+  } catch (err) {
+    console.error('Error renaming role:', err);
+    res.status(500).json({ message: 'Server error while renaming role' });
+  }
+});
+
+// PUT update an extension activity
 router.put('/api/activities/:id', async (req, res) => {
   try {
     const { serialNumber, role, title, description, location } = req.body;

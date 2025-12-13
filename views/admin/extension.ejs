@@ -49,16 +49,26 @@
                 </div>
 
                 <!-- Activity Count Card -->
-                <div class="bg-gradient-to-r from-brand-secondary to-blue-700 text-white rounded-lg shadow-md p-4 mb-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 class="text-lg font-semibold">Total Extension Activities</h2>
-                            <p class="text-sm opacity-80">Manage all your extension activities in one place</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gradient-to-r from-brand-secondary to-blue-700 text-white rounded-lg shadow-md p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-lg font-semibold">Total Extension Activities</h2>
+                                <p class="text-sm opacity-80">Manage all your extension activities in one place</p>
+                            </div>
+                            <div class="text-3xl font-bold flex items-center">
+                                <span id="activityCount">0</span>
+                                <i class="fas fa-handshake ml-3 text-2xl"></i>
+                            </div>
                         </div>
-                        <div class="text-3xl font-bold flex items-center">
-                            <span id="activityCount">0</span>
-                            <i class="fas fa-handshake ml-3 text-2xl"></i>
-                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center text-center">
+                         <h2 class="text-lg font-semibold text-gray-800 mb-2">Manage Categories</h2>
+                         <p class="text-sm text-gray-600 mb-4">Rename existing role categories in bulk</p>
+                         <button id="manageCategoriesBtn" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition duration-300 w-full md:w-auto">
+                            <i class="fas fa-tags mr-2"></i> Manage Categories
+                         </button>
                     </div>
                 </div>
 
@@ -80,11 +90,7 @@
                             <select id="role" name="role" required
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                                 <option value="">Select Role Category</option>
-                                <option value="Government Advisory Roles">Government Advisory Roles</option>
-                                <option value="International Contributions">International Contributions</option>
-                                <option value="National Contributions">National Contributions</option>
-                                <option value="Conference organised">Conference organised</option>
-                                <option value="Workshop organised">Workshop organised</option>
+                                <!-- Options populated dynamically -->
                                 <option value="Other">Other</option>
                             </select>
                         </div>
@@ -142,12 +148,7 @@
                     <select id="roleFilter"
                         class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         <option value="">All Roles</option>
-                        <option value="Government Advisory Roles">Government Advisory Roles</option>
-                        <option value="International Contributions">International Contributions</option>
-                        <option value="National Contributions">National Contributions</option>
-                        <option value="Conference organised">Conference organised</option>
-                        <option value="Workshop organised">Workshop organised</option>
-                        <option value="Other">Other</option>
+                        <!-- Options populated dynamically -->
                     </select>
                     <button id="searchButton"
                         class="bg-brand-secondary text-white p-2 rounded hover:bg-blue-700 transition duration-300 flex items-center">
@@ -188,6 +189,26 @@
         </div>
     </div>
 
+    <!-- Manage Categories Modal -->
+    <div id="categoriesModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-6 max-w-lg w-full max-h-[80vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">Manage Role Categories</h2>
+                <button id="closeCategoriesModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="mb-4 text-sm text-blue-600 bg-blue-50 p-3 rounded border border-blue-200">
+                <i class="fas fa-info-circle mr-1"></i> Renaming a category will update ALL activities that use it.
+            </div>
+
+            <div class="overflow-y-auto flex-grow pr-2" id="categoriesList">
+                <!-- Categories will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // DOM Elements
         const form = document.getElementById('activityForm');
@@ -205,6 +226,12 @@
         const roleSelect = document.getElementById('role');
         const otherRoleContainer = document.getElementById('otherRoleContainer');
         const otherRoleInput = document.getElementById('otherRole');
+        
+        // Modal Elements
+        const manageCategoriesBtn = document.getElementById('manageCategoriesBtn');
+        const categoriesModal = document.getElementById('categoriesModal');
+        const closeCategoriesModal = document.getElementById('closeCategoriesModal');
+        const categoriesList = document.getElementById('categoriesList');
 
         // Mobile menu elements
         const mobileMenuButton = document.getElementById("mobile-menu-button");
@@ -293,6 +320,7 @@
                 const response = await fetch('/api/activities');
                 activities = await response.json();
                 renderActivities(activities);
+                updateRoleDropdowns(activities);
                 
                 // Update activity count
                 activityCount.textContent = activities.length;
@@ -303,6 +331,47 @@
                 activities = [];
                 renderActivities(activities);
             }
+        }
+        
+        // Update Role Dropdowns based on current data
+        function updateRoleDropdowns(activities) {
+            const roleSelect = document.getElementById('role');
+            const roleFilter = document.getElementById('roleFilter');
+            
+            // Get unique roles from data
+            let uniqueRoles = [...new Set(activities.map(a => a.role))].sort();
+            
+            // If no data, use defaults to help user get started
+            if (uniqueRoles.length === 0) {
+                uniqueRoles = [
+                    'Government Advisory Roles', 
+                    'International Contributions', 
+                    'National Contributions', 
+                    'Conference organised', 
+                    'Workshop organised'
+                ];
+            }
+            
+            // Populate Form Select (Preserve "Select Role Category" and "Other")
+            // We want: [Select...] [Dynamic Roles...] [Other]
+            // The HTML currently has [Select...] and [Other]. We insert dynamic ones in between.
+            
+            // Clear current dynamic options (keep first and last if possible, or rebuild innerHTML)
+            // Easier to rebuild:
+            roleSelect.innerHTML = `
+                <option value="">Select Role Category</option>
+                ${uniqueRoles.map(r => `<option value="${escapeHtml(r)}">${escapeHtml(r)}</option>`).join('')}
+                <option value="Other">Other</option>
+            `;
+            
+            // Populate Filter Select
+            const currentFilter = roleFilter.value; // Store current selection
+            roleFilter.innerHTML = `
+                <option value="">All Roles</option>
+                ${uniqueRoles.map(r => `<option value="${escapeHtml(r)}">${escapeHtml(r)}</option>`).join('')}
+                <option value="Other">Other</option>
+            `;
+            roleFilter.value = currentFilter; // Restore selection if still valid
         }
 
         // Render Extension Activities as Cards
@@ -529,11 +598,16 @@
                 document.getElementById('serialNumber').value = activity.serialNumber || '';
                 
                 // Handle role selection including "Other"
-                const standardRoles = ['Government Advisory Roles', 'International Contributions', 'National Contributions', 'Conference organised', 'Workshop organised'];
-                if (standardRoles.includes(activity.role)) {
+                // Check if the role is in our current dropdown list (excluding "Other")
+                const roleExistsInDropdown = Array.from(document.getElementById('role').options)
+                    .some(opt => opt.value === activity.role && opt.value !== 'Other');
+                
+                if (roleExistsInDropdown) {
                     document.getElementById('role').value = activity.role;
                     otherRoleContainer.classList.add('hidden');
+                    otherRoleInput.removeAttribute('required');
                 } else {
+                    // It's effectively an "Other" role (or a newly renamed one that hasn't refreshed? unlikely)
                     document.getElementById('role').value = 'Other';
                     document.getElementById('otherRole').value = activity.role;
                     otherRoleContainer.classList.remove('hidden');
@@ -653,6 +727,96 @@
                 showNotification(error.message, 'error');
             }
         });
+
+        // Manage Categories Modal Logic
+        manageCategoriesBtn.addEventListener('click', () => {
+            renderCategoriesList();
+            categoriesModal.classList.remove('hidden');
+            categoriesModal.classList.add('flex');
+        });
+
+        closeCategoriesModal.addEventListener('click', () => {
+            categoriesModal.classList.add('hidden');
+            categoriesModal.classList.remove('flex');
+        });
+        
+        // Render Categories List for Management
+        function renderCategoriesList() {
+            // Extract unique categories from activities
+            const categories = [...new Set(activities.map(a => a.role))].sort();
+            
+            if (categories.length === 0) {
+                categoriesList.innerHTML = '<p class="text-gray-500 text-center py-4">No categories found.</p>';
+                return;
+            }
+
+            categoriesList.innerHTML = categories.map(category => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded mb-2 border border-gray-100 group">
+                    <div class="font-medium text-gray-800 flex-grow mr-3">${escapeHtml(category)}</div>
+                    <button onclick="enableRenameMode(this, '${escapeHtml(category)}')" class="text-blue-500 hover:text-blue-700 px-3 py-1 rounded hover:bg-blue-100 transition">
+                        <i class="fas fa-edit"></i> Rename
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Enable Rename Mode
+        window.enableRenameMode = function(btnElement, currentName) {
+            const container = btnElement.closest('div');
+            container.innerHTML = `
+                <form onsubmit="handleRename(event, '${escapeHtml(currentName)}')" class="flex items-center w-full space-x-2">
+                    <input type="text" value="${escapeHtml(currentName)}" class="flex-grow border border-blue-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <button type="submit" class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button type="button" onclick="renderCategoriesList()" class="bg-gray-400 text-white px-3 py-2 rounded hover:bg-gray-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </form>
+            `;
+            // Focus input
+            container.querySelector('input').focus();
+        }
+
+        // Handle Rename Submission
+        window.handleRename = async function(e, oldName) {
+            e.preventDefault();
+            const input = e.target.querySelector('input');
+            const newName = input.value.trim();
+            
+            if (!newName || newName === oldName) {
+                renderCategoriesList();
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/activities/rename-role', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ oldRole: oldName, newRole: newName })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || 'Failed to rename category');
+                }
+
+                showNotification(`Category renamed successfully! (${result.modifiedCount} updated)`, 'success');
+                
+                // Refresh activities to reflect changes everywhere
+                await fetchActivities();
+                
+                // Refresh the modal list
+                renderCategoriesList();
+                
+                // Dropdowns are updated inside fetchActivities -> updateRoleDropdowns
+
+            } catch (error) {
+                console.error('Error renaming category:', error);
+                showNotification(error.message, 'error');
+            }
+        };
 
         // Initialize the page
         fetchActivities();
