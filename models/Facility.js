@@ -13,7 +13,7 @@ const facilitySchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['general', 'materials', 'bricks'],
+    enum: ['research', 'characteristics', 'durability', 'casting'],
     default: 'general'
   },
   image: {

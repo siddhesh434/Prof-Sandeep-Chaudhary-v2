@@ -153,15 +153,16 @@ router.get("/facilities.html", async (req, res) => {
     
     // Group facilities by category
     const groupedFacilities = {
-      general: facilities.filter(f => f.category === 'general'),
-      materials: facilities.filter(f => f.category === 'materials'),
-      bricks: facilities.filter(f => f.category === 'bricks')
+      research: facilities.filter(f => f.category === 'research'),
+      characteristics: facilities.filter(f => f.category === 'characteristics'),
+      durability: facilities.filter(f => f.category === 'durability'),
+      casting: facilities.filter(f => f.category === 'casting')
     };
     
     res.render("facilities", { facilities: groupedFacilities });
   } catch (error) {
     console.error("Error loading facilities page:", error);
-    res.render("facilities", { facilities: { general: [], materials: [], bricks: [] } });
+    res.render("facilities", { facilities: { research: [], characteristics: [], durability: [], casting: [] } });
   }
 });
 

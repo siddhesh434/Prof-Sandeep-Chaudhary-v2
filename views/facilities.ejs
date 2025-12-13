@@ -18,17 +18,19 @@
     <!-- Category Navigation -->
     <div class="category-nav">
       <button class="category-btn active" onclick="showCategory('all')">All Facilities</button>
-      <button class="category-btn" onclick="showCategory('general')">Lab Images</button>
-      <button class="category-btn" onclick="showCategory('materials')">Materials Lab</button>
-      <button class="category-btn" onclick="showCategory('bricks')">Bricks Lab</button>
+      <button class="category-btn" onclick="showCategory('research')">Specialized Research</button>
+      <button class="category-btn" onclick="showCategory('characteristics')">Advanced Material Testing</button>
+      <button class="category-btn" onclick="showCategory('durability')">Durability Testing</button>
+      <button class="category-btn" onclick="showCategory('casting')">Other Casting & Testing</button>
     </div>
 
     <!-- Lab Images Section -->
-    <% if (facilities.general && facilities.general.length > 0) { %>
-    <div class="category-section" data-category="general">
-      <h2 class="category-title">Lab Images</h2>
+    <!-- Specialized research facilities Section -->
+    <% if (facilities.research && facilities.research.length > 0) { %>
+    <div class="category-section" data-category="research">
+      <h2 class="category-title">Specialized research facilities</h2>
       <div class="facilities-grid">
-        <% facilities.general.forEach(facility => { %>
+        <% facilities.research.forEach(facility => { %>
         <div class="facility-card <%= !facility.name ? 'no-name' : '' %> <%= !facility.description ? 'no-description' : '' %>">
           <% if (facility.image) { %>
             <img src="<%= facility.image %>" alt="<%= facility.name || 'Facility' %>" />
@@ -50,11 +52,12 @@
     <% } %>
 
     <!-- Materials Lab Section -->
-    <% if (facilities.materials && facilities.materials.length > 0) { %>
-    <div class="category-section" data-category="materials">
-      <h2 class="category-title">Materials Lab</h2>
+    <!-- Advanced material characteristics testing Section -->
+    <% if (facilities.characteristics && facilities.characteristics.length > 0) { %>
+    <div class="category-section" data-category="characteristics">
+      <h2 class="category-title">Advanced material characteristics testing</h2>
       <div class="facilities-grid">
-        <% facilities.materials.forEach(facility => { %>
+        <% facilities.characteristics.forEach(facility => { %>
         <div class="facility-card <%= !facility.name ? 'no-name' : '' %> <%= !facility.description ? 'no-description' : '' %>">
           <% if (facility.image) { %>
             <img src="<%= facility.image %>" alt="<%= facility.name || 'Facility' %>" />
@@ -76,11 +79,38 @@
     <% } %>
 
     <!-- Bricks Lab Section -->
-    <% if (facilities.bricks && facilities.bricks.length > 0) { %>
-    <div class="category-section" data-category="bricks">
-      <h2 class="category-title">Bricks Lab</h2>
+    <!-- Durability testing facilities Section -->
+    <% if (facilities.durability && facilities.durability.length > 0) { %>
+    <div class="category-section" data-category="durability">
+      <h2 class="category-title">Durability testing facilities</h2>
       <div class="facilities-grid">
-        <% facilities.bricks.forEach(facility => { %>
+        <% facilities.durability.forEach(facility => { %>
+        <div class="facility-card <%= !facility.name ? 'no-name' : '' %> <%= !facility.description ? 'no-description' : '' %>">
+          <% if (facility.image) { %>
+            <img src="<%= facility.image %>" alt="<%= facility.name || 'Facility' %>" />
+          <% } else { %>
+            <div class="no-image">
+              <i class="fas fa-image"></i>
+            </div>
+          <% } %>
+          <% if (facility.name) { %>
+            <h3><%= facility.name %></h3>
+          <% } %>
+          <% if (facility.description) { %>
+            <p><%= facility.description %></p>
+          <% } %>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Other casting and testing facilities Section -->
+    <% if (facilities.casting && facilities.casting.length > 0) { %>
+    <div class="category-section" data-category="casting">
+      <h2 class="category-title">Other casting and testing facilities</h2>
+      <div class="facilities-grid">
+        <% facilities.casting.forEach(facility => { %>
         <div class="facility-card <%= !facility.name ? 'no-name' : '' %> <%= !facility.description ? 'no-description' : '' %>">
           <% if (facility.image) { %>
             <img src="<%= facility.image %>" alt="<%= facility.name || 'Facility' %>" />
@@ -102,9 +132,10 @@
     <% } %>
 
     <!-- Empty State -->
-    <% if ((!facilities.general || facilities.general.length === 0) && 
-           (!facilities.materials || facilities.materials.length === 0) && 
-           (!facilities.bricks || facilities.bricks.length === 0)) { %>
+    <% if ((!facilities.research || facilities.research.length === 0) && 
+           (!facilities.characteristics || facilities.characteristics.length === 0) && 
+           (!facilities.durability || facilities.durability.length === 0) &&
+           (!facilities.casting || facilities.casting.length === 0)) { %>
     <div class="empty-state">
       <i class="fas fa-flask"></i>
       <p>No facilities available at the moment.</p>

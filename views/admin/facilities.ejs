@@ -38,17 +38,21 @@
         <div class="mb-6">
           <div class="border-b border-gray-200">
             <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-              <button onclick="switchCategory('general')" id="tab-general"
+              <button onclick="switchCategory('research')" id="tab-research"
                 class="category-tab border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-600">
-                Lab Images
+                Specialized Research
               </button>
-              <button onclick="switchCategory('materials')" id="tab-materials"
+              <button onclick="switchCategory('characteristics')" id="tab-characteristics"
                 class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                Materials Lab
+                Material Testing
               </button>
-              <button onclick="switchCategory('bricks')" id="tab-bricks"
+              <button onclick="switchCategory('durability')" id="tab-durability"
                 class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
-                Bricks Lab
+                Durability
+              </button>
+              <button onclick="switchCategory('casting')" id="tab-casting"
+                class="category-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                Other Casting
               </button>
             </nav>
           </div>
@@ -116,9 +120,10 @@
             <label class="block text-gray-700 font-medium mb-2">Category *</label>
             <select id="facility-category" name="category" required
               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="general">Lab Images</option>
-              <option value="materials">Materials Lab</option>
-              <option value="bricks">Bricks Lab</option>
+              <option value="research">Specialized Research</option>
+              <option value="characteristics">Advanced Material Characteristics</option>
+              <option value="durability">Durability Testing</option>
+              <option value="casting">Other Casting & Testing</option>
             </select>
           </div>
 
@@ -164,7 +169,7 @@
   </div>
 
   <script>
-    let currentCategory = 'general';
+    let currentCategory = 'research';
     let facilities = [];
     let editingFacilityId = null;
 

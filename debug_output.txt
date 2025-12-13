@@ -1,0 +1,19 @@
+Total: 12
+Categories: [
+  {
+    "_id": "durability",
+    "count": 2
+  },
+  {
+    "_id": "research",
+    "count": 2
+  },
+  {
+    "_id": "characteristics",
+    "count": 3
+  },
+  {
+    "_id": "casting",
+    "count": 5
+  }
+]
