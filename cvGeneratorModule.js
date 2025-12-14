@@ -326,8 +326,8 @@ async function generateCV(config = {}) {
                 const startY = doc.y;
                 doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
                 
-                let projText = `"${title}" funded by ${p.funded}. (${p.year}). Role: ${p.role}`;
-                if (p.collaborator && p.collaborator !== 'N/A' && p.collaborator.trim() !== '') {
+                let projText = `"${title}" funded by ${p.funded}. (${p.year})`;
+                if (p.collaborator && p.collaborator !== 'N/A' && p.collaborator.trim() !== '' && p.collaborator.trim() !== '-') {
                      projText += `. Collaborator: ${p.collaborator}`;
                 }
                 projText += ".";
