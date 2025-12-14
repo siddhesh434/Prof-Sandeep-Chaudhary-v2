@@ -257,15 +257,15 @@ async function generateCV(config = {}) {
     const credentials = [
       { label: "Technology Transfer/ Translational Research:", value: rc.techTransfer || `${techTransferCount}/02` },
       { label: "Patents (granted/ published/filed/in process):", value: rc.patents || patentStr }, 
+      { label: "Sponsored Research Projects:", value: rc.sponsoredProjects || sponsoredProjectsList.length.toString() },
+      { label: "(PI/Scientific Director/Mentor/Co-PI/Guide)", value: rc.projectRoles || `(${projectCountStr})` },
       { label: "Publications in SCIE/Scopus Indexed Journals:", value: rc.journals || filteredJournals.length.toString() },
       { label: "Publications in Conference Proceedings:", value: rc.conferences || filteredConferences.length.toString() },
       { label: "Books authored/edited:", value: rc.books || filteredBooks.length.toString().padStart(2, '0') },
       { label: "Technical reports:", value: rc.technicalReports || "01" },
       { label: "Book/ video chapters:", value: rc.chapters || filteredChapters.length.toString().padStart(2, '0') }, // Label changed slightly in other conv but keeping standard
       { label: "Ph.D. Supervision (completed/ongoing):", value: rc.phdSupervision || `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}` },
-      { label: "MTech and MSc thesis Awarded/Ongoing:", value: rc.mtechSupervision || `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}` },
-      { label: "Sponsored Research Projects:", value: rc.sponsoredProjects || sponsoredProjectsList.length.toString() },
-      { label: "(PI/Scientific Director/Mentor/Co-PI/Guide)", value: rc.projectRoles || `(${projectCountStr})` }
+      { label: "MTech and MSc thesis Awarded/Ongoing:", value: rc.mtechSupervision || `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}` }
     ];
     
     credentials.forEach(cred => {
@@ -311,7 +311,7 @@ async function generateCV(config = {}) {
             groupProjects.forEach(p => displayedProjectIds.add(p._id.toString()));
             
             doc.moveDown(0.3);
-            doc.font('Times-Italic').fontSize(11).text(`${group.label} (${groupProjects.length})`);
+            doc.font('Times-BoldItalic').fontSize(11).text(`${group.label} (${groupProjects.length})`);
             doc.moveDown(0.2);
 
             groupProjects.forEach((p, i) => {
@@ -402,7 +402,7 @@ async function generateCV(config = {}) {
     
     // Books
     if(filteredBooks.length > 0) {
-        doc.font('Times-Italic').fontSize(11).text("Books Published");
+        doc.font('Times-BoldItalic').fontSize(11).text("Books Published");
         filteredBooks.forEach((b, i) => {
             checkPageBreak(doc);
             const num = (i + 1).toString().padStart(2, '0');
@@ -429,7 +429,7 @@ async function generateCV(config = {}) {
     
     // Journals
     if(filteredJournals.length > 0) {
-        doc.font('Times-Italic').fontSize(11).text(`SCI/ SCI-E Journal Publications (${filteredJournals.length})`);
+        doc.font('Times-BoldItalic').fontSize(11).text(`SCI/ SCI-E Journal Publications (${filteredJournals.length})`);
         doc.moveDown(0.2);
 
             filteredJournals.forEach((p, i) => {
@@ -450,7 +450,7 @@ async function generateCV(config = {}) {
     // Conferences
     // Conferences
     if(filteredConferences.length > 0) {
-        doc.font('Times-Italic').fontSize(11).text(`Conference publications (${filteredConferences.length})`);
+        doc.font('Times-BoldItalic').fontSize(11).text(`Conference publications (${filteredConferences.length})`);
         filteredConferences.forEach((c, i) => {
             checkPageBreak(doc);
             const num = (i + 1).toString().padStart(2, '0');
@@ -468,7 +468,7 @@ async function generateCV(config = {}) {
     // Chapters
     // Chapters
     if(filteredChapters.length > 0) {
-         doc.font('Times-Italic').fontSize(11).text(`Chapters/Video Chapters Published (${filteredChapters.length})`);
+         doc.font('Times-BoldItalic').fontSize(11).text(`Chapters/Video Chapters Published (${filteredChapters.length})`);
          filteredChapters.forEach((c, i) => {
              checkPageBreak(doc);
              const num = (i + 1).toString().padStart(2, '0');
