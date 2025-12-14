@@ -86,28 +86,46 @@ router.get("/api/all-cv-data", async (req, res) => {
 
         // Calculate Statistics
         const roleGroups = [
-             { label: "As Principal Investigator", matches: ["Principal Investigator", "PI"] },
-             { label: "As Scientific Director", matches: ["Scientific Director"] },
-             { label: "As Scientist Mentor", matches: ["Scientist Mentor", "Mentor"] },
-             { label: "As Co-Principal Investigator", matches: ["Co-Principal Investigator", "Co-PI", "Co-PI/Co-Guide"] },
-             { label: "As Guide", matches: ["Guide"] }
+             { label: "As Principal Investigator", matches: ["Principal Investigator", "PI", "As Principal Investigator", "as pi", "P.I.", "Principal Inv."] },
+             { label: "As Scientific Director", matches: ["Scientific Director", "As Scientific Director", "Director"] },
+             { label: "As Scientist Mentor", matches: ["Scientist Mentor", "Mentor", "As Scientist Mentor", "Mentor As Scientist", "Scientist", "As Scientist"] },
+             { label: "As Co-Principal Investigator", matches: ["Co-Principal Investigator", "Co-PI", "Co-PI/Co-Guide", "As Co-Principal Investigator", "Co-Investigator", "as co-pi"] },
+             { label: "As Guide", matches: ["Guide", "As a Guide", "As Guide", "as guide"] }
         ];
-        const normalizeRole = r => r ? r.trim() : "";
+        const normalizeRole = r => {
+            if (!r) return "";
+            let normalizedR = r.trim();
+            if (normalizedR.toLowerCase().includes('international contributions')) {
+                normalizedR = "Contributions";
+            } else if (normalizedR.toLowerCase().includes('contributions')) {
+                normalizedR = "Contributions";
+            }
+            return normalizedR;
+        };
         const isOngoing = (y) => y && (y.toLowerCase().includes('cont') || y.toLowerCase().includes('ongoing') || y.toLowerCase().includes('present'));
 
-        const patentsGranted = patents.filter(p => p.grantNumber).length;
+        const isGranted = (p) => {
+            const no = p.grantNumber ? p.grantNumber.trim() : "";
+            const date = p.grantDate ? p.grantDate.trim() : "";
+            return no && date && no !== '-' && date !== '-' && no.toLowerCase() !== 'na' && date.toLowerCase() !== 'na';
+        };
+        const patentsGranted = patents.filter(p => isGranted(p)).length;
         const patentsOther = patents.length - patentsGranted;
         
-        const phds = dissertations.filter(d => d.degree && d.degree.includes('Ph.D'));
-        const phdOngoing = phds.filter(d => isOngoing(d.year)).length;
-        const phdCompleted = phds.length - phdOngoing;
+        // PhD Strict
+        const phdOngoing = dissertations.filter(d => d.degree === 'PhD Thesis in progress').length;
+        const phdCompleted = dissertations.filter(d => d.degree === 'PhD Thesis Awarded').length;
         
-        const mtechs = dissertations.filter(d => d.degree && (d.degree.includes('M.Tech') || d.degree.includes('M.Sc')));
+        // MTech Strict
+        const mtechs = dissertations.filter(d => d.degree === 'MTech and MSc Awarded/Ongoing');
         const mtechOngoing = mtechs.filter(d => isOngoing(d.year)).length;
         const mtechCompleted = mtechs.length - mtechOngoing;
 
+        // Projects - Exclude Consultancy
+        const sponsoredProjects = projects.filter(p => !p.projectType || !p.projectType.toLowerCase().includes('consultancy'));
+
         const projectCounts = roleGroups.map(group => {
-            return projects.filter(p => {
+            return sponsoredProjects.filter(p => {
                 const r = normalizeRole(p.role);
                 return group.matches.some(m => r.toLowerCase() === m.toLowerCase()); 
             }).length;
@@ -124,7 +142,7 @@ router.get("/api/all-cv-data", async (req, res) => {
              chapters: chapters.length.toString().padStart(2, '0'),
              phdSupervision: `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}`,
              mtechSupervision: `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}`,
-             sponsoredProjects: projects.length.toString(),
+             sponsoredProjects: sponsoredProjects.length.toString(),
              projectRoles: `(${projectCountStr})`
         };
 

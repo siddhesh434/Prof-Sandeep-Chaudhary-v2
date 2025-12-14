@@ -73,27 +73,35 @@ function checkPageBreak(doc, neededHeight = 60) {
 }
 
 // Helper: Bold specific substring "Chaudhary, S." while maintaining continued flow
-function printWithBoldAuthor(doc, textStr, x, y, width) {
+// Helper: Bold specific substring "Chaudhary, S." while maintaining continued flow
+function printWithBoldAuthor(doc, textStr, x, y, width, keepOpen = true) {
     const target = "Chaudhary, S.";
-    // Split by target. Note: if textStr doesn't contain it, parts=[textStr]
-    // If textStr starts with it, parts=["", remainder]
     const parts = textStr.split(target);
-    const opts = { width: width, align: 'justify', continued: true };
+    const baseOpts = { width: width, align: 'justify', continued: true };
     
-    // We need to ensuring we start writing at x,y
     let isFirst = true;
 
     parts.forEach((part, i) => {
-        if (isFirst) {
-            doc.text(part, x, y, opts);
-            isFirst = false;
-        } else {
-            doc.text(part, opts);
+        // Determine continued state for THIS part
+        // Only the very last part of the loop should respect 'keepOpen'.
+        // All intermediate parts (and the bold separators) must be continued=true.
+        const isLastPart = (i === parts.length - 1);
+        const currentOpts = { ...baseOpts };
+        
+        if (isLastPart) {
+            currentOpts.continued = keepOpen;
         }
 
-        // If not the last part, we encountered a split, so print the target in bold
+        if (isFirst) {
+            doc.text(part, x, y, currentOpts);
+            isFirst = false;
+        } else {
+            doc.text(part, currentOpts);
+        }
+
+        // Print bold target between parts
         if (i < parts.length - 1) {
-            doc.font('Times-Bold').text(target, opts).font('Times-Roman');
+            doc.font('Times-Bold').text(target, { ...baseOpts, continued: true }).font('Times-Roman');
         }
     });
 }
@@ -134,12 +142,13 @@ async function generateCV(config = {}) {
     const outreach = filterItems(extensionActivities, config.selectedOutreach);
 
     // Filter Definitions for Role Groups (Used for counts and display)
+    // Filter Definitions for Role Groups (Used for counts and display)
     const roleGroups = [
-        { label: "As Principal Investigator", short: "PI", matches: ["Principal Investigator", "PI", "As Principal Investigator"] },
-        { label: "As Scientific Director", short: "Scientific Director", matches: ["Scientific Director", "As Scientific Director"] },
-        { label: "As Scientist Mentor", short: "Mentor", matches: ["Scientist Mentor", "Mentor", "As Scientist Mentor"] },
-        { label: "As Co-Principal Investigator", short: "Co-PI", matches: ["Co-Principal Investigator", "Co-PI", "Co-PI/Co-Guide", "As Co-Principal Investigator"] },
-        { label: "As a Guide", short: "Guide", matches: ["Guide", "As a Guide"] }
+        { label: "As Principal Investigator", short: "PI", matches: ["Principal Investigator", "PI", "As Principal Investigator", "as pi", "P.I.", "Principal Inv."] },
+        { label: "As Scientific Director", short: "Scientific Director", matches: ["Scientific Director", "As Scientific Director", "Director"] },
+        { label: "As Scientist Mentor", short: "Mentor", matches: ["Scientist Mentor", "Mentor", "As Scientist Mentor", "Mentor As Scientist", "Scientist", "As Scientist"] },
+        { label: "As Co-Principal Investigator", short: "Co-PI", matches: ["Co-Principal Investigator", "Co-PI", "Co-PI/Co-Guide", "As Co-Principal Investigator", "Co-Investigator", "as co-pi"] },
+        { label: "As a Guide", short: "Guide", matches: ["Guide", "As a Guide", "As Guide", "as guide"] }
     ];
     const normalizeRole = r => r ? r.trim() : "";
     const isOngoing = (y) => y && (y.toLowerCase().includes('cont') || y.toLowerCase().includes('ongoing') || y.toLowerCase().includes('present'));
@@ -212,20 +221,33 @@ async function generateCV(config = {}) {
 
     // Recalculate defaults just in case (or for fallback)
     const techTransferCount = filteredTechTransfers.length.toString().padStart(2, '0');
-    const patentsGranted = filteredPatents.filter(p => p.grantNumber).length;
+    
+    // Patent Logic
+    const isGranted = (p) => {
+        const no = p.grantNumber ? p.grantNumber.trim() : "";
+        const date = p.grantDate ? p.grantDate.trim() : "";
+        return no && date && no !== '-' && date !== '-' && no.toLowerCase() !== 'na' && date.toLowerCase() !== 'na';
+    };
+    const patentsGranted = filteredPatents.filter(p => isGranted(p)).length;
     const patentsOther = filteredPatents.length - patentsGranted;
     const patentStr = `${patentsGranted.toString().padStart(2, '0')}/${patentsOther.toString().padStart(2, '0')}/01/01`;
 
-    const phds = filteredDissertations.filter(d => d.degree && d.degree.includes('Ph.D'));
-    const phdOngoing = phds.filter(d => isOngoing(d.year)).length;
-    const phdCompleted = phds.length - phdOngoing;
+    // Ph.D. Logic
+    // const phds = filteredDissertations.filter(d => d.degree && d.degree.toLowerCase().includes('phd')); // OLD
+    const phdOngoing = filteredDissertations.filter(d => d.degree === 'PhD Thesis in progress').length;
+    const phdCompleted = filteredDissertations.filter(d => d.degree === 'PhD Thesis Awarded').length;
     
-    const mtechs = filteredDissertations.filter(d => d.degree && (d.degree.includes('M.Tech') || d.degree.includes('M.Sc')));
+    // M.Tech Logic
+    const mtechs = filteredDissertations.filter(d => d.degree === 'MTech and MSc Awarded/Ongoing');
     const mtechOngoing = mtechs.filter(d => isOngoing(d.year)).length;
     const mtechCompleted = mtechs.length - mtechOngoing;
 
+    // Project Logic
+    // Filter out Consultancy Projects for "Sponsored Research Projects" count
+    const sponsoredProjectsList = filteredProjects.filter(p => !p.projectType || !p.projectType.toLowerCase().includes('consultancy'));
+
     const projectCounts = roleGroups.map(group => {
-         return filteredProjects.filter(p => {
+         return sponsoredProjectsList.filter(p => {
              const r = normalizeRole(p.role);
              return group.matches.some(m => r.toLowerCase() === m.toLowerCase()); 
          }).length;
@@ -235,15 +257,15 @@ async function generateCV(config = {}) {
     const credentials = [
       { label: "Technology Transfer/ Translational Research:", value: rc.techTransfer || `${techTransferCount}/02` },
       { label: "Patents (granted/ published/filed/in process):", value: rc.patents || patentStr }, 
-      { label: "Sponsored Research Projects:", value: rc.sponsoredProjects || filteredProjects.length.toString() },
-      { label: "(PI/Scientific Director/Mentor/Co-PI/Guide)", value: rc.projectRoles || `(${projectCountStr})` },
       { label: "Publications in SCIE/Scopus Indexed Journals:", value: rc.journals || filteredJournals.length.toString() },
       { label: "Publications in Conference Proceedings:", value: rc.conferences || filteredConferences.length.toString() },
       { label: "Books authored/edited:", value: rc.books || filteredBooks.length.toString().padStart(2, '0') },
       { label: "Technical reports:", value: rc.technicalReports || "01" },
-      { label: "Chapters in Books/Videos:", value: rc.chapters || filteredChapters.length.toString().padStart(2, '0') },
+      { label: "Book/ video chapters:", value: rc.chapters || filteredChapters.length.toString().padStart(2, '0') }, // Label changed slightly in other conv but keeping standard
       { label: "Ph.D. Supervision (completed/ongoing):", value: rc.phdSupervision || `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}` },
-      { label: "MTech and MSc thesis Awarded/Ongoing:", value: rc.mtechSupervision || `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}` }
+      { label: "MTech and MSc thesis Awarded/Ongoing:", value: rc.mtechSupervision || `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}` },
+      { label: "Sponsored Research Projects:", value: rc.sponsoredProjects || sponsoredProjectsList.length.toString() },
+      { label: "(PI/Scientific Director/Mentor/Co-PI/Guide)", value: rc.projectRoles || `(${projectCountStr})` }
     ];
     
     credentials.forEach(cred => {
@@ -258,7 +280,6 @@ async function generateCV(config = {}) {
 
     // 6. Courses Taught
     // 6. Courses Taught
-    doc.moveDown(0.6); // Specific spacing request
     addSectionHeader(doc, "Courses Taught");
     addBodyText(doc, config.coursesTaught);
 
@@ -271,10 +292,6 @@ async function generateCV(config = {}) {
     // 8. Sponsored Research Projects
     addSectionHeader(doc, "List of sponsored research projects");
 
-
-
-
-
     // Track which projects we've displayed to handle any "Others" if needed? 
     // For now, assuming data fits these categories or we just add an "Other" category at end.
     let displayedProjectIds = new Set();
@@ -283,8 +300,9 @@ async function generateCV(config = {}) {
     // Actually image "As Principal Investigator (13)" -> "01. ...". 
     // It seems numbering resets or is per section. Let's assume resets per subsection based on the image "01. ...".
     
+    // Use the filtered list (excluding Consultancy) for the display section
     roleGroups.forEach(group => {
-        const groupProjects = filteredProjects.filter(p => {
+        const groupProjects = sponsoredProjectsList.filter(p => {
              const r = normalizeRole(p.role);
              return group.matches.some(m => r.toLowerCase() === m.toLowerCase()) && !displayedProjectIds.has(p._id.toString());
         });
@@ -292,8 +310,8 @@ async function generateCV(config = {}) {
         if (groupProjects.length > 0) {
             groupProjects.forEach(p => displayedProjectIds.add(p._id.toString()));
             
-            doc.moveDown(0.6);
-            doc.font('Times-BoldItalic').fontSize(11).text(`${group.label} (${groupProjects.length})`);
+            doc.moveDown(0.3);
+            doc.font('Times-Italic').fontSize(11).text(`${group.label} (${groupProjects.length})`);
             doc.moveDown(0.2);
 
             groupProjects.forEach((p, i) => {
@@ -308,8 +326,8 @@ async function generateCV(config = {}) {
                 const startY = doc.y;
                 doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
                 
-                let projText = `"${title}" funded by ${p.funded}. (${p.year})`;//Removed role
-                if (p.collaborator && p.collaborator !== 'N/A' && p.collaborator.trim() !== '' && p.collaborator.trim() !== '-') {
+                let projText = `"${title}" funded by ${p.funded}. (${p.year}). Role: ${p.role}`;
+                if (p.collaborator && p.collaborator !== 'N/A' && p.collaborator.trim() !== '') {
                      projText += `. Collaborator: ${p.collaborator}`;
                 }
                 projText += ".";
@@ -322,7 +340,8 @@ async function generateCV(config = {}) {
     });
 
     // Handle any Remaining Projects (Others)
-    const remainingProjects = filteredProjects.filter(p => !displayedProjectIds.has(p._id.toString()));
+    // Handle any Remaining Projects (Others) - strictly from the sponsored list
+    const remainingProjects = sponsoredProjectsList.filter(p => !displayedProjectIds.has(p._id.toString()));
     if (remainingProjects.length > 0) {
         doc.font('Times-Italic').fontSize(11).text(`Other Projects (${remainingProjects.length})`);
         remainingProjects.forEach((p, i) => {
@@ -337,18 +356,38 @@ async function generateCV(config = {}) {
 
 
     // 9. Patents
-    // 9. Patents
     addSectionHeader(doc, "Patents");
+    
+    // Re-use isGranted helper logic locally or just implement strict checks
+    const isValid = (val) => val && val.trim() !== '' && val.trim() !== '-' && val.toLowerCase() !== 'na';
+
     filteredPatents.forEach((p, i) => {
         checkPageBreak(doc);
         // Format: 01. Authors (Status, Year). "Title", Patent No. X, Grant Date: Y.
         const num = (i + 1).toString().padStart(2, '0');
-        const status = p.grantNumber ? "Granted" : "Published";
-        const yearStr = p.year ? `, ${p.year}` : "";
-        const patentNoStr = p.grantNumber ? `, Patent No. ${p.grantNumber}` : "";
-        const appNoStr = p.applicationNumber ? `, Application No. ${p.applicationNumber}` : "";
-        const dateStr = p.grantDate ? `, Grant Date: ${p.grantDate}` : (p.grantNumber ? "" : `, Filed: ${p.year}`); // Fallback
         
+        const hasGrantNo = isValid(p.grantNumber);
+        const hasGrantDate = isValid(p.grantDate);
+        const isGrantedLocal = hasGrantNo && hasGrantDate;
+
+        const status = isGrantedLocal ? "Granted" : "Published";
+        const yearStr = p.year ? `, ${p.year}` : "";
+        
+        const patentNoStr = hasGrantNo ? `, Patent No. ${p.grantNumber}` : "";
+        const appNoStr = isValid(p.applicationNumber) ? `, Application No. ${p.applicationNumber}` : "";
+        
+        // Date Logic: If Granted, show Grant Date. If not, show Filed Date (if available) or Year.
+        let dateStr = "";
+        if (isGrantedLocal && hasGrantDate) {
+             dateStr = `, Grant Date: ${p.grantDate}`;
+        } else if (!isGrantedLocal) {
+             // For published/filed, maybe show filing date if we had it? 
+             // Logic says: (p.grantNumber ? "" : `, Filed: ${p.year}`)
+             // Let's stick to "Filed: [Year]" if not granted, or nothing if we just want "Published".
+             dateStr = `, Filed: ${p.year}`;
+        }
+        
+        // Construct line
         const startY = doc.y;
         doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
         doc.text(`${p.authors} (`, 75, startY, { width: 470, allowedToBreak: true, continued: true })
@@ -372,13 +411,18 @@ async function generateCV(config = {}) {
             doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
             
             
-            // Bold "Chaudhary, S." 
+            // Format: Author (Year). Title. Publisher. (ISBN: ...)
+            // Combine into one string to ensure consistent spacing and bolding
             const authorText = b.author || "";
-            printWithBoldAuthor(doc, authorText, 75, startY, 470); // Starts content block
-
-            // Format: (Year). Title. Publisher. (ISBN: ...)
-            // Note: Title is kept Roman to match user image.
-            doc.font('Times-Roman').text(` (${b.year}). ${b.title}. ${b.publisher ? b.publisher + '. ' : ''}(ISBN: ${b.isbn})`);
+            const yearStr = b.year ? ` (${b.year}). ` : "";
+            const titleStr = b.title ? `${b.title}. ` : "";
+            const pubStr = b.publisher ? `${b.publisher}. ` : "";
+            const isbnStr = b.isbn ? `(ISBN: ${b.isbn})` : "";
+            
+            const fullText = `${authorText}${yearStr}${titleStr}${pubStr}${isbnStr}`;
+            
+            // Pass false to close the paragraph specifically for Books
+            printWithBoldAuthor(doc, fullText, 75, startY, 470, false);
             doc.moveDown(0.4);
         });
     }
@@ -603,7 +647,7 @@ async function generateCV(config = {}) {
     // 18. Major Outreach
     // 18. Major Outreach
     // 18. Major Outreach
-    addSectionHeader(doc, "Major Outreach (Intl/Natl Contributions)");
+    addSectionHeader(doc, "Major Outreach");
     
     const outreachGroups = [];
     // Group by Role dynamically with Merge Logic
@@ -612,12 +656,11 @@ async function generateCV(config = {}) {
         const groups = {};
         outreach.forEach(item => {
              let r = item.role || "Other Contributions";
-             // Map Government to National
-             if(r.toLowerCase().includes('government')) r = "National Contributions";
-             // Map National to National (normalize)
-             else if(r.toLowerCase().includes('national') && !r.toLowerCase().includes('international')) r = "National Contributions";
-             // Map International to International (normalize) or Generic Contributions
-             else if(r.toLowerCase().includes('international') || r.toLowerCase().includes('contributions')) r = "International Contributions";
+             // Map Government to Government Advisory Roles
+             if(r.toLowerCase().includes('government')) r = "Government Advisory Roles";
+             // Map National to Government Advisory Roles (normalize)
+             else if(r.toLowerCase().includes('national') && !r.toLowerCase().includes('international')) r = "Government Advisory Roles";
+             else if(r.toLowerCase().includes('international') || r.toLowerCase().includes('contributions')) r = "Contributions";
 
              if(!groups[r]) groups[r] = [];
              groups[r].push(item);
