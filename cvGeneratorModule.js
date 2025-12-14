@@ -241,7 +241,7 @@ async function generateCV(config = {}) {
       { label: "Publications in Conference Proceedings:", value: rc.conferences || filteredConferences.length.toString() },
       { label: "Books authored/edited:", value: rc.books || filteredBooks.length.toString().padStart(2, '0') },
       { label: "Technical reports:", value: rc.technicalReports || "01" },
-      { label: "Book/ video chapters:", value: rc.chapters || filteredChapters.length.toString().padStart(2, '0') },
+      { label: "Chapters in Books/Videos:", value: rc.chapters || filteredChapters.length.toString().padStart(2, '0') },
       { label: "Ph.D. Supervision (completed/ongoing):", value: rc.phdSupervision || `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}` },
       { label: "MTech and MSc thesis Awarded/Ongoing:", value: rc.mtechSupervision || `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}` }
     ];
