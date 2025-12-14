@@ -189,7 +189,7 @@ async function generateCV(config = {}) {
     // Image scan: "Academic and Research Qualifications" - NO NUMBER.
     // I will remove numbers.
     // 2. Academic (No Number)
-    doc.moveDown(0.4); // Specific spacing request
+    doc.moveDown(0.8); // Specific spacing request
     addSectionHeader(doc, "Academic and Research Qualifications");
     addBodyText(doc, config.qualifications);
 
@@ -235,15 +235,15 @@ async function generateCV(config = {}) {
     const credentials = [
       { label: "Technology Transfer/ Translational Research:", value: rc.techTransfer || `${techTransferCount}/02` },
       { label: "Patents (granted/ published/filed/in process):", value: rc.patents || patentStr }, 
+      { label: "Sponsored Research Projects:", value: rc.sponsoredProjects || filteredProjects.length.toString() },
+      { label: "(PI/Scientific Director/Mentor/Co-PI/Guide)", value: rc.projectRoles || `(${projectCountStr})` },
       { label: "Publications in SCIE/Scopus Indexed Journals:", value: rc.journals || filteredJournals.length.toString() },
       { label: "Publications in Conference Proceedings:", value: rc.conferences || filteredConferences.length.toString() },
       { label: "Books authored/edited:", value: rc.books || filteredBooks.length.toString().padStart(2, '0') },
       { label: "Technical reports:", value: rc.technicalReports || "01" },
       { label: "Book/ video chapters:", value: rc.chapters || filteredChapters.length.toString().padStart(2, '0') },
       { label: "Ph.D. Supervision (completed/ongoing):", value: rc.phdSupervision || `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}` },
-      { label: "MTech and MSc thesis Awarded/Ongoing:", value: rc.mtechSupervision || `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}` },
-      { label: "Sponsored Research Projects:", value: rc.sponsoredProjects || filteredProjects.length.toString() },
-      { label: "(PI/Scientific Director/Mentor/Co-PI/Guide)", value: rc.projectRoles || `(${projectCountStr})` }
+      { label: "MTech and MSc thesis Awarded/Ongoing:", value: rc.mtechSupervision || `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}` }
     ];
     
     credentials.forEach(cred => {
@@ -258,6 +258,7 @@ async function generateCV(config = {}) {
 
     // 6. Courses Taught
     // 6. Courses Taught
+    doc.moveDown(0.6); // Specific spacing request
     addSectionHeader(doc, "Courses Taught");
     addBodyText(doc, config.coursesTaught);
 
@@ -291,8 +292,8 @@ async function generateCV(config = {}) {
         if (groupProjects.length > 0) {
             groupProjects.forEach(p => displayedProjectIds.add(p._id.toString()));
             
-            doc.moveDown(0.3);
-            doc.font('Times-Italic').fontSize(11).text(`${group.label} (${groupProjects.length})`);
+            doc.moveDown(0.6);
+            doc.font('Times-BoldItalic').fontSize(11).text(`${group.label} (${groupProjects.length})`);
             doc.moveDown(0.2);
 
             groupProjects.forEach((p, i) => {
@@ -307,8 +308,8 @@ async function generateCV(config = {}) {
                 const startY = doc.y;
                 doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
                 
-                let projText = `"${title}" funded by ${p.funded}. (${p.year}). Role: ${p.role}`;
-                if (p.collaborator && p.collaborator !== 'N/A' && p.collaborator.trim() !== '') {
+                let projText = `"${title}" funded by ${p.funded}. (${p.year})`;//Removed role
+                if (p.collaborator && p.collaborator !== 'N/A' && p.collaborator.trim() !== '' && p.collaborator.trim() !== '-') {
                      projText += `. Collaborator: ${p.collaborator}`;
                 }
                 projText += ".";
