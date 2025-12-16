@@ -165,7 +165,7 @@ async function generateCV(config = {}) {
     doc.pipe(writeStream);
 
     // --- Header ---
-    doc.font('Times-Bold').fontSize(12).text("BRIEF CURRICULUM VITAE", { align: "center" });
+    doc.font('Times-Bold').fontSize(12).text("CURRICULUM VITAE", { align: "center" });
     doc.moveDown(0.5);
     
     // 1. Personal Information
