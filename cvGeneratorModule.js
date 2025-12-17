@@ -32,37 +32,50 @@ function addSectionHeader(doc, title) {
 }
 
 // Helper: Add Body Text (handles multiline input)
-function addBodyText(doc, text) {
-  if (!text) return;
-  const lines = text.split('\n');
-  lines.forEach(line => {
-      if(line.trim()) {
+// Helper: Add Body Text (handles multiline input or array)
+function addBodyText(doc, content) {
+  if (!content) return;
+
+  if (Array.isArray(content)) {
+      content.forEach(item => {
+          if (!item || !item.trim()) return;
           checkPageBreak(doc);
-          doc.x = 50; // Reset X for every line/paragraph
-          
-          // Check for numbered list pattern (e.g. "1. ", "01. ", "1) ") - REQUIRE SPACE to avoid dates like "2009."
-          const match = line.trim().match(/^(\d+[\.\)]\s+)(.*)/);
-          
-          if (match) {
-              // Hanging Indent
-              const num = match[1];
-              const content = match[2];
-              const startY = doc.y;
-              doc.font('Times-Roman').fontSize(11).text(num, 50, startY);
-              const yNum = doc.y;
-              
-              doc.text(content, 75, startY, { width: 470, align: 'justify', lineGap: 2 });
-              const yContent = doc.y;
-              
-              doc.y = Math.max(yNum, yContent);
-          } else {
-              // Standard Paragraph
-              doc.font('Times-Roman').fontSize(11).text(line.trim(), { align: 'justify', lineGap: 2 });
-          }
+          const startY = doc.y;
+          // Bullet at x=60, Text at x=75
+          doc.font('Times-Roman').fontSize(14).text("•", 60, startY - 1);
+          doc.font('Times-Roman').fontSize(11).text(item.trim(), 75, startY, { width: 470, align: 'justify', lineGap: 2 });
           doc.moveDown(0.3);
-      }
-  });
-  doc.moveDown(0.4);
+      });
+      doc.moveDown(0.4);
+  } else if (typeof content === 'string') {
+      const lines = content.split('\n');
+      lines.forEach(line => {
+          if(line.trim()) {
+              checkPageBreak(doc);
+              doc.x = 50; 
+              
+              // Check for numbered list pattern
+              const match = line.trim().match(/^(\d+[\.\)]\s+)(.*)/);
+              
+              if (match) {
+                  // Hanging Indent
+                  const num = match[1];
+                  const textContent = match[2];
+                  const startY = doc.y;
+                  doc.font('Times-Roman').fontSize(11).text(num, 50, startY);
+                  doc.text(textContent, 75, startY, { width: 470, align: 'justify', lineGap: 2 });
+                  
+                  // Ensure Y is correct after text block
+                  // doc.text automatically advances Y, but we need to ensure we don't overlap if number was somehow taller (unlikely)
+              } else {
+                  // Standard Paragraph
+                  doc.font('Times-Roman').fontSize(11).text(line.trim(), { align: 'justify', lineGap: 2 });
+              }
+              doc.moveDown(0.3);
+          }
+      });
+      doc.moveDown(0.4);
+  }
 }
 
 // Helper: Check Page Break to keep items together
@@ -198,54 +211,32 @@ async function generateCV(config = {}) {
     // Image scan: "Academic and Research Qualifications" - NO NUMBER.
     // I will remove numbers.
     // 2. Academic (No Number)
-    doc.moveDown(0.8); // Specific spacing request
-    addSectionHeader(doc, "Academic and Research Qualifications");
-    addBodyText(doc, config.qualifications);
+    if (config.showQualifications !== false) {
+        doc.moveDown(0.8); 
+        addSectionHeader(doc, "Academic and Research Qualifications");
+        addBodyText(doc, config.qualifications);
+    }
 
     // 3. Work Experience
     // 3. Work Experience
-    addSectionHeader(doc, "Work Experience");
-    addBodyText(doc, config.experience);
+    if (config.showExperience !== false) {
+        addSectionHeader(doc, "Work Experience");
+        addBodyText(doc, config.experience);
+    }
 
     // 4. Specialization
     // 4. Specialization
-    addSectionHeader(doc, "Specialization");
-    addBodyText(doc, config.specialization);
+    if (config.showSpecialization !== false) {
+        addSectionHeader(doc, "Specialization");
+        addBodyText(doc, config.specialization);
+    }
 
     // 5. Research Credentials
-    // 5. Research Credentials
-    addSectionHeader(doc, "Research Credentials");
+    // Define sponsoredProjectsList at top scope for re-use
+    // (It was defined below in original code, moving logic up if needed, but here we just ensure calculation runs)
     
-    // Use Edited Credentials if available, otherwise fallback to calculation (or 0)
-    const rc = config.researchCredentials || {};
-
-    // Recalculate defaults just in case (or for fallback)
-    const techTransferCount = filteredTechTransfers.length.toString().padStart(2, '0');
-    
-    // Patent Logic
-    const isGranted = (p) => {
-        const no = p.grantNumber ? p.grantNumber.trim() : "";
-        const date = p.grantDate ? p.grantDate.trim() : "";
-        return no && date && no !== '-' && date !== '-' && no.toLowerCase() !== 'na' && date.toLowerCase() !== 'na';
-    };
-    const patentsGranted = filteredPatents.filter(p => isGranted(p)).length;
-    const patentsOther = filteredPatents.length - patentsGranted;
-    const patentStr = `${patentsGranted.toString().padStart(2, '0')}/${patentsOther.toString().padStart(2, '0')}/01/01`;
-
-    // Ph.D. Logic
-    // const phds = filteredDissertations.filter(d => d.degree && d.degree.toLowerCase().includes('phd')); // OLD
-    const phdOngoing = filteredDissertations.filter(d => d.degree === 'PhD Thesis in progress').length;
-    const phdCompleted = filteredDissertations.filter(d => d.degree === 'PhD Thesis Awarded').length;
-    
-    // M.Tech Logic
-    const mtechs = filteredDissertations.filter(d => d.degree === 'MTech and MSc Awarded/Ongoing');
-    const mtechOngoing = mtechs.filter(d => isOngoing(d.year)).length;
-    const mtechCompleted = mtechs.length - mtechOngoing;
-
-    // Project Logic
-    // Filter out Consultancy Projects for "Sponsored Research Projects" count
+    // Project Logic (Needed for Credentials & Projects section)
     const sponsoredProjectsList = filteredProjects.filter(p => !p.projectType || !p.projectType.toLowerCase().includes('consultancy'));
-
     const projectCounts = roleGroups.map(group => {
          return sponsoredProjectsList.filter(p => {
              const r = normalizeRole(p.role);
@@ -254,334 +245,339 @@ async function generateCV(config = {}) {
      });
     const projectCountStr = projectCounts.map(c => c.toString().padStart(2, '0')).join('/');
 
-    const credentials = [
-      { label: "Technology Transfer/ Translational Research:", value: rc.techTransfer || `${techTransferCount}/02` },
-      { label: "Patents (granted/ published/filed/in process):", value: rc.patents || patentStr }, 
-      { label: "Sponsored Research Projects:", value: rc.sponsoredProjects || sponsoredProjectsList.length.toString() },
-      { label: "(PI/Scientific Director/Mentor/Co-PI/Guide)", value: rc.projectRoles || `(${projectCountStr})` },
-      { label: "Publications in SCIE/Scopus Indexed Journals:", value: rc.journals || filteredJournals.length.toString() },
-      { label: "Publications in Conference Proceedings:", value: rc.conferences || filteredConferences.length.toString() },
-      { label: "Books authored/edited:", value: rc.books || filteredBooks.length.toString().padStart(2, '0') },
-      { label: "Technical reports:", value: rc.technicalReports || "01" },
-      { label: "Book/ video chapters:", value: rc.chapters || filteredChapters.length.toString().padStart(2, '0') }, // Label changed slightly in other conv but keeping standard
-      { label: "Ph.D. Supervision (completed/ongoing):", value: rc.phdSupervision || `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}` },
-      { label: "MTech and MSc thesis Awarded/Ongoing:", value: rc.mtechSupervision || `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}` }
-    ];
-    
-    credentials.forEach(cred => {
-         checkPageBreak(doc);
-         const currentY = doc.y;
-         doc.font('Times-Roman').fontSize(11).text(cred.label, 50, currentY);
-         doc.text(cred.value, 450, currentY);
-         doc.moveDown(0.4);
-    });
-    doc.x = 50; 
-    // doc.moveDown();
+    if (config.showResearchCredentials !== false) {
+        addSectionHeader(doc, "Research Credentials");
+        
+        const rc = config.researchCredentials || {};
 
-    // 6. Courses Taught
-    // 6. Courses Taught
-    addSectionHeader(doc, "Courses Taught");
-    addBodyText(doc, config.coursesTaught);
+        // Recalculate defaults just in case (or for fallback)
+        const techTransferCount = filteredTechTransfers.length.toString().padStart(2, '0');
+        
+        // Patent Logic
+        const isGranted = (p) => {
+            const no = p.grantNumber ? p.grantNumber.trim() : "";
+            const date = p.grantDate ? p.grantDate.trim() : "";
+            return no && date && no !== '-' && date !== '-' && no.toLowerCase() !== 'na' && date.toLowerCase() !== 'na';
+        };
+        const patentsGranted = filteredPatents.filter(p => isGranted(p)).length;
+        const patentsOther = filteredPatents.length - patentsGranted;
+        const patentStr = `${patentsGranted.toString().padStart(2, '0')}/${patentsOther.toString().padStart(2, '0')}/01/01`;
 
-    // 7. Awards
-    // 7. Awards
-    addSectionHeader(doc, "Awards / Achievements / Recognitions / Fellowships");
-    addBodyText(doc, config.awards);
+        // Ph.D. Logic
+        const phdOngoing = filteredDissertations.filter(d => d.degree === 'PhD Thesis in progress').length;
+        const phdCompleted = filteredDissertations.filter(d => d.degree === 'PhD Thesis Awarded').length;
+        
+        // M.Tech Logic
+        const mtechs = filteredDissertations.filter(d => d.degree === 'MTech and MSc Awarded/Ongoing');
+        const mtechOngoing = mtechs.filter(d => isOngoing(d.year)).length;
+        const mtechCompleted = mtechs.length - mtechOngoing;
 
-    // 8. Sponsored Research Projects
-    // 8. Sponsored Research Projects
-    addSectionHeader(doc, "List of sponsored research projects");
-
-    // Track which projects we've displayed to handle any "Others" if needed? 
-    // For now, assuming data fits these categories or we just add an "Other" category at end.
-    let displayedProjectIds = new Set();
-    
-    let globalProjCounter = 0; // If numbering should be continuous? Image shows "01, 02.." for EACH subsection probably? 
-    // Actually image "As Principal Investigator (13)" -> "01. ...". 
-    // It seems numbering resets or is per section. Let's assume resets per subsection based on the image "01. ...".
-    
-    // Use the filtered list (excluding Consultancy) for the display section
-    roleGroups.forEach(group => {
-        const groupProjects = sponsoredProjectsList.filter(p => {
-             const r = normalizeRole(p.role);
-             return group.matches.some(m => r.toLowerCase() === m.toLowerCase()) && !displayedProjectIds.has(p._id.toString());
-        });
-
-        if (groupProjects.length > 0) {
-            groupProjects.forEach(p => displayedProjectIds.add(p._id.toString()));
-            
-            doc.moveDown(0.3);
-            doc.font('Times-BoldItalic').fontSize(11).text(`${group.label} (${groupProjects.length})`);
-            doc.moveDown(0.2);
-
-            groupProjects.forEach((p, i) => {
-                checkPageBreak(doc);
-                const num = (i + 1).toString().padStart(2, '0');
-                
-                // Format: "01. "Title" funded by [Agency]. (Dates). Sanctioned Amount: [Amount]"
-                // We rely on existing fields. `p.funded` usually contains agency.
-                // Convert p.title to double quotes if not present
-                const title = p.title.replace(/^"/, '').replace(/"$/, '');
-                
-                const startY = doc.y;
-                doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-                
-                let projText = `"${title}" funded by ${p.funded}. (${p.year})`;
-                if (p.collaborator && p.collaborator !== 'N/A' && p.collaborator.trim() !== '' && p.collaborator.trim() !== '-') {
-                     projText += `. Collaborator: ${p.collaborator}`;
-                }
-                projText += ".";
-
-                doc.text(projText, 75, startY, { width: 470, align: 'justify' });
-                doc.moveDown(0.3);
-            });
-            doc.moveDown(0.3);
-        }
-    });
-
-    // Handle any Remaining Projects (Others)
-    // Handle any Remaining Projects (Others) - strictly from the sponsored list
-    const remainingProjects = sponsoredProjectsList.filter(p => !displayedProjectIds.has(p._id.toString()));
-    if (remainingProjects.length > 0) {
-        doc.font('Times-Italic').fontSize(11).text(`Other Projects (${remainingProjects.length})`);
-        remainingProjects.forEach((p, i) => {
+        const credentials = [
+          { label: "Technology Transfer/ Translational Research:", value: rc.techTransfer || `${techTransferCount}/02` },
+          { label: "Patents (granted/ published/filed/in process):", value: rc.patents || patentStr }, 
+          { label: "Sponsored Research Projects:", value: rc.sponsoredProjects || sponsoredProjectsList.length.toString() },
+          { label: "(PI/Scientific Director/Mentor/Co-PI/Guide)", value: rc.projectRoles || `(${projectCountStr})` },
+          { label: "Publications in SCIE/Scopus Indexed Journals:", value: rc.journals || filteredJournals.length.toString() },
+          { label: "Publications in Conference Proceedings:", value: rc.conferences || filteredConferences.length.toString() },
+          { label: "Books authored/edited:", value: rc.books || filteredBooks.length.toString().padStart(2, '0') },
+          { label: "Technical reports:", value: rc.technicalReports || "01" },
+          { label: "Book/ video chapters:", value: rc.chapters || filteredChapters.length.toString().padStart(2, '0') }, 
+          { label: "Ph.D. Supervision (completed/ongoing):", value: rc.phdSupervision || `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}` },
+          { label: "MTech and MSc thesis Awarded/Ongoing:", value: rc.mtechSupervision || `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}` }
+        ];
+        
+        credentials.forEach(cred => {
              checkPageBreak(doc);
-             const num = (i + 1).toString().padStart(2, '0');
-             const startY = doc.y;
-             doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-             doc.text(`"${p.title}" (${p.year}). Funded by: ${p.funded}. Role: ${p.role}`, 75, startY, { width: 470, align: 'justify' });
-             doc.moveDown(0.3);
+             const currentY = doc.y;
+             doc.font('Times-Roman').fontSize(11).text(cred.label, 50, currentY);
+             doc.text(cred.value, 460, currentY); // 460 to right align roughly
+             doc.moveDown(0.4);
         });
+        doc.x = 50; 
+    }
+
+    // 6. Courses Taught
+    if (config.showCoursesTaught !== false) {
+        addSectionHeader(doc, "Courses Taught");
+        addBodyText(doc, config.coursesTaught);
+    }
+
+    // 7. Awards
+    if (config.showAwards !== false) {
+        addSectionHeader(doc, "Awards / Achievements / Recognitions / Fellowships");
+        addBodyText(doc, config.awards);
+    }
+
+    // 8. Sponsored Research Projects
+    if (config.showProjects !== false) {
+        addSectionHeader(doc, "List of sponsored research projects");
+
+        let displayedProjectIds = new Set();
+        
+        // Use the filtered list (excluding Consultancy) for the display section
+        roleGroups.forEach(group => {
+            const groupProjects = sponsoredProjectsList.filter(p => {
+                 const r = normalizeRole(p.role);
+                 return group.matches.some(m => r.toLowerCase() === m.toLowerCase()) && !displayedProjectIds.has(p._id.toString());
+            });
+
+            if (groupProjects.length > 0) {
+                groupProjects.forEach(p => displayedProjectIds.add(p._id.toString()));
+                
+                doc.moveDown(0.3);
+                doc.font('Times-BoldItalic').fontSize(11).text(`${group.label} (${groupProjects.length})`);
+                doc.moveDown(0.2);
+
+                groupProjects.forEach((p, i) => {
+                    checkPageBreak(doc);
+                    const num = (i + 1).toString().padStart(2, '0');
+                    const title = p.title.replace(/^"/, '').replace(/"$/, '');
+                    
+                    const startY = doc.y;
+                    doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+                    
+                    let projText = `"${title}" funded by ${p.funded}. (${p.year})`;
+                    if (p.collaborator && p.collaborator !== 'N/A' && p.collaborator.trim() !== '' && p.collaborator.trim() !== '-') {
+                         projText += `. Collaborator: ${p.collaborator}`;
+                    }
+                    projText += ".";
+
+                    doc.text(projText, 75, startY, { width: 470, align: 'justify' });
+                    doc.moveDown(0.3);
+                });
+                doc.moveDown(0.3);
+            }
+        });
+
+        // Handle any Remaining Projects (Others)
+        const remainingProjects = sponsoredProjectsList.filter(p => !displayedProjectIds.has(p._id.toString()));
+        if (remainingProjects.length > 0) {
+            doc.font('Times-Italic').fontSize(11).text(`Other Projects (${remainingProjects.length})`);
+            remainingProjects.forEach((p, i) => {
+                 checkPageBreak(doc);
+                 const num = (i + 1).toString().padStart(2, '0');
+                 const startY = doc.y;
+                 doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+                 doc.text(`"${p.title}" (${p.year}). Funded by: ${p.funded}. Role: ${p.role}`, 75, startY, { width: 470, align: 'justify' });
+                 doc.moveDown(0.3);
+            });
+        }
     }
 
 
     // 9. Patents
-    addSectionHeader(doc, "Patents");
-    
-    // Re-use isGranted helper logic locally or just implement strict checks
-    const isValid = (val) => val && val.trim() !== '' && val.trim() !== '-' && val.toLowerCase() !== 'na';
+    if (config.showPatents !== false) {
+        addSectionHeader(doc, "Patents");
+        
+        // Re-use isGranted helper logic locally or just implement strict checks
+        const isValid = (val) => val && val.trim() !== '' && val.trim() !== '-' && val.toLowerCase() !== 'na';
 
-    filteredPatents.forEach((p, i) => {
-        checkPageBreak(doc);
-        // Format: 01. Authors (Status, Year). "Title", Patent No. X, Grant Date: Y.
-        const num = (i + 1).toString().padStart(2, '0');
-        
-        const hasGrantNo = isValid(p.grantNumber);
-        const hasGrantDate = isValid(p.grantDate);
-        const isGrantedLocal = hasGrantNo && hasGrantDate;
+        filteredPatents.forEach((p, i) => {
+            checkPageBreak(doc);
+            const num = (i + 1).toString().padStart(2, '0');
+            
+            const hasGrantNo = isValid(p.grantNumber);
+            const hasGrantDate = isValid(p.grantDate);
+            const isGrantedLocal = hasGrantNo && hasGrantDate;
 
-        const status = isGrantedLocal ? "Granted" : "Published";
-        const yearStr = p.year ? `, ${p.year}` : "";
+            const status = isGrantedLocal ? "Granted" : "Published";
+            const yearStr = p.year ? `, ${p.year}` : "";
+            
+            const patentNoStr = hasGrantNo ? `, Patent No. ${p.grantNumber}` : "";
+            const appNoStr = isValid(p.applicationNumber) ? `, Application No. ${p.applicationNumber}` : "";
+            
+            let dateStr = "";
+            if (isGrantedLocal && hasGrantDate) {
+                 dateStr = `, Grant Date: ${p.grantDate}`;
+            } else if (!isGrantedLocal) {
+                 dateStr = `, Filed: ${p.year}`;
+            }
+            
+            const startY = doc.y;
+            doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+            doc.text(`${p.authors} (`, 75, startY, { width: 470, allowedToBreak: true, continued: true })
+               .font('Times-Italic').text(`${status}${yearStr}`, { continued: true })
+               .font('Times-Roman').text(`). "${p.title}"${patentNoStr}${appNoStr}${dateStr}.`);
+            
+            doc.moveDown(0.4);
+        });
+    }
+    // 10. List of publications
+    // 10. List of publications
+    // 10. List of publications
+    if (config.showPublications !== false) {
+        addSectionHeader(doc, "List of publications");
         
-        const patentNoStr = hasGrantNo ? `, Patent No. ${p.grantNumber}` : "";
-        const appNoStr = isValid(p.applicationNumber) ? `, Application No. ${p.applicationNumber}` : "";
-        
-        // Date Logic: If Granted, show Grant Date. If not, show Filed Date (if available) or Year.
-        let dateStr = "";
-        if (isGrantedLocal && hasGrantDate) {
-             dateStr = `, Grant Date: ${p.grantDate}`;
-        } else if (!isGrantedLocal) {
-             // For published/filed, maybe show filing date if we had it? 
-             // Logic says: (p.grantNumber ? "" : `, Filed: ${p.year}`)
-             // Let's stick to "Filed: [Year]" if not granted, or nothing if we just want "Published".
-             dateStr = `, Filed: ${p.year}`;
+        // Books
+        if(filteredBooks.length > 0) {
+            doc.font('Times-BoldItalic').fontSize(11).text("Books Published");
+            filteredBooks.forEach((b, i) => {
+                checkPageBreak(doc);
+                const num = (i + 1).toString().padStart(2, '0');
+                
+                const startY = doc.y;
+                doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+                
+                const authorText = b.author || "";
+                const yearStr = b.year ? ` (${b.year}). ` : "";
+                const titleStr = b.title ? `${b.title}. ` : "";
+                const pubStr = b.publisher ? `${b.publisher}. ` : "";
+                const isbnStr = b.isbn ? `(ISBN: ${b.isbn})` : "";
+                
+                const fullText = `${authorText}${yearStr}${titleStr}${pubStr}${isbnStr}`;
+                
+                printWithBoldAuthor(doc, fullText, 75, startY, 470, false);
+                doc.moveDown(0.4);
+            });
         }
         
-        // Construct line
-        const startY = doc.y;
-        doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-        doc.text(`${p.authors} (`, 75, startY, { width: 470, allowedToBreak: true, continued: true })
-           .font('Times-Italic').text(`${status}${yearStr}`, { continued: true })
-           .font('Times-Roman').text(`). "${p.title}"${patentNoStr}${appNoStr}${dateStr}.`);
-        
-        doc.moveDown(0.4);
-    });
-    // 10. List of publications
-    // 10. List of publications
-    addSectionHeader(doc, "List of publications");
-    
-    // Books
-    if(filteredBooks.length > 0) {
-        doc.font('Times-BoldItalic').fontSize(11).text("Books Published");
-        filteredBooks.forEach((b, i) => {
-            checkPageBreak(doc);
-            const num = (i + 1).toString().padStart(2, '0');
-            
-            const startY = doc.y;
-            doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-            
-            
-            // Format: Author (Year). Title. Publisher. (ISBN: ...)
-            // Combine into one string to ensure consistent spacing and bolding
-            const authorText = b.author || "";
-            const yearStr = b.year ? ` (${b.year}). ` : "";
-            const titleStr = b.title ? `${b.title}. ` : "";
-            const pubStr = b.publisher ? `${b.publisher}. ` : "";
-            const isbnStr = b.isbn ? `(ISBN: ${b.isbn})` : "";
-            
-            const fullText = `${authorText}${yearStr}${titleStr}${pubStr}${isbnStr}`;
-            
-            // Pass false to close the paragraph specifically for Books
-            printWithBoldAuthor(doc, fullText, 75, startY, 470, false);
-            doc.moveDown(0.4);
-        });
-    }
-    
-    // Journals
-    if(filteredJournals.length > 0) {
-        doc.font('Times-BoldItalic').fontSize(11).text(`SCI/ SCI-E Journal Publications (${filteredJournals.length})`);
-        doc.moveDown(0.2);
+        // Journals
+        if(filteredJournals.length > 0) {
+            doc.font('Times-BoldItalic').fontSize(11).text(`SCI/ SCI-E Journal Publications (${filteredJournals.length})`);
+            doc.moveDown(0.2);
 
-            filteredJournals.forEach((p, i) => {
-            checkPageBreak(doc);
-            const num = (i + 1).toString().padStart(2, '0');
-            const startY = doc.y;
-            doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-            
-            
-            // Format: 01. Author (Year). "Title". Journal, Vol, Pages.
-            printWithBoldAuthor(doc, `${p.author} (${p.year}). "${p.title}". `, 75, startY, 470);
-            doc.font('Times-Italic').text(`${p.journal}`, { continued: true })
-               .font('Times-Roman').text(`, ${p.volumePages}.`);
-            doc.moveDown(0.4);
-        });
-    }
+                filteredJournals.forEach((p, i) => {
+                checkPageBreak(doc);
+                const num = (i + 1).toString().padStart(2, '0');
+                const startY = doc.y;
+                doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+                
+                printWithBoldAuthor(doc, `${p.author} (${p.year}). "${p.title}". `, 75, startY, 470);
+                doc.font('Times-Italic').text(`${p.journal}`, { continued: true })
+                   .font('Times-Roman').text(`, ${p.volumePages}.`);
+                doc.moveDown(0.4);
+            });
+        }
 
-    // Conferences
-    // Conferences
-    if(filteredConferences.length > 0) {
-        doc.font('Times-BoldItalic').fontSize(11).text(`Conference publications (${filteredConferences.length})`);
-        filteredConferences.forEach((c, i) => {
-            checkPageBreak(doc);
-            const num = (i + 1).toString().padStart(2, '0');
-            const startY = doc.y;
-            doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-            // Bold Author support
-            printWithBoldAuthor(doc, `${c.author} (${c.year}). "${c.title}". `, 75, startY, 470);
-            
-            doc.font('Times-Italic').text(`${c.conference}`, { continued: true })
-               .font('Times-Roman').text(`, ${c.place}, ${c.date}.`);
-            doc.moveDown(0.4);
-        });
-    }
+        // Conferences
+        if(filteredConferences.length > 0) {
+            doc.font('Times-BoldItalic').fontSize(11).text(`Conference publications (${filteredConferences.length})`);
+            filteredConferences.forEach((c, i) => {
+                checkPageBreak(doc);
+                const num = (i + 1).toString().padStart(2, '0');
+                const startY = doc.y;
+                doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+                // Bold Author support
+                printWithBoldAuthor(doc, `${c.author} (${c.year}). "${c.title}". `, 75, startY, 470);
+                
+                doc.font('Times-Italic').text(`${c.conference}`, { continued: true })
+                   .font('Times-Roman').text(`, ${c.place}, ${c.date}.`);
+                doc.moveDown(0.4);
+            });
+        }
 
-    // Chapters
-    // Chapters
-    if(filteredChapters.length > 0) {
-         doc.font('Times-BoldItalic').fontSize(11).text(`Chapters/Video Chapters Published (${filteredChapters.length})`);
-         filteredChapters.forEach((c, i) => {
-             checkPageBreak(doc);
-             const num = (i + 1).toString().padStart(2, '0');
-             const startY = doc.y;
-             doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-             printWithBoldAuthor(doc, `${c.author} (${c.year}). "${c.chapterName}". In `, 75, startY, 470);
-             doc.font('Times-Italic').text(`${c.bookName}`, { continued: true })
-                .font('Times-Roman').text(`, ${c.Page}. (ISBN: ${c.ISBN})`);
-             doc.moveDown(0.4);
-          });
+        // Chapters
+        if(filteredChapters.length > 0) {
+             doc.font('Times-BoldItalic').fontSize(11).text(`Chapters/Video Chapters Published (${filteredChapters.length})`);
+             filteredChapters.forEach((c, i) => {
+                 checkPageBreak(doc);
+                 const num = (i + 1).toString().padStart(2, '0');
+                 const startY = doc.y;
+                 doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+                 printWithBoldAuthor(doc, `${c.author} (${c.year}). "${c.chapterName}". In `, 75, startY, 470);
+                 doc.font('Times-Italic').text(`${c.bookName}`, { continued: true })
+                    .font('Times-Roman').text(`, ${c.Page}. (ISBN: ${c.ISBN})`);
+                 doc.moveDown(0.4);
+              });
+        }
     }
 
     // 11. Translational Contributions
-    const customTrans = config.translationalCustom || [];
-    const hasTransData = (filteredTechTransfers.length > 0) || (customTrans.length > 0) || config.translational;
+    if (config.showTranslational !== false) {
+        const customTrans = config.translationalCustom || [];
+        const hasTransData = (filteredTechTransfers.length > 0) || (customTrans.length > 0) || config.translational;
 
-    if (hasTransData) {
-        // Header matches image
-        addSectionHeader(doc, "Translational Contributions");
-        
-        // List from DB (TechnologyTransfer) - DISABLED as per user request (only Custom items shown)
-        // if(filteredTechTransfers.length > 0) { ... }
-        
-        // List from Custom Items (config.translationalCustom)
-        if(customTrans.length > 0) {
-              customTrans.forEach(item => {
-                   checkPageBreak(doc);
-                   if(item.title) {
-                       doc.x = 50;
-                       doc.font('Times-Italic').fontSize(11).text(item.title);
-                   }
-                   if(item.description) {
-                       doc.font('Times-Roman').fontSize(11).text(item.description, 65, doc.y, { width: 480, align: 'justify', lineGap: 2 });
-                       doc.moveDown(0.3);
-                   }
-              });
-        }
+        if (hasTransData) {
+            addSectionHeader(doc, "Translational Contributions");
+            
+            // List from Custom Items (config.translationalCustom)
+            if(customTrans.length > 0) {
+                  customTrans.forEach(item => {
+                       checkPageBreak(doc);
+                       if(item.title) {
+                           doc.x = 50;
+                           doc.font('Times-Italic').fontSize(11).text(item.title);
+                       }
+                       if(item.description) {
+                           doc.font('Times-Roman').fontSize(11).text(item.description, 65, doc.y, { width: 480, align: 'justify', lineGap: 2 });
+                           doc.moveDown(0.3);
+                       }
+                  });
+            }
 
-        // Additional text from config (Legacy string field)
-        if (config.translational) {
-             addBodyText(doc, config.translational);
+            // Additional text from config
+            if (config.translational) {
+                 addBodyText(doc, config.translational);
+            }
         }
-        // doc.moveDown();
     }
 
     // 12. Professional Affiliations
-    // 12. Professional Affiliations
-    addSectionHeader(doc, "Professional Affiliations");
-    addBodyText(doc, config.affiliations);
+    if (config.showAffiliations !== false) {
+        addSectionHeader(doc, "Professional Affiliations");
+        addBodyText(doc, config.affiliations);
+    }
 
     // 13. Administrative Positions
-    // 13. Administrative Positions
-    addSectionHeader(doc, "Administrative Positions Held");
-    addBodyText(doc, config.adminPositions);
+    if (config.showAdminPositions !== false) {
+        addSectionHeader(doc, "Administrative Positions Held");
+        addBodyText(doc, config.adminPositions);
+    }
 
     // 14. Facilities Established
-    // 14. Facilities Established
-    addSectionHeader(doc, "Facilities and Centres established");
-    addBodyText(doc, config.facilities);
+    if (config.showFacilities !== false) {
+        addSectionHeader(doc, "Facilities and Centres established");
+        addBodyText(doc, config.facilities);
+    }
 
     // 15. Workshops, conferences
-    // 15. Workshops, conferences
-    addSectionHeader(doc, "Conferences Organised");
+    if (config.showConferencesOrganised !== false) {
+        addSectionHeader(doc, "Conferences Organised");
 
-    if (organizedConferences.length > 0) {
-        organizedConferences.forEach((item, i) => {
-            checkPageBreak(doc);
-            const num = (i + 1).toString().padStart(2, '0');
-            const startY = doc.y;
+        if (organizedConferences.length > 0) {
+            organizedConferences.forEach((item, i) => {
+                checkPageBreak(doc);
+                const num = (i + 1).toString().padStart(2, '0');
+                const startY = doc.y;
 
-            // Format Dates: "Month DD-DD, YYYY" or just "Month DD, YYYY"
-            const formatDate = (d) => {
-                if(!d) return "";
-                return new Date(d).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
-            };
+                const formatDate = (d) => {
+                    if(!d) return "";
+                    return new Date(d).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+                };
 
-            let dateStr = "";
-            if (item.startDate) {
-                const start = new Date(item.startDate);
-                const end = item.endDate ? new Date(item.endDate) : null;
-                const month = start.toLocaleString('default', { month: 'long' });
-                const year = start.getFullYear();
-                
-                if (end && start.getTime() !== end.getTime()) {
-                     // Try to be smart about ranges like "March 21-22, 2025"
-                     if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
-                         dateStr = `(${month} ${start.getDate()}-${end.getDate()}, ${year})`;
-                     } else {
-                         dateStr = `(${formatDate(start)} - ${formatDate(end)})`;
-                     }
-                } else {
-                    dateStr = `(${formatDate(start)})`;
+                let dateStr = "";
+                if (item.startDate) {
+                    const start = new Date(item.startDate);
+                    const end = item.endDate ? new Date(item.endDate) : null;
+                    const month = start.toLocaleString('default', { month: 'long' });
+                    const year = start.getFullYear();
+                    
+                    if (end && start.getTime() !== end.getTime()) {
+                         if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+                             dateStr = `(${month} ${start.getDate()}-${end.getDate()}, ${year})`;
+                         } else {
+                             dateStr = `(${formatDate(start)} - ${formatDate(end)})`;
+                         }
+                    } else {
+                        dateStr = `(${formatDate(start)})`;
+                    }
                 }
-            }
 
-            // Construct Content String
-            // Pattern: [Description] "[Title]", [Location] [Date]. 
-            // We strip quoting from DB if present to avoid double quoting
-            const cleanTitle = item.title ? item.title.replace(/^"/, '').replace(/"$/, '') : "";
-            
-            // Build the text segments
-            let text = "";
-            if (cleanTitle) text += `${cleanTitle}`;
-            if (item.description) text += ` of ${item.description}`;
-            if (item.location) text += `, ${item.location}`;
-            if (dateStr) text += ` ${dateStr}`;
-            text += "."; // Period at end
+                const cleanTitle = item.title ? item.title.replace(/^"/, '').replace(/"$/, '') : "";
+                
+                let text = "";
+                if (cleanTitle) text += `${cleanTitle}`;
+                if (item.description) text += ` of ${item.description}`;
+                if (item.location) text += `, ${item.location}`;
+                if (dateStr) text += ` ${dateStr}`;
+                text += "."; 
 
-            doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-            doc.text(text, 75, startY, { width: 470, align: 'justify' });
-            doc.moveDown(0.4);
-        });
-        doc.moveDown(0.3);
+                doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+                doc.text(text, 75, startY, { width: 470, align: 'justify' });
+                doc.moveDown(0.4);
+            });
+            doc.moveDown(0.3);
+        }
     }
 
     // Append any manual additional text
@@ -589,109 +585,105 @@ async function generateCV(config = {}) {
     // doc.moveDown();
 
     // 16. Workshops Organised
-    addSectionHeader(doc, "Workshops Organised");
+    if (config.showWorkshopsOrganised !== false) {
+        addSectionHeader(doc, "Workshops Organised");
 
-    if (organizedWorkshops.length > 0) {
-         organizedWorkshops.forEach((item, i) => {
-            checkPageBreak(doc);
-            const num = (i + 1).toString().padStart(2, '0');
-            const startY = doc.y;
+        if (organizedWorkshops.length > 0) {
+             organizedWorkshops.forEach((item, i) => {
+                checkPageBreak(doc);
+                const num = (i + 1).toString().padStart(2, '0');
+                const startY = doc.y;
 
-            // Date Logic (Reused)
-            const formatDate = (d) => {
-                if(!d) return "";
-                return new Date(d).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
-            };
+                const formatDate = (d) => {
+                    if(!d) return "";
+                    return new Date(d).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+                };
 
-            let dateStr = "";
-            if (item.startDate) {
-                const start = new Date(item.startDate);
-                const end = item.endDate ? new Date(item.endDate) : null;
-                const month = start.toLocaleString('default', { month: 'long' });
-                const year = start.getFullYear();
-                
-                if (end && start.getTime() !== end.getTime()) {
-                     if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
-                         dateStr = `(${month} ${start.getDate()}-${end.getDate()}, ${year})`;
-                     } else {
-                         dateStr = `(${formatDate(start)} - ${formatDate(end)})`;
-                     }
-                } else {
-                    dateStr = `(${formatDate(start)})`;
+                let dateStr = "";
+                if (item.startDate) {
+                    const start = new Date(item.startDate);
+                    const end = item.endDate ? new Date(item.endDate) : null;
+                    const month = start.toLocaleString('default', { month: 'long' });
+                    const year = start.getFullYear();
+                    
+                    if (end && start.getTime() !== end.getTime()) {
+                         if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+                             dateStr = `(${month} ${start.getDate()}-${end.getDate()}, ${year})`;
+                         } else {
+                             dateStr = `(${formatDate(start)} - ${formatDate(end)})`;
+                         }
+                    } else {
+                        dateStr = `(${formatDate(start)})`;
+                    }
                 }
-            }
 
-            const cleanTitle = item.title ? item.title.replace(/^"/, '').replace(/"$/, '') : "";
-            
-            let text = "";
-            if (cleanTitle) text += `${cleanTitle}`;
-            if (item.description) text += ` of ${item.description}`;
-            if (item.location) text += `, ${item.location}`;
-            if (dateStr) text += ` ${dateStr}`;
-            text += ".";
+                const cleanTitle = item.title ? item.title.replace(/^"/, '').replace(/"$/, '') : "";
+                
+                let text = "";
+                if (cleanTitle) text += `${cleanTitle}`;
+                if (item.description) text += ` of ${item.description}`;
+                if (item.location) text += `, ${item.location}`;
+                if (dateStr) text += ` ${dateStr}`;
+                text += ".";
 
-            doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-            doc.text(text, 75, startY, { width: 470, align: 'justify' });
-            doc.moveDown(0.4);
-        });
-        doc.moveDown(0.3);
+                doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+                doc.text(text, 75, startY, { width: 470, align: 'justify' });
+                doc.moveDown(0.4);
+            });
+            doc.moveDown(0.3);
+        }
+        addBodyText(doc, config.continuingEducation);
     }
-    
-    addBodyText(doc, config.continuingEducation);
 
     // 17. International Collaborations
-    // 17. International Collaborations
-    addSectionHeader(doc, "International Collaborations");
-    addBodyText(doc, config.collaborations);
+    if (config.showCollaborations !== false) {
+        addSectionHeader(doc, "International Collaborations");
+        addBodyText(doc, config.collaborations);
+    }
 
     // 18. Major Outreach
     // 18. Major Outreach
     // 18. Major Outreach
-    addSectionHeader(doc, "Major Outreach");
-    
-    const outreachGroups = [];
-    // Group by Role dynamically with Merge Logic
-    if(outreach.length > 0) {
-        // Collect matches
-        const groups = {};
-        outreach.forEach(item => {
-             let r = item.role || "Other Contributions";
-             // Map Government to Government Advisory Roles
-             if(r.toLowerCase().includes('government')) r = "Government Advisory Roles";
-             // Map National to Government Advisory Roles (normalize)
-             else if(r.toLowerCase().includes('national') && !r.toLowerCase().includes('international')) r = "Government Advisory Roles";
-             else if(r.toLowerCase().includes('international') || r.toLowerCase().includes('contributions')) r = "Contributions";
-
-             if(!groups[r]) groups[r] = [];
-             groups[r].push(item);
-        });
+    if (config.showOutreach !== false) {
+        addSectionHeader(doc, "Major Outreach");
         
-        // Sort keys to maybe keep Gov -> Intl -> Natl? 
-        // Or just alphabetical? Or user defined?
-        // Let's rely on alphanumeric sort for stability
-        Object.keys(groups).sort().forEach(role => {
-            outreachGroups.push({ title: role, items: groups[role] });
+        const outreachGroups = [];
+        if(outreach.length > 0) {
+            const groups = {};
+            outreach.forEach(item => {
+                 let r = item.role || "Other Contributions";
+                 if(r.toLowerCase().includes('government')) r = "Government Advisory Roles";
+                 else if(r.toLowerCase().includes('national') && !r.toLowerCase().includes('international')) r = "Government Advisory Roles";
+                 else if(r.toLowerCase().includes('international') || r.toLowerCase().includes('contributions')) r = "Contributions";
+
+                 if(!groups[r]) groups[r] = [];
+                 groups[r].push(item);
+            });
+            
+            Object.keys(groups).sort().forEach(role => {
+                outreachGroups.push({ title: role, items: groups[role] });
+            });
+        }
+
+        outreachGroups.forEach(group => {
+             if(group.items.length > 0) {
+                 doc.font('Times-Italic').fontSize(11).text(group.title);
+                 doc.moveDown(0.2);
+                  group.items.forEach((o, i) => {
+                      checkPageBreak(doc);
+                      const num = (i + 1).toString().padStart(2, '0');
+                     let text = `${o.title}`;
+                     if(o.description) text += ` - ${o.description}`;
+                     
+                     const startY = doc.y;
+                     doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
+                     doc.text(text, 75, startY, { width: 470, align: 'justify' });
+                     doc.moveDown(0.4);
+                 });
+                 doc.moveDown();
+             }
         });
     }
-
-    outreachGroups.forEach(group => {
-         if(group.items.length > 0) {
-             doc.font('Times-Italic').fontSize(11).text(group.title);
-             doc.moveDown(0.2);
-              group.items.forEach((o, i) => {
-                  checkPageBreak(doc);
-                  const num = (i + 1).toString().padStart(2, '0');
-                 let text = `${o.title}`;
-                 if(o.description) text += ` - ${o.description}`;
-                 
-                 const startY = doc.y;
-                 doc.font('Times-Roman').fontSize(11).text(`${num}.`, 50, startY);
-                 doc.text(text, 75, startY, { width: 470, align: 'justify' }); // Hanging indent
-                 doc.moveDown(0.4);
-             });
-             doc.moveDown();
-         }
-    });
 
     doc.end();
 

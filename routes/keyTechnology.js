@@ -68,6 +68,7 @@ router.post(
     try {
       const { title, description, tags } = req.body;
       let imageUrl = req.body.imageUrl; // Fallback if no file
+      const order = req.body.order || 0;
 
       if (req.file) {
         imageUrl = `/uploads/keyTechnology/${req.file.filename}`;
@@ -93,6 +94,7 @@ router.post(
         description,
         imageUrl,
         tags: tagsArray,
+        order,
       });
 
       const saved = await tech.save();
@@ -107,7 +109,7 @@ router.post(
 // Read All Key Technologies
 router.get("/api/key-technologies", async (req, res) => {
   try {
-    const techs = await KeyTechnology.find().sort({ createdAt: -1 });
+    const techs = await KeyTechnology.find().sort({ order: 1, createdAt: -1 });
     res.json(techs);
   } catch (error) {
     console.error("Error fetching key technologies:", error);
@@ -135,7 +137,7 @@ router.put(
   upload.single("image"),
   async (req, res) => {
     try {
-      const { title, description, tags } = req.body;
+      const { title, description, tags, order } = req.body;
       let imageUrl = req.body.imageUrl;
 
       const tech = await KeyTechnology.findById(req.params.id);
@@ -175,7 +177,7 @@ router.put(
 
       const updated = await KeyTechnology.findByIdAndUpdate(
         req.params.id,
-        { title, description, imageUrl, tags: tagsArray },
+        { title, description, imageUrl, tags: tagsArray, order },
         { new: true, runValidators: true }
       );
 

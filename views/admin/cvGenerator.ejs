@@ -67,7 +67,10 @@
           </div>
           
           <!-- Actions Bar -->
-          <div class="flex justify-end mb-6 space-x-4 sticky top-0 z-20 bg-gray-100 py-4">
+          <div class="flex justify-end mb-6 space-x-4 sticky top-0 z-20 bg-gray-100 py-4 items-center">
+              <span id="inlineSaveMsg" class="text-green-600 font-semibold opacity-0 transition-opacity duration-500 mr-4">
+                  <i class="fas fa-check-circle"></i> Configuration saved successfully!
+              </span>
               <button id="saveConfigBtn" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 shadow-md flex items-center">
                   <i class="fas fa-save mr-2"></i> Save Configuration
               </button>
@@ -101,26 +104,40 @@
 
                 <!-- 2. Qualifications -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">2. Academic & Research Qualifications</label>
+                    <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_qualifications" checked class="w-5 h-5 text-blue-600 rounded">
+                        2. Academic & Research Qualifications
+                    </label>
                     <p class="text-xs text-gray-500 mb-2">Format: Degree - Institute (Year) - Details</p>
                     <textarea id="txt_qualifications" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
                 </div>
 
                 <!-- 3. Work Experience -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">3. Work Experience</label>
-                    <textarea id="txt_experience" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
+                    <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_experience" checked class="w-5 h-5 text-blue-600 rounded">
+                        3. Work Experience
+                    </label>
+                    <div id="container-experience" class="space-y-2"></div>
+                    <button type="button" onclick="addDynamicItem('container-experience')" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">+ Add Position</button>
                 </div>
 
                 <!-- 4. Specialization -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">4. Specialization</label>
-                    <textarea id="specialization" rows="3" class="w-full border p-2 rounded"></textarea>
+                    <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_specialization" checked class="w-5 h-5 text-blue-600 rounded">
+                        4. Specialization
+                    </label>
+                    <div id="container-specialization" class="space-y-2"></div>
+                    <button type="button" onclick="addDynamicItem('container-specialization')" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">+ Add Specialization</button>
                 </div>
 
                 <!-- 5. Research Credentials -->
                 <div>
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">5. Research Credentials (Summary)</h3>
+                    <h3 class="flex items-center gap-2 text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                         <input type="checkbox" id="chk_researchCredentials" checked class="w-5 h-5 text-blue-600 rounded">
+                         5. Research Credentials (Summary)
+                    </h3>
                     <div class="flex justify-between items-end mb-2">
                         <p class="text-sm text-gray-500">Auto-calculated counts. Edit manually if needed.</p>
                         <button type="button" onclick="populateCredentialsFromDB()" class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded hover:bg-blue-100">Reset to DB Values</button>
@@ -142,19 +159,29 @@
 
                 <!-- 6. Courses Taught -->
                 <div>
-                     <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">6. Courses Taught</label>
+                      <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_coursesTaught" checked class="w-5 h-5 text-blue-600 rounded">
+                        6. Courses Taught
+                    </label>
                      <textarea id="coursesTaught" rows="3" class="w-full border p-2 rounded"></textarea>
                 </div>
 
                 <!-- 7. Awards -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">7. Awards/ Achievements</label>
-                    <textarea id="awards" rows="3" class="w-full border p-2 rounded"></textarea>
+                    <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_awards" checked class="w-5 h-5 text-blue-600 rounded">
+                        7. Awards/ Achievements
+                    </label>
+                    <div id="container-awards" class="space-y-2"></div>
+                    <button type="button" onclick="addDynamicItem('container-awards')" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">+ Add Award</button>
                 </div>
 
                 <!-- 8. Projects (Grouped) -->
                 <div class="space-y-4">
-                    <h4 class="text-lg font-bold text-gray-800">8. List of sponsored research projects</h4>
+                     <h4 class="flex items-center gap-2 text-lg font-bold text-gray-800">
+                         <input type="checkbox" id="chk_projects" checked class="w-5 h-5 text-blue-600 rounded">
+                         8. List of sponsored research projects
+                    </h4>
                     
                     <!-- PI -->
                     <div class="ml-4">
@@ -215,7 +242,10 @@
                 <!-- 9. Patents -->
                 <div class="selector-group">
                     <div class="flex justify-between items-center mb-2">
-                        <h4 class="text-lg font-bold text-gray-800">9. Patents</h4>
+                        <h4 class="flex items-center gap-2 text-lg font-bold text-gray-800">
+                             <input type="checkbox" id="chk_patents" checked class="w-5 h-5 text-blue-600 rounded">
+                             9. Patents
+                        </h4>
                         <div class="flex items-center gap-2">
                            <label class="text-xs flex items-center cursor-pointer"><input type="checkbox" onchange="toggleAll('list-patents', this.checked)" class="mr-1">Select All</label>
                            <input type="text" onkeyup="filterList('list-patents', this.value)" placeholder="Search..." class="border p-1 rounded text-sm w-48">
@@ -226,7 +256,10 @@
 
                 <!-- 10. List of publications -->
                 <div>
-                     <h4 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">10. List of publications</h4>
+                      <h4 class="flex items-center gap-2 text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                         <input type="checkbox" id="chk_publications" checked class="w-5 h-5 text-blue-600 rounded">
+                         10. List of publications
+                     </h4>
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                          <div>
                              <div class="flex justify-between items-center mb-2">
@@ -273,7 +306,10 @@
 
                 <!-- 11. Translational Contributions -->
                 <div>
-                     <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-4">11. Translational Contributions</h3>
+                      <h3 class="flex items-center gap-2 text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                         <input type="checkbox" id="chk_transl_custom" checked class="w-5 h-5 text-blue-600 rounded">
+                         11. Translational Contributions
+                      </h3>
                      
                      <!-- Custom Items -->
                      <div class="mb-6 bg-gray-50 p-4 rounded border">
@@ -288,25 +324,40 @@
 
                 <!-- 12. Professional Affiliations -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">12. Professional Affiliations</label>
-                    <textarea id="affiliations" rows="3" class="w-full border p-2 rounded"></textarea>
+                     <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_affiliations" checked class="w-5 h-5 text-blue-600 rounded">
+                        12. Professional Affiliations
+                    </label>
+                    <div id="container-affiliations" class="space-y-2"></div>
+                    <button type="button" onclick="addDynamicItem('container-affiliations')" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">+ Add Affiliation</button>
                 </div>
 
                 <!-- 13. Admin Positions -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">13. Administrative Positions Held</label>
-                    <textarea id="txt_adminPositions" rows="4" class="w-full border p-2 rounded font-mono text-sm"></textarea>
+                    <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_adminPositions" checked class="w-5 h-5 text-blue-600 rounded">
+                        13. Administrative Positions Held
+                    </label>
+                    <div id="container-adminPositions" class="space-y-2"></div>
+                    <button type="button" onclick="addDynamicItem('container-adminPositions')" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">+ Add Position</button>
                 </div>
 
                 <!-- 14. Facilities -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">14. Facilities and Centres established</label>
-                    <textarea id="facilities" rows="3" class="w-full border p-2 rounded"></textarea>
+                    <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_facilities" checked class="w-5 h-5 text-blue-600 rounded">
+                        14. Facilities and Centres established
+                    </label>
+                    <div id="container-facilities" class="space-y-2"></div>
+                    <button type="button" onclick="addDynamicItem('container-facilities')" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">+ Add Facility</button>
                 </div>
 
                 <!-- 15. Workshops, Conferences -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">15. Conferences Organised</label>
+                    <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_conferencesOrganised" checked class="w-5 h-5 text-blue-600 rounded">
+                        15. Conferences Organised
+                    </label>
                     
                     <!-- Organized Conferences Selector -->
                     <div class="selector-group mb-4">
@@ -324,7 +375,10 @@
                 <!-- 16. Continuing Education -->
                 <!-- 16. Continuing Education -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">16. Workshops Organised</label>
+                    <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_workshopsOrganised" checked class="w-5 h-5 text-blue-600 rounded">
+                        16. Workshops Organised
+                    </label>
                     <div class="selector-group mb-4">
                         <div class="flex justify-between items-center mb-2">
                             <h4 class="font-semibold text-gray-700">Workshops Organised</h4>
@@ -339,13 +393,20 @@
 
                 <!-- 17. Collaborations -->
                 <div>
-                    <label class="block text-lg font-bold text-gray-800 border-b pb-2 mb-4">17. International Collaborations</label>
-                    <textarea id="collaborations" rows="3" class="w-full border p-2 rounded"></textarea>
+                    <label class="flex items-center gap-2 block text-lg font-bold text-gray-800 border-b pb-2 mb-4">
+                        <input type="checkbox" id="chk_collaborations" checked class="w-5 h-5 text-blue-600 rounded">
+                        17. International Collaborations
+                    </label>
+                    <div id="container-collaborations" class="space-y-2"></div>
+                    <button type="button" onclick="addDynamicItem('container-collaborations')" class="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium">+ Add Collaboration</button>
                 </div>
 
                 <!-- 18. Outreach -->
                 <div class="selector-group space-y-4">
-                    <h4 class="text-lg font-bold text-gray-800 border-b pb-2">18. Major Outreach</h4>
+                    <h4 class="flex items-center gap-2 text-lg font-bold text-gray-800 border-b pb-2">
+                        <input type="checkbox" id="chk_outreach" checked class="w-5 h-5 text-blue-600 rounded">
+                        18. Major Outreach
+                     </h4>
 
 
                     <!-- Intl -->
@@ -476,7 +537,7 @@
             document.getElementById('pi_address').value = currentConfig.personalInfo.address || '';
         }
 
-        // Research Credentials (saved or default to calculated if config is empty)
+        // Research Credentials
         const rc = currentConfig.researchCredentials || {};
         const stats = allData.calculatedStats || {};
         
@@ -485,36 +546,66 @@
         document.getElementById('rc_journals').value = rc.journals || stats.journals || '0';
         document.getElementById('rc_conferences').value = rc.conferences || stats.conferences || '0';
         document.getElementById('rc_books').value = rc.books || stats.books || '00';
-        document.getElementById('rc_technicalReports').value = rc.technicalReports || stats.technicalReports || '01'; // Default
+        document.getElementById('rc_technicalReports').value = rc.technicalReports || stats.technicalReports || '01';
         document.getElementById('rc_chapters').value = rc.chapters || stats.chapters || '00';
         document.getElementById('rc_phdSupervision').value = rc.phdSupervision || stats.phdSupervision || '00/00';
         document.getElementById('rc_mtechSupervision').value = rc.mtechSupervision || stats.mtechSupervision || '00/00';
         document.getElementById('rc_sponsoredProjects').value = rc.sponsoredProjects || stats.sponsoredProjects || '0';
         document.getElementById('rc_projectRoles').value = rc.projectRoles || stats.projectRoles || '(00)';
         
-        // Fixed Text
+        // Fixed Text & Dynamic Lists
         document.getElementById('txt_qualifications').value = currentConfig.qualifications || '';
-        document.getElementById('txt_experience').value = currentConfig.experience || '';
-        document.getElementById('txt_adminPositions').value = currentConfig.adminPositions || '';
+        
+        // Helper for Lists
+        const populateList = (containerId, data) => {
+            const container = document.getElementById(containerId);
+            if(!container) return; // Guard
+            container.innerHTML = '';
+            // Handle migrated data (string -> array)
+            if (Array.isArray(data)) {
+                 data.forEach(item => addDynamicItem(containerId, item));
+            } else if (typeof data === 'string' && data.trim()) {
+                 data.split('\n').filter(x=>x.trim()).forEach(item => addDynamicItem(containerId, item));
+            }
+        };
 
-        // Editable Details
-        document.getElementById('specialization').value = currentConfig.specialization || '';
+        populateList('container-experience', currentConfig.experience);
+        populateList('container-specialization', currentConfig.specialization);
+        populateList('container-awards', currentConfig.awards);
+        populateList('container-affiliations', currentConfig.affiliations);
+        populateList('container-adminPositions', currentConfig.adminPositions);
+        populateList('container-facilities', currentConfig.facilities);
+        populateList('container-collaborations', currentConfig.collaborations);
+
         document.getElementById('coursesTaught').value = currentConfig.coursesTaught || '';
-        document.getElementById('awards').value = currentConfig.awards || '';
-        // document.getElementById('translational').value = currentConfig.translational || ''; // Removed single text
+
+        // Visibility Toggles
+        const setCheck = (id, val) => { if(document.getElementById(id)) document.getElementById(id).checked = val !== false; };
+        
+        setCheck('chk_qualifications', currentConfig.showQualifications);
+        setCheck('chk_experience', currentConfig.showExperience);
+        setCheck('chk_specialization', currentConfig.showSpecialization);
+        setCheck('chk_researchCredentials', currentConfig.showResearchCredentials);
+        setCheck('chk_coursesTaught', currentConfig.showCoursesTaught);
+        setCheck('chk_awards', currentConfig.showAwards);
+        setCheck('chk_projects', currentConfig.showProjects);
+        setCheck('chk_patents', currentConfig.showPatents);
+        setCheck('chk_publications', currentConfig.showPublications);
+        setCheck('chk_transl_custom', currentConfig.showTranslational); 
+        setCheck('chk_affiliations', currentConfig.showAffiliations);
+        setCheck('chk_adminPositions', currentConfig.showAdminPositions);
+        setCheck('chk_facilities', currentConfig.showFacilities);
+        setCheck('chk_conferencesOrganised', currentConfig.showConferencesOrganised);
+        setCheck('chk_workshopsOrganised', currentConfig.showWorkshopsOrganised);
+        setCheck('chk_collaborations', currentConfig.showCollaborations);
+        setCheck('chk_outreach', currentConfig.showOutreach);
+
         
         // Populate Custom Translational Items
         document.getElementById('container-trans-custom').innerHTML = ''; // Clear first
         if(currentConfig.translationalCustom && currentConfig.translationalCustom.length > 0) {
             currentConfig.translationalCustom.forEach(item => addTranslationalItem(item.title, item.description));
-        } else {
-             // Maybe add one empty? Or none.
         }
-
-        document.getElementById('affiliations').value = currentConfig.affiliations || '';
-        document.getElementById('facilities').value = currentConfig.facilities || '';
-
-        document.getElementById('collaborations').value = currentConfig.collaborations || '';
     }
 
     function addTranslationalItem(title = '', desc = '') {
@@ -607,6 +698,7 @@
         const getIds = (listId) => {
             return Array.from(document.getElementById(listId).querySelectorAll('input:checked')).map(cb => cb.value);
         };
+        const getCheck = (id) => document.getElementById(id) ? document.getElementById(id).checked : true;
 
         return {
             personalInfo: {
@@ -618,18 +710,36 @@
                 address: document.getElementById('pi_address').value.trim()
             },
             qualifications: document.getElementById('txt_qualifications').value,
-            experience: document.getElementById('txt_experience').value,
-            adminPositions: document.getElementById('txt_adminPositions').value,
             
-            specialization: document.getElementById('specialization').value.trim(),
+            experience: getDynamicItems('container-experience'),
+            specialization: getDynamicItems('container-specialization'),
+            awards: getDynamicItems('container-awards'),
+            affiliations: getDynamicItems('container-affiliations'),
+            adminPositions: getDynamicItems('container-adminPositions'),
+            facilities: getDynamicItems('container-facilities'),
+            collaborations: getDynamicItems('container-collaborations'),
+
             coursesTaught: document.getElementById('coursesTaught').value.trim(),
-            awards: document.getElementById('awards').value.trim(),
-            // translational: document.getElementById('translational').value.trim(), // Removed
-            affiliations: document.getElementById('affiliations').value.trim(),
-            facilities: document.getElementById('facilities').value.trim(),
-            collaborations: document.getElementById('collaborations').value.trim(),
-            
             translationalCustom: getTranslationalItems(),
+
+            // Visibility Flags
+            showQualifications: getCheck('chk_qualifications'),
+            showExperience: getCheck('chk_experience'),
+            showSpecialization: getCheck('chk_specialization'),
+            showResearchCredentials: getCheck('chk_researchCredentials'),
+            showCoursesTaught: getCheck('chk_coursesTaught'),
+            showAwards: getCheck('chk_awards'),
+            showProjects: getCheck('chk_projects'),
+            showPatents: getCheck('chk_patents'),
+            showPublications: getCheck('chk_publications'),
+            showTranslational: getCheck('chk_transl_custom'),
+            showAffiliations: getCheck('chk_affiliations'),
+            showAdminPositions: getCheck('chk_adminPositions'),
+            showFacilities: getCheck('chk_facilities'),
+            showConferencesOrganised: getCheck('chk_conferencesOrganised'),
+            showWorkshopsOrganised: getCheck('chk_workshopsOrganised'),
+            showCollaborations: getCheck('chk_collaborations'),
+            showOutreach: getCheck('chk_outreach'),
 
             researchCredentials: {
                 techTransfer: document.getElementById('rc_techTransfer').value.trim(),
@@ -679,6 +789,51 @@
         return items;
     }
 
+    // Dynamic List Helpers
+    function addDynamicItem(containerId, value = '') {
+        const container = document.getElementById(containerId);
+        const div = document.createElement('div');
+        div.className = "group flex gap-3 items-start bg-white p-3 rounded-md border border-gray-200 shadow-sm hover:border-blue-300 transition-all duration-200 dynamic-item";
+        div.innerHTML = `
+            <span class="index-label text-blue-500 font-bold text-xl leading-none mt-1 select-none">•</span>
+            <div class="w-full">
+                <textarea class="dynamic-input w-full border-0 border-b border-gray-200 focus:border-blue-500 focus:ring-0 bg-transparent text-sm text-gray-700 leading-relaxed resize-y placeholder-gray-400" 
+                          rows="1" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" 
+                          placeholder="Type your point here...">${value}</textarea>
+            </div>
+            <button type="button" onclick="removeItem(this)" class="text-gray-400 hover:text-red-500 transition-colors p-1 opacity-50 group-hover:opacity-100" title="Remove Item">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        container.appendChild(div);
+        
+        // Auto-resize
+        const ta = div.querySelector('textarea');
+        if(value) {
+             setTimeout(() => {
+                 ta.style.height = 'auto';
+                 ta.style.height = ta.scrollHeight + 'px';
+             }, 0);
+        }
+    }
+
+    function removeItem(btn) {
+        if(confirm("Are you sure you want to delete this item?")) {
+            btn.parentElement.remove();
+        }
+    }
+
+    function getDynamicItems(containerId) {
+        const items = [];
+        const container = document.getElementById(containerId);
+        if(!container) return [];
+        container.querySelectorAll('.dynamic-input').forEach(input => {
+            const val = input.value.trim();
+            if(val) items.push(val);
+        });
+        return items;
+    }
+
     async function saveConfig() {
         const data = collectFormData();
         showStatus('Saving...', 'info');
@@ -690,6 +845,12 @@
             });
             if(response.ok) {
                 showStatus('Configuration saved successfully!', 'success');
+                // Inline Success Message
+                const msg = document.getElementById('inlineSaveMsg');
+                if(msg) {
+                    msg.classList.remove('opacity-0');
+                    setTimeout(() => msg.classList.add('opacity-0'), 3000);
+                }
                 // Update local config reference
                 currentConfig = data;
             } else {
