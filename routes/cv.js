@@ -42,14 +42,14 @@ router.post("/api/cv-config", async (req, res) => {
     try {
         const updateData = req.body;
         let config = await CVConfig.findOne();
-        
+
         if (!config) {
             config = new CVConfig(updateData);
         } else {
             // Update fields
             Object.assign(config, updateData);
         }
-        
+
         config.updatedAt = Date.now();
         await config.save();
         res.json({ message: "Configuration saved successfully", config });
@@ -63,12 +63,12 @@ router.post("/api/cv-config", async (req, res) => {
 router.get("/api/all-cv-data", async (req, res) => {
     try {
         const [
-            projects, 
-            patents, 
-            publications, 
-            books, 
-            chapters, 
-            conferences, 
+            projects,
+            patents,
+            publications,
+            books,
+            chapters,
+            conferences,
             dissertations,
             extensionActivities,
             technologyTransfers
@@ -86,11 +86,11 @@ router.get("/api/all-cv-data", async (req, res) => {
 
         // Calculate Statistics
         const roleGroups = [
-             { label: "As Principal Investigator", matches: ["Principal Investigator", "PI", "As Principal Investigator", "as pi", "P.I.", "Principal Inv."] },
-             { label: "As Scientific Director", matches: ["Scientific Director", "As Scientific Director", "Director"] },
-             { label: "As Scientist Mentor", matches: ["Scientist Mentor", "Mentor", "As Scientist Mentor", "Mentor As Scientist", "Scientist", "As Scientist"] },
-             { label: "As Co-Principal Investigator", matches: ["Co-Principal Investigator", "Co-PI", "Co-PI/Co-Guide", "As Co-Principal Investigator", "Co-Investigator", "as co-pi"] },
-             { label: "As Guide", matches: ["Guide", "As a Guide", "As Guide", "as guide"] }
+            { label: "As Principal Investigator", matches: ["Principal Investigator", "PI", "As Principal Investigator", "as pi", "P.I.", "Principal Inv."] },
+            { label: "As Scientific Director", matches: ["Scientific Director", "As Scientific Director", "Director"] },
+            { label: "As Scientist Mentor", matches: ["Scientist Mentor", "Mentor", "As Scientist Mentor", "Mentor As Scientist", "Scientist", "As Scientist"] },
+            { label: "As Co-Principal Investigator", matches: ["Co-Principal Investigator", "Co-PI", "Co-PI/Co-Guide", "As Co-Principal Investigator", "Co-Investigator", "as co-pi"] },
+            { label: "As Guide", matches: ["Guide", "As a Guide", "As Guide", "as guide"] }
         ];
         const normalizeRole = r => {
             if (!r) return "";
@@ -111,11 +111,11 @@ router.get("/api/all-cv-data", async (req, res) => {
         };
         const patentsGranted = patents.filter(p => isGranted(p)).length;
         const patentsOther = patents.length - patentsGranted;
-        
+
         // PhD Strict
         const phdOngoing = dissertations.filter(d => d.degree === 'PhD Thesis in progress').length;
         const phdCompleted = dissertations.filter(d => d.degree === 'PhD Thesis Awarded').length;
-        
+
         // MTech Strict
         const mtechs = dissertations.filter(d => d.degree === 'MTech and MSc Awarded/Ongoing');
         const mtechOngoing = mtechs.filter(d => isOngoing(d.year)).length;
@@ -127,23 +127,23 @@ router.get("/api/all-cv-data", async (req, res) => {
         const projectCounts = roleGroups.map(group => {
             return sponsoredProjects.filter(p => {
                 const r = normalizeRole(p.role);
-                return group.matches.some(m => r.toLowerCase() === m.toLowerCase()); 
+                return group.matches.some(m => r.toLowerCase() === m.toLowerCase());
             }).length;
         });
         const projectCountStr = projectCounts.map(c => c.toString().padStart(2, '0')).join('/');
 
         const calculatedStats = {
-             techTransfer: `${technologyTransfers.length.toString().padStart(2, '0')}/02`, 
-             patents: `${patentsGranted.toString().padStart(2, '0')}/${patentsOther.toString().padStart(2, '0')}/01/01`,
-             journals: publications.filter(p => !p.journal || p.journal !== 'Conference').length.toString(),
-             conferences: conferences.length.toString(),
-             books: books.length.toString().padStart(2, '0'),
-             technicalReports: "01",
-             chapters: chapters.length.toString().padStart(2, '0'),
-             phdSupervision: `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}`,
-             mtechSupervision: `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}`,
-             sponsoredProjects: sponsoredProjects.length.toString(),
-             projectRoles: `(${projectCountStr})`
+            techTransfer: `${technologyTransfers.length.toString().padStart(2, '0')}/02`,
+            patents: `${patentsGranted.toString().padStart(2, '0')}/${patentsOther.toString().padStart(2, '0')}/01/01`,
+            journals: publications.filter(p => !p.journal || p.journal !== 'Conference').length.toString(),
+            conferences: conferences.length.toString(),
+            books: books.length.toString().padStart(2, '0'),
+            technicalReports: "01",
+            chapters: chapters.length.toString().padStart(2, '0'),
+            phdSupervision: `${phdCompleted}/${phdOngoing.toString().padStart(2, '0')}`,
+            mtechSupervision: `${mtechCompleted}/${mtechOngoing.toString().padStart(2, '0')}`,
+            sponsoredProjects: sponsoredProjects.length.toString(),
+            projectRoles: `(${projectCountStr})`
         };
 
         res.json({
@@ -166,43 +166,53 @@ router.get("/api/all-cv-data", async (req, res) => {
 
 // Route to generate CV
 router.post("/generate-cv", async (req, res) => {
-  // The body contains the FULL configuration (text fields + selected IDs)
-  // We might want to auto-save this config too? 
-  // For now, let's assume the user clicked "Save" or we just use the body data to generate PDF one-time.
-  // Actually, keeping them separate is safer: Save button saves, Generate just generates.
-  // BUT the generate function needs the IDs to filter data.
-  
-  const config = req.body;
+    const config = req.body;
+    const format = req.body.format || 'pdf'; // Default to PDF
 
-  try {
-    console.log("Generating CV...");
-    
-    // Generate CV using the module
-    const cvPath = await generateCV(config);
-    
-    // Check if the file exists
-    if (fs.existsSync(cvPath)) {
-      res.download(cvPath, "Sandeep_Chaudhary_CV.pdf", (err) => {
-        if (err) {
-            console.error(`Error sending file: ${err}`);
-             if (!res.headersSent) res.status(500).send("Error downloading CV");
+    try {
+        console.log(`Generating CV in ${format} format...`);
+
+        let cvPath;
+        let filename;
+        let contentType;
+
+        if (format === 'word') {
+            const { generateWordCV } = require("../cvGeneratorModule");
+            cvPath = await generateWordCV(config);
+            filename = "Sandeep_Chaudhary_CV.docx";
+            // .docx MIME type
+            contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        } else {
+            // PDF
+            const { generateCV } = require("../cvGeneratorModule");
+            cvPath = await generateCV(config);
+            filename = "Sandeep_Chaudhary_CV.pdf";
+            contentType = "application/pdf";
         }
-      });
-    } else {
-      res.status(404).send("CV file not found");
+
+        // Check if the file exists
+        if (fs.existsSync(cvPath)) {
+            res.download(cvPath, filename, (err) => {
+                if (err) {
+                    console.error(`Error sending file: ${err}`);
+                    if (!res.headersSent) res.status(500).send("Error downloading CV");
+                }
+            });
+        } else {
+            res.status(404).send("CV file not found");
+        }
+    } catch (error) {
+        console.error("Error in CV generation route:", error);
+        if (!res.headersSent) {
+            res.status(500).json({ error: "Error generating CV", details: error.message });
+        }
     }
-  } catch (error) {
-    console.error("Error in CV generation route:", error);
-    if (!res.headersSent) {
-      res.status(500).json({ error: "Error generating CV", details: error.message });
-    }
-  }
 });
 
 // Serve the main HTML page
 router.get("/admin/cvGenerator.html", (req, res) => {
-  if (!req.session.admin) return res.redirect("/admin/login");
-  res.render("admin/cvGenerator");
+    if (!req.session.admin) return res.redirect("/admin/login");
+    res.render("admin/cvGenerator");
 });
 
 module.exports = router;

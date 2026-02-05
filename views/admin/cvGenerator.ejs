@@ -53,10 +53,16 @@
                 Generate and download Prof. Sandeep Chaudhary's CV in PDF format. The document includes publications, books, book chapters, conference proceedings, patents, research projects, and supervised dissertations.
               </p>
               
-              <button id="downloadCV" class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors duration-300 shadow-md">
-                <i class="fas fa-download mr-2"></i>
-                Generate & Download CV
-              </button>
+              <div class="flex flex-col sm:flex-row justify-center gap-4">
+                  <button id="downloadPDF" class="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition-colors duration-300 shadow-md">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Download PDF
+                  </button>
+                  <button id="downloadWord" class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors duration-300 shadow-md">
+                    <i class="fas fa-file-word mr-2"></i>
+                    Download Word
+                  </button>
+              </div>
               
               <div class="mt-6">
                 <div id="loading" class="hidden mx-auto w-10 h-10 border-4 border-blue-200 border-t-blue-800 rounded-full animate-spin"></div>
@@ -862,13 +868,15 @@
         }
     }
 
-    async function generateCV() {
+    async function generateCV(format = 'pdf') {
         const data = collectFormData();
-        showStatus('Generating CV...', 'info');
+        data.format = format; // Add format to body
+
+        showStatus(`Generating ${format.toUpperCase()} CV...`, 'info');
         document.getElementById('loading').classList.remove('hidden');
 
         try {
-            // We send the FULL data payload, which acts as a save + generate
+            // We send the FULL data payload
             const response = await fetch('/generate-cv', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -881,7 +889,8 @@
                 const a = document.createElement('a');
                 a.style.display = 'none';
                 a.href = url;
-                a.download = 'Sandeep_Chaudhary_CV.pdf';
+                // Filename based on format
+                a.download = `Sandeep_Chaudhary_CV.${format === 'word' ? 'docx' : 'pdf'}`;
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
@@ -911,8 +920,10 @@
     }
 
     // Event Listeners
+    // Event Listeners
     document.getElementById('saveConfigBtn').addEventListener('click', saveConfig);
-    document.getElementById('downloadCV').addEventListener('click', generateCV);
+    document.getElementById('downloadPDF').addEventListener('click', () => generateCV('pdf'));
+    document.getElementById('downloadWord').addEventListener('click', () => generateCV('word'));
 
     // Init
     init();
