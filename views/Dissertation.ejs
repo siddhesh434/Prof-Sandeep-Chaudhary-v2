@@ -1,456 +1,555 @@
 <%- include('partials/header') %>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="Disseration.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="Disseration.css" />
 
-<div class="main-wrapper">
-    <div class="container">
-        <!-- Page Title -->
-        <div class="page-title">
-            <h1>Research Supervision</h1>
-            <p class="subtitle">
-                Doctoral, Master's, and Ongoing Research Scholars
-            </p>
-        </div>
-        <% if (settings.showDissertation) { %>
-        <!-- Research Summary -->
-        <div class="research-summary">
-            <div class="summary-card">
-                <div class="summary-number">
-                    <%= researchData.filter(student => student.degree === 'PhD Thesis Awarded').length %>
+    <div class="main-wrapper">
+        <div class="container">
+            <!-- Page Title -->
+            <div class="page-title">
+                <h1>Research Supervision</h1>
+                <p class="subtitle">
+                    Doctoral, Master's, and Ongoing Research Scholars
+                </p>
+            </div>
+            <% if (settings.showDissertation) { %>
+                <!-- Research Summary -->
+                <div class="research-summary">
+                    <div class="summary-card">
+                        <div class="summary-number">
+                            <%= researchData.filter(student => student.degree === 'PhD Thesis Awarded').length %>
+                        </div>
+                        <div class="summary-title">PhD Thesis Awarded</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number">
+                            <%= researchData.filter(student => student.degree === 'PhD Thesis in progress').length %>
+                        </div>
+                        <div class="summary-title">PhD Thesis in Progress</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number">
+                            <%= researchData.filter(student => student.degree === 'MTech and MSc Awarded').length %>
+                        </div>
+                        <div class="summary-title">MTech and MSc Awarded</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number">
+                            <%= researchData.filter(student => student.degree === 'MTech and MSc Ongoing').length %>
+                        </div>
+                        <div class="summary-title">MTech and MSc Ongoing</div>
+                    </div>
                 </div>
-                <div class="summary-title">PhD Thesis Awarded</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-number">
-                    <%= researchData.filter(student => student.degree === 'PhD Thesis in progress').length %>
-                </div>
-                <div class="summary-title">PhD Thesis in Progress</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-number">
-                    <%= researchData.filter(student => student.degree === 'MTech and MSc Awarded/Ongoing').length %>
-                </div>
-                <div class="summary-title">MTech and MSc Scholars</div>
-            </div>
-        </div>
-        <% } %>
-        <!-- PhD Thesis Awarded Section -->
-        <div class="publication-section">
-            <div class="section-title">
-                <h2>PhD Thesis Awarded</h2>
-            </div>
+                <% } %>
 
-            <!-- Search and Display Controls -->
-            <div class="table-controls">
-                <div class="entries-selector">
-                    <label for="entries-select-awarded">Show</label>
-                    <select id="entries-select-awarded" class="entries-select">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                    <span>entries</span>
-                </div>
-                <div class="search-container">
-                    <input
-                        type="text"
-                        id="search-awarded"
-                        placeholder="Search awarded PhD students..."
-                        class="search-input"
-                    />
-                    <button id="search-btn-awarded" class="search-button">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
+                    <!-- PhD Thesis Awarded Section -->
+                    <div class="publication-section">
+                        <div class="section-title">
+                            <h2>PhD Thesis Awarded</h2>
+                        </div>
 
-            <div class="table-wrapper">
-                <table class="publication-table" id="awarded-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Title</th>
-                            <th>Year</th>
-                            <th>Co-Supervisors</th>
-                           
-                        </tr>
-                    </thead>
-                    <tbody id="awarded-body">
-                        <% researchData.filter(student => student.degree === 'PhD Thesis Awarded').forEach((student, index) => { %>
-                        <tr class="student-row" data-index="<%= index %>">
-                            <td><%= student.name %></td>
-                            <td><%= student.title %></td>
-                            <td><%= student.year %></td>
-                            <td><%= student.coSupervisors %></td>
-            
-                        </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
+                        <!-- Search and Display Controls -->
+                        <div class="table-controls">
+                            <div class="entries-selector">
+                                <label for="entries-select-awarded">Show</label>
+                                <select id="entries-select-awarded" class="entries-select">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span>entries</span>
+                            </div>
+                            <div class="search-container">
+                                <input type="text" id="search-awarded" placeholder="Search awarded PhD students..."
+                                    class="search-input" />
+                                <button id="search-btn-awarded" class="search-button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
 
-            <!-- Pagination -->
-            <div class="pagination-container">
-                <div class="pagination-info">
-                    Showing <span id="showing-start-awarded">1</span> to
-                    <span id="showing-end-awarded">5</span> of
-                    <span id="total-entries-awarded"><%= researchData.filter(student => student.degree === 'PhD Thesis Awarded').length %></span>
-                    entries
-                </div>
-                <div class="pagination-controls" id="pagination-controls-awarded">
-                    <!-- Pagination buttons will be dynamically generated -->
-                </div>
-            </div>
-        </div>
+                        <div class="table-wrapper">
+                            <table class="publication-table" id="awarded-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Title</th>
+                                        <th>Year</th>
+                                        <th>Co-Supervisors</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="awarded-body">
+                                    <% researchData.filter(student => student.degree === 'PhD Thesis Awarded').forEach((student, index) => { %>
+                                        <tr class="student-row" data-index="<%= index %>">
+                                            <td>
+                                                <%= student.name %>
+                                            </td>
+                                            <td>
+                                                <%= student.title %>
+                                            </td>
+                                            <td>
+                                                <%= student.year %>
+                                            </td>
+                                            <td>
+                                                <%= student.coSupervisors %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
 
-        <!-- PhD Thesis in Progress Section -->
-        <div class="publication-section">
-            <div class="section-title">
-                <h2>PhD Thesis in Progress</h2>
-            </div>
+                        <!-- Pagination -->
+                        <div class="pagination-container">
+                            <div class="pagination-info">
+                                Showing <span id="showing-start-awarded">1</span> to
+                                <span id="showing-end-awarded">5</span> of
+                                <span id="total-entries-awarded">
+                                    <%= researchData.filter(student => student.degree === 'PhD Thesis Awarded').length %>
+                                </span>
+                                entries
+                            </div>
+                            <div class="pagination-controls" id="pagination-controls-awarded">
+                                <!-- Pagination buttons will be dynamically generated -->
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- Search and Display Controls -->
-            <div class="table-controls">
-                <div class="entries-selector">
-                    <label for="entries-select-progress">Show</label>
-                    <select id="entries-select-progress" class="entries-select">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                    <span>entries</span>
-                </div>
-                <div class="search-container">
-                    <input
-                        type="text"
-                        id="search-progress"
-                        placeholder="Search PhD students in progress..."
-                        class="search-input"
-                    />
-                    <button id="search-btn-progress" class="search-button">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
+                    <!-- PhD Thesis in Progress Section -->
+                    <div class="publication-section">
+                        <div class="section-title">
+                            <h2>PhD Thesis in Progress</h2>
+                        </div>
 
-            <div class="table-wrapper">
-                <table class="publication-table" id="progress-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Title</th>
-                            <th>Year</th>
-                            <th>Co-Supervisors</th>
-                        </tr>
-                    </thead>
-                    <tbody id="progress-body">
-                        <% researchData.filter(student => student.degree === 'PhD Thesis in progress').forEach((student, index) => { %>
-                        <tr class="student-row" data-index="<%= index %>">
-                            <td><%= student.name %></td>
-                            <td><%= student.title %></td>
-                            <td><%= student.year %></td>
-                            <td><%= student.coSupervisors %></td>
-                        </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
+                        <!-- Search and Display Controls -->
+                        <div class="table-controls">
+                            <div class="entries-selector">
+                                <label for="entries-select-progress">Show</label>
+                                <select id="entries-select-progress" class="entries-select">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span>entries</span>
+                            </div>
+                            <div class="search-container">
+                                <input type="text" id="search-progress" placeholder="Search PhD students in progress..."
+                                    class="search-input" />
+                                <button id="search-btn-progress" class="search-button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
 
-            <!-- Pagination -->
-            <div class="pagination-container">
-                <div class="pagination-info">
-                    Showing <span id="showing-start-progress">1</span> to
-                    <span id="showing-end-progress">5</span> of
-                    <span id="total-entries-progress"><%= researchData.filter(student => student.degree === 'PhD Thesis in progress').length %></span>
-                    entries
-                </div>
-                <div class="pagination-controls" id="pagination-controls-progress">
-                    <!-- Pagination buttons will be dynamically generated -->
-                </div>
-            </div>
-        </div>
+                        <div class="table-wrapper">
+                            <table class="publication-table" id="progress-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Title</th>
+                                        <th>Year</th>
+                                        <th>Co-Supervisors</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="progress-body">
+                                    <% researchData.filter(student => student.degree === 'PhD Thesis in progress').forEach((student, index) => { %>
+                                        <tr class="student-row" data-index="<%= index %>">
+                                            <td>
+                                                <%= student.name %>
+                                            </td>
+                                            <td>
+                                                <%= student.title %>
+                                            </td>
+                                            <td>
+                                                <%= student.year %>
+                                            </td>
+                                            <td>
+                                                <%= student.coSupervisors %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
 
-        <!-- MTech and MSc Awarded/Ongoing Section -->
-        <div class="publication-section">
-            <div class="section-title">
-                <h2>MTech and MSc Scholars</h2>
-            </div>
+                        <!-- Pagination -->
+                        <div class="pagination-container">
+                            <div class="pagination-info">
+                                Showing <span id="showing-start-progress">1</span> to
+                                <span id="showing-end-progress">5</span> of
+                                <span id="total-entries-progress">
+                                    <%= researchData.filter(student => student.degree === 'PhD Thesis in progress').length %>
+                                </span>
+                                entries
+                            </div>
+                            <div class="pagination-controls" id="pagination-controls-progress">
+                                <!-- Pagination buttons will be dynamically generated -->
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- Search and Display Controls -->
-            <div class="table-controls">
-                <div class="entries-selector">
-                    <label for="entries-select-mtech">Show</label>
-                    <select id="entries-select-mtech" class="entries-select">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                    <span>entries</span>
-                </div>
-                <div class="search-container">
-                    <input
-                        type="text"
-                        id="search-mtech"
-                        placeholder="Search MTech and MSc students..."
-                        class="search-input"
-                    />
-                    <button id="search-btn-mtech" class="search-button">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
+                    <!-- MTech and MSc Awarded Section -->
+                    <div class="publication-section">
+                        <div class="section-title">
+                            <h2>MTech and MSc Awarded</h2>
+                        </div>
 
-            <div class="table-wrapper">
-                <table class="publication-table" id="mtech-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Title</th>
-                            <th>Year</th>
-                            <th>Co-Supervisors</th>
-                        </tr>
-                    </thead>
-                    <tbody id="mtech-body">
-                        <% researchData.filter(student => student.degree === 'MTech and MSc Awarded/Ongoing').forEach((student, index) => { %>
-                        <tr class="student-row" data-index="<%= index %>">
-                            <td><%= student.name %></td>
-                            <td><%= student.title %></td>
-                            <td><%= student.year %></td>
-                            <td><%= student.coSupervisors %></td>
-                        </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
+                        <!-- Search and Display Controls -->
+                        <div class="table-controls">
+                            <div class="entries-selector">
+                                <label for="entries-select-mtech-awarded">Show</label>
+                                <select id="entries-select-mtech-awarded" class="entries-select">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span>entries</span>
+                            </div>
+                            <div class="search-container">
+                                <input type="text" id="search-mtech-awarded"
+                                    placeholder="Search MTech and MSc Awarded..." class="search-input" />
+                                <button id="search-btn-mtech-awarded" class="search-button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
 
-            <!-- Pagination -->
-            <div class="pagination-container">
-                <div class="pagination-info">
-                    Showing <span id="showing-start-mtech">1</span> to
-                    <span id="showing-end-mtech">5</span> of
-                    <span id="total-entries-mtech"><%= researchData.filter(student => student.degree === 'MTech and MSc Awarded/Ongoing').length %></span>
-                    entries
-                </div>
-                <div class="pagination-controls" id="pagination-controls-mtech">
-                    <!-- Pagination buttons will be dynamically generated -->
-                </div>
-            </div>
+                        <div class="table-wrapper">
+                            <table class="publication-table" id="mtech-awarded-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Title</th>
+                                        <th>Year</th>
+                                        <th>Co-Supervisors</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mtech-awarded-body">
+                                    <% researchData.filter(student => student.degree === 'MTech and MSc Awarded').forEach((student, index) => { %>
+                                        <tr class="student-row" data-index="<%= index %>">
+                                            <td>
+                                                <%= student.name %>
+                                            </td>
+                                            <td>
+                                                <%= student.title %>
+                                            </td>
+                                            <td>
+                                                <%= student.year %>
+                                            </td>
+                                            <td>
+                                                <%= student.coSupervisors %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="pagination-container">
+                            <div class="pagination-info">
+                                Showing <span id="showing-start-mtech-awarded">1</span> to
+                                <span id="showing-end-mtech-awarded">5</span> of
+                                <span id="total-entries-mtech-awarded">
+                                    <%= researchData.filter(student => student.degree === 'MTech and MSc Awarded').length %>
+                                </span>
+                                entries
+                            </div>
+                            <div class="pagination-controls" id="pagination-controls-mtech-awarded">
+                                <!-- Pagination buttons will be dynamically generated -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MTech and MSc Ongoing Section -->
+                    <div class="publication-section">
+                        <div class="section-title">
+                            <h2>MTech and MSc Ongoing</h2>
+                        </div>
+
+                        <!-- Search and Display Controls -->
+                        <div class="table-controls">
+                            <div class="entries-selector">
+                                <label for="entries-select-mtech-ongoing">Show</label>
+                                <select id="entries-select-mtech-ongoing" class="entries-select">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <span>entries</span>
+                            </div>
+                            <div class="search-container">
+                                <input type="text" id="search-mtech-ongoing"
+                                    placeholder="Search MTech and MSc Ongoing..." class="search-input" />
+                                <button id="search-btn-mtech-ongoing" class="search-button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table class="publication-table" id="mtech-ongoing-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Title</th>
+                                        <th>Year</th>
+                                        <th>Co-Supervisors</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mtech-ongoing-body">
+                                    <% researchData.filter(student => student.degree === 'MTech and MSc Ongoing').forEach((student, index) => { %>
+                                        <tr class="student-row" data-index="<%= index %>">
+                                            <td>
+                                                <%= student.name %>
+                                            </td>
+                                            <td>
+                                                <%= student.title %>
+                                            </td>
+                                            <td>
+                                                <%= student.year %>
+                                            </td>
+                                            <td>
+                                                <%= student.coSupervisors %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="pagination-container">
+                            <div class="pagination-info">
+                                Showing <span id="showing-start-mtech-ongoing">1</span> to
+                                <span id="showing-end-mtech-ongoing">5</span> of
+                                <span id="total-entries-mtech-ongoing">
+                                    <%= researchData.filter(student => student.degree === 'MTech and MSc Ongoing').length %>
+                                </span>
+                                entries
+                            </div>
+                            <div class="pagination-controls" id="pagination-controls-mtech-ongoing">
+                                <!-- Pagination buttons will be dynamically generated -->
+                            </div>
+                        </div>
+                    </div>
         </div>
     </div>
-</div>
 
-<%- include('partials/footer') %>
+    <%- include('partials/footer') %>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    // Initialize pagination and search for each section
-    initializeSection("awarded", "awarded-body", "student-row");
-    initializeSection("progress", "progress-body", "student-row");
-    initializeSection("mtech", "mtech-body", "student-row");
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Initialize pagination and search for each section
+                initializeSection("awarded", "awarded-body", "student-row");
+                initializeSection("progress", "progress-body", "student-row");
+                initializeSection("mtech-awarded", "mtech-awarded-body", "student-row");
+                initializeSection("mtech-ongoing", "mtech-ongoing-body", "student-row");
 
-    // Function to initialize pagination and search for a section
-    function initializeSection(sectionId, tbodyId, rowClass) {
-        // DOM elements
-        const entriesSelect = document.getElementById(`entries-select-${sectionId}`);
-        const searchInput = document.getElementById(`search-${sectionId}`);
-        const searchBtn = document.getElementById(`search-btn-${sectionId}`);
-        const tbody = document.getElementById(tbodyId);
-        const paginationControls = document.getElementById(`pagination-controls-${sectionId}`);
-        const showingStart = document.getElementById(`showing-start-${sectionId}`);
-        const showingEnd = document.getElementById(`showing-end-${sectionId}`);
-        const totalEntries = document.getElementById(`total-entries-${sectionId}`);
+                // Function to initialize pagination and search for a section
+                function initializeSection(sectionId, tbodyId, rowClass) {
+                    // DOM elements
+                    const entriesSelect = document.getElementById(`entries-select-${sectionId}`);
+                    const searchInput = document.getElementById(`search-${sectionId}`);
+                    const searchBtn = document.getElementById(`search-btn-${sectionId}`);
+                    const tbody = document.getElementById(tbodyId);
+                    const paginationControls = document.getElementById(`pagination-controls-${sectionId}`);
+                    const showingStart = document.getElementById(`showing-start-${sectionId}`);
+                    const showingEnd = document.getElementById(`showing-end-${sectionId}`);
+                    const totalEntries = document.getElementById(`total-entries-${sectionId}`);
 
-        if (!tbody || !paginationControls) return;
+                    if (!tbody || !paginationControls) return;
 
-        // Get all rows
-        const allRows = Array.from(tbody.querySelectorAll(`.${rowClass}`));
-        
-        // Sort rows by year in descending order (most recent first)
-        allRows.sort((a, b) => {
-            const yearA = parseInt(a.querySelector('td:nth-child(3)').textContent);
-            const yearB = parseInt(b.querySelector('td:nth-child(3)').textContent);
-            return yearB - yearA; // Descending order
-        });
-        
-        // Reappend rows in sorted order
-        allRows.forEach(row => {
-            tbody.appendChild(row);
-        });
+                    // Get all rows
+                    const allRows = Array.from(tbody.querySelectorAll(`.${rowClass}`));
 
-        // Variables
-        let currentPage = 1;
-        let entriesPerPage = parseInt(entriesSelect ? entriesSelect.value : 5);
-        let filteredRows = [...allRows];
+                    // Sort rows by year in descending order (most recent first)
+                    allRows.sort((a, b) => {
+                        const yearA = parseInt(a.querySelector('td:nth-child(3)').textContent);
+                        const yearB = parseInt(b.querySelector('td:nth-child(3)').textContent);
+                        return yearB - yearA; // Descending order
+                    });
 
-        // Initialize pagination
-        function initializePagination() {
-            updatePagination();
-            showPage(currentPage);
-        }
+                    // Reappend rows in sorted order
+                    allRows.forEach(row => {
+                        tbody.appendChild(row);
+                    });
 
-        // Update pagination based on filtered rows
-        function updatePagination() {
-            const pageCount = Math.ceil(filteredRows.length / entriesPerPage);
-            paginationControls.innerHTML = "";
+                    // Variables
+                    let currentPage = 1;
+                    let entriesPerPage = parseInt(entriesSelect ? entriesSelect.value : 5);
+                    let filteredRows = [...allRows];
 
-            // Previous button
-            const prevBtn = document.createElement("button");
-            prevBtn.innerHTML = "&laquo;";
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.addEventListener("click", () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    showPage(currentPage);
-                    updatePagination(); // Update the entire pagination control
+                    // Initialize pagination
+                    function initializePagination() {
+                        updatePagination();
+                        showPage(currentPage);
+                    }
+
+                    // Update pagination based on filtered rows
+                    function updatePagination() {
+                        const pageCount = Math.ceil(filteredRows.length / entriesPerPage);
+                        paginationControls.innerHTML = "";
+
+                        // Previous button
+                        const prevBtn = document.createElement("button");
+                        prevBtn.innerHTML = "&laquo;";
+                        prevBtn.disabled = currentPage === 1;
+                        prevBtn.addEventListener("click", () => {
+                            if (currentPage > 1) {
+                                currentPage--;
+                                showPage(currentPage);
+                                updatePagination();
+                            }
+                        });
+                        paginationControls.appendChild(prevBtn);
+
+                        // Page buttons (show max 5 buttons)
+                        const maxVisibleButtons = 5;
+                        let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
+                        let endPage = Math.min(pageCount, startPage + maxVisibleButtons - 1);
+
+                        // Adjust start page if we're near the end
+                        if (endPage - startPage + 1 < maxVisibleButtons && startPage > 1) {
+                            startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+                        }
+
+                        // First page button (if not already showing)
+                        if (startPage > 1) {
+                            const firstPageBtn = document.createElement("button");
+                            firstPageBtn.textContent = "1";
+                            firstPageBtn.addEventListener("click", () => {
+                                currentPage = 1;
+                                showPage(currentPage);
+                                updatePagination();
+                            });
+                            paginationControls.appendChild(firstPageBtn);
+
+                            // Ellipsis after first page (if needed)
+                            if (startPage > 2) {
+                                const ellipsis = document.createElement("span");
+                                ellipsis.textContent = "...";
+                                ellipsis.className = "pagination-ellipsis";
+                                paginationControls.appendChild(ellipsis);
+                            }
+                        }
+
+                        // Generate page buttons
+                        for (let i = startPage; i <= endPage; i++) {
+                            const pageBtn = document.createElement("button");
+                            pageBtn.textContent = i;
+                            if (i === currentPage) {
+                                pageBtn.classList.add("active");
+                            }
+                            pageBtn.addEventListener("click", () => {
+                                currentPage = i;
+                                showPage(currentPage);
+                                updatePagination();
+                            });
+                            paginationControls.appendChild(pageBtn);
+                        }
+
+                        // Last page button (if not already showing)
+                        if (endPage < pageCount) {
+                            // Add ellipsis before last page (if needed)
+                            if (endPage < pageCount - 1) {
+                                const ellipsis = document.createElement("span");
+                                ellipsis.textContent = "...";
+                                ellipsis.className = "pagination-ellipsis";
+                                paginationControls.appendChild(ellipsis);
+                            }
+
+                            const lastPageBtn = document.createElement("button");
+                            lastPageBtn.textContent = pageCount;
+                            lastPageBtn.addEventListener("click", () => {
+                                currentPage = pageCount;
+                                showPage(currentPage);
+                                updatePagination();
+                            });
+                            paginationControls.appendChild(lastPageBtn);
+                        }
+
+                        // Next button
+                        const nextBtn = document.createElement("button");
+                        nextBtn.innerHTML = "&raquo;";
+                        nextBtn.disabled = currentPage === pageCount;
+                        nextBtn.addEventListener("click", () => {
+                            if (currentPage < pageCount) {
+                                currentPage++;
+                                showPage(currentPage);
+                                updatePagination();
+                            }
+                        });
+                        paginationControls.appendChild(nextBtn);
+                    }
+
+                    // Show current page
+                    function showPage(page) {
+                        // Hide all rows
+                        allRows.forEach((row) => {
+                            row.style.display = "none";
+                        });
+
+                        // Show rows for current page
+                        const start = (page - 1) * entriesPerPage;
+                        const end = start + entriesPerPage;
+
+                        filteredRows.forEach((row, index) => {
+                            if (index >= start && index < end) {
+                                row.style.display = "table-row";
+                            }
+                        });
+
+                        // Update info text
+                        if (showingStart && showingEnd && totalEntries) {
+                            showingStart.textContent = filteredRows.length ? start + 1 : 0;
+                            showingEnd.textContent = Math.min(end, filteredRows.length);
+                            totalEntries.textContent = filteredRows.length;
+                        }
+                    }
+
+                    // Filter rows based on search input
+                    function filterRows() {
+                        const searchTerm = searchInput.value.toLowerCase();
+                        filteredRows = [...allRows].filter((row) => {
+                            const text = row.textContent.toLowerCase();
+                            return text.includes(searchTerm);
+                        });
+
+                        currentPage = 1;
+                        updatePagination();
+                        showPage(currentPage);
+                    }
+
+                    // Event listeners
+                    if (entriesSelect) {
+                        entriesSelect.addEventListener("change", function () {
+                            entriesPerPage = parseInt(this.value);
+                            currentPage = 1;
+                            updatePagination();
+                            showPage(currentPage);
+                        });
+                    }
+
+                    if (searchBtn) {
+                        searchBtn.addEventListener("click", filterRows);
+                    }
+
+                    if (searchInput) {
+                        searchInput.addEventListener("keyup", function () {
+                            filterRows();
+                        });
+                    }
+
+                    // Initialize on page load
+                    initializePagination();
                 }
             });
-            paginationControls.appendChild(prevBtn);
-
-            // Page buttons (show max 5 buttons)
-            const maxVisibleButtons = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
-            let endPage = Math.min(pageCount, startPage + maxVisibleButtons - 1);
-
-            // Adjust start page if we're near the end
-            if (endPage - startPage + 1 < maxVisibleButtons && startPage > 1) {
-                startPage = Math.max(1, endPage - maxVisibleButtons + 1);
-            }
-
-            // First page button (if not already showing)
-            if (startPage > 1) {
-                const firstPageBtn = document.createElement("button");
-                firstPageBtn.textContent = "1";
-                firstPageBtn.addEventListener("click", () => {
-                    currentPage = 1;
-                    showPage(currentPage);
-                    updatePagination();
-                });
-                paginationControls.appendChild(firstPageBtn);
-                
-                // Ellipsis after first page (if needed)
-                if (startPage > 2) {
-                    const ellipsis = document.createElement("span");
-                    ellipsis.textContent = "...";
-                    ellipsis.className = "pagination-ellipsis";
-                    paginationControls.appendChild(ellipsis);
-                }
-            }
-
-            // Generate page buttons
-            for (let i = startPage; i <= endPage; i++) {
-                const pageBtn = document.createElement("button");
-                pageBtn.textContent = i;
-                if (i === currentPage) {
-                    pageBtn.classList.add("active");
-                }
-                pageBtn.addEventListener("click", () => {
-                    currentPage = i;
-                    showPage(currentPage);
-                    updatePagination();
-                });
-                paginationControls.appendChild(pageBtn);
-            }
-
-            // Last page button (if not already showing)
-            if (endPage < pageCount) {
-                // Add ellipsis before last page (if needed)
-                if (endPage < pageCount - 1) {
-                    const ellipsis = document.createElement("span");
-                    ellipsis.textContent = "...";
-                    ellipsis.className = "pagination-ellipsis";
-                    paginationControls.appendChild(ellipsis);
-                }
-                
-                const lastPageBtn = document.createElement("button");
-                lastPageBtn.textContent = pageCount;
-                lastPageBtn.addEventListener("click", () => {
-                    currentPage = pageCount;
-                    showPage(currentPage);
-                    updatePagination();
-                });
-                paginationControls.appendChild(lastPageBtn);
-            }
-
-            // Next button
-            const nextBtn = document.createElement("button");
-            nextBtn.innerHTML = "&raquo;";
-            nextBtn.disabled = currentPage === pageCount;
-            nextBtn.addEventListener("click", () => {
-                if (currentPage < pageCount) {
-                    currentPage++;
-                    showPage(currentPage);
-                    updatePagination(); // Update the entire pagination control
-                }
-            });
-            paginationControls.appendChild(nextBtn);
-        }
-
-        // Show current page
-        function showPage(page) {
-            // Hide all rows
-            allRows.forEach((row) => {
-                row.style.display = "none";
-            });
-
-            // Show rows for current page
-            const start = (page - 1) * entriesPerPage;
-            const end = start + entriesPerPage;
-
-            filteredRows.forEach((row, index) => {
-                if (index >= start && index < end) {
-                    row.style.display = "table-row";
-                }
-            });
-
-            // Update info text
-            if (showingStart && showingEnd && totalEntries) {
-                showingStart.textContent = filteredRows.length ? start + 1 : 0;
-                showingEnd.textContent = Math.min(end, filteredRows.length);
-                totalEntries.textContent = filteredRows.length;
-            }
-        }
-
-        // Filter rows based on search input
-        function filterRows() {
-            const searchTerm = searchInput.value.toLowerCase();
-            filteredRows = [...allRows].filter((row) => {
-                const text = row.textContent.toLowerCase();
-                return text.includes(searchTerm);
-            });
-
-            currentPage = 1;
-            updatePagination();
-            showPage(currentPage);
-        }
-
-        // Event listeners
-        if (entriesSelect) {
-            entriesSelect.addEventListener("change", function () {
-                entriesPerPage = parseInt(this.value);
-                currentPage = 1;
-                updatePagination();
-                showPage(currentPage);
-            });
-        }
-
-        if (searchBtn) {
-            searchBtn.addEventListener("click", filterRows);
-        }
-
-        if (searchInput) {
-            searchInput.addEventListener("keyup", function () {
-                filterRows();
-            });
-        }
-
-        // Initialize on page load
-        initializePagination();
-    }
-});
-</script>
+        </script>

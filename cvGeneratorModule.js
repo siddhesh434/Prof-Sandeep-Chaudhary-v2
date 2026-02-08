@@ -268,10 +268,11 @@ async function generateCV(config = {}) {
             const phdOngoing = filteredDissertations.filter(d => d.degree === 'PhD Thesis in progress').length;
             const phdCompleted = filteredDissertations.filter(d => d.degree === 'PhD Thesis Awarded').length;
 
-            // M.Tech Logic
-            const mtechs = filteredDissertations.filter(d => d.degree === 'MTech and MSc Awarded/Ongoing');
-            const mtechOngoing = mtechs.filter(d => isOngoing(d.year)).length;
-            const mtechCompleted = mtechs.length - mtechOngoing;
+            // M.Tech Logic - now separated into Awarded and Ongoing
+            const mtechsAwarded = filteredDissertations.filter(d => d.degree === 'MTech and MSc Awarded');
+            const mtechsOngoing = filteredDissertations.filter(d => d.degree === 'MTech and MSc Ongoing');
+            const mtechCompleted = mtechsAwarded.length;
+            const mtechOngoing = mtechsOngoing.length;
 
             const credentials = [
                 { label: "Technology Transfer/ Translational Research:", value: rc.techTransfer || `${techTransferCount}/02` },
@@ -925,9 +926,10 @@ async function generateWordCV(config = {}) {
 
             const phdOngoing = filteredDissertations.filter(d => d.degree === 'PhD Thesis in progress').length;
             const phdCompleted = filteredDissertations.filter(d => d.degree === 'PhD Thesis Awarded').length;
-            const mtechs = filteredDissertations.filter(d => d.degree === 'MTech and MSc Awarded/Ongoing');
-            const mtechOngoing = mtechs.filter(d => isOngoing(d.year)).length;
-            const mtechCompleted = mtechs.length - mtechOngoing;
+            const mtechsAwarded = filteredDissertations.filter(d => d.degree === 'MTech and MSc Awarded');
+            const mtechsOngoing = filteredDissertations.filter(d => d.degree === 'MTech and MSc Ongoing');
+            const mtechCompleted = mtechsAwarded.length;
+            const mtechOngoing = mtechsOngoing.length;
 
             const credentials = [
                 { label: "Technology Transfer/ Translational Research:", value: rc.techTransfer || `${techTransferCount}/02` },

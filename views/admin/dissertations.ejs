@@ -22,176 +22,182 @@
 </head>
 
 <body class="bg-gray-100">
-    <div class="flex h-screen overflow-hidden relative">    <!-- New Collapsible Sidebar -->
-    <%- include('../partials/admin-sidebar', { adminID: 'admin123', currentPage: '/admin/dissertations.html' }) %>
+    <div class="flex h-screen overflow-hidden relative"> <!-- New Collapsible Sidebar -->
+        <%- include('../partials/admin-sidebar', { adminID: 'admin123' , currentPage: '/admin/dissertations.html' }) %>
 
-        <!-- Overlay for mobile sidebar -->
-        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+            <!-- Overlay for mobile sidebar -->
+            <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
 
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
-            <div class="p-4 md:p-6">
-                <!-- Header with mobile menu indicator -->
-                <div class="flex justify-between items-center mb-6">
-                    <div class="flex items-center">
-                        <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
-                            <i class="fas fa-bars text-xl"></i>
-                        </button>
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">
-                            Dissertation Management
-                        </h1>
-                    </div>
-                    <div class="flex items-center space-x-2 md:space-x-4">
-                        <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Welcome, Admin</span>
-                        <div
-                            class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
-                            A
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto">
+                <div class="p-4 md:p-6">
+                    <!-- Header with mobile menu indicator -->
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center">
+                            <button id="mobile-menu-button" class="mr-3 text-gray-700 md:hidden">
+                                <i class="fas fa-bars text-xl"></i>
+                            </button>
+                            <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+                                Dissertation Management
+                            </h1>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Stats Card -->
-                <div class="mb-6">
-                    <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                        <div class="flex flex-wrap items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-brand-secondary bg-opacity-20 mr-4">
-                                    <i class="fas fa-user-graduate text-xl text-brand-secondary"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-gray-600 text-sm">Total Dissertations</h2>
-                                    <p class="text-2xl font-bold text-gray-800" id="dissertationCount">0</p>
-                                </div>
-                            </div>
-                            <div class="flex space-x-3 mt-3 sm:mt-0">
-                                <div class="p-2 px-4 bg-blue-50 rounded-lg">
-                                    <p class="text-xs font-medium text-blue-500">PhD Awarded</p>
-                                    <p class="text-lg font-bold text-blue-600" id="phdCount">0</p>
-                                </div>
-                                <div class="p-2 px-4 bg-yellow-50 rounded-lg">
-                                    <p class="text-xs font-medium text-yellow-600">In Progress</p>
-                                    <p class="text-lg font-bold text-yellow-600" id="inProgressCount">0</p>
-                                </div>
-                                <div class="p-2 px-4 bg-green-50 rounded-lg">
-                                    <p class="text-xs font-medium text-green-600">MTech/MSc</p>
-                                    <p class="text-lg font-bold text-green-600" id="mtechCount">0</p>
-                                </div>
+                        <div class="flex items-center space-x-2 md:space-x-4">
+                            <span class="text-gray-700 text-sm md:text-base hidden sm:inline">Welcome, Admin</span>
+                            <div
+                                class="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-semibold">
+                                A
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Dissertation Form -->
-                <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Dissertation</h3>
-                    <form id="dissertationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="hidden" id="dissertationId">
-
-                        <div class="flex flex-col">
-                            <label class="mb-2 text-gray-700" for="name">Student Name</label>
-                            <input type="text" id="name" name="name" required
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="Full Name">
+                    <!-- Stats Card -->
+                    <div class="mb-6">
+                        <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                            <div class="flex flex-wrap items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="p-3 rounded-full bg-brand-secondary bg-opacity-20 mr-4">
+                                        <i class="fas fa-user-graduate text-xl text-brand-secondary"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-gray-600 text-sm">Total Dissertations</h2>
+                                        <p class="text-2xl font-bold text-gray-800" id="dissertationCount">0</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-3 mt-3 sm:mt-0">
+                                    <div class="p-2 px-4 bg-blue-50 rounded-lg">
+                                        <p class="text-xs font-medium text-blue-500">PhD Awarded</p>
+                                        <p class="text-lg font-bold text-blue-600" id="phdCount">0</p>
+                                    </div>
+                                    <div class="p-2 px-4 bg-yellow-50 rounded-lg">
+                                        <p class="text-xs font-medium text-yellow-600">In Progress</p>
+                                        <p class="text-lg font-bold text-yellow-600" id="inProgressCount">0</p>
+                                    </div>
+                                    <div class="p-2 px-4 bg-green-50 rounded-lg">
+                                        <p class="text-xs font-medium text-green-600">MTech Awarded</p>
+                                        <p class="text-lg font-bold text-green-600" id="mtechAwardedCount">0</p>
+                                    </div>
+                                    <div class="p-2 px-4 bg-purple-50 rounded-lg">
+                                        <p class="text-xs font-medium text-purple-600">MTech Ongoing</p>
+                                        <p class="text-lg font-bold text-purple-600" id="mtechOngoingCount">0</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="flex flex-col">
-                            <label class="mb-2 text-gray-700" for="title">Dissertation Title</label>
-                            <input type="text" id="title" name="title" required
+                    <!-- Dissertation Form -->
+                    <div class="bg-white shadow-md rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Add New Dissertation</h3>
+                        <form id="dissertationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="hidden" id="dissertationId">
+
+                            <div class="flex flex-col">
+                                <label class="mb-2 text-gray-700" for="name">Student Name</label>
+                                <input type="text" id="name" name="name" required
+                                    class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                    placeholder="Full Name">
+                            </div>
+
+                            <div class="flex flex-col">
+                                <label class="mb-2 text-gray-700" for="title">Dissertation Title</label>
+                                <input type="text" id="title" name="title" required
+                                    class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                            </div>
+
+                            <div class="flex flex-col">
+                                <label class="mb-2 text-gray-700" for="year">Year</label>
+                                <input type="number" id="year" name="year" required min="1900" max="2100"
+                                    class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                            </div>
+
+                            <div class="flex flex-col">
+                                <label class="mb-2 text-gray-700" for="coSupervisors">Co-Supervisors</label>
+                                <input type="text" id="coSupervisors" name="coSupervisors"
+                                    class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                    placeholder="e.g., Dr. Rajesh Gupta">
+                            </div>
+
+                            <div class="flex flex-col">
+                                <label class="mb-2 text-gray-700" for="degree">Degree Status</label>
+                                <select id="degree" name="degree" required
+                                    class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                                    <option value="">Select Degree Status</option>
+                                    <option value="PhD Thesis Awarded">PhD Thesis Awarded</option>
+                                    <option value="PhD Thesis in progress">PhD Thesis in progress</option>
+                                    <option value="MTech and MSc Awarded">MTech and MSc Awarded</option>
+                                    <option value="MTech and MSc Ongoing">MTech and MSc Ongoing</option>
+                                </select>
+                            </div>
+
+                            <div class="col-span-1 md:col-span-2 flex space-x-4 mt-2">
+                                <button type="submit" id="addButton"
+                                    class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-blue-700 transition duration-300">
+                                    <i class="fas fa-plus mr-2"></i> Add Dissertation
+                                </button>
+                                <button type="button" id="updateButton"
+                                    class="flex-1 bg-yellow-500 text-white p-3 rounded hover:bg-yellow-600 transition duration-300 hidden">
+                                    <i class="fas fa-save mr-2"></i> Update Dissertation
+                                </button>
+                                <button type="button" id="cancelEditButton"
+                                    class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden">
+                                    <i class="fas fa-times mr-2"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Search and Filter Section -->
+                    <div class="mb-6 bg-white p-4 rounded-lg shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Search & Filter</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="flex-grow">
+                                <input type="text" id="searchInput" placeholder="Search dissertations..."
+                                    class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
+                            </div>
+                            <select id="yearFilter"
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                        </div>
-
-                        <div class="flex flex-col">
-                            <label class="mb-2 text-gray-700" for="year">Year</label>
-                            <input type="number" id="year" name="year" required min="1900" max="2100"
+                                <option value="">All Years</option>
+                            </select>
+                            <select id="degreeFilter"
                                 class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                        </div>
-
-                        <div class="flex flex-col">
-                            <label class="mb-2 text-gray-700" for="coSupervisors">Co-Supervisors</label>
-                            <input type="text" id="coSupervisors" name="coSupervisors"
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                                placeholder="e.g., Dr. Rajesh Gupta">
-                        </div>
-
-                        <div class="flex flex-col">
-                            <label class="mb-2 text-gray-700" for="degree">Degree Status</label>
-                            <select id="degree" name="degree" required
-                                class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                                <option value="">Select Degree Status</option>
+                                <option value="">All Degrees</option>
                                 <option value="PhD Thesis Awarded">PhD Thesis Awarded</option>
                                 <option value="PhD Thesis in progress">PhD Thesis in progress</option>
-                                <option value="MTech and MSc Awarded/Ongoing">MTech and MSc Awarded/Ongoing</option>
+                                <option value="MTech and MSc Awarded">MTech and MSc Awarded</option>
+                                <option value="MTech and MSc Ongoing">MTech and MSc Ongoing</option>
                             </select>
-                        </div>
-
-                        <div class="col-span-1 md:col-span-2 flex space-x-4 mt-2">
-                            <button type="submit" id="addButton"
-                                class="flex-1 bg-brand-primary text-white p-3 rounded hover:bg-blue-700 transition duration-300">
-                                <i class="fas fa-plus mr-2"></i> Add Dissertation
-                            </button>
-                            <button type="button" id="updateButton"
-                                class="flex-1 bg-yellow-500 text-white p-3 rounded hover:bg-yellow-600 transition duration-300 hidden">
-                                <i class="fas fa-save mr-2"></i> Update Dissertation
-                            </button>
-                            <button type="button" id="cancelEditButton"
-                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300 hidden">
-                                <i class="fas fa-times mr-2"></i> Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Search and Filter Section -->
-                <div class="mb-6 bg-white p-4 rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Search & Filter</h3>
-                    <div class="flex flex-wrap gap-4">
-                        <div class="flex-grow">
-                            <input type="text" id="searchInput" placeholder="Search dissertations..."
-                                class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                        </div>
-                        <select id="yearFilter"
-                            class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                            <option value="">All Years</option>
-                        </select>
-                        <select id="degreeFilter"
-                            class="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-brand-primary">
-                            <option value="">All Degrees</option>
-                            <option value="PhD Thesis Awarded">PhD Thesis Awarded</option>
-                            <option value="PhD Thesis in progress">PhD Thesis in progress</option>
-                            <option value="MTech and MSc Awarded/Ongoing">MTech and MSc Awarded/Ongoing</option>
-                        </select>
-                        <button id="searchButton"
-                            class="bg-brand-secondary text-white p-2 rounded hover:bg-blue-700 transition duration-300">
-                            <i class="fas fa-search mr-2"></i> Search
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Dissertations Grid -->
-                <div id="dissertationsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-                    <!-- Dissertations will be dynamically added here -->
-                </div>
-
-                <!-- Delete Confirmation Modal -->
-                <div id="deleteModal"
-                    class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
-                    <div class="bg-white rounded-lg p-6 max-w-sm w-full">
-                        <h2 class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h2>
-                        <p class="mb-6 text-gray-600">Are you sure you want to delete this dissertation?</p>
-                        <div class="flex space-x-4">
-                            <button id="confirmDeleteBtn"
-                                class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300">
-                                <i class="fas fa-trash mr-2"></i> Delete
-                            </button>
-                            <button id="cancelDeleteBtn"
-                                class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300">
-                                <i class="fas fa-times mr-2"></i> Cancel
+                            <button id="searchButton"
+                                class="bg-brand-secondary text-white p-2 rounded hover:bg-blue-700 transition duration-300">
+                                <i class="fas fa-search mr-2"></i> Search
                             </button>
                         </div>
                     </div>
+
+                    <!-- Dissertations Grid -->
+                    <div id="dissertationsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                        <!-- Dissertations will be dynamically added here -->
+                    </div>
+
+                    <!-- Delete Confirmation Modal -->
+                    <div id="deleteModal"
+                        class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+                        <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+                            <h2 class="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h2>
+                            <p class="mb-6 text-gray-600">Are you sure you want to delete this dissertation?</p>
+                            <div class="flex space-x-4">
+                                <button id="confirmDeleteBtn"
+                                    class="flex-1 bg-red-500 text-white p-3 rounded hover:bg-red-600 transition duration-300">
+                                    <i class="fas fa-trash mr-2"></i> Delete
+                                </button>
+                                <button id="cancelDeleteBtn"
+                                    class="flex-1 bg-gray-500 text-white p-3 rounded hover:bg-gray-600 transition duration-300">
+                                    <i class="fas fa-times mr-2"></i> Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </main>
+            </main>
     </div>
 
     <!-- Floating action button for mobile -->
@@ -217,7 +223,8 @@
         const dissertationCount = document.getElementById('dissertationCount');
         const phdCount = document.getElementById('phdCount');
         const inProgressCount = document.getElementById('inProgressCount');
-        const mtechCount = document.getElementById('mtechCount');
+        const mtechAwardedCount = document.getElementById('mtechAwardedCount');
+        const mtechOngoingCount = document.getElementById('mtechOngoingCount');
 
         // Mobile menu elements
         const mobileMenuButton = document.getElementById("mobile-menu-button");
@@ -273,7 +280,7 @@
                         title: "Machine Learning Applications in Structural Health Monitoring",
                         year: "2022",
                         coSupervisors: "-",
-                        degree: "MTech and MSc Awarded/Ongoing"
+                        degree: "MTech and MSc Awarded"
                     },
                     {
                         _id: '5',
@@ -296,7 +303,8 @@
             dissertationCount.textContent = data.length;
             phdCount.textContent = data.filter(d => d.degree === "PhD Thesis Awarded").length;
             inProgressCount.textContent = data.filter(d => d.degree === "PhD Thesis in progress").length;
-            mtechCount.textContent = data.filter(d => d.degree === "MTech and MSc Awarded/Ongoing").length;
+            mtechAwardedCount.textContent = data.filter(d => d.degree === "MTech and MSc Awarded").length;
+            mtechOngoingCount.textContent = data.filter(d => d.degree === "MTech and MSc Ongoing").length;
         }
 
         // Populate Year Filter Dropdown
@@ -320,8 +328,12 @@
                     badgeColor = 'bg-green-500';
                 } else if (dissertation.degree === 'PhD Thesis in progress') {
                     badgeColor = 'bg-yellow-500';
-                } else {
+                } else if (dissertation.degree === 'MTech and MSc Awarded') {
                     badgeColor = 'bg-blue-500';
+                } else if (dissertation.degree === 'MTech and MSc Ongoing') {
+                    badgeColor = 'bg-purple-500';
+                } else {
+                    badgeColor = 'bg-gray-500';
                 }
 
                 return `

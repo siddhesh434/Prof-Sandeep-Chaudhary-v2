@@ -116,10 +116,11 @@ router.get("/api/all-cv-data", async (req, res) => {
         const phdOngoing = dissertations.filter(d => d.degree === 'PhD Thesis in progress').length;
         const phdCompleted = dissertations.filter(d => d.degree === 'PhD Thesis Awarded').length;
 
-        // MTech Strict
-        const mtechs = dissertations.filter(d => d.degree === 'MTech and MSc Awarded/Ongoing');
-        const mtechOngoing = mtechs.filter(d => isOngoing(d.year)).length;
-        const mtechCompleted = mtechs.length - mtechOngoing;
+        // MTech Strict - now separated into Awarded and Ongoing
+        const mtechsAwarded = dissertations.filter(d => d.degree === 'MTech and MSc Awarded');
+        const mtechsOngoing = dissertations.filter(d => d.degree === 'MTech and MSc Ongoing');
+        const mtechCompleted = mtechsAwarded.length;
+        const mtechOngoing = mtechsOngoing.length;
 
         // Projects - Exclude Consultancy
         const sponsoredProjects = projects.filter(p => !p.projectType || !p.projectType.toLowerCase().includes('consultancy'));
