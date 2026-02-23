@@ -46,60 +46,14 @@
   <meta property="og:image" content="/images/score.png" />
   <link rel="canonical" href="https://your-domain.com" />
 
-<% const activeBulletins = Array.isArray(bulletins) ? bulletins.filter(b => b.enabled) : []; %>
-<% if (activeBulletins.length) { %>
-<%
-  const firstBulletin = activeBulletins[0];
-  let gradientColor;
-  if (firstBulletin.color === 'red') {
-    gradientColor = '#dc2626, #b91c1c';
-  } else if (firstBulletin.color === 'green') {
-    gradientColor = 'var(--primary-color), var(--primary-color)';
-  } else if (firstBulletin.color === 'orange') {
-    gradientColor = '#ea580c, #c2410c';
-  } else if (firstBulletin.color === 'purple') {
-    gradientColor = '#9333ea, #7c3aed';
-  } else {
-    gradientColor = '#3b82f6, #1d4ed8';
-  }
-  const bulletinSpeed = firstBulletin.speed ? firstBulletin.speed + 's' : '15s';
-%>
-<div class="moving-bulletin" role="alert" style="background: linear-gradient(45deg, <%= gradientColor %>)">
-  <div class="bulletin-content" style="animation-duration: <%= bulletinSpeed %>;">
-    <% activeBulletins.forEach(function(item) { %>
-      <span class="bulletin-item">
-        <% const titleText = item.title || 'Latest News :'; %>
-        <% if (item.linkUrl) { %>
-          <a href="<%= item.linkUrl %>" target="_blank" rel="noopener" class="bulletin-link">
-            <strong><%= titleText %></strong> <%= item.message %>
-          </a>
-        <% } else { %>
-          <strong><%= titleText %></strong> <%= item.message %>
-        <% } %>
-      </span>
-    <% }) %>
-    <% activeBulletins.forEach(function(item) { %>
-      <span class="bulletin-item" aria-hidden="true">
-        <% const titleText = item.title || 'Latest News :'; %>
-        <% if (item.linkUrl) { %>
-          <a href="<%= item.linkUrl %>" target="_blank" rel="noopener" class="bulletin-link">
-            <strong><%= titleText %></strong> <%= item.message %>
-          </a>
-        <% } else { %>
-          <strong><%= titleText %></strong> <%= item.message %>
-        <% } %>
-      </span>
-    <% }) %>
-  </div>
-</div>
-<% } %>
+
 
   <!-- Hero Image Section -->
   <div class="hero-image" role="banner">
     <div class="container">
       <div class="hero-text">
-        <h1>SCORE</h1>
-        <p>Sustainable COnstruction REsearch Group</p>
+        <h1>Sustainable Building Products for Net Zero in Construction</h1>
+        <p>Joint lab to market research by IIT Indore and University of Plymouth, funded by British Council</p>
       </div>
     </div>
   </div>
