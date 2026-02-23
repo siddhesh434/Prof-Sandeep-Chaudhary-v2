@@ -1,0 +1,534 @@
+<!-- Primary Meta Tags -->
+<title>
+  Sustainable building products for net zero in construction
+</title>
+<meta name="title" content="Net Zero in Construction" />
+<meta name="description"
+  content="." />
+<meta name="keywords"
+  content="sustainable building products, net zero in construction, IIT Indore, University of Warwick" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sustainableconstructionlab.com/" />
+<meta property="og:title" content="Prof. Sandeep Chaudhary - Sustainable Construction Lab | IIT Indore" />
+<meta property="og:description"
+  content="Prof. Sandeep Chaudhary's Sustainable Construction Lab at IIT Indore - Leading research in sustainable construction, low carbon materials, waste upcycling, and IoT applications. Explore our innovative technologies and research projects." />
+<meta property="og:image" content="https://sustainableconstructionlab.com/images/og-image.jpg" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content="https://sustainableconstructionlab.com/" />
+<meta property="twitter:title" content="Prof. Sandeep Chaudhary - Sustainable Construction Lab | IIT Indore" />
+<meta property="twitter:description"
+  content="Prof. Sandeep Chaudhary's Sustainable Construction Lab at IIT Indore - Leading research in sustainable construction, low carbon materials, waste upcycling, and IoT applications. Explore our innovative technologies and research projects." />
+<meta property="twitter:image" content="https://sustainableconstructionlab.com/images/og-image.jpg" />
+
+<!-- Additional SEO Meta Tags -->
+<meta name="author" content="Prof. Sandeep Chaudhary, IIT Indore" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta name="language" content="English" />
+<meta name="revisit-after" content="7 days" />
+<meta name="generator" content="Sustainable Construction Lab" />
+
+<link rel="stylesheet" href="index.css" />
+<%- include('partials/header') %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="SCORE - Sustainable Construction Research Group at IIT Indore, led by Prof. Sandeep Chaudhary. Focused on sustainable construction materials, structural engineering, and rural development." />
+  <meta name="keywords"
+    content="SCORE, Sustainable Construction, Research Group, IIT Indore, Prof. Sandeep Chaudhary, Sustainable Materials, Structural Engineering, Rural Development" />
+  <meta property="og:title" content="SCORE - Sustainable Construction Research Group" />
+  <meta property="og:description"
+    content="Leading research group at IIT Indore focused on sustainable construction, structural engineering, and rural development initiatives." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://your-domain.com" />
+  <meta property="og:image" content="/images/score.png" />
+  <link rel="canonical" href="https://your-domain.com" />
+
+<% const activeBulletins = Array.isArray(bulletins) ? bulletins.filter(b => b.enabled) : []; %>
+<% if (activeBulletins.length) { %>
+<%
+  const firstBulletin = activeBulletins[0];
+  let gradientColor;
+  if (firstBulletin.color === 'red') {
+    gradientColor = '#dc2626, #b91c1c';
+  } else if (firstBulletin.color === 'green') {
+    gradientColor = 'var(--primary-color), var(--primary-color)';
+  } else if (firstBulletin.color === 'orange') {
+    gradientColor = '#ea580c, #c2410c';
+  } else if (firstBulletin.color === 'purple') {
+    gradientColor = '#9333ea, #7c3aed';
+  } else {
+    gradientColor = '#3b82f6, #1d4ed8';
+  }
+  const bulletinSpeed = firstBulletin.speed ? firstBulletin.speed + 's' : '15s';
+%>
+<div class="moving-bulletin" role="alert" style="background: linear-gradient(45deg, <%= gradientColor %>)">
+  <div class="bulletin-content" style="animation-duration: <%= bulletinSpeed %>;">
+    <% activeBulletins.forEach(function(item) { %>
+      <span class="bulletin-item">
+        <% const titleText = item.title || 'Latest News :'; %>
+        <% if (item.linkUrl) { %>
+          <a href="<%= item.linkUrl %>" target="_blank" rel="noopener" class="bulletin-link">
+            <strong><%= titleText %></strong> <%= item.message %>
+          </a>
+        <% } else { %>
+          <strong><%= titleText %></strong> <%= item.message %>
+        <% } %>
+      </span>
+    <% }) %>
+    <% activeBulletins.forEach(function(item) { %>
+      <span class="bulletin-item" aria-hidden="true">
+        <% const titleText = item.title || 'Latest News :'; %>
+        <% if (item.linkUrl) { %>
+          <a href="<%= item.linkUrl %>" target="_blank" rel="noopener" class="bulletin-link">
+            <strong><%= titleText %></strong> <%= item.message %>
+          </a>
+        <% } else { %>
+          <strong><%= titleText %></strong> <%= item.message %>
+        <% } %>
+      </span>
+    <% }) %>
+  </div>
+</div>
+<% } %>
+
+  <!-- Hero Image Section -->
+  <div class="hero-image" role="banner">
+    <div class="container">
+      <div class="hero-text">
+        <h1>SCORE</h1>
+        <p>Sustainable COnstruction REsearch Group</p>
+      </div>
+    </div>
+  </div>
+  <!-- Main Content -->
+  <div class="container main-wrapper">
+    
+    <div>
+      <!-- About SCORE Section -->
+      <section class="about-score-section" itemscope itemtype="https://schema.org/Organization">
+        <h2>
+          About <span class="highlight">S</span>ustainable
+          <span class="highlight">CO</span>nstruction
+          <span class="highlight">RE</span>search Group
+        </h2>
+        <p itemprop="description">
+          Sustainable COnstruction REsearch group, abbreviated as SCORE, was started by Prof. Sandeep Chaudhary. SCORE recognizes the need for
+          sustainability in the construction industry and has been actively
+          working towards achieving the same. SCORE is a multi-disciplinary
+          research group with members and collaborations across different
+          countries from both industry and academia.
+        </p>
+      </section>
+      </div>
+
+      <% const highlightCategories = Array.isArray(homeHighlightCategories) && homeHighlightCategories.length
+        ? homeHighlightCategories
+        : [
+          { key: "paper", label: "Recent Paper" },
+          { key: "project", label: "Recent Project" },
+          { key: "technology", label: "Key Technology" },
+        ];
+        const highlightRows = Array.isArray(homeHighlightRows) && homeHighlightRows.length
+          ? homeHighlightRows
+          : [
+            [null, null, null],
+            [null, null, null],
+          ];
+        const visibleRows = highlightRows.filter(row => row.some(Boolean));
+      %>
+      <% if (visibleRows.length) { %>
+      <section class="home-highlights" aria-label="Featured research highlights">
+        <div class="home-highlights__header">
+          <div>
+            <p class="home-highlights__eyebrow">Our freshest work</p>
+            <h2>Recent Papers, Projects & Technologies</h2>
+          
+          </div>
+        </div>
+        <% visibleRows.forEach(function(row, rowIndex) { %>
+          <div class="home-highlight-row" role="list">
+            <% row.forEach(function(slot, columnIndex) {
+              const categoryMeta = highlightCategories[columnIndex] || {};
+              const categoryLabel = categoryMeta.label || "Highlight";
+            %>
+              <article class="highlight-card <%= slot ? '' : 'highlight-card--empty' %>" role="listitem">
+                <div class="highlight-card__meta">
+                  <span class="highlight-card__tag"><%= categoryLabel %></span>
+                  <% if (slot) { %>
+                    <span class="highlight-card__badge">#<%= rowIndex + 1 %></span>
+                  <% } %>
+                </div>
+            <% if (slot) { %>
+            <% const cardLink = slot.ctaUrl || slot.mediaUrl; %>
+            <% const displayMode = slot.displayMode || 'both'; %>
+            <% const showSummary = displayMode === 'text' || displayMode === 'both'; %>
+            <% const showMedia = displayMode === 'image' || displayMode === 'both'; %>
+            <% if (cardLink) { %>
+              <a href="<%= cardLink %>" target="_blank" rel="noopener" class="highlight-card__title-link">
+                <h3><%= slot.title %></h3>
+              </a>
+            <% } else { %>
+              <h3><%= slot.title %></h3>
+            <% } %>
+            <% if (showSummary) { %>
+              <p class="highlight-card__summary"><%= slot.summary %></p>
+            <% } %>
+            <% if (showMedia && slot.mediaType === 'image' && slot.mediaUrl) { %>
+              <a href="<%= cardLink || slot.mediaUrl %>" target="_blank" rel="noopener" class="highlight-card__media">
+                <img src="<%= slot.mediaUrl %>" alt="<%= slot.title %> media preview" loading="lazy" />
+                <% if (slot.ctaLabel) { %><span class="highlight-card__badge-overlay"><%= slot.ctaLabel %></span><% } %>
+              </a>
+            <% } else if (showMedia && slot.mediaUrl) { %>
+              <div class="highlight-card__file">
+                <span class="highlight-card__file-label">
+                  <%= slot.mediaType === 'pdf' ? 'PDF' : slot.mediaType === 'file' ? 'File' : 'Link' %>
+                </span>
+                <p><%= slot.mediaOriginalName || 'Download resource' %></p>
+              </div>
+            <% } %>
+                <% } else { %>
+                  <p class="highlight-card__placeholder">
+                    We are updating this <%= categoryLabel.toLowerCase() %> slot. Stay tuned for the latest release.
+                  </p>
+                <% } %>
+              </article>
+            <% }) %>
+          </div>
+        <% }) %>
+      </section>
+      <% } %>
+
+      <!-- About PI Section -->
+      <section class="about-pi-section" itemscope itemtype="https://schema.org/Person">
+        <h2>About Professor</h2>
+        <div class="pi-profile">
+          <div class="pi-img">
+            <img src="/images/Sandeep.jpg" alt="Prof. Sandeep Chaudhary"
+              itemprop="image" />
+          </div>
+          <div class="pi-info">
+            <h3 itemprop="name">Prof. Sandeep Chaudhary</h3>
+            <p itemprop="description">
+              Prof. Sandeep Chaudhary is currently working as a Professor (HAG) in the Department of Civil Engineering at IIT Indore.
+              </p><p itemprop="description">
+              His research group conducts pioneering work in structural engineering, concrete technology, and sustainable development, focusing on innovative solutions such as steel-concrete composite structures and the sustainable use of waste materials in construction, with a strong emphasis on product development and translational applications.
+              </p><p itemprop="description">
+              His key achievements include IIT Indore's first technology transfer, recognised among the top forty technologies published by IIT Madras in the coffee table book Prabhav, and the recent adoption of one of his technologies by a prestigious Indian government organisation for a large-scale construction project, fostering pride in institutional progress. 
+              </p><p itemprop="description">
+              Prof. Chaudhary serves on several committees of the Bureau of Indian Standards and the Asian Concrete Federation. He has established international collaborations, including joint research projects and academic exchanges, and was recently invited by the Government of the Russian Federation to develop a world-class research lab at NPI, Russia, as part of the Mega Grant scheme, highlighting his global research leadership.
+              </p><p itemprop="description">
+              His work has significantly advanced the field, as evidenced by his more than 120 research papers in SCI/SCI(E) journals and fourteen sponsored research Projects as Principal Investigator. He has recently coauthored a textbook on “Concrete Technology”, which has been published by McGraw-Hill Publications. 
+              </p><p itemprop="description">
+              Prof. Chaudhary's mission is deeply rooted in addressing global challenges through sustainable engineering practices. 
+            </p>
+            <a href="aboutPI.html" class="pi_more" style="color: var(--primary-color)"
+              aria-label="Learn more about Prof. Sandeep Chaudhary">Click here to read more about him</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Mission Vision Section -->
+    <div class="two-column-layout">
+      <!-- Mission Section -->
+      <section class="mission" itemscope itemtype="https://schema.org/Organization">
+        <h3>Our Mission</h3>
+        <p itemprop="description">
+          SCORE aims to develop sustainable industry ready solutions to the global
+          challenges in the field of construction industry and rural development.
+          SCORE welcomes the participation of all stakeholders to make this vision
+          a reality.
+        </p>
+        <p>
+          SCORE has recently expanded its scope of work to focus on rural
+          development. This is in light of the fact that two-third of the
+          population in India resides in villages. As a part of rural development
+          SCORE is also working towards livelihood creation, clean energy and
+          sanitation.
+        </p>
+      </section>
+
+      <!-- SDG Alignment Section -->
+      <section class="vision">
+        <h3>SDG Alignment</h3>
+        <p>
+          SCORE aligns with the United Nations Sustainability Development Goals
+          (SDG), with a keen focus towards:
+        </p>
+        <br />
+        <p style="font-weight: bold">
+          United Nations Sustainable Development Goals
+        </p>
+        <div class="sdg-icons" role="list">
+          <div class="sdg-tag" data-sdg="9" role="listitem">
+            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-09.jpg"
+              alt="SDG 9 - Industry, Innovation and Infrastructure" class="sdg-icon" />
+            <span class="sdg-tooltip">Industry, Innovation and Infrastructure</span>
+          </div>
+          <div class="sdg-tag" data-sdg="11" role="listitem">
+            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-11.jpg"
+              alt="SDG 11 - Sustainable Cities and Communities" class="sdg-icon" />
+            <span class="sdg-tooltip">Sustainable Cities and Communities</span>
+          </div>
+          <div class="sdg-tag" data-sdg="12" role="listitem">
+            <img src="https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-12.jpg"
+              alt="SDG 12 - Responsible Consumption and Production" class="sdg-icon" />
+            <span class="sdg-tooltip">Responsible Consumption and Production</span>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- Research Areas Section with Clickable Hexagons and Description Panel -->
+    <!-- Modal -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <img id="modal-image" src="" alt="Research Area" />
+        <h2 id="modal-title"></h2>
+        <p id="modal-description"></p>
+      </div>
+    </div>
+
+    <!-- Research Areas Section -->
+    <section class="research-areas-section" itemscope itemtype="https://schema.org/ResearchProject">
+      <h2>Key Research Areas</h2>
+      <div class="hexagon-container" role="list">
+        
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Sustainable Construction Materials"
+          data-image="images/sust.jpg"
+          data-description="One of the key focuses of our research has been on the development of sustainable construction materials. We leverage the principles of circular economy, waste to wealth and pre-processing and product engineering to identify, develop and assess alternate construction materials that satisfy codal provision with lower cost and environmental impact." role="listitem">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
+              background-image: url('images/sust.jpg');
+            "></div>
+            <div class="hexagon-icon" aria-hidden="true">
+              <i class="fas fa-flask"></i>
+            </div>
+            <h3>Sustainable Construction Materials</h3>
+          </div>
+        </div>
+
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Structural Engineering"
+          data-image="images/struct.png" data-description="Robust structural designs and application of sustainable construction materials have been a long focus of our research.">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="background-image: url('images/struct.png')"></div>
+            <div class="hexagon-icon"><i class="fas fa-building"></i></div>
+            <h3>Structural Engineering</h3>
+          </div>
+        </div>
+
+        <div class="hexagon-item" onclick="openModal(this)" data-title="C&D Waste Management"
+          data-image="images/c&d.jpg"
+          data-description="Construction and Demolition (C&D) waste management, an important part of national missions, is a major thrust area for our research. In the wake of C&D waste management rules 2025, we have been developing innovative recycling strategies and machines. Among the key technologies, we have developed a high-quality recycled aggregate, which can replace 100% natural aggregate and has a lower cost and carbon footprint.">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
+              background-image: url('images/c&d.jpg');
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-microchip"></i></div>
+            <h3>C&D Waste Management</h3>
+          </div>
+        </div>
+
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Bio-derived Materials"
+          data-image="images/gobair.png"
+          data-description="Bio-derived materials offer a green alternative to synthetic or manufactured materials. Our research has been focusing on developing bio-derived admixtures, cement and building products to sustainably meet the needs of the industry.">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
+              background-image: url('images/gobair.png');
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-microchip"></i></div>
+            <h3>Bio-derived Materials</h3>
+          </div>
+        </div>
+
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Fuctional Building Products"
+          data-image="images/func.jpg"
+          data-description="It is always about having more. Our research leverages the properties of alternative construction materials to engineer products with added functional properties.">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
+              background-image: url('images/func.jpg');
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-microchip"></i></div>
+            <h3>Functional Building Products</h3>
+          </div>
+        </div>
+
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Construction 4.0"
+          data-image="images/autum.jpg"
+          data-description="Our research integrates digital technologies and innovative instrument designs to introduce smart construction practices. We have used cyber-physical systems (CPS), internet of things (IoT), digital twins, simulation and modelling, and AI/ML as part of digital technologies. We have also developed several instruments with advanced functionalities to improve construction practices.">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
+              background-image: url('images/autum.jpg');
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-microchip"></i></div>
+            <h3>Construction 4.0</h3>
+          </div>
+        </div>
+
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Advanced Characterization"
+          data-image="images/fund.jpg"
+          data-description="We leverage advanced characterisation techniques to improve the fundamental understanding of concrete and alternative construction materials. One of our key focuses lies on the rheological behaviour of concrete.">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
+              background-image: url('images/fund.jpg');
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-microscope"></i></div>
+            <h3>Advanced Characterization</h3>
+          </div>
+        </div>
+
+        <div class="hexagon-item" onclick="openModal(this)" data-title="Rural Development"
+          data-image="images/gobrick.jpg"
+          data-description="Sustainable housing solutions for rural communities are a major need in India. A key part of our research focuses on aligning the application of sustainable construction solutions with rural needs and aspirations.">
+          <div class="hexagon-content">
+            <div class="hexagon-bg" style="
+              background-image: url('images/gobrick.jpg');
+            "></div>
+            <div class="hexagon-icon"><i class="fas fa-home"></i></div>
+            <h3>Rural Development</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Collaboration -->
+  <section class="collaboration-section" itemscope itemtype="https://schema.org/Organization">
+    <h2>Research Collaborations</h2>
+    <p class="collaboration-intro">We have an expanding network of research collaborations across the globe.</p>
+    <div class="collaboration-logos">
+      <img src="/images/logo/0.jpg" alt="India" />
+      <img src="/images/logo/1.jpg" alt="UK" />
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_Australia_%28converted%29.svg/250px-Flag_of_Australia_%28converted%29.svg.png" alt="Australia" width: Auto height: 40px />
+      <img src="/images/logo/2.jpg" alt="Russia" />
+      <img src="/images/logo/3.jpg" alt="China" />
+      <img src="/images/logo/4.jpg" alt="Hong Kong" />
+      <img src="/images/logo/5.jpg" alt="South Korea" />
+      <img src="/images/logo/6.jpg" alt="Thailand" />
+      <img src="/images/logo/7.jpg" alt="Tunisia" />
+      <img src="/images/logo/8.jpg" alt="France" />
+      <img src="/images/logo/9.jpg" alt="Serbia" />
+      <img src="/images/logo/10.jpg" alt="ACF" />
+    </div>
+    <div class="collaboration-link">
+      <a href="/Collaboration.html" class="more-tech-link">Collaborating Institutes →</a>
+    </div>
+  </section>
+  </div>
+
+
+
+
+<script>
+    carouselSlides = <%- JSON.stringify(carouselSlides) %>;
+</script>
+
+<%- include('partials/carousel', { carouselSlides: carouselSlides }) %>
+
+  <%- include('partials/footer') %>
+  <!-- JavaScript for carousel -->
+    <script>
+      function openModal(element) {
+        document.getElementById("modal-title").textContent =
+          element.getAttribute("data-title");
+        document.getElementById("modal-image").src =
+          element.getAttribute("data-image");
+        document.getElementById("modal-description").textContent =
+          element.getAttribute("data-description");
+
+        document.getElementById("modal").style.display = "flex";
+      }
+
+      document.querySelector(".close").addEventListener("click", function () {
+        document.getElementById("modal").style.display = "none";
+      });
+
+      window.onclick = function (event) {
+        if (event.target == document.getElementById("modal")) {
+          document.getElementById("modal").style.display = "none";
+        }
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+
+        // SDG Tag hover effects
+        const sdgTags = document.querySelectorAll(".sdg-tag");
+        sdgTags.forEach((tag) => {
+          tag.addEventListener("mouseenter", () => {
+            tag.querySelector(".sdg-tooltip").style.opacity = "1";
+          });
+
+          tag.addEventListener("mouseleave", () => {
+            tag.querySelector(".sdg-tooltip").style.opacity = "0";
+          });
+        });
+      });
+    </script>
+
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Sandeep Chaudhary",
+    "jobTitle": "Professor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Indian Institute of Technology Indore",
+      "url": "https://www.iiti.ac.in"
+    },
+    "url": "https://sustainableconstructionlab.com",
+    "sameAs": [
+      "https://scholar.google.com/citations?user=YOUR_GOOGLE_SCHOLAR_ID",
+      "https://www.researchgate.net/profile/YOUR_RESEARCHGATE_PROFILE",
+      "https://www.linkedin.com/in/YOUR_LINKEDIN_PROFILE"
+    ],
+    "image": "https://sustainableconstructionlab.com/images/sandeep-chaudhary.jpg",
+    "description": "Professor at IIT Indore specializing in sustainable construction, low carbon materials, waste upcycling, and IoT applications."
+  }
+</script>
+
+    <!-- Structured Data for Organization -->
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ResearchProject",
+    "name": "Sustainable Construction Lab",
+    "url": "https://sustainableconstructionlab.com",
+    "description": "Leading research group at IIT Indore focused on sustainable construction, low carbon materials, waste upcycling, and IoT applications",
+    "funder": {
+      "@type": "Organization",
+      "name": "Indian Institute of Technology Indore"
+    },
+    "principalInvestigator": {
+      "@type": "Person",
+      "name": "Sandeep Chaudhary"
+    },
+    "image": "https://sustainableconstructionlab.com/images/score-logo.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Indore",
+      "addressRegion": "Madhya Pradesh",
+      "addressCountry": "IN"
+    }
+  }
+</script>
+
+    <!-- Structured Data for WebSite -->
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Sustainable Construction Lab",
+    "url": "https://sustainableconstructionlab.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://sustainableconstructionlab.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+</script>
