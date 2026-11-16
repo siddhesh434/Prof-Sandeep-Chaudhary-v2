@@ -90,7 +90,6 @@ const carouselSlideSchema = new mongoose.Schema({
 // Create indexes for better performance
 carouselSlideSchema.index({ order: 1 });
 carouselSlideSchema.index({ active: 1 });
-carouselSlideSchema.index({ id: 1 }, { unique: true });
 
 // Middleware to update updatedAt timestamp
 bulletinSchema.pre('save', function(next) {

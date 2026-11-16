@@ -11,6 +11,12 @@ const { v4: uuidv4 } = require("uuid");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
+const dns = require('node:dns');
+
+if (process.env.NODE_ENV !== 'production') {
+    dns.setServers(['8.8.8.8', '8.8.4.4']);
+}
+
 // Load environment variables
 dotenv.config();
 
